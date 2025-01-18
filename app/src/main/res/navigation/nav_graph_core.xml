@@ -2,14 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/blankDestination">
-
-    <!-- Blank Destination -->
-    <activity
-        android:id="@+id/blankDestination"
-        android:name="com.rvoc.cvorapp.ui.activities.core.CoreActivity"
-        android:label="Core Activity Blank"
-        tools:layout="@layout/activity_core" />
+    app:startDestination="@id/fileSourceFragment">
 
     <!-- File Source Fragment (Modal Bottom Sheet) -->
     <dialog

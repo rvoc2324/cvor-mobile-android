@@ -40,7 +40,8 @@
 
     <!-- Additional Common Colors -->
     <color name="white">#F8F9FA</color>
-    <color name="black">#000000</color>
+    <color name="black">#000000</color>e
     <color name="grey">#808080</color>
     <color name="shine">#3f6080</color>
+    <color name="ripple">#33FFFFFF</color>
 </resources>

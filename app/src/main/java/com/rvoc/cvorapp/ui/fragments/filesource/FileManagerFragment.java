@@ -18,15 +18,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * FileManagerFragment
  * Automatically launches a system file picker for the user to select files.
  * On file selection, updates the CoreViewModel with the selected file URIs and sets a navigation event.
  */
+@AndroidEntryPoint
 public class FileManagerFragment extends Fragment {
 
     private static final String TAG = "FileManagerFragment";
-
     private CoreViewModel coreViewModel;
 
     // Launchers for file picker and permission requests

@@ -25,10 +25,21 @@ import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class PdfHandlingFragment extends Fragment {
+
+    @Inject
+    PdfHandlingService pdfHandlingService;
+    @Inject
+    FileListAdapter fileListAdapter;
     private CoreViewModel coreViewModel;
-    private FileListAdapter fileListAdapter;
     private Button actionButton;
     private ProgressBar progressBar;
     private String currentActionType;
@@ -43,6 +54,7 @@ public class PdfHandlingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Initialize the CoreViewModel
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         RecyclerView fileRecyclerView = view.findViewById(R.id.recycler_view_files);
@@ -119,44 +131,50 @@ public class PdfHandlingFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         actionButton.setEnabled(false);
 
-        // Initialize the PdfHandlingService
-        PdfHandlingService pdfHandlingService = new PdfHandlingService();
-        List<Uri> selectedFiles = coreViewModel.getSelectedFileUris().getValue();
-        File outputFile = new File(requireContext().getCacheDir(), "processed_file.pdf");
+        // Use an ExecutorService to run background work
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            List<Uri> selectedFiles = coreViewModel.getSelectedFileUris().getValue();
+            if (selectedFiles == null || selectedFiles.isEmpty()) {
+                requireActivity().runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    actionButton.setEnabled(true);
+                    Toast.makeText(requireContext(), "No files selected", Toast.LENGTH_SHORT).show();
+                });
+                return;
+            }
 
-        new Thread(() -> {
+            File outputFile = new File(requireContext().getCacheDir(), "processed_file.pdf");
             try {
                 File processedFile;
-                // Trigger the appropriate service method based on action type
-                if ("CombinePDF".equals(actionType) && selectedFiles != null) {
-                    processedFile = pdfHandlingService.combinePDF(selectedFiles, outputFile, requireContext());
-                } else if ("ConvertToPDF".equals(actionType) && selectedFiles != null) {
-                    processedFile = pdfHandlingService.convertImagesToPDF(selectedFiles, outputFile, requireContext());
+
+                if ("CombinePDF".equals(actionType)) {
+                    processedFile = pdfHandlingService.combinePDF(selectedFiles, outputFile);
+                } else if ("ConvertToPDF".equals(actionType)) {
+                    processedFile = pdfHandlingService.convertImagesToPDF(selectedFiles, outputFile);
                 } else {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
 
-                // On success, update the ViewModel and set navigation event
+                // Update UI and ViewModel on success
                 requireActivity().runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
                     actionButton.setEnabled(true);
-
-                    // Add the processed file to the ViewModel
                     coreViewModel.addProcessedFile(processedFile);
-
-                    // Set the navigation event to transition to the preview screen
                     coreViewModel.setNavigationEvent("navigate_to_preview");
                 });
             } catch (Exception e) {
-                Log.e("AppError", "Error processing files", e); // Logs the exception
-                // On failure, update the UI with error feedback
+                // Handle error and update UI
+                Log.e("AppError", "Error processing files", e);
                 requireActivity().runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
                     actionButton.setEnabled(true);
                     Toast.makeText(requireContext(), "Error processing files: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
-        }).start();
+        });
+
+        executorService.shutdown(); // Ensure the executor shuts down after the task
     }
 }
 

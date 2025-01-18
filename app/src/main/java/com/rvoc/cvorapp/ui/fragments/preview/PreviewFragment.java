@@ -23,6 +23,9 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class PreviewFragment extends Fragment {
 
     private CoreViewModel coreViewModel;

@@ -3,9 +3,8 @@
     <string name="app_toolbar_title">Welcome to CVOR</string>
     <string name="app_slogan">CVOR - Making your data secure</string>
     <string name="add_watermark_button">Add Watermark and Share File</string>
-    <string name="combine_pdfs_button">Combine PDFs</string>
+    <string name="combine_pdfs_button">Combine PDF</string>
     <string name="convert_to_pdf_button">Convert Images to PDF</string>
-    <string name="whatsnew">Whats New</string>
     <string name="flash_toggle">Flash ON</string>
     <string name="capture_image">Take Photo</string>
     <string name="retake_image">Retake the photo</string>
@@ -16,7 +15,9 @@
     <string name="camera_icon_desc">Camera icon</string>
     <string name="file_manager_icon_desc">File Manager icon</string>
     <string name="file_name">File Name</string>
+    <string name="refer">Refer</string>
     <string name="share_history">Share history</string>
+    <string name="whatsnew">Whats New</string>
     <string name="settings">Settings</string>
     <string name="sharing_with">Sharing with</string>
     <string name="purpose">Purpose</string>

@@ -6,73 +6,86 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_primary">
 
-    <!-- Toolbar with header text -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:title="@string/app_toolbar_title"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment_home"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph_home" />
-
     <!-- Main content area -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="50dp"
+        android:letterSpacing="0.3"
+        android:text="@string/app_name"
+        android:textColor="@color/text"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_below="@id/toolbar"
-        android:background="@drawable/rounded_bottom_border">
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:padding="16dp">
 
-        <!-- Animated text for the slogan -->
-        <TextView
-            android:id="@+id/tv_animated_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"
-            android:textSize="18sp"
-            android:textColor="@color/text"
-            android:gravity="center" />
-            <!-- android:text="@string/app_slogan" -->
-
-        <!-- Primary action: Add Watermark button -->
-        <Button
+        <!-- Add Watermark Button -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_watermark"
+            style="@style/PrimaryButtonStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:text="@string/add_watermark_button"
-            android:backgroundTint="@color/buttonPrimary"
-            android:textColor="@color/text"
-            android:layout_marginBottom="16dp" />
+            android:elevation="8dp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="16dp"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/borderColor"
+            android:stateListAnimator="@animator/button_lift_animator"
+            app:rippleColor="@color/rippleEffect" />
 
-        <!-- Secondary action: Combine PDFs button -->
-        <Button
-            android:id="@+id/btn_combine_pdfs"
+        <!-- 2x2 grid layout for buttons -->
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/combine_pdfs_button"
-            android:backgroundTint="@color/buttonSecondary"
-            android:textColor="@color/text"
-            android:layout_marginBottom="8dp" />
+            android:rowCount="2"
+            android:columnCount="2"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true">
 
-        <!-- Secondary action: Convert Images to PDF button -->
-        <Button
-            android:id="@+id/btn_convert_to_pdf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/convert_to_pdf_button"
-            android:backgroundTint="@color/buttonSecondary"
-            android:textColor="@color/text"
-            android:layout_marginBottom="8dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_combine_pdfs"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="@string/combine_pdfs_button"
+                android:elevation="6dp"
+                app:cornerRadius="16dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/borderColor"
+                android:stateListAnimator="@animator/button_lift_animator"
+                app:rippleColor="@color/rippleEffect"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Convert Images to PDF Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_convert_to_pdf"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="@string/convert_to_pdf_button"
+                android:elevation="6dp"
+                app:cornerRadius="16dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/borderColor"
+                android:stateListAnimator="@animator/button_lift_animator"
+                app:rippleColor="@color/rippleEffect"
+                android:layout_marginStart="8dp" />
+        </GridLayout>
     </LinearLayout>
 
     <!-- Bottom navigation -->
@@ -81,8 +94,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu"
+        android:paddingBottom="8dp"
         android:background="@color/colorPrimary"
+        app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/white"
-        app:itemTextColor="@color/text" />
+        app:itemTextColor="@color/text"
+        app:itemRippleColor="@color/ripple"
+        android:divider="@drawable/nav_divider"
+        android:showDividers="middle"
+        app:labelVisibilityMode="labeled"
+        app:itemTextAppearanceActive="@style/TextStyle.Label"
+        app:itemTextAppearanceInactive="@style/TextStyle.Label"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

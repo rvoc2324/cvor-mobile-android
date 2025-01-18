@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.services.PdfHandlingService;
 import com.rvoc.cvorapp.services.WatermarkService;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
@@ -23,8 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class WatermarkFragment extends Fragment {
 
+    @Inject
+    WatermarkService watermarkService;
+    // @Inject
+    // PdfHandlingService pdfHandlingService;
     private WatermarkViewModel watermarkViewModel;
     private CoreViewModel coreViewModel;
 
@@ -65,9 +75,6 @@ public class WatermarkFragment extends Fragment {
                 return;
             }
 
-            WatermarkService watermarkService = new WatermarkService();
-            // PDFHandlingService pdfHandlingService = new PDFHandlingService();
-
             List<File> watermarkedFiles = new ArrayList<>();
 
             try {
@@ -84,8 +91,7 @@ public class WatermarkFragment extends Fragment {
 
                             File watermarkedPDF = watermarkService.applyWatermarkPDF(
                                     selectedFileUri,
-                                    watermarkText,
-                                    requireContext()
+                                    watermarkText
                             );
 
                             if (watermarkedPDF != null) {
@@ -99,8 +105,7 @@ public class WatermarkFragment extends Fragment {
                             // Handle image watermarking
                             File watermarkedImage = watermarkService.applyWatermarkImage(
                                     selectedFileUri,
-                                    watermarkText,
-                                    requireContext()
+                                    watermarkText
                             );
 
                             if (watermarkedImage != null) {

@@ -6,11 +6,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.rvoc.cvorapp.R;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * WhatsNewActivity
  * This activity provides additional information about the CVOR platform,
  * including its vision, goals, and objectives.
  */
+@AndroidEntryPoint
 public class WhatsNewActivity extends AppCompatActivity {
 
     // TextView to display information

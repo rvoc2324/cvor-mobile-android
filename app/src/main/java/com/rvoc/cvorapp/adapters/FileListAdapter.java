@@ -14,11 +14,14 @@ import com.rvoc.cvorapp.R;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
 
     private List<Uri> fileUris;
     private final OnFileActionListener actionListener;
 
+    @Inject // Hilt will provide this class wherever needed
     public FileListAdapter(OnFileActionListener listener) {
         this.actionListener = listener;
     }

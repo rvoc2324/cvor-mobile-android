@@ -3,61 +3,47 @@ package com.rvoc.cvorapp;
 import android.app.Application;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatDelegate; // For Theme management
-import androidx.work.WorkManager; // WorkManager instance
-import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
+import com.rvoc.cvorapp.utils.AppThemeInitialiser;
+import com.rvoc.cvorapp.utils.CrashlyticsInitialiser;
+import com.rvoc.cvorapp.utils.LoggingInitialiser;
+import com.rvoc.cvorapp.utils.PDFBoxInitialiser;
 
-import dagger.hilt.android.HiltAndroidApp; // For Dependency Injection
+import javax.inject.Inject;
 
-@HiltAndroidApp // Marks this class as the entry point for Hilt Dependency Injection
+import dagger.hilt.android.HiltAndroidApp;
+
+@HiltAndroidApp
 public class MyApplication extends Application {
+
+    private static final String TAG = "MyApplication";
+
+    // Dependencies injected via Hilt
+    @Inject
+    AppThemeInitialiser appThemeInitialiser;
+
+    @Inject
+    CrashlyticsInitialiser crashlyticsInitialiser;
+
+    @Inject
+    LoggingInitialiser loggingInitialiser;
+
+    @Inject
+    PDFBoxInitialiser pdfBoxInitialiser;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        // Initialize application-wide configurations here
-        initAppTheme();
-        initCrashlytics();
-        initLogging();
-        PDFBoxResourceLoader.init(getApplicationContext());
+        long startTime = System.currentTimeMillis();
+        Log.d(TAG, "Application onCreate started.");
 
-        Log.d("MyApplication", "Application initialized successfully.");
-    }
+        // Perform initialisation using injected dependencies
+        appThemeInitialiser.initialise();
+        crashlyticsInitialiser.initialise();
+        loggingInitialiser.initialise();
+        pdfBoxInitialiser.initialise();
 
-    /**
-     * Initialize the app's theme settings.
-     * Since we're using a custom branding theme, we disable dark mode.
-     */
-    private void initAppTheme() {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        Log.d("MyApplication", "App theme initialized to MODE_NIGHT_NO.");
-    }
-
-    /**
-     * Initialize Crashlytics or any other crash reporting library.
-     */
-    private void initCrashlytics() {
-        try {
-            // Example: Firebase Crashlytics initialization
-            // FirebaseApp.initializeApp(this);
-            // FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
-            Log.d("MyApplication", "Crashlytics initialized.");
-        } catch (Exception e) {
-            Log.e("MyApplication", "Crashlytics initialization failed.", e);
-        }
-    }
-
-    /**
-     * Initialize logging frameworks such as Timber.
-     */
-    private void initLogging() {
-        try {
-            // Example: Initialize Timber
-            // Timber.plant(new Timber.DebugTree());
-            Log.d("MyApplication", "Logging framework initialized.");
-        } catch (Exception e) {
-            Log.e("MyApplication", "Logging framework initialization failed.", e);
-        }
+        long endTime = System.currentTimeMillis();
+        Log.d(TAG, "Application initialised successfully in " + (endTime - startTime) + " ms.");
     }
 }

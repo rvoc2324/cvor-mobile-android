@@ -3,97 +3,77 @@ package com.rvoc.cvorapp.ui.activities.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.animation.AlphaAnimation;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
-import androidx.navigation.NavController;
-import androidx.navigation.ui.NavigationUI;
 
-import com.rvoc.cvorapp.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.rvoc.cvorapp.databinding.ActivityHomeBinding;
 import com.rvoc.cvorapp.ui.activities.core.CoreActivity;
-import com.rvoc.cvorapp.ui.activities.whatsnew.WhatsNewActivity;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class HomeActivity extends AppCompatActivity {
-    // Declare UI components
-    private Button btnAddWatermark, btnCombinePDFs, btnConvertToPDF;
-    private TextView tvAnimatedText;
-    private BottomNavigationView bottomNavigationView;
-    // private NavController navController;
+    private static final String TAG = "HomeActivity";
+    private ActivityHomeBinding binding;
+
+    // Example: Injecting SharedPreferences (if needed for settings or local storage)
+    // @Inject
+    // android.content.SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "HomeActivity onCreate started.");
+
+        // Install the splash screen
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 
+        splashScreen.setKeepOnScreenCondition(() -> {
+            // Add logic here if needed to determine when the splash screen should exit
+            return false;
+        });
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
-        // Initialize and set up the UI components
-        initUIComponents();
-        /*
-        // Set up NavController
-        try {
-            NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.nav_host_fragment_home);
-            if (navHostFragment != null) {
-                navController = navHostFragment.getNavController();
-                NavigationUI.setupActionBarWithNavController(this, navController);
-            } else {
-                throw new IllegalStateException("NavHostFragment not found in HomeActivity.");
-            }
-        } catch (Exception e) {
-            Log.e("HomeActivity", "NavController setup failed: " + e.getMessage());
-            Toast.makeText(this, "NavController setup failed", Toast.LENGTH_SHORT).show();
-        }*/
+        // Set up ViewBinding
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // Set click listeners for buttons
-        setupActionButtons();
+        // Example: Reading a value from SharedPreferences
+        // String lastUsedFeature = sharedPreferences.getString("last_used_feature", "none");
+        // Log.d(TAG, "Last used feature retrieved from SharedPreferences: " + lastUsedFeature);
 
-        // Set up animated text
-        // setupAnimatedText();
-
-        // Set up bottom navigation
-        // setupBottomNavigation();
+        // Set up click listeners
+        setupClickListeners();
+        Log.d(TAG, "HomeActivity onCreate 7.");
     }
 
-    // Initialize UI components and bind them to XML elements
-    private void initUIComponents() {
-        try {
-            btnAddWatermark = findViewById(R.id.btn_add_watermark);
-            btnCombinePDFs = findViewById(R.id.btn_combine_pdfs);
-            btnConvertToPDF = findViewById(R.id.btn_convert_to_pdf);
-            tvAnimatedText = findViewById(R.id.tv_animated_text);
-            bottomNavigationView = findViewById(R.id.bottom_navigation);
-        } catch (Exception e) {
-            Log.e("HomeActivity", "Error initializing components: " + e.getMessage());
-            Toast.makeText(this, "Error initializing components", Toast.LENGTH_SHORT).show();
-        }
+    /**
+     * Sets up click listeners for buttons in the UI.
+     */
+    private void setupClickListeners() {
+        binding.btnAddWatermark.setOnClickListener(view -> navigateToCoreActivity("addwatermark"));
+        binding.btnCombinePdfs.setOnClickListener(view -> navigateToCoreActivity("combinepdf"));
+        binding.btnConvertToPdf.setOnClickListener(view -> navigateToCoreActivity("convertpdf"));
     }
 
-    // Set up button click listeners
-    private void setupActionButtons() {
-        btnAddWatermark.setOnClickListener(view -> navigateToCoreActivity("addwatermark"));
-        btnCombinePDFs.setOnClickListener(view -> navigateToCoreActivity("combinepdf"));
-        btnConvertToPDF.setOnClickListener(view -> navigateToCoreActivity("converttopdf"));
-    }
-
+    /**
+     * Navigates to the CoreActivity based on the specified action type.
+     *
+     * @param actionType The type of action to be performed (e.g., "addwatermark").
+     */
     private void navigateToCoreActivity(String actionType) {
         try {
-            // Create an intent to start CoreActivity
-            Intent intent = new Intent(HomeActivity.this, CoreActivity.class);
-
-            // Pass the actionType as an extra in the intent
+            Intent intent = new Intent(this, CoreActivity.class);
             intent.putExtra("actionType", actionType);
-
-            // Start the CoreActivity
             startActivity(intent);
+
+            Log.d(TAG, "Navigating to CoreActivity with actionType: " + actionType);
         } catch (Exception e) {
-            Log.e("HomeActivity", "Failed to navigate: " + e.getMessage());
-            Toast.makeText(this, "Failed to navigate", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Navigation error: " + e.getMessage(), e);
+            Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -106,21 +86,6 @@ public class HomeActivity extends AppCompatActivity {
             default -> -1;  // Invalid action type
         };
     }*/
-
-    // Set up animated text
-    private void setupAnimatedText() {
-        try {
-            AlphaAnimation fadeInOut = new AlphaAnimation(0.0f, 1.0f);
-            fadeInOut.setDuration(1500); // Animation duration
-            fadeInOut.setRepeatCount(AlphaAnimation.INFINITE);
-            fadeInOut.setRepeatMode(AlphaAnimation.REVERSE);
-            tvAnimatedText.setText(getString(R.string.app_slogan));
-            tvAnimatedText.startAnimation(fadeInOut);
-        } catch (Exception e) {
-            Log.e("HomeActivity", "Error setting up animated text: " + e.getMessage());
-            Toast.makeText(this, "Error setting up animated text", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     /*
     // Set up bottom navigation

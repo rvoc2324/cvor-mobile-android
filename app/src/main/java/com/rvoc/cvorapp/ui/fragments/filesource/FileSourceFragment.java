@@ -14,10 +14,13 @@ import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * FileSourceFragment is a modal bottom sheet allowing users to choose between Camera or File Manager as the file source.
  * It uses the CoreViewModel to communicate user selections back to the activity.
  */
+@AndroidEntryPoint
 public class FileSourceFragment extends BottomSheetDialogFragment {
 
     private CoreViewModel coreViewModel; // Shared ViewModel for app state management
@@ -35,6 +38,7 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
 
         // Initialize the shared ViewModel scoped to the activity
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+
 
         // Set up click listeners for Camera and File Manager options
         setupListeners(view);

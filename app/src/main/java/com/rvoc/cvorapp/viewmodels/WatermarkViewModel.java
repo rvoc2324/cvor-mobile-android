@@ -11,15 +11,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
 /**
  * ViewModel for managing state and logic in WatermarkFragment.
  */
+@HiltViewModel
 public class WatermarkViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> shareWith = new MutableLiveData<>();
     private final MutableLiveData<String> purpose = new MutableLiveData<>();
     private final MutableLiveData<String> generatedWatermarkText = new MutableLiveData<>();
 
+    @Inject
     public WatermarkViewModel(@NonNull Application application) {
         super(application);
     }

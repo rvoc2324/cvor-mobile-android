@@ -12,9 +12,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
 /**
  * CoreViewModel manages the state of files and navigation arguments throughout the lifecycle of CoreActivity.
  */
+@HiltViewModel
 public class CoreViewModel extends AndroidViewModel {
 
     public enum SourceType {
@@ -30,6 +35,8 @@ public class CoreViewModel extends AndroidViewModel {
     // Navigation events
     private final MutableLiveData<String> navigationEvent = new MutableLiveData<>(null);
 
+    // Constructor
+    @Inject
     public CoreViewModel(@NonNull Application application) {
         super(application);
     }

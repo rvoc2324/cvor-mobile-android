@@ -36,10 +36,12 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class CameraFragment extends Fragment {
 
     private static final String TAG = "CameraFragment";
-
     private ImageButton buttonFlashToggle;
     private ImageButton buttonCapture;
     private ImageButton buttonRetake;
@@ -52,7 +54,7 @@ public class CameraFragment extends Fragment {
     private boolean isFlashOn = false;
     private Uri capturedImageUri;
 
-    private CoreViewModel viewModel;
+    private CoreViewModel coreViewModel;
 
     // Permission launcher
     private final ActivityResultLauncher<String> cameraPermissionLauncher =
@@ -81,7 +83,7 @@ public class CameraFragment extends Fragment {
         buttonConfirm = view.findViewById(R.id.buttonConfirm);
         buttonBack = view.findViewById(R.id.buttonBack);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+        coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         checkAndRequestPermissions();
         setupButtonListeners();
@@ -173,7 +175,7 @@ public class CameraFragment extends Fragment {
         // Confirm image
         buttonConfirm.setOnClickListener(v -> {
             if (capturedImageUri != null) {
-                viewModel.addSelectedFileUri(capturedImageUri);
+                coreViewModel.addSelectedFileUri(capturedImageUri);
                 askCaptureMoreImages();
             } else {
                 Toast.makeText(requireContext(), "No image to confirm", Toast.LENGTH_SHORT).show();
@@ -204,7 +206,7 @@ public class CameraFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setMessage(dialogMessage)
                 .setPositiveButton(dialogYes, (dialog, which) -> resetCaptureState())
-                .setNegativeButton(dialogNo, (dialog, which) -> viewModel.setNavigationEvent("navigate_to_action"))
+                .setNegativeButton(dialogNo, (dialog, which) -> coreViewModel.setNavigationEvent("navigate_to_action"))
                 .show();
     }
 }

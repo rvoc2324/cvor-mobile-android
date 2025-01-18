@@ -85,6 +85,7 @@ dependencies {
     ksp(libs.permissions.dispatcher.processor)
 
     // Hilt for Dependency Injection
+    implementation(libs.kotlinx.metadata.jvm)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 

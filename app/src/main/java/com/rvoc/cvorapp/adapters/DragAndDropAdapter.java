@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import javax.inject.Inject;
+
 public class DragAndDropAdapter extends ItemTouchHelper.Callback {
 
     private final OnItemMoveListener moveListener;
 
+    @Inject
     public DragAndDropAdapter(OnItemMoveListener listener) {
         this.moveListener = listener;
     }

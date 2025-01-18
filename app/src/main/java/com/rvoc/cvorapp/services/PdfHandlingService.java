@@ -20,10 +20,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
+@Singleton
 public class PdfHandlingService {
 
+    private final Context context;
+
+    @Inject
+    public PdfHandlingService(@ApplicationContext Context context) {
+        this.context = context;
+    }
+
     // Combine multiple PDFs into one
-    public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile, @NonNull Context context) throws Exception {
+    public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile) throws Exception {
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
 
         for (Uri uri : inputFiles) {
@@ -36,7 +49,7 @@ public class PdfHandlingService {
                     // If the document is password-protected, an IOException will be thrown
                     if (e.getMessage() != null && e.getMessage().contains("password") && inputStream != null) {
                         // Attempt to decrypt the document after catching the IOException
-                        document = decryptPDF(inputStream, context);
+                        document = decryptPDF(inputStream);
                     } else {
                         // If the exception is not related to encryption, rethrow it
                         throw e;
@@ -63,7 +76,7 @@ public class PdfHandlingService {
     }
 
     // Convert images to a single PDF
-    public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile, @NonNull Context context) throws Exception {
+    public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {
         try (PDDocument document = new PDDocument()) {
             for (Uri uri : imageUris) {
                 try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
@@ -93,9 +106,8 @@ public class PdfHandlingService {
     }
 
     // Decrypt a PDF document if it's password protected
-    public PDDocument decryptPDF(@NonNull InputStream inputStream, @NonNull Context context) throws Exception {
-
-        String password = promptForPassword(context);
+    public PDDocument decryptPDF(@NonNull InputStream inputStream) throws Exception {
+        String password = promptForPassword();
         if (password == null || password.isEmpty()) {
             throw new IOException("Password is required to decrypt the PDF.");
         }
@@ -108,12 +120,10 @@ public class PdfHandlingService {
         } catch (Exception e) {
             throw new IOException("Failed to decrypt PDF with the provided password.");
         }
-
     }
 
     // Prompt the user for a password
-    private String promptForPassword(Context context) {
-        // Use an Android AlertDialog to prompt for a password
+    private String promptForPassword() {
         final String[] password = new String[1];
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
         builder.setTitle("Enter PDF Password");
