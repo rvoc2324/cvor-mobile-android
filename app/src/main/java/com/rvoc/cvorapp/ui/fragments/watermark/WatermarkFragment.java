@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,8 @@ public class WatermarkFragment extends Fragment {
 
     private TextInputEditText shareWithInput, purposeInput;
 
+    private CheckBox repeatInput;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_watermark, container, false);
@@ -56,18 +59,22 @@ public class WatermarkFragment extends Fragment {
         // Bind UI components
         shareWithInput = view.findViewById(R.id.input_sharing_with);
         purposeInput = view.findViewById(R.id.input_purpose);
+        repeatInput = view.findViewById(R.id.input_repeat);
+
+        repeatInput.setChecked(true);
 
         // Handle "Preview" button click
         view.findViewById(R.id.button_preview).setOnClickListener(v -> {
             String shareWith = Objects.requireNonNull(shareWithInput.getText()).toString().trim();
             String purpose = Objects.requireNonNull(purposeInput.getText()).toString().trim();
+            boolean repeat = repeatInput.isChecked();
 
             if (shareWith.isEmpty()) {
-                Toast.makeText(requireContext(), "Share with is required.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Share with and Repeat is required.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            watermarkViewModel.setInputs(shareWith, purpose);
+            watermarkViewModel.setInputs(shareWith, purpose, repeat);
             List<Uri> selectedFileUris = coreViewModel.getSelectedFileUris().getValue();
 
             if (selectedFileUris == null || selectedFileUris.isEmpty()) {

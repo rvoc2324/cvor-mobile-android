@@ -18,8 +18,8 @@ workVersion = "2.10.0"
 permissionsDispatcher = "4.9.2"
 hilt = "2.55"
 kotlinx-metadata-jvm = "0.9.0"
-kotlinx-coroutines-android = "1.7.3"
 pdfbox-android = '2.0.27.0'
+cardView = "1.0.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -49,7 +49,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 kotlinx-metadata-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-metadata-jvm", version.ref = "kotlinx-metadata-jvm" }
 pdfbox-android = { group = "com.tom-roush", name = "pdfbox-android", version.ref = "pdfbox-android" }
-
+cardView = { group = "androidx.cardview", name = "cardview", version.ref = "cardView" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

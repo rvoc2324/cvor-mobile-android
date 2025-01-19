@@ -1,18 +1,19 @@
 package com.rvoc.cvorapp.adapters;
 
 import android.net.Uri;
-import javax.inject.Inject;
 
-public class FileActionListener implements FileListAdapter.OnFileActionListener {
+public class FileActionListener {
+    private final OnFileActionCallback callback;
 
-    @Inject
-    public FileActionListener() {
-        // Constructor for Hilt to inject dependencies if needed
+    public FileActionListener(OnFileActionCallback callback) {
+        this.callback = callback;
     }
 
-    @Override
     public void onRemove(Uri uri) {
-        // Implement the remove action logic here
-        // For example, removing the file from a list
+        callback.onRemove(uri);
+    }
+
+    public interface OnFileActionCallback {
+        void onRemove(Uri uri);
     }
 }

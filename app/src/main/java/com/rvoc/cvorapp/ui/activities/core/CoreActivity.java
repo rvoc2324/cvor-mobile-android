@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.rvoc.cvorapp.R;
@@ -37,14 +38,20 @@ public class CoreActivity extends AppCompatActivity {
             coreViewModel = new ViewModelProvider(this).get(CoreViewModel.class);
             Log.d(TAG, "CoreActivity 2.");
 
-            // Initialize NavController
+            // Initialize NavController using NavHostFragment
             try {
-                navController = Navigation.findNavController(this, R.id.nav_host_fragment_core);
+                NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.nav_host_fragment_core);
+                if (navHostFragment == null) {
+                    throw new IllegalStateException("NavHostFragment not found. Check nav_host_fragment_core ID in activity_core.xml.");
+                }
+                navController = navHostFragment.getNavController();
                 NavigationUI.setupActionBarWithNavController(this, navController);
-                Log.d(TAG, "CoreActivity 3.");
+                Log.d(TAG, "NavController initialized successfully.");
             } catch (Exception e) {
                 throw new IllegalStateException("NavController could not be initialized. Check nav_host_fragment_core ID in activity_core.xml", e);
             }
+
 
             // Handle actionType from intent extras
             String actionType = getIntent().getStringExtra("actionType");
@@ -250,7 +257,8 @@ public class CoreActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         Log.d(TAG, "CoreActivity 19.");
-        return navController != null && navController.navigateUp() || super.onSupportNavigateUp();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_core);
+        return navController.navigateUp() || super.onSupportNavigateUp();
     }
 
     @Override

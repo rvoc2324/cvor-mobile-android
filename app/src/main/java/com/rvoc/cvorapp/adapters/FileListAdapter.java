@@ -12,32 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.rvoc.cvorapp.R;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
 
-    private List<Uri> fileUris;
-    private final OnFileActionListener actionListener;
+    private List<Uri> fileUris = new ArrayList<>();
+    private final FileActionListener fileActionListener;
 
-    @Inject // Hilt will provide this class wherever needed
-    public FileListAdapter(OnFileActionListener listener) {
-        this.actionListener = listener;
+    public FileListAdapter(FileActionListener fileActionListener) {
+        this.fileActionListener = fileActionListener;
     }
 
     public void submitList(List<Uri> uris) {
-        this.fileUris = uris;
-        notifyDataSetChanged();
-    }
-
-    public void moveItem(int fromPosition, int toPosition) {
-        if (fileUris != null && fromPosition >= 0 && toPosition >= 0 &&
-                fromPosition < fileUris.size() && toPosition < fileUris.size()) {
-            Uri movedUri = fileUris.remove(fromPosition);
-            fileUris.add(toPosition, movedUri);
-            notifyItemMoved(fromPosition, toPosition);
+        if (uris != null) {
+            this.fileUris = new ArrayList<>(uris); // Create a new list to avoid modifying external references
+        } else {
+            this.fileUris.clear();
         }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -54,12 +47,12 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         holder.fileTypeImageView.setImageResource(fileUri.toString().endsWith(".pdf") ? R.drawable.ic_pdf : R.drawable.ic_image);
 
         // Delete button action
-        holder.deleteButton.setOnClickListener(v -> actionListener.onRemove(fileUri));
+        holder.deleteButton.setOnClickListener(v -> fileActionListener.onRemove(fileUri));
     }
 
     @Override
     public int getItemCount() {
-        return fileUris != null ? fileUris.size() : 0;
+        return fileUris.size();
     }
 
     public static class FileViewHolder extends RecyclerView.ViewHolder {
@@ -73,9 +66,5 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
             fileTypeImageView = itemView.findViewById(R.id.file_type_image_view);
             deleteButton = itemView.findViewById(R.id.delete_button);
         }
-    }
-
-    public interface OnFileActionListener {
-        void onRemove(Uri uri);
     }
 }

@@ -5,9 +5,9 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Branding Colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorAccent</item>
-        <item name="colorSecondaryVariant">@color/buttonHighlightPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorAccentPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorAccentSecondary</item>
 
         <!-- Background and Surface Colors -->
         <item name="android:windowBackground">@color/fragment1Background</item>
@@ -33,8 +33,9 @@
     <!-- Light Theme -->
     <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorAccentPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorAccentSecondary</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="colorSurface">@color/inputBox</item>
         <item name="android:colorControlHighlight">@color/buttonHighlightSecondary</item>
@@ -45,8 +46,9 @@
     <!-- Dark Theme -->
     <style name="AppTheme.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorAccentPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorAccentSecondary</item>
         <item name="android:windowBackground">@color/black</item>
         <item name="colorSurface">@color/fragment2Background</item>
         <item name="android:colorControlHighlight">@color/buttonHighlightPrimary</item>

@@ -1,47 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Primary Colors -->
-    <color name="colorPrimary">#071D2F</color>
-    <color name="colorPrimaryDark">#071D2F</color>
-    <color name="colorAccent">#030E15</color>
+    <color name="colorPrimary">#0C1F3F</color> <!-- Deep, rich navy blue for trust and security -->
+    <color name="colorPrimaryDark">#08152A</color> <!-- Slightly darker variant -->
+    <color name="colorSecondary">#162B46</color> <!-- Refined dark blue for background elements -->
+    <color name="colorAccentPrimary">#146A8D</color> <!-- Vibrant teal for accents -->
+    <color name="colorAccentSecondary">#0B5672</color> <!-- Subtle darker teal for cohesion -->
 
     <!-- Button Colors -->
-    <color name="buttonPrimary">#0A4A72</color>
-    <color name="buttonSecondary">#1C2938</color>
-    <color name="buttonHighlightPrimary">#0B668A</color>
-    <color name="buttonHighlightSecondary">#2A3F4D</color>
-    <color name="buttonDisabled">#3A4F5C</color>
+    <color name="buttonPrimary">#0C72C8</color> <!-- Bright but professional blue for CTAs -->
+    <color name="buttonSecondary">#193C5B</color> <!-- Muted secondary button color -->
+    <color name="buttonHighlightPrimary">#18A1D7</color> <!-- Bright cyan for hover/highlight -->
+    <color name="buttonHighlightSecondary">#225978</color> <!-- Supporting secondary highlight -->
+    <color name="buttonDisabled">#6A8093</color> <!-- Accessible muted tone for disabled buttons -->
 
     <!-- Text Colors -->
-    <color name="text">#F8F9FA</color>
-    <color name="textHighlight">#D4EDE8</color>
-    <color name="textSecondary">#A9C7D8</color>
-    <color name="textSubdued">#808080</color>
-    <color name="textDisabled">#9CA3AF</color>
+    <color name="text">#F4F8FA</color> <!-- Soft white for high contrast -->
+    <color name="textHighlight">#E8F4FC</color> <!-- Subtle blue-tinted highlight for emphasis -->
+    <color name="textSecondary">#A4BEDD</color> <!-- Muted blue for secondary text -->
+    <color name="textSubdued">#738394</color> <!-- Neutral gray for subdued content -->
+    <color name="textDisabled">#99AAB6</color> <!-- Dimmed gray for disabled text -->
 
     <!-- Input Box and Border Colors -->
-    <color name="inputBox">#486581</color>
-    <color name="borderColor">#0F2434</color>
+    <color name="inputBox">#2B475F</color> <!-- Muted blue-gray for inputs -->
+    <color name="borderColor">#1E3A56</color> <!-- Slightly brighter blue for borders -->
+    <color name="checkBoxColor">#18A1D7</color> <!-- Consistent with highlight accent -->
 
     <!-- Background Colors -->
-    <color name="fragment1Background">#1C2938</color>
-    <color name="fragment2Background">#243845</color>
-    <color name="backgroundLight">#2E3B47</color>
-    <color name="backgroundDark">#121A24</color>
+    <color name="fragment1Background">#1A2E43</color> <!-- Clean blue-gray background -->
+    <color name="fragment2Background">#243C53</color> <!-- Slightly darker variant -->
+    <color name="backgroundLight">#304D66</color> <!-- Subtle lighter background for depth -->
+    <color name="backgroundDark">#0E1C2B</color> <!-- Dark background for sections -->
 
     <!-- Status Colors -->
-    <color name="error">#D9534F</color>
-    <color name="success">#5CB85C</color>
-    <color name="warning">#F0AD4E</color>
+    <color name="error">#E63946</color> <!-- Bright, accessible red -->
+    <color name="success">#4CAF50</color> <!-- Trustworthy green -->
+    <color name="warning">#F9C74F</color> <!-- Modern muted yellow for warnings -->
 
     <!-- Shadows and Ripple Effects -->
-    <color name="shadow">#33000000</color>
-    <color name="rippleEffect">#660A4A72</color>
+    <color name="shadow">#40000000</color> <!-- Slightly stronger shadow -->
+    <color name="rippleEffect">#6618A1D7</color> <!-- Soft ripple effect matching accents -->
 
     <!-- Additional Common Colors -->
-    <color name="white">#F8F9FA</color>
-    <color name="black">#000000</color>e
-    <color name="grey">#808080</color>
-    <color name="shine">#3f6080</color>
-    <color name="ripple">#33FFFFFF</color>
+    <color name="white">#FFFFFF</color> <!-- Standard white -->
+    <color name="black">#000000</color> <!-- Standard black -->
+    <color name="grey">#74828F</color> <!-- Neutral gray -->
+    <color name="shine">#2B658B</color> <!-- Subtle, polished shine effect -->
+    <color name="ripple">#33FFFFFF</color> <!-- Light ripple for contrast -->
 </resources>

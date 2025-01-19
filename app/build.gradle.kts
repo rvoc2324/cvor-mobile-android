@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.splashscreen)
     implementation(libs.constraintlayout)
+    implementation(libs.cardView)
 
     // Lifecycle Components
     implementation(libs.lifecycle.livedata.ktx)

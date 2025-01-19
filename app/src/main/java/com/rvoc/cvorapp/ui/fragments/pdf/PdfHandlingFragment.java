@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.adapters.FileActionListener;
 import com.rvoc.cvorapp.adapters.FileListAdapter;
 import com.rvoc.cvorapp.services.PdfHandlingService;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
@@ -37,8 +38,8 @@ public class PdfHandlingFragment extends Fragment {
 
     @Inject
     PdfHandlingService pdfHandlingService;
-    @Inject
-    FileListAdapter fileListAdapter;
+    FileActionListener fileActionListener;
+    private FileListAdapter fileListAdapter;
     private CoreViewModel coreViewModel;
     private Button actionButton;
     private ProgressBar progressBar;
@@ -61,10 +62,20 @@ public class PdfHandlingFragment extends Fragment {
         actionButton = view.findViewById(R.id.action_button);
         progressBar = view.findViewById(R.id.progress_bar);
 
-        // Setup RecyclerView
+        // Initialize FileActionListener as a simple callback for removing files
+        fileActionListener = new FileActionListener(uri -> coreViewModel.removeSelectedFileUri(uri));
+
+        // Initialize the FileListAdapter
+        fileListAdapter = new FileListAdapter(fileActionListener);
         fileRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        fileListAdapter = new FileListAdapter(coreViewModel::removeSelectedFileUri);
         fileRecyclerView.setAdapter(fileListAdapter);
+
+        // Observe selected files and update adapter
+        coreViewModel.getSelectedFileUris().observe(getViewLifecycleOwner(), uris -> {
+            if (uris != null) {
+                fileListAdapter.submitList(uris);
+            }
+        });
 
         // Observe action type and update button label
         coreViewModel.getActionType().observe(getViewLifecycleOwner(), actionType -> {
@@ -76,15 +87,19 @@ public class PdfHandlingFragment extends Fragment {
             currentActionType = actionType;
         });
 
-        // Observe selected files
-        coreViewModel.getSelectedFileUris().observe(getViewLifecycleOwner(), uris -> fileListAdapter.submitList(uris));
+        // Enable drag-and-drop and swipe-to-remove using ItemTouchHelper
+        setupItemTouchHelper(fileRecyclerView);
 
-        // Enable drag-and-drop and reordering
+        // Handle action button click
+        actionButton.setOnClickListener(v -> processFiles(currentActionType));
+    }
+
+    private void setupItemTouchHelper(RecyclerView recyclerView) {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN; // Enable dragging up and down
-                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT; // Enable swiping left or right
+                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                 return makeMovementFlags(dragFlags, swipeFlags);
             }
 
@@ -92,9 +107,6 @@ public class PdfHandlingFragment extends Fragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
-
-                // Update the adapter and the ViewModel
-                fileListAdapter.moveItem(fromPosition, toPosition);
                 coreViewModel.reorderSelectedFileUris(fromPosition, toPosition);
                 return true;
             }
@@ -103,35 +115,19 @@ public class PdfHandlingFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 List<Uri> uris = coreViewModel.getSelectedFileUris().getValue();
-
                 if (uris != null && position >= 0 && position < uris.size()) {
                     Uri uriToRemove = uris.get(position);
                     coreViewModel.removeSelectedFileUri(uriToRemove);
-                    fileListAdapter.notifyItemRemoved(position);
                 }
             }
-
-            @Override
-            public boolean isLongPressDragEnabled() {
-                return true; // Enable drag-and-drop on long press
-            }
-
-            @Override
-            public boolean isItemViewSwipeEnabled() {
-                return true; // Enable swipe-to-delete
-            }
         });
-        itemTouchHelper.attachToRecyclerView(fileRecyclerView);
-
-        // Handle action button click
-        actionButton.setOnClickListener(v -> processFiles(currentActionType));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void processFiles(String actionType) {
         progressBar.setVisibility(View.VISIBLE);
         actionButton.setEnabled(false);
 
-        // Use an ExecutorService to run background work
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             List<Uri> selectedFiles = coreViewModel.getSelectedFileUris().getValue();
@@ -156,7 +152,6 @@ public class PdfHandlingFragment extends Fragment {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
 
-                // Update UI and ViewModel on success
                 requireActivity().runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
                     actionButton.setEnabled(true);
@@ -164,7 +159,6 @@ public class PdfHandlingFragment extends Fragment {
                     coreViewModel.setNavigationEvent("navigate_to_preview");
                 });
             } catch (Exception e) {
-                // Handle error and update UI
                 Log.e("AppError", "Error processing files", e);
                 requireActivity().runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
@@ -173,8 +167,6 @@ public class PdfHandlingFragment extends Fragment {
                 });
             }
         });
-
-        executorService.shutdown(); // Ensure the executor shuts down after the task
+        executorService.shutdown();
     }
 }
-

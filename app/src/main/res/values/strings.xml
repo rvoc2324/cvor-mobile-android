@@ -21,8 +21,9 @@
     <string name="settings">Settings</string>
     <string name="sharing_with">Sharing with</string>
     <string name="purpose">Purpose</string>
-    <string name="watermark_text">Watermark to be added</string>
-    <string name="preview">Preview</string>
+    <string name="watermark_text">Watermark to be added:</string>
+    <string name="repeat_watermark_check">Repeat watermark?</string>
+    <string name="preview_button">Preview</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="capture_more_images">Capture more images?</string>
