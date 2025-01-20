@@ -1,68 +1,118 @@
 package com.rvoc.cvorapp.ui.fragments.filesource;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.rvoc.cvorapp.R;
-import com.rvoc.cvorapp.viewmodels.CoreViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.rvoc.cvorapp.databinding.FragmentFileSourceBinding;
+import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * FileSourceFragment is a modal bottom sheet allowing users to choose between Camera or File Manager as the file source.
- * It uses the CoreViewModel to communicate user selections back to the activity.
  */
 @AndroidEntryPoint
 public class FileSourceFragment extends BottomSheetDialogFragment {
 
-    private CoreViewModel coreViewModel; // Shared ViewModel for app state management
+    private static final String TAG = "FileSourceFragment";
+    private FragmentFileSourceBinding binding;
+    private CoreViewModel coreViewModel;
 
-    @Nullable
+    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for the bottom sheet
-        return inflater.inflate(R.layout.fragment_file_source, container, false);
-    }
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+        Log.d(TAG, "File source 1.");
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        // Initialize View Binding
+        binding = FragmentFileSourceBinding.inflate(getLayoutInflater());
+        dialog.setContentView(binding.getRoot());
+        Log.d(TAG, "File source 2.");
 
-        // Initialize the shared ViewModel scoped to the activity
+        // Initialize ViewModel
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
+        observeActionType();
 
-        // Set up click listeners for Camera and File Manager options
-        setupListeners(view);
+        // Set up listeners
+        setupListeners();
+        Log.d(TAG, "File source 3.");
+
+        return dialog;
+    }
+
+    private void observeActionType() {
+        Log.d(TAG, "File source 9.");
+        coreViewModel.getActionType().observe(this, actionType -> {
+            if (actionType != null) {
+                switch (actionType) {
+                    case "addwatermark":
+                        Log.d(TAG, "File source 10.");
+                        binding.optionCamera.setVisibility(View.VISIBLE);
+                        binding.optionImagePicker.setVisibility(View.VISIBLE);
+                        binding.optionPDFPicker.setVisibility(View.VISIBLE);
+                        break;
+                    case "combinepdf":
+                        binding.optionCamera.setVisibility(View.GONE);
+                        binding.optionImagePicker.setVisibility(View.GONE);
+                        binding.optionPDFPicker.setVisibility(View.VISIBLE);
+                        break;
+                    case "convertpdf":
+                        binding.optionCamera.setVisibility(View.VISIBLE);
+                        binding.optionImagePicker.setVisibility(View.VISIBLE);
+                        binding.optionPDFPicker.setVisibility(View.GONE);
+                        break;
+                }
+                binding.optionCamera.setVisibility(View.VISIBLE);
+                binding.optionImagePicker.setVisibility(View.VISIBLE);
+                binding.optionPDFPicker.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     /**
-     * Set up click listeners for options and update the ViewModel with the selected source type.
-     *
-     * @param view The root view of the fragment.
+     * Set up click listeners for Camera and File Manager options.
      */
-    private void setupListeners(@NonNull View view) {
-        LinearLayout cameraOption = view.findViewById(R.id.option_camera);
-        LinearLayout fileManagerOption = view.findViewById(R.id.option_file_manager);
-
-        // Set the source type to CAMERA in the ViewModel and dismiss the bottom sheet
-        cameraOption.setOnClickListener(v -> {
+    private void setupListeners() {
+        Log.d(TAG, "File source 4.");
+        binding.optionCamera.setOnClickListener(v -> {
             coreViewModel.setSourceType(CoreViewModel.SourceType.CAMERA);
-            dismiss(); // Close the bottom sheet
+            Log.d(TAG, "File source 5.");
+            dismiss();
         });
 
-        // Set the source type to FILE_MANAGER in the ViewModel and dismiss the bottom sheet
-        fileManagerOption.setOnClickListener(v -> {
-            coreViewModel.setSourceType(CoreViewModel.SourceType.FILE_MANAGER);
-            dismiss(); // Close the bottom sheet
+        binding.optionImagePicker.setOnClickListener(v -> {
+            coreViewModel.setSourceType(CoreViewModel.SourceType.IMAGE_PICKER);
+            Log.d(TAG, "File source 6.");
+            dismiss();
         });
+
+        binding.optionPDFPicker.setOnClickListener(v -> {
+            coreViewModel.setSourceType(CoreViewModel.SourceType.PDF_PICKER);
+            Log.d(TAG, "File source 6.");
+            dismiss();
+        });
+    }
+
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
+        super.onCancel(dialog);
+        Log.d(TAG, "File source 7.");
+        coreViewModel.clearState(); // Optional: Reset ViewModel state if needed
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.d(TAG, "File source 8.");
+        super.onDestroyView();
+        binding = null; // Avoid memory leaks
     }
 }

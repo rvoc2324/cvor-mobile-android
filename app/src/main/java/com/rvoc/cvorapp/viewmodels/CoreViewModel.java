@@ -22,12 +22,13 @@ public class CoreViewModel extends AndroidViewModel {
 
     public enum SourceType {
         CAMERA,
-        FILE_MANAGER
+        PDF_PICKER,
+        IMAGE_PICKER
     }
 
     private final MutableLiveData<SourceType> sourceType = new MutableLiveData<>(null);
-    private final MutableLiveData<List<Uri>> selectedFileUris = new MutableLiveData<>(Collections.emptyList());
-    private final MutableLiveData<List<File>> processedFiles = new MutableLiveData<>(Collections.emptyList());
+    private final MutableLiveData<List<Uri>> selectedFileUris = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<File>> processedFiles = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> actionType = new MutableLiveData<>("");
 
     // Navigation events (SingleLiveEvent recommended for one-time events)
@@ -58,7 +59,7 @@ public class CoreViewModel extends AndroidViewModel {
 
     // Selected File URIs
     public void setSelectedFileUris(List<Uri> uris) {
-        selectedFileUris.setValue(uris != null ? new ArrayList<>(uris) : Collections.emptyList());
+        selectedFileUris.setValue(uris != null ? new ArrayList<>(uris) : new ArrayList<>());
     }
 
     public LiveData<List<Uri>> getSelectedFileUris() {
@@ -66,6 +67,8 @@ public class CoreViewModel extends AndroidViewModel {
     }
 
     public void addSelectedFileUri(Uri uri) {
+        if (uri == null) return;
+
         List<Uri> uris = getValueOrEmpty(selectedFileUris);
         if (!uris.contains(uri)) {
             uris.add(uri);
@@ -74,6 +77,8 @@ public class CoreViewModel extends AndroidViewModel {
     }
 
     public void removeSelectedFileUri(Uri uri) {
+        if (uri == null) return;
+
         List<Uri> uris = getValueOrEmpty(selectedFileUris);
         if (uris.remove(uri)) {
             selectedFileUris.setValue(uris);
@@ -91,7 +96,7 @@ public class CoreViewModel extends AndroidViewModel {
 
     // Processed Files
     public void setProcessedFiles(List<File> files) {
-        processedFiles.setValue(files != null ? new ArrayList<>(files) : Collections.emptyList());
+        processedFiles.setValue(files != null ? new ArrayList<>(files) : new ArrayList<>());
     }
 
     public LiveData<List<File>> getProcessedFiles() {
@@ -99,6 +104,8 @@ public class CoreViewModel extends AndroidViewModel {
     }
 
     public void addProcessedFile(File file) {
+        if (file == null) return;
+
         List<File> files = getValueOrEmpty(processedFiles);
         files.add(file);
         processedFiles.setValue(files);
@@ -115,7 +122,8 @@ public class CoreViewModel extends AndroidViewModel {
 
     // Utility Methods
     public boolean isActionTypeSet() {
-        return actionType.getValue() != null && !actionType.getValue().isEmpty();
+        String type = actionType.getValue();
+        return type != null && !type.isEmpty();
     }
 
     public boolean isSourceTypeSet() {
@@ -125,8 +133,8 @@ public class CoreViewModel extends AndroidViewModel {
     // Clear State
     public void clearState() {
         sourceType.setValue(null);
-        selectedFileUris.setValue(Collections.emptyList());
-        processedFiles.setValue(Collections.emptyList());
+        selectedFileUris.setValue(new ArrayList<>());
+        processedFiles.setValue(new ArrayList<>());
         navigationEvent.setValue(null);
     }
 

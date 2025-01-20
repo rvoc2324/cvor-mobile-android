@@ -1,18 +1,16 @@
 package com.rvoc.cvorapp.ui.fragments.filesource;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,8 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * FileManagerFragment
- * Automatically launches a system file picker for the user to select files.
- * On file selection, updates the CoreViewModel with the selected file URIs and sets a navigation event.
+ * Allows users to select PDF or image files using system file picker.
+ * Updates the CoreViewModel with selected file URIs.
  */
 @AndroidEntryPoint
 public class FileManagerFragment extends Fragment {
@@ -31,15 +29,14 @@ public class FileManagerFragment extends Fragment {
     private static final String TAG = "FileManagerFragment";
     private CoreViewModel coreViewModel;
 
-    // Launchers for file picker and permission requests
+    // Launcher for file picker results
     private ActivityResultLauncher<Intent> filePickerLauncher;
-    private ActivityResultLauncher<String> permissionLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize the CoreViewModel
+        // Initialize CoreViewModel
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         // Register file picker result handler
@@ -48,7 +45,6 @@ public class FileManagerFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == android.app.Activity.RESULT_OK && result.getData() != null) {
                         Intent data = result.getData();
-
                         // Handle multiple or single file selection
                         if (data.getClipData() != null) {
                             int itemCount = data.getClipData().getItemCount();
@@ -59,22 +55,10 @@ public class FileManagerFragment extends Fragment {
                         } else if (data.getData() != null) {
                             handleSelectedFile(data.getData());
                         }
-
-                        // Navigate to action screen after processing all files
                         coreViewModel.setNavigationEvent("navigate_to_action");
                     } else {
                         Toast.makeText(requireContext(), "File selection cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        // Register permission result handler
-        permissionLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                isGranted -> {
-                    if (isGranted) {
-                        launchFilePicker();
-                    } else {
-                        Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                        coreViewModel.setNavigationEvent("navigate_back");
                     }
                 });
     }
@@ -82,44 +66,82 @@ public class FileManagerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull android.view.View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Automatically launch the file picker
-        launchFilePicker();
+
+        // Observe the sourceType from CoreViewModel
+        coreViewModel.getSourceType().observe(getViewLifecycleOwner(), sourceType -> {
+            if (sourceType != null) {
+                switch (sourceType) {
+                    case PDF_PICKER:
+                        pickPdfFiles();
+                        break;
+                    case IMAGE_PICKER:
+                        pickImageFiles();
+                        break;
+                    default:
+                        Toast.makeText(requireContext(), "Invalid file source type", Toast.LENGTH_SHORT).show();
+                        coreViewModel.setNavigationEvent("navigate_back");
+                }
+            } else {
+                Toast.makeText(requireContext(), "Source type not set", Toast.LENGTH_SHORT).show();
+                coreViewModel.setNavigationEvent("navigate_back");
+            }
+        });
     }
 
     /**
-     * Launches the system file picker based on the Android version and permissions.
+     * Launches the file picker for PDF files.
      */
-    private void launchFilePicker() {
+    private void pickPdfFiles() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("application/pdf");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        filePickerLauncher.launch(intent);
+    }
+
+    /**
+     * Launches the file picker for image files.
+     */
+    private void pickImageFiles() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Use Photo Picker API for Android 14+
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("*/*");
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Enable multiple file selection
-            filePickerLauncher.launch(intent);
-        } else if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            // Use traditional file picker for older versions
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Enable multiple file selection
-            filePickerLauncher.launch(intent);
+            // Android 13+ Photo Picker API
+            ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher = registerForActivityResult(
+                    new ActivityResultContracts.PickMultipleVisualMedia(),
+                    uris -> {
+                        if (!uris.isEmpty()) {
+                            for (Uri uri : uris) {
+                                handleSelectedFile(uri);
+                            }
+                            coreViewModel.setNavigationEvent("navigate_to_action");
+                        } else {
+                            Toast.makeText(requireContext(), "No images selected", Toast.LENGTH_SHORT).show();
+                            coreViewModel.setNavigationEvent("navigate_back");
+                        }
+                    });
+
+            photoPickerLauncher.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         } else {
-            // Request permission for older versions
-            permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+            // For Android 12 and below
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            filePickerLauncher.launch(intent);
         }
     }
 
     /**
      * Handles the selected file and updates the CoreViewModel.
      *
-     * @param fileUri The Uri of the selected file.
+     * @param fileUri The URI of the selected file.
      */
     private void handleSelectedFile(@NonNull Uri fileUri) {
         try {
-            coreViewModel.addSelectedFileUri(fileUri); // Save the selected file in the CoreViewModel
+            coreViewModel.addSelectedFileUri(fileUri);
+            Toast.makeText(requireContext(), "File selected: " + fileUri, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Log.e(TAG, "Error handling file: " + e.getMessage(), e);
             Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
         }
     }

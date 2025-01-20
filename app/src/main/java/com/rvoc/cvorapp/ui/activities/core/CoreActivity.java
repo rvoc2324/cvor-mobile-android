@@ -3,16 +3,14 @@ package com.rvoc.cvorapp.ui.activities.core;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import com.rvoc.cvorapp.R;
-import com.rvoc.cvorapp.ui.fragments.filesource.FileSourceFragment;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -38,20 +36,18 @@ public class CoreActivity extends AppCompatActivity {
             coreViewModel = new ViewModelProvider(this).get(CoreViewModel.class);
             Log.d(TAG, "CoreActivity 2.");
 
-            // Initialize NavController using NavHostFragment
-            try {
-                NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.nav_host_fragment_core);
-                if (navHostFragment == null) {
-                    throw new IllegalStateException("NavHostFragment not found. Check nav_host_fragment_core ID in activity_core.xml.");
-                }
-                navController = navHostFragment.getNavController();
-                NavigationUI.setupActionBarWithNavController(this, navController);
-                Log.d(TAG, "NavController initialized successfully.");
-            } catch (Exception e) {
-                throw new IllegalStateException("NavController could not be initialized. Check nav_host_fragment_core ID in activity_core.xml", e);
-            }
+            initialiseNavController();
 
+            // Handle the back button using OnBackPressedDispatcher
+            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    if (navController != null && !navController.popBackStack()) {
+                        // If the NavController cannot handle the back stack, finish the activity
+                        finish();
+                    }
+                }
+            });
 
             // Handle actionType from intent extras
             String actionType = getIntent().getStringExtra("actionType");
@@ -67,13 +63,6 @@ public class CoreActivity extends AppCompatActivity {
                 Log.d(TAG, "CoreActivity 7.");
             }
 
-            /*
-            // Show FileSource bottom sheet on first load
-            if (savedInstanceState == null) {
-                Log.d(TAG, "CoreActivity 8.");
-                showFileSourceBottomSheet();
-            }*/
-
             // Observe source type for navigation
             coreViewModel.getSourceType().observe(this, sourceType -> {
                 if (sourceType == null) {
@@ -85,7 +74,8 @@ public class CoreActivity extends AppCompatActivity {
                         navToCamera();
                         break;
 
-                    case FILE_MANAGER:
+                    case PDF_PICKER:
+                    case IMAGE_PICKER:
                         navToFileManager();
                         break;
                 }
@@ -122,20 +112,22 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    /*
-     * Show the FileSourceFragment as a bottom sheet.
+    private void initialiseNavController() {
+        try {
+            NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.nav_host_fragment_core);
 
-    private void showFileSourceBottomSheet() {
-        Log.d(TAG, "CoreActivity 9.");
-        String tag = FileSourceFragment.class.getSimpleName();
-        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            Log.d(TAG, "CoreActivity 10.");
-            FileSourceFragment fileSourceFragment = new FileSourceFragment();
-            Log.d(TAG, "CoreActivity 11");
-            fileSourceFragment.show(getSupportFragmentManager(), tag);
-            Log.d(TAG, "CoreActivity 12.");
+            if (navHostFragment == null) {
+                throw new IllegalStateException("NavHostFragment not found. Check the ID 'nav_host_fragment_core' in activity_core.xml.");
+            }
+
+            navController = navHostFragment.getNavController();
+
+            Log.d(TAG, "NavController initialized successfully.");
+        } catch (Exception e) {
+            throw new IllegalStateException("NavController could not be initialized. Check 'nav_host_fragment_core' in activity_core.xml.", e);
         }
-    }*/
+    }
 
     /**
      * Navigate to CameraFragment.
@@ -155,6 +147,7 @@ public class CoreActivity extends AppCompatActivity {
     private void navToFileManager() {
         try {
             navController.navigate(R.id.action_fileSourceFragment_to_fileManagerFragment);
+            Log.d(TAG, "CoreActivity 20.");
         } catch (Exception e) {
             Log.e("CoreActivity", "Navigation to FileManagerFragment failed: " + e.getMessage(), e);
         }
@@ -180,7 +173,8 @@ public class CoreActivity extends AppCompatActivity {
                     Log.d(TAG, "CoreActivity 15.");
                     break;
 
-                case FILE_MANAGER:
+                case PDF_PICKER:
+                case IMAGE_PICKER:
                     navigateFromFileManager(actionType);
                     break;
             }
@@ -255,16 +249,8 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        Log.d(TAG, "CoreActivity 19.");
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_core);
-        return navController.navigateUp() || super.onSupportNavigateUp();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "CoreActivity 20.");
         if (coreViewModel != null) {
             coreViewModel.clearState();
         }
