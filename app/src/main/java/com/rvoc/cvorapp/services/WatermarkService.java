@@ -51,6 +51,7 @@ public class WatermarkService {
      */
     public File applyWatermarkImage(Uri inputUri,  String watermarkText) throws Exception {
         File outputFile = new File(context.getCacheDir(), "watermarked_image.png");
+        Log.d(TAG, "Watermark service 1.");
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputUri)) {
             Bitmap originalBitmap = android.graphics.BitmapFactory.decodeStream(inputStream);
@@ -58,6 +59,7 @@ public class WatermarkService {
             // Create a mutable bitmap to draw the watermark
             Bitmap watermarkedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
             Canvas canvas = new Canvas(watermarkedBitmap);
+            Log.d(TAG, "Watermark service 2.");
 
             // Set up paint for watermark text
             Paint paint = new Paint();
@@ -65,6 +67,7 @@ public class WatermarkService {
             paint.setAlpha(100); // 40% transparency
             paint.setTextSize(36);
             paint.setAntiAlias(true);
+            Log.d(TAG, "Watermark service 3.");
 
             // Calculate text width and height
             float textWidth = paint.measureText(watermarkText);
@@ -84,6 +87,7 @@ public class WatermarkService {
             // Save the watermarked bitmap to file
             try (FileOutputStream out = new FileOutputStream(outputFile)) {
                 watermarkedBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                Log.d(TAG, "Watermark service 4.");
             }
         } catch (Exception e) {
             Log.e(TAG, "Error applying watermark to image: " + e.getMessage(), e);
@@ -109,6 +113,7 @@ public class WatermarkService {
             try {
                 // Try loading the PDF (throws an exception if encrypted)
                 document = PDDocument.load(inputStream);
+                Log.d(TAG, "Watermark service 5.");
             } catch (Exception e) {
                 Log.w(TAG, "PDF might be encrypted. Attempting decryption...");
                 // Attempt to decrypt the PDF
@@ -132,6 +137,7 @@ public class WatermarkService {
                         PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();
                         graphicsState.setNonStrokingAlphaConstant(0.2f); // 20% opacity
                         contentStream.setGraphicsStateParameters(graphicsState);
+                        Log.d(TAG, "Watermark service 6.");
 
                         // Set font and color
                         float fontSize = 40;
@@ -142,6 +148,7 @@ public class WatermarkService {
                         float pageWidth = page.getMediaBox().getWidth();
                         float pageHeight = page.getMediaBox().getHeight();
                         float textWidth = PDType1Font.HELVETICA.getStringWidth(watermarkText) / 1000 * fontSize;
+                        Log.d(TAG, "Watermark service 7.");
 
                         // Render watermark text diagonally across the page
                         for (float y = 0; y < pageHeight; y += 100) {
@@ -163,6 +170,7 @@ public class WatermarkService {
             try (FileOutputStream out = new FileOutputStream(outputFile)) {
                 if (document != null) {
                     document.save(out);
+                    Log.d(TAG, "Watermark service 8.");
                 }
             }
         } finally {

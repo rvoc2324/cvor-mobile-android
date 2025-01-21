@@ -38,29 +38,33 @@ public class PdfHandlingFragment extends Fragment {
 
     @Inject
     PdfHandlingService pdfHandlingService;
+
+    private static final String TAG = "PDFHandlingFragment";
     FileActionListener fileActionListener;
     private FileListAdapter fileListAdapter;
     private CoreViewModel coreViewModel;
     private Button actionButton;
-    private ProgressBar progressBar;
+    private ProgressBar progressIndicator;
     private String currentActionType;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "PDF Handling 1.");
         return inflater.inflate(R.layout.fragment_pdf_handling, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "PDF Handling 2.");
 
         // Initialize the CoreViewModel
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         RecyclerView fileRecyclerView = view.findViewById(R.id.recycler_view_files);
         actionButton = view.findViewById(R.id.action_button);
-        progressBar = view.findViewById(R.id.progress_bar);
+        progressIndicator = view.findViewById(R.id.progress_indicator);
 
         // Initialize FileActionListener as a simple callback for removing files
         fileActionListener = new FileActionListener(uri -> coreViewModel.removeSelectedFileUri(uri));
@@ -76,22 +80,28 @@ public class PdfHandlingFragment extends Fragment {
                 fileListAdapter.submitList(uris);
             }
         });
+        Log.d(TAG, "PDF Handling 3.");
 
         // Observe action type and update button label
         coreViewModel.getActionType().observe(getViewLifecycleOwner(), actionType -> {
-            if ("CombinePDF".equals(actionType)) {
+            if ("combinepdf".equals(actionType)) {
+                Log.d(TAG, "PDF Handling 4.");
                 actionButton.setText(R.string.combine_pdf);
-            } else if ("ConvertToPDF".equals(actionType)) {
+            } else if ("convertpdf".equals(actionType)) {
+                Log.d(TAG, "PDF Handling 5.");
                 actionButton.setText(R.string.convert_to_pdf);
             }
             currentActionType = actionType;
+            Log.d(TAG, "PDF Handling 6.");
         });
 
         // Enable drag-and-drop and swipe-to-remove using ItemTouchHelper
         setupItemTouchHelper(fileRecyclerView);
+        Log.d(TAG, "PDF Handling 7.");
 
         // Handle action button click
         actionButton.setOnClickListener(v -> processFiles(currentActionType));
+        Log.d(TAG, "PDF Handling 8.");
     }
 
     private void setupItemTouchHelper(RecyclerView recyclerView) {
@@ -100,6 +110,7 @@ public class PdfHandlingFragment extends Fragment {
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                 int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                Log.d(TAG, "PDF Handling 9.");
                 return makeMovementFlags(dragFlags, swipeFlags);
             }
 
@@ -108,6 +119,7 @@ public class PdfHandlingFragment extends Fragment {
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
                 coreViewModel.reorderSelectedFileUris(fromPosition, toPosition);
+                Log.d(TAG, "PDF Handling 10.");
                 return true;
             }
 
@@ -116,26 +128,31 @@ public class PdfHandlingFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 List<Uri> uris = coreViewModel.getSelectedFileUris().getValue();
                 if (uris != null && position >= 0 && position < uris.size()) {
+                    Log.d(TAG, "PDF Handling 1.");
                     Uri uriToRemove = uris.get(position);
                     coreViewModel.removeSelectedFileUri(uriToRemove);
                 }
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
+        Log.d(TAG, "PDF Handling 12.");
+
     }
 
     private void processFiles(String actionType) {
-        progressBar.setVisibility(View.VISIBLE);
+        progressIndicator.setVisibility(View.VISIBLE);
         actionButton.setEnabled(false);
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Log.d(TAG, "PDF Handling 13.");
         executorService.execute(() -> {
             List<Uri> selectedFiles = coreViewModel.getSelectedFileUris().getValue();
+            Log.d(TAG, "PDF Handling 14.");
             if (selectedFiles == null || selectedFiles.isEmpty()) {
                 requireActivity().runOnUiThread(() -> {
-                    progressBar.setVisibility(View.GONE);
+                    progressIndicator.setVisibility(View.GONE);
                     actionButton.setEnabled(true);
-                    Toast.makeText(requireContext(), "No files selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "No files selected. Go back to select a file.", Toast.LENGTH_SHORT).show();
                 });
                 return;
             }
@@ -143,17 +160,20 @@ public class PdfHandlingFragment extends Fragment {
             File outputFile = new File(requireContext().getCacheDir(), "processed_file.pdf");
             try {
                 File processedFile;
+                Log.d(TAG, "PDF Handling 15.");
 
-                if ("CombinePDF".equals(actionType)) {
+                if ("combinepdf".equals(actionType)) {
+                    Log.d(TAG, "PDF Handling 16.");
                     processedFile = pdfHandlingService.combinePDF(selectedFiles, outputFile);
-                } else if ("ConvertToPDF".equals(actionType)) {
+                } else if ("convertpdf".equals(actionType)) {
+                    Log.d(TAG, "PDF Handling 17.");
                     processedFile = pdfHandlingService.convertImagesToPDF(selectedFiles, outputFile);
                 } else {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
 
                 requireActivity().runOnUiThread(() -> {
-                    progressBar.setVisibility(View.GONE);
+                    progressIndicator.setVisibility(View.GONE);
                     actionButton.setEnabled(true);
                     coreViewModel.addProcessedFile(processedFile);
                     coreViewModel.setNavigationEvent("navigate_to_preview");
@@ -161,7 +181,7 @@ public class PdfHandlingFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("AppError", "Error processing files", e);
                 requireActivity().runOnUiThread(() -> {
-                    progressBar.setVisibility(View.GONE);
+                    progressIndicator.setVisibility(View.GONE);
                     actionButton.setEnabled(true);
                     Toast.makeText(requireContext(), "Error processing files: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });

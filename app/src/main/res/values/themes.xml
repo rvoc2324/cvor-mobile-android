@@ -35,6 +35,14 @@
 
     </style>
 
+    <!-- Dialog style -->
+    <style name="AppTheme.Dialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorAccentPrimary</item>
+        <item name="colorOnPrimary">@color/transparent</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
     <!-- Light Theme -->
     <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>

@@ -114,8 +114,8 @@
 
             <ImageButton
                 android:id="@+id/buttonCapture"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/baseline_circle_24"
@@ -153,7 +153,7 @@
                 android:layout_margin="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/switch_camera"
-                android:src="@drawable/baseline_flip_camera_24"
+                android:src="@drawable/baseline_switch_camera_24"
                 app:tint="@android:color/white" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

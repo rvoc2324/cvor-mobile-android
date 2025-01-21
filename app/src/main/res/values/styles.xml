@@ -65,6 +65,12 @@
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
+    <!-- Text hint style -->
+    <style name="TextInputHintStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <!-- Container Styles -->
     <style name="CardStyle">
         <item name="android:background">@color/fragment1Background</item>
@@ -73,6 +79,11 @@
     </style>
 
     <style name="DialogStyle" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:background">@color/fragment2Background</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="CustomAlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="android:background">@color/fragment2Background</item>
         <item name="android:textColor">@color/text</item>
     </style>

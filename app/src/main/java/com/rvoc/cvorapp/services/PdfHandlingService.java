@@ -30,6 +30,8 @@ public class PdfHandlingService {
 
     private final Context context;
 
+    private static final String TAG = "PDF Service";
+
     @Inject
     public PdfHandlingService(@ApplicationContext Context context) {
         this.context = context;
@@ -38,6 +40,7 @@ public class PdfHandlingService {
     // Combine multiple PDFs into one
     public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile) throws Exception {
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
+        Log.d(TAG, "PDF Service 5.");
 
         for (Uri uri : inputFiles) {
             PDDocument document;
@@ -45,11 +48,13 @@ public class PdfHandlingService {
                 try {
                     // Attempt to load the PDF document
                     document = PDDocument.load(inputStream);
+                    Log.d(TAG, "PDF Service 6.");
                 } catch (IOException e) {
                     // If the document is password-protected, an IOException will be thrown
                     if (e.getMessage() != null && e.getMessage().contains("password") && inputStream != null) {
                         // Attempt to decrypt the document after catching the IOException
                         document = decryptPDF(inputStream);
+                        Log.d(TAG, "PDF Service 7.");
                     } else {
                         // If the exception is not related to encryption, rethrow it
                         throw e;
@@ -60,6 +65,7 @@ public class PdfHandlingService {
                 if (document != null) {
                     ByteArrayOutputStream decryptedStream = new ByteArrayOutputStream();
                     document.save(decryptedStream);
+                    Log.d(TAG, "PDF Service 8.");
                     document.close();
                     mergerUtility.addSource(new ByteArrayInputStream(decryptedStream.toByteArray()));
                 }
@@ -72,11 +78,13 @@ public class PdfHandlingService {
         // Set the destination file and merge the documents
         mergerUtility.setDestinationFileName(outputFile.getPath());
         mergerUtility.mergeDocuments(null);
+        Log.d(TAG, "PDF Service 9.");
         return outputFile;
     }
 
     // Convert images to a single PDF
     public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {
+        Log.d(TAG, "PDF Service 1.");
         try (PDDocument document = new PDDocument()) {
             for (Uri uri : imageUris) {
                 try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
@@ -87,10 +95,12 @@ public class PdfHandlingService {
                             readStream(inputStream),
                             "image"
                     );
+                    Log.d(TAG, "PDF Service 2.");
 
                     // Create a new page and add the image
                     PDPage page = new PDPage(new PDRectangle(pdImage.getWidth(), pdImage.getHeight()));
                     document.addPage(page);
+                    Log.d(TAG, "PDF Service 3.");
                     try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                         contentStream.drawImage(pdImage, 0, 0, pdImage.getWidth(), pdImage.getHeight());
                     }
@@ -143,6 +153,7 @@ public class PdfHandlingService {
     // Helper to read InputStream into a byte array
     private byte[] readStream(InputStream inputStream) throws Exception {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        Log.d(TAG, "PDF Service 4.");
         int nRead;
         byte[] data = new byte[1024];
         while ((nRead = inputStream.read(data, 0, data.length)) != -1) {

@@ -1,10 +1,14 @@
 package com.rvoc.cvorapp.ui.fragments.filesource;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,8 +18,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
@@ -36,6 +43,13 @@ import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -62,7 +76,6 @@ public class CameraFragment extends Fragment {
 
     private CoreViewModel coreViewModel;
     private ProcessCameraProvider cameraProvider;
-    private CameraSelector cameraSelector;
 
     private final ActivityResultLauncher<String> cameraPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -138,7 +151,7 @@ public class CameraFragment extends Fragment {
         Log.d(TAG, "Camera 2.");
         if (cameraProvider == null) return;
 
-        cameraSelector = new CameraSelector.Builder()
+        CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(isUsingBackCamera ? CameraSelector.LENS_FACING_BACK : CameraSelector.LENS_FACING_FRONT)
                 .build();
         Log.d(TAG, "Camera 3.");
@@ -174,24 +187,29 @@ public class CameraFragment extends Fragment {
                 return;
             }
 
-            // String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis());
-            ContentValues contentValues = new ContentValues();
-            // contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "JPEG_" + timestamp);
-            // contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-
+            // Capture image into memory for faster preview
             imageCapture.takePicture(
-                    new ImageCapture.OutputFileOptions.Builder(
-
-                            requireContext().getContentResolver(),
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                            contentValues
-                    ).build(),
                     ContextCompat.getMainExecutor(requireContext()),
-                    new ImageCapture.OnImageSavedCallback() {
+                    new ImageCapture.OnImageCapturedCallback() {
                         @Override
-                        public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                            capturedImageUri = outputFileResults.getSavedUri();
-                            showImageConfirmation();
+                        public void onCaptureSuccess(@NonNull ImageProxy image) {
+                            // Convert the ImageProxy to a Bitmap (or other format) for immediate display
+                            Bitmap bitmap = convertImageProxyToBitmap(image);
+                            showImageConfirmation(bitmap);
+
+                            // Save the image to a file in a background thread
+                            new Thread(() -> {
+                                File photoFile = new File(requireContext().getCacheDir(), "temp_capture_" + System.currentTimeMillis() + ".jpg");
+                                if (bitmap != null) {
+                                    saveBitmapToFile(bitmap, photoFile);
+                                }
+
+                                // Update the URI on the main thread
+                                capturedImageUri = Uri.fromFile(photoFile);
+                                Log.d(TAG, "Captured Image URI: " + capturedImageUri);
+                            }).start();
+
+                            image.close(); // Close the ImageProxy
                         }
 
                         @Override
@@ -203,11 +221,55 @@ public class CameraFragment extends Fragment {
             );
         });
 
-        buttonRetake.setOnClickListener(v -> resetCaptureState());
+        buttonRetake.setOnClickListener(v -> {
+            if (capturedImageUri != null) {
+                File file = new File(capturedImageUri.getPath());
+                if (file.exists() && file.delete()) {
+                    Log.d(TAG, "Temporary file deleted successfully.");
+                } else {
+                    Log.w(TAG, "Failed to delete the temporary file.");
+                }
+                capturedImageUri = null;
+                Log.d(TAG, "Camera 8.");
+            }
+            resetCaptureState();
+        });
 
         buttonConfirm.setOnClickListener(v -> {
             if (capturedImageUri != null) {
-                coreViewModel.addSelectedFileUri(capturedImageUri);
+                // Move the temporary file to permanent storage (e.g., gallery)
+                String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis());
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "JPEG_" + timestamp);
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+
+                Uri savedUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+                if (savedUri != null) {
+                    try (OutputStream outputStream = requireContext().getContentResolver().openOutputStream(savedUri);
+                         InputStream inputStream = new FileInputStream(capturedImageUri.getPath())) {
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            if (outputStream != null) {
+                                outputStream.write(buffer, 0, bytesRead);
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Failed to save image", e);
+                        Toast.makeText(requireContext(), R.string.image_save_failed, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                // Update coreViewModel
+                coreViewModel.addSelectedFileUri(savedUri);
+
+                File tempFile = new File(capturedImageUri.getPath());
+                if (tempFile.exists() && tempFile.delete()) {
+                    Log.d(TAG, "Temporary file deleted successfully.");
+                }
+
                 askCaptureMoreImages();
             } else {
                 Toast.makeText(requireContext(), R.string.no_image_to_confirm, Toast.LENGTH_SHORT).show();
@@ -222,12 +284,15 @@ public class CameraFragment extends Fragment {
         });
     }
 
-    private void showImageConfirmation() {
+    private void showImageConfirmation(Bitmap imagePreview) {
         previewView.setVisibility(View.GONE);
-        if (capturedImageUri != null) {
-            capturedImageView.setImageURI(capturedImageUri);
+
+        // Show the captured image as a Bitmap
+        if (imagePreview != null) {
+            capturedImageView.setImageBitmap(imagePreview); // Set the Bitmap as the preview
             capturedImageView.setVisibility(View.VISIBLE);
         }
+
         buttonCapture.setVisibility(View.GONE);
         buttonFlashToggle.setVisibility(View.GONE);
         buttonBack.setVisibility(View.GONE);
@@ -237,7 +302,9 @@ public class CameraFragment extends Fragment {
     }
 
     private void resetCaptureState() {
+        capturedImageView.setImageBitmap(null);
         capturedImageView.setVisibility(View.GONE);
+
         previewView.setVisibility(View.VISIBLE);
         buttonCapture.setVisibility(View.VISIBLE);
         buttonFlashToggle.setVisibility(View.VISIBLE);
@@ -246,14 +313,40 @@ public class CameraFragment extends Fragment {
         buttonConfirm.setVisibility(View.GONE);
         buttonSwitchCamera.setVisibility(View.VISIBLE);
         capturedImageUri = null;
+
+        setupCamera();
     }
 
     private void askCaptureMoreImages() {
-        new AlertDialog.Builder(requireContext())
-                .setMessage(R.string.capture_more_images)
-                .setPositiveButton(R.string.yes, (dialog, which) -> resetCaptureState())
-                .setNegativeButton(R.string.no, (dialog, which) -> coreViewModel.setNavigationEvent("navigate_to_action"))
-                .show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme);
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        View dialogView = inflater.inflate(R.layout.dialog_layout, null);
+
+        // Set up dialog content
+        TextView dialogMessage = dialogView.findViewById(R.id.dialogMessage);
+        Button positiveButton = dialogView.findViewById(R.id.positiveButton);
+        Button negativeButton = dialogView.findViewById(R.id.negativeButton);
+
+        // Set the message dynamically
+        dialogMessage.setText(R.string.capture_more_images);
+
+        // Create the dialog
+        AlertDialog dialog = builder.setView(dialogView).create();
+
+        // Set up button click listeners
+        positiveButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            resetCaptureState();
+        });
+
+        negativeButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            coreViewModel.setNavigationEvent("navigate_to_action");
+            Log.e(TAG, "navigate to watermark");
+        });
+
+        // Show the dialog
+        dialog.show();
     }
 
     private void openAppSettings() {
@@ -261,6 +354,28 @@ public class CameraFragment extends Fragment {
         Uri uri = Uri.fromParts("package", requireContext().getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
+    }
+
+    // Converting Image Proxy to Bitmap
+    private Bitmap convertImageProxyToBitmap(ImageProxy image) {
+        @SuppressLint("UnsafeOptInUsageError")
+        Image imageData = image.getImage();
+        if (imageData != null) {
+            ByteBuffer buffer = imageData.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        return null;
+    }
+
+    // Saving bitmap to file
+    private void saveBitmapToFile(Bitmap bitmap, File file) {
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        } catch (IOException e) {
+            Log.e(TAG, "Error saving bitmap to file", e);
+        }
     }
 
     @Override

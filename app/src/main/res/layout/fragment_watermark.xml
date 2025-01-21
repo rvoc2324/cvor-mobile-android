@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_gravity="center">
 
         <!-- Card containing input fields -->
         <androidx.cardview.widget.CardView
@@ -20,7 +21,7 @@
             app:cardElevation="8dp"
             app:cardCornerRadius="16dp"
             android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="@drawable/gradient_secondary">
+            app:cardBackgroundColor="@color/fragment1Background">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,7 +36,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/sharing_with"
                     app:hintTextColor="@color/textSecondary"
-                    app:boxStrokeColor="@color/buttonSecondary">
+                    app:boxStrokeColor="@color/buttonSecondary"
+                    app:hintTextAppearance="@style/TextInputHintStyle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/input_sharing_with"
@@ -53,6 +55,7 @@
                     android:hint="@string/purpose"
                     app:hintTextColor="@color/textSecondary"
                     app:boxStrokeColor="@color/buttonSecondary"
+                    app:hintTextAppearance="@style/TextInputHintStyle"
                     android:layout_marginTop="16dp">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="@string/watermark_text"
             android:textColor="@color/text"
-            android:gravity="center"
+            android:gravity="left"
             android:padding="16dp"
             android:background="@drawable/rounded_background_secondary"
             android:layout_marginBottom="16dp"
@@ -96,9 +99,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/preview_button"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="30dp"
             android:paddingVertical="12dp"
             app:cornerRadius="16dp"
             app:rippleColor="@color/rippleEffect" />
     </LinearLayout>
+
+    <!-- Indeterminate Circular Progress Indicator -->
+    <ProgressBar
+        android:id="@+id/progress_indicator"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </ScrollView>

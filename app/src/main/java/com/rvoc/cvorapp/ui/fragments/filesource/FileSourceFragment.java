@@ -31,6 +31,7 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         Log.d(TAG, "File source 1.");
+        dialog.setDismissWithAnimation(true);
 
         // Initialize View Binding
         binding = FragmentFileSourceBinding.inflate(getLayoutInflater());
@@ -46,34 +47,40 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
         setupListeners();
         Log.d(TAG, "File source 3.");
 
+        // Add a listener to handle dismissal action
+        dialog.setOnDismissListener(dialogInterface -> {
+            Log.d(TAG, "FileSourceFragment dismissed.");
+            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+        });
+
         return dialog;
     }
 
     private void observeActionType() {
-        Log.d(TAG, "File source 9.");
+        Log.d(TAG, "File source 10.");
         coreViewModel.getActionType().observe(this, actionType -> {
+            Log.d(TAG, "Action Type: " + actionType);
             if (actionType != null) {
                 switch (actionType) {
                     case "addwatermark":
-                        Log.d(TAG, "File source 10.");
+                        Log.d(TAG, "File source 11.");
                         binding.optionCamera.setVisibility(View.VISIBLE);
                         binding.optionImagePicker.setVisibility(View.VISIBLE);
                         binding.optionPDFPicker.setVisibility(View.VISIBLE);
                         break;
                     case "combinepdf":
+                        Log.d(TAG, "File source 12.");
                         binding.optionCamera.setVisibility(View.GONE);
                         binding.optionImagePicker.setVisibility(View.GONE);
                         binding.optionPDFPicker.setVisibility(View.VISIBLE);
                         break;
                     case "convertpdf":
+                        Log.d(TAG, "File source 13.");
                         binding.optionCamera.setVisibility(View.VISIBLE);
                         binding.optionImagePicker.setVisibility(View.VISIBLE);
                         binding.optionPDFPicker.setVisibility(View.GONE);
                         break;
                 }
-                binding.optionCamera.setVisibility(View.VISIBLE);
-                binding.optionImagePicker.setVisibility(View.VISIBLE);
-                binding.optionPDFPicker.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -97,7 +104,7 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
 
         binding.optionPDFPicker.setOnClickListener(v -> {
             coreViewModel.setSourceType(CoreViewModel.SourceType.PDF_PICKER);
-            Log.d(TAG, "File source 6.");
+            Log.d(TAG, "File source 7.");
             dismiss();
         });
     }
@@ -105,13 +112,16 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
-        Log.d(TAG, "File source 7.");
-        coreViewModel.clearState(); // Optional: Reset ViewModel state if needed
+        Log.d(TAG, "File source 8.");
+        coreViewModel.clearState();
+
+        // Finish the activity if the fragment is dismissed
+        requireActivity().getOnBackPressedDispatcher().onBackPressed();
     }
 
     @Override
     public void onDestroyView() {
-        Log.d(TAG, "File source 8.");
+        Log.d(TAG, "File source 9.");
         super.onDestroyView();
         binding = null; // Avoid memory leaks
     }

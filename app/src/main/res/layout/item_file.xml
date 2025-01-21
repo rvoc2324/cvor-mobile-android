@@ -3,21 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="20dp">
 
     <ImageView
         android:id="@+id/file_type_image_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_pdf"
+        android:backgroundTint="@color/transparent"
         android:contentDescription="@string/pdf_icon" />
 
     <TextView
         android:id="@+id/file_name_text_view"
+        style="@style/TextStyle.Headline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="8dp"
+        android:layout_gravity="center_vertical"
         android:text="@string/file_name"
         android:textSize="16sp" />
 
@@ -26,5 +29,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_delete"
+        android:backgroundTint="@color/transparent"
         android:contentDescription="@string/delete_icon" />
 </LinearLayout>

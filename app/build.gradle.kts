@@ -35,6 +35,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_20
     }
 
+    lint {
+        ignoreWarnings = false
+    }
+
     buildFeatures {
         viewBinding = true
     }

@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -14,15 +18,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-/**
- * FileManagerFragment
- * Allows users to select PDF or image files using system file picker.
- * Updates the CoreViewModel with selected file URIs.
- */
 @AndroidEntryPoint
 public class FileManagerFragment extends Fragment {
 
@@ -31,50 +31,106 @@ public class FileManagerFragment extends Fragment {
 
     // Launcher for file picker results
     private ActivityResultLauncher<Intent> filePickerLauncher;
+    private ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            Log.d(TAG, "FileManagerFragment: onCreate started.");
 
-        // Initialize CoreViewModel
-        coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+            // Initialize CoreViewModel
+            coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+            Log.d(TAG, "FileManagerFragment: CoreViewModel initialized.");
 
-        // Register file picker result handler
-        filePickerLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == android.app.Activity.RESULT_OK && result.getData() != null) {
-                        Intent data = result.getData();
-                        // Handle multiple or single file selection
-                        if (data.getClipData() != null) {
-                            int itemCount = data.getClipData().getItemCount();
-                            for (int i = 0; i < itemCount; i++) {
-                                Uri fileUri = data.getClipData().getItemAt(i).getUri();
-                                handleSelectedFile(fileUri);
+            // Register file picker launcher
+            filePickerLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        try {
+                            Log.d(TAG, "FileManagerFragment: File picker result received.");
+                            if (result.getResultCode() == android.app.Activity.RESULT_OK && result.getData() != null) {
+                                Intent data = result.getData();
+                                if (data.getClipData() != null) {
+                                    Log.d(TAG, "FileManagerFragment: Multiple files selected.");
+                                    int itemCount = data.getClipData().getItemCount();
+                                    for (int i = 0; i < itemCount; i++) {
+                                        Uri fileUri = data.getClipData().getItemAt(i).getUri();
+                                        handleSelectedFile(fileUri);
+                                        Log.d(TAG, "FileManagerFragment: File processed: " + fileUri);
+                                    }
+                                    Toast.makeText(requireContext(), itemCount + " files selected", Toast.LENGTH_SHORT).show();
+                                } else if (data.getData() != null) {
+                                    Log.d(TAG, "FileManagerFragment: Single file selected.");
+                                    handleSelectedFile(data.getData());
+                                    Toast.makeText(requireContext(), "1 file selected", Toast.LENGTH_SHORT).show();
+                                }
+                                coreViewModel.setNavigationEvent("navigate_to_action");
+                            } else {
+                                Log.w(TAG, "FileManagerFragment: File selection cancelled.");
+                                Toast.makeText(requireContext(), "File selection cancelled", Toast.LENGTH_SHORT).show();
+                                coreViewModel.setNavigationEvent("navigate_back");
                             }
-                        } else if (data.getData() != null) {
-                            handleSelectedFile(data.getData());
+                        } catch (Exception e) {
+                            Log.e(TAG, "FileManagerFragment: Error handling file picker result.", e);
                         }
-                        coreViewModel.setNavigationEvent("navigate_to_action");
-                    } else {
-                        Toast.makeText(requireContext(), "File selection cancelled", Toast.LENGTH_SHORT).show();
-                        coreViewModel.setNavigationEvent("navigate_back");
-                    }
-                });
+                    });
+
+            Log.d(TAG, "FileManagerFragment: File picker launcher initialized.");
+
+            // Register photo picker launcher (for Android 13+)
+            photoPickerLauncher = registerForActivityResult(
+                    new ActivityResultContracts.PickMultipleVisualMedia(),
+                    uris -> {
+                        try {
+                            Log.d(TAG, "FileManagerFragment: Photo picker result received.");
+                            if (uris != null && !uris.isEmpty()) {
+                                Log.d(TAG, "FileManagerFragment: Photos selected: " + uris.size());
+                                for (Uri uri : uris) {
+                                    handleSelectedFile(uri);
+                                    Log.d(TAG, "FileManagerFragment: Photo processed: " + uri);
+                                }
+                                coreViewModel.setNavigationEvent("navigate_to_action");
+                            } else {
+                                Log.w(TAG, "FileManagerFragment: No photos selected.");
+                                Toast.makeText(requireContext(), "No images selected", Toast.LENGTH_SHORT).show();
+                                coreViewModel.setNavigationEvent("navigate_back");
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "FileManagerFragment: Error handling photo picker result.", e);
+                        }
+                    });
+
+            Log.d(TAG, "FileManagerFragment: Photo picker launcher initialized.");
+            Log.d(TAG, "FileManagerFragment: onCreate completed.");
+        } catch (Exception e) {
+            Log.e(TAG, "FileManagerFragment: Error during onCreate.", e);
+        }
+    }
+
+    @Override
+    @Nullable
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "FileManagerFragment: onCreateView invoked.");
+        // Inflate and return the layout for the fragment
+        return inflater.inflate(R.layout.fragment_file_manager, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull android.view.View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "File manager fragment 3.");
 
-        // Observe the sourceType from CoreViewModel
+        // Observe the source type and launch appropriate picker
         coreViewModel.getSourceType().observe(getViewLifecycleOwner(), sourceType -> {
             if (sourceType != null) {
                 switch (sourceType) {
                     case PDF_PICKER:
+                        Log.d(TAG, "pdf picker picked.");
                         pickPdfFiles();
                         break;
                     case IMAGE_PICKER:
+                        Log.d(TAG, "image picker picked.");
                         pickImageFiles();
                         break;
                     default:
@@ -88,42 +144,27 @@ public class FileManagerFragment extends Fragment {
         });
     }
 
-    /**
-     * Launches the file picker for PDF files.
-     */
     private void pickPdfFiles() {
+        Toast.makeText(requireContext(), "Long press to select multiple files.", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "File Manager fragment 4.");
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("application/pdf");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
+        Log.d(TAG, "File Manager fragment 5.");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        Log.d(TAG, "File Manager fragment 6.");
         filePickerLauncher.launch(intent);
     }
 
-    /**
-     * Launches the file picker for image files.
-     */
     private void pickImageFiles() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Android 13+ Photo Picker API
-            ActivityResultLauncher<PickVisualMediaRequest> photoPickerLauncher = registerForActivityResult(
-                    new ActivityResultContracts.PickMultipleVisualMedia(),
-                    uris -> {
-                        if (!uris.isEmpty()) {
-                            for (Uri uri : uris) {
-                                handleSelectedFile(uri);
-                            }
-                            coreViewModel.setNavigationEvent("navigate_to_action");
-                        } else {
-                            Toast.makeText(requireContext(), "No images selected", Toast.LENGTH_SHORT).show();
-                            coreViewModel.setNavigationEvent("navigate_back");
-                        }
-                    });
-
-            photoPickerLauncher.launch(new PickVisualMediaRequest.Builder()
-                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                    .build());
+            Log.d(TAG, "File Manager fragment 7.");
+            photoPickerLauncher.launch(
+                    new PickVisualMediaRequest.Builder()
+                            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                            .build()
+            );
         } else {
-            // For Android 12 and below
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -132,15 +173,10 @@ public class FileManagerFragment extends Fragment {
         }
     }
 
-    /**
-     * Handles the selected file and updates the CoreViewModel.
-     *
-     * @param fileUri The URI of the selected file.
-     */
     private void handleSelectedFile(@NonNull Uri fileUri) {
         try {
             coreViewModel.addSelectedFileUri(fileUri);
-            Toast.makeText(requireContext(), "File selected: " + fileUri, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "File Manager fragment 8.");
         } catch (Exception e) {
             Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
         }

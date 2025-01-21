@@ -99,6 +99,10 @@ public class CoreActivity extends AppCompatActivity {
                     case "navigate_to_share":
                         navToShare();
                         break;
+
+                    default:
+                        Log.e("CoreActivity", "Unknown navigation event: " + event);
+                        break;
                 }
 
                 // Reset navigation event after handling
