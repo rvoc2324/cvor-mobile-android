@@ -3,14 +3,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_primary">
-
-    <TextView
-        android:id="@+id/tv_file_picker_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Select the file type to pick"
-        android:textSize="24sp"
-        android:textColor="@color/text" />
-
 </FrameLayout>

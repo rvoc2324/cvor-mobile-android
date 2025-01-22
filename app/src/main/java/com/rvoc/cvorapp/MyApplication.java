@@ -49,7 +49,9 @@ public class MyApplication extends Application {
         long endTime = System.currentTimeMillis();
         Log.d(TAG, "Application initialised successfully in " + (endTime - startTime) + " ms.");
 
+        /*
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
@@ -60,7 +62,6 @@ public class MyApplication extends Application {
             @Override public void onActivityStopped(Activity activity) {}
             @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
             @Override public void onActivityDestroyed(Activity activity) {}
-        });
-    }
+        });*/
     }
 }

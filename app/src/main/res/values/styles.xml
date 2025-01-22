@@ -84,7 +84,7 @@
     </style>
 
     <style name="CustomAlertDialogTheme" parent="Theme.MaterialComponents.Dialog.Alert">
-        <item name="android:background">@color/fragment2Background</item>
+        <item name="android:background">@color/transparent</item>
         <item name="android:textColor">@color/text</item>
     </style>
 </resources>

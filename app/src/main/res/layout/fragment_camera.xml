@@ -38,20 +38,6 @@
 
     <!-- Top Controls -->
     <ImageButton
-        android:id="@+id/buttonFlashToggle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/baseline_flash_on_24"
-        android:contentDescription="@string/flash_toggle"
-        app:tint="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/topPadding"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
         android:id="@+id/buttonBack"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -89,6 +75,21 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
+                android:id="@+id/buttonFlashToggle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/flash_toggle"
+                android:src="@drawable/baseline_flash_off_24"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/topPadding"
+                app:tint="@android:color/white" />
+
+            <ImageButton
                 android:id="@+id/buttonRetake"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -114,8 +115,8 @@
 
             <ImageButton
                 android:id="@+id/buttonCapture"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_margin="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/baseline_circle_24"

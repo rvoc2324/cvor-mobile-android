@@ -5,12 +5,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.FragmentFileSourceBinding;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
@@ -36,6 +38,16 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
         // Initialize View Binding
         binding = FragmentFileSourceBinding.inflate(getLayoutInflater());
         dialog.setContentView(binding.getRoot());
+
+        // Apply rounded background to the BottomSheet
+        dialog.setOnShowListener(dialogInterface -> {
+            BottomSheetDialog d = (BottomSheetDialog) dialogInterface;
+            FrameLayout bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.setBackgroundResource(R.drawable.rounded_top_border);
+            }
+        });
+
         Log.d(TAG, "File source 2.");
 
         // Initialize ViewModel

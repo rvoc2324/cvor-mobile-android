@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,6 +64,9 @@ public class PdfHandlingFragment extends Fragment {
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         RecyclerView fileRecyclerView = view.findViewById(R.id.recycler_view_files);
+        DividerItemDecoration divider = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+        fileRecyclerView.addItemDecoration(divider);
+
         actionButton = view.findViewById(R.id.action_button);
         progressIndicator = view.findViewById(R.id.progress_indicator);
 

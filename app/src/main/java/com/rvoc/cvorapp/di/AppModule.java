@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.rvoc.cvorapp.adapters.DragAndDropAdapter;
 import com.rvoc.cvorapp.adapters.FileActionListener;
 import com.rvoc.cvorapp.adapters.FileListAdapter;
 import com.rvoc.cvorapp.utils.PDFBoxInitialiser;

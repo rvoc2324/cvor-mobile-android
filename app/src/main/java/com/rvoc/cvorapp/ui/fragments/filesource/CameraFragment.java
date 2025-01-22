@@ -1,16 +1,11 @@
 package com.rvoc.cvorapp.ui.fragments.filesource;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -45,15 +40,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -161,7 +153,6 @@ public class CameraFragment extends Fragment {
         Log.d(TAG, "Camera 5.");
         imageCapture = new ImageCapture.Builder()
                 .setFlashMode(isFlashOn ? ImageCapture.FLASH_MODE_ON : ImageCapture.FLASH_MODE_OFF)
-                .setTargetRotation(previewView.getDisplay().getRotation())
                 .build();
         Log.d(TAG, "Camera 6.");
         cameraProvider.unbindAll();
@@ -177,6 +168,7 @@ public class CameraFragment extends Fragment {
             isFlashOn = !isFlashOn;
             buttonFlashToggle.setImageResource(isFlashOn ? R.drawable.baseline_flash_on_24 : R.drawable.baseline_flash_off_24);
             if (imageCapture != null) {
+                imageCapture.setFlashMode(isFlashOn ? ImageCapture.FLASH_MODE_ON : ImageCapture.FLASH_MODE_OFF);
                 bindCameraUseCases(); // Re-bind to apply flash mode changes
             }
         });
@@ -193,25 +185,11 @@ public class CameraFragment extends Fragment {
                     new ImageCapture.OnImageCapturedCallback() {
                         @Override
                         public void onCaptureSuccess(@NonNull ImageProxy image) {
-                            // Convert the ImageProxy to a Bitmap (or other format) for immediate display
-                            Bitmap bitmap = convertImageProxyToBitmap(image);
-                            showImageConfirmation(bitmap);
 
-                            // Save the image to a file in a background thread
-                            new Thread(() -> {
-                                File photoFile = new File(requireContext().getCacheDir(), "temp_capture_" + System.currentTimeMillis() + ".jpg");
-                                if (bitmap != null) {
-                                    saveBitmapToFile(bitmap, photoFile);
-                                }
-
-                                // Update the URI on the main thread
-                                capturedImageUri = Uri.fromFile(photoFile);
-                                Log.d(TAG, "Captured Image URI: " + capturedImageUri);
-                            }).start();
-
-                            image.close(); // Close the ImageProxy
+                            File photoFile = new File(requireContext().getCacheDir(), "temp_capture_" + System.currentTimeMillis() + ".jpg");
+                            capturedImageUri = Uri.fromFile(photoFile);
+                            showImageConfirmation();
                         }
-
                         @Override
                         public void onError(@NonNull ImageCaptureException exception) {
                             Log.e(TAG, "Image capture failed", exception);
@@ -240,7 +218,7 @@ public class CameraFragment extends Fragment {
                 // Move the temporary file to permanent storage (e.g., gallery)
                 String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis());
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "JPEG_" + timestamp);
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "cvor_" + timestamp);
                 contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
 
                 Uri savedUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -284,12 +262,12 @@ public class CameraFragment extends Fragment {
         });
     }
 
-    private void showImageConfirmation(Bitmap imagePreview) {
+    private void showImageConfirmation() {
         previewView.setVisibility(View.GONE);
 
         // Show the captured image as a Bitmap
-        if (imagePreview != null) {
-            capturedImageView.setImageBitmap(imagePreview); // Set the Bitmap as the preview
+        if (capturedImageUri != null) {
+            capturedImageView.setImageURI(capturedImageUri); // Set the Bitmap as the preview
             capturedImageView.setVisibility(View.VISIBLE);
         }
 
@@ -302,7 +280,7 @@ public class CameraFragment extends Fragment {
     }
 
     private void resetCaptureState() {
-        capturedImageView.setImageBitmap(null);
+        capturedImageView.setImageURI(null);
         capturedImageView.setVisibility(View.GONE);
 
         previewView.setVisibility(View.VISIBLE);
@@ -354,28 +332,6 @@ public class CameraFragment extends Fragment {
         Uri uri = Uri.fromParts("package", requireContext().getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
-    }
-
-    // Converting Image Proxy to Bitmap
-    private Bitmap convertImageProxyToBitmap(ImageProxy image) {
-        @SuppressLint("UnsafeOptInUsageError")
-        Image imageData = image.getImage();
-        if (imageData != null) {
-            ByteBuffer buffer = imageData.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        }
-        return null;
-    }
-
-    // Saving bitmap to file
-    private void saveBitmapToFile(Bitmap bitmap, File file) {
-        try (FileOutputStream out = new FileOutputStream(file)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        } catch (IOException e) {
-            Log.e(TAG, "Error saving bitmap to file", e);
-        }
     }
 
     @Override

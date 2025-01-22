@@ -7,115 +7,116 @@
     android:background="@drawable/gradient_primary"
     android:padding="24dp">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:gravity="center">
 
-        <!-- Card containing input fields -->
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="8dp"
-            app:cardCornerRadius="16dp"
-            android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="@color/fragment1Background">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <!-- Card containing input fields -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/fragment1Background"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
 
-                <!-- Sharing With Input Field -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_sharing_with_layout"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/sharing_with"
-                    app:hintTextColor="@color/textSecondary"
-                    app:boxStrokeColor="@color/buttonSecondary"
-                    app:hintTextAppearance="@style/TextInputHintStyle">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_sharing_with"
+                    <!-- Sharing With Input Field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_sharing_with_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text"
-                        android:inputType="text" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:hint="@string/sharing_with"
+                        app:boxStrokeColor="@color/buttonSecondary"
+                        app:hintTextAppearance="@style/TextInputHintStyle"
+                        app:hintTextColor="@color/textSecondary">
 
-                <!-- Purpose Input Field -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/input_purpose_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/purpose"
-                    app:hintTextColor="@color/textSecondary"
-                    app:boxStrokeColor="@color/buttonSecondary"
-                    app:hintTextAppearance="@style/TextInputHintStyle"
-                    android:layout_marginTop="16dp">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_sharing_with"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:textColor="@color/text" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_purpose"
+                    <!-- Purpose Input Field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_purpose_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text"
-                        android:inputType="text" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/purpose"
+                        app:boxStrokeColor="@color/buttonSecondary"
+                        app:hintTextAppearance="@style/TextInputHintStyle"
+                        app:hintTextColor="@color/textSecondary">
 
-                <!-- Repeat Watermark Checkbox -->
-                <CheckBox
-                    android:id="@+id/input_repeat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/repeat_watermark_check"
-                    android:textColor="@color/text"
-                    android:layout_marginTop="16dp"
-                    android:buttonTint="@color/checkBoxColor"
-                    android:checked="true" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_purpose"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:textColor="@color/text" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Watermark to be added -->
-        <TextView
-            android:id="@+id/text_generated_watermark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/watermark_text"
-            android:textColor="@color/text"
-            android:gravity="left"
-            android:padding="16dp"
-            android:background="@drawable/rounded_background_secondary"
-            android:layout_marginBottom="16dp"
-            style="@style/TextStyle.Body" />
+                    <!-- Repeat Watermark Checkbox -->
+                    <CheckBox
+                        android:id="@+id/input_repeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:buttonTint="@color/checkBoxColor"
+                        android:checked="true"
+                        android:text="@string/repeat_watermark_check"
+                        android:textColor="@color/text" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-        <!-- Preview Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_preview"
-            style="@style/PrimaryButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/preview_button"
-            android:layout_marginTop="30dp"
-            android:paddingVertical="12dp"
-            app:cornerRadius="16dp"
-            app:rippleColor="@color/rippleEffect" />
-    </LinearLayout>
+            <!-- Watermark to be added -->
+            <TextView
+                android:id="@+id/text_generated_watermark"
+                style="@style/TextStyle.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_background_secondary"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/watermark_text"
+                android:textColor="@color/text" />
 
-    <!-- Indeterminate Circular Progress Indicator -->
-    <ProgressBar
-        android:id="@+id/progress_indicator"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="16dp"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+            <!-- Preview Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_preview"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:paddingVertical="12dp"
+                android:text="@string/preview_button"
+                app:cornerRadius="16dp"
+                app:rippleColor="@color/rippleEffect" />
+        </LinearLayout>
+
+        <!-- Progress bar -->
+        <ProgressBar
+            android:id="@+id/progress_indicator"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminate="true"/>
+    </FrameLayout>
 </ScrollView>

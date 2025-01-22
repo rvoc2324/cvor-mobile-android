@@ -1,73 +1,72 @@
 package com.rvoc.cvorapp.ui.fragments.preview;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.rvoc.cvorapp.R;
-import com.rvoc.cvorapp.adapters.PreviewAdapter;
+import com.rvoc.cvorapp.adapters.PreviewPagerAdapter;
+import com.rvoc.cvorapp.databinding.FragmentPreviewBinding;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
-
-import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class PreviewFragment extends Fragment {
 
+    private FragmentPreviewBinding binding;
+    private PreviewPagerAdapter previewPagerAdapter;
     private CoreViewModel coreViewModel;
-    private PreviewAdapter previewAdapter;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_preview, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentPreviewBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+        coreViewModel = new ViewModelProvider(this).get(CoreViewModel.class);
 
-        RecyclerView previewRecyclerView = view.findViewById(R.id.preview_recycler_view);
-        Button backButton = view.findViewById(R.id.back_button);
-        Button shareButton = view.findViewById(R.id.share_button);
+        // Initialize ViewPager2 Adapter
+        previewPagerAdapter = new PreviewPagerAdapter(getChildFragmentManager(), getLifecycle());
+        binding.filePreviewPager.setAdapter(previewPagerAdapter);
 
-        previewRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        // Observe the processed file's pages and update UI
+        // Observe LiveData from CoreViewModel to update the ViewPager2 when the data changes
         coreViewModel.getProcessedFiles().observe(getViewLifecycleOwner(), files -> {
-            if (files != null) {
-                List<Bitmap> bitmaps = files.stream()
-                        .map(this::convertFileToBitmap)
-                        .collect(Collectors.toList());
-
-                previewAdapter.updateData(bitmaps);
-            }
+            previewPagerAdapter.submitList(files);  // Update adapter with the new list
         });
 
-        // Back button navigation
-        backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
-
-        // Share button navigation
-        shareButton.setOnClickListener(v -> coreViewModel.setNavigationEvent("navigate_to_share"));
+        // Set up listeners for buttons (Back, Share)
+        setupButtons();
     }
 
-    private Bitmap convertFileToBitmap(File file) {
-        return BitmapFactory.decodeFile(file.getAbsolutePath());
+
+    // Setup the buttons in the bottom bar
+    private void setupButtons() {
+        // Back Button - Navigates back to the previous fragment
+        binding.btnBack.setOnClickListener(v -> {
+            requireActivity().getOnBackPressedDispatcher().onBackPressed(); // Navigate to the previous fragment
+        });
+
+        // Share Button - Triggers the navigation event to "navigate_to_share"
+        binding.btnShare.setOnClickListener(v -> {
+            coreViewModel.setNavigationEvent("navigate_to_preview");  // Set the navigation event
+        });
+    }
+
+    // If needed, provide a method to clear binding and any other resources
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Clean up binding
     }
 }

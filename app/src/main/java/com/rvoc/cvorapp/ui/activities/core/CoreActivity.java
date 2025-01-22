@@ -233,7 +233,26 @@ public class CoreActivity extends AppCompatActivity {
      */
     private void navToPreview() {
         try {
-            navController.navigate(R.id.action_watermarkFragment_to_previewFragment);
+            String actionType = coreViewModel.getActionType().getValue();
+
+            if (actionType == null) {
+                Log.e("CoreActivity", "Cannot navigate: actionType is null!");
+                return;
+            }
+
+            switch (actionType) {
+                case "addwatermark":
+                    navController.navigate(R.id.action_watermarkFragment_to_previewFragment);
+                    break;
+
+                case "combinepdf":
+                case "convertpdf":
+                    navController.navigate(R.id.action_PdfHandlingFragment_to_previewFragment);
+                    break;
+
+                default:
+                    Log.e("CoreActivity", "Unknown actionType: " + actionType);
+            }
             Log.d(TAG, "CoreActivity 17.");
         } catch (Exception e) {
             Log.e("CoreActivity", "Navigation to PreviewFragment failed: " + e.getMessage(), e);

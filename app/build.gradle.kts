@@ -73,6 +73,10 @@ dependencies {
     //PDF Libraries
     implementation(libs.pdfbox.android)
 
+    // Image loading/caching libraries
+    implementation(libs.glide)
+    ksp(libs.glide.compiler)
+
     // Room Database
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

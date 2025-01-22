@@ -1,8 +1,15 @@
 package com.rvoc.cvorapp.services;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.InputType;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,6 +39,7 @@ public class PdfHandlingService {
     private final Context context;
 
     private static final String TAG = "PDF Service";
+    private static final long MAX_FILE_SIZE = 20 * 1024 * 1024; // 50 MB, you can change this limit.
 
     @Inject
     public PdfHandlingService(@ApplicationContext Context context) {
@@ -45,19 +54,23 @@ public class PdfHandlingService {
         for (Uri uri : inputFiles) {
             PDDocument document;
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+                if (inputStream == null) {
+                    throw new IOException("Unable to open input stream for URI: " + uri);
+                }
+
                 try {
                     // Attempt to load the PDF document
                     document = PDDocument.load(inputStream);
                     Log.d(TAG, "PDF Service 6.");
                 } catch (IOException e) {
-                    // If the document is password-protected, an IOException will be thrown
-                    if (e.getMessage() != null && e.getMessage().contains("password") && inputStream != null) {
-                        // Attempt to decrypt the document after catching the IOException
+                    // Handle password-protected PDFs
+                    if (e.getMessage() != null && e.getMessage().contains("password")) {
+                        // Attempt to decrypt the document
                         document = decryptPDF(inputStream);
                         Log.d(TAG, "PDF Service 7.");
                     } else {
-                        // If the exception is not related to encryption, rethrow it
-                        throw e;
+                        // Handle corrupted files
+                        throw new IOException("Corrupted PDF or unsupported format: " + uri, e);
                     }
                 }
 
@@ -70,7 +83,7 @@ public class PdfHandlingService {
                     mergerUtility.addSource(new ByteArrayInputStream(decryptedStream.toByteArray()));
                 }
             } catch (Exception e) {
-                Log.e("PdfHandlingService", "Error processing file", e);
+                Log.e("PdfHandlingService", "Error processing file: " + uri, e);
                 throw new IOException("Failed to process file: " + uri.toString(), e);
             }
         }
@@ -105,8 +118,8 @@ public class PdfHandlingService {
                         contentStream.drawImage(pdImage, 0, 0, pdImage.getWidth(), pdImage.getHeight());
                     }
                 } catch (Exception e) {
-                    Log.e("PdfHandlingService", "Error processing file", e);
-                    throw new IOException("Failed to process image: " + uri.toString());
+                    Log.e("PdfHandlingService", "Error processing image: " + uri, e);
+                    throw new IOException("Failed to process image: " + uri.toString(), e);
                 }
             }
 
@@ -115,39 +128,89 @@ public class PdfHandlingService {
         return outputFile;
     }
 
-    // Decrypt a PDF document if it's password protected
+    // Decrypt a PDF document if it's password-protected
     public PDDocument decryptPDF(@NonNull InputStream inputStream) throws Exception {
-        String password = promptForPassword();
-        if (password == null || password.isEmpty()) {
-            throw new IOException("Password is required to decrypt the PDF.");
-        }
-        try {
-            PDDocument decryptedDocument = PDDocument.load(inputStream, password);
-            if (decryptedDocument.isEncrypted()) {
-                decryptedDocument.setAllSecurityToBeRemoved(true);
+        PDDocument document = null;
+
+        while (document == null) {
+            String password = promptForPassword();
+
+            if (password == null) {
+                // User canceled, destroy the activity and notify them
+                if (context instanceof Activity) {
+                    ((Activity) context).runOnUiThread(() ->
+                            Toast.makeText(context, "Password is required to proceed.", Toast.LENGTH_SHORT).show()
+                    );
+                    ((Activity) context).finish();
+                }
+                throw new IOException("User canceled password entry.");
             }
-            return decryptedDocument;
-        } catch (Exception e) {
-            throw new IOException("Failed to decrypt PDF with the provided password.");
+
+            try {
+                document = PDDocument.load(inputStream, password);
+                if (document.isEncrypted()) {
+                    document.setAllSecurityToBeRemoved(true);
+                }
+            } catch (IOException e) {
+                // Handle incorrect password
+                if (e.getMessage() != null && e.getMessage().contains("password")) {
+                    showToast("Incorrect password. Please try again.");
+                } else {
+                    throw new IOException("Failed to decrypt PDF.", e);
+                }
+            }
         }
+        return document;
     }
 
-    // Prompt the user for a password
+    // Password prompt
     private String promptForPassword() {
         final String[] password = new String[1];
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-        builder.setTitle("Enter PDF Password");
+        final CountDownLatch latch = new CountDownLatch(1);
 
-        // Add an EditText to the dialog
-        final android.widget.EditText input = new android.widget.EditText(context);
-        input.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        builder.setView(input);
+        if (!(context instanceof Activity activity)) {
+            throw new IllegalStateException("Context must be an Activity to show a dialog.");
+        }
 
-        builder.setPositiveButton("OK", (dialog, which) -> password[0] = input.getText().toString());
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
+        activity.runOnUiThread(() -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("Your file is password protected, enter password to continue.");
+
+            // Add an EditText to the dialog
+            final EditText input = new EditText(activity);
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            builder.setView(input);
+
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                password[0] = input.getText().toString();
+                latch.countDown(); // Release the latch
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> {
+                password[0] = null; // User canceled
+                latch.countDown(); // Release the latch
+            });
+
+            builder.setCancelable(false); // Ensure the dialog cannot be dismissed by clicking outside
+            builder.show();
+        });
+
+        try {
+            latch.await(); // Wait until the user responds
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return null;
+        }
 
         return password[0];
+    }
+
+    // Helper to show a toast
+    private void showToast(String message) {
+        if (context instanceof Activity) {
+            ((Activity) context).runOnUiThread(() ->
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            );
+        }
     }
 
     // Helper to read InputStream into a byte array
@@ -161,5 +224,19 @@ public class PdfHandlingService {
         }
         buffer.flush();
         return buffer.toByteArray();
+    }
+
+    // Check if a file is large, and if so, handle it in the background (Worker)
+    public boolean isLargeFile(File file) {
+        return file.length() > MAX_FILE_SIZE;
+    }
+
+    // Worker implementation for processing large PDFs (stub, you need to integrate WorkManager)
+    public void processLargePDFInBackground(File file) {
+        if (isLargeFile(file)) {
+            // Create and enqueue a Worker using WorkManager or use a background thread to process
+            // Implement the Worker for long-running tasks like PDF merging
+            // WorkManager.enqueue(new OneTimeWorkRequest.Builder(LargeFileWorker.class).build());
+        }
     }
 }

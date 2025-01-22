@@ -2,7 +2,8 @@
     <string name="app_name">CVOR</string>
     <string name="app_toolbar_title">Welcome to CVOR</string>
     <string name="app_slogan">CVOR - Making your data secure</string>
-    <string name="add_watermark_button">Add Watermark and Share File</string>
+    <string name="add_watermark_button">Add Watermark and Share</string>
+    <string name="share_file_button">Share file</string>
     <string name="combine_pdfs_button">Combine PDF</string>
     <string name="convert_to_pdf_button">Convert Images to PDF</string>
     <string name="flash_toggle">Flash ON</string>
@@ -25,6 +26,7 @@
     <string name="permission_required_message">Applicable permission is required to use the feature.</string>
     <string name="image_picker_icon_desc">Image picker icon</string>
     <string name="pdf_picker_icon_desc">PDF picker icon</string>
+    <string name="file_manager_fragment_title">Reorder or remove files (if required)</string>
     <string name="file_name">File Name</string>
     <string name="refer">Refer</string>
     <string name="share_history">Share history</string>
@@ -33,7 +35,7 @@
     <string name="cancel">Cancel</string>
     <string name="sharing_with">Sharing with</string>
     <string name="purpose">Purpose</string>
-    <string name="watermark_text">Watermark to be added:</string>
+    <string name="watermark_text">Watermark preview</string>
     <string name="repeat_watermark_check">Repeat watermark?</string>
     <string name="preview_button">Preview  watermarked  file</string>
     <string name="yes">Yes</string>
@@ -44,6 +46,7 @@
     <string name="pdf_icon">PDF icon</string>
     <string name="image_icon">Image icon</string>
     <string name="preview_desc">Preview of processed file</string>
+    <string name="preview_fragment_title">Preview files</string>
     <string name="back_button">Back</string>
     <string name="share_button">Share</string>
 </resources>

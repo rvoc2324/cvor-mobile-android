@@ -1,4 +1,4 @@
-package com.rvoc.cvorapp.ui.activities.history;
+package com.rvoc.cvorapp.ui.activities.sharehistory;
 
 import androidx.appcompat.app.AppCompatActivity;
 

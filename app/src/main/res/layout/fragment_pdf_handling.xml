@@ -7,26 +7,42 @@
     android:background="@drawable/gradient_primary"
     android:paddingTop="20dp">
 
+    <!-- Title Text -->
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/file_manager_fragment_title"
+        style="@style/TextStyle"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_files"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_text"
         app:layout_constraintBottom_toTopOf="@+id/action_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
+    <!-- Action Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/action_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:backgroundTint="@color/buttonPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cornerRadius="16dp" />
 
-    <!-- Indeterminate Circular Progress Indicator -->
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progress_indicator"
         style="?android:attr/progressBarStyleLarge"
