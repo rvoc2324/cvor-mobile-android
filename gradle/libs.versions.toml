@@ -20,7 +20,8 @@ hilt = "2.55"
 kotlinx-metadata-jvm = "0.9.0"
 pdfbox-android = '2.0.27.0'
 cardView = "1.0.0"
-glide = "4.15.1"
+glide = "4.16.0"
+opencv = "4.9.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -53,6 +54,7 @@ pdfbox-android = { group = "com.tom-roush", name = "pdfbox-android", version.ref
 cardView = { group = "androidx.cardview", name = "cardview", version.ref = "cardView" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+opencv = { group = "org.opencv", name = "opencv", version.ref = "opencv" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

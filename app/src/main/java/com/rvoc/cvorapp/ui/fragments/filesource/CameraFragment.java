@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
@@ -33,10 +36,14 @@ import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.utils.EdgeDetectionUtils;
+import com.rvoc.cvorapp.utils.ImageUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.rvoc.cvorapp.utils.EdgeDetectionUtils;
+import com.rvoc.cvorapp.views.EdgeOverlayView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,10 +51,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import dagger.hilt.android.AndroidEntryPoint;
+
+import org.opencv.core.Mat;
+import org.opencv.android.Utils;
 
 @AndroidEntryPoint
 public class CameraFragment extends Fragment {
@@ -60,6 +72,8 @@ public class CameraFragment extends Fragment {
     private ImageButton buttonBack;
     private ImageButton buttonSwitchCamera;
     private PreviewView previewView;
+
+    private EdgeOverlayView edgeOverlayView;
     private ImageView capturedImageView;
     private ImageCapture imageCapture;
     private boolean isFlashOn = false;
@@ -94,6 +108,7 @@ public class CameraFragment extends Fragment {
 
         previewView = view.findViewById(R.id.cameraPreview);
         capturedImageView = view.findViewById(R.id.capturedImageView);
+        edgeOverlayView = view.findViewById(R.id.edgeOverlayView);
         buttonFlashToggle = view.findViewById(R.id.buttonFlashToggle);
         buttonCapture = view.findViewById(R.id.buttonCapture);
         buttonRetake = view.findViewById(R.id.buttonRetake);
@@ -151,16 +166,40 @@ public class CameraFragment extends Fragment {
         Log.d(TAG, "Camera 4.");
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
         Log.d(TAG, "Camera 5.");
+
         imageCapture = new ImageCapture.Builder()
                 .setFlashMode(isFlashOn ? ImageCapture.FLASH_MODE_ON : ImageCapture.FLASH_MODE_OFF)
                 .build();
+
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build();
+
+        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), this::analyzeFrame);
+
         Log.d(TAG, "Camera 6.");
         cameraProvider.unbindAll();
         try {
-            cameraProvider.bindToLifecycle(this, cameraSelector, imageCapture, preview);
+            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis, imageCapture);
         } catch (IllegalStateException | IllegalArgumentException e) {
             Log.e(TAG, "Failed to bind camera use cases", e);
         }
+    }
+
+    private void analyzeFrame(ImageProxy image) {
+        // Convert the ImageProxy to Bitmap
+        Bitmap bitmap = ImageUtils.imageProxyToBitmap(image);
+        Log.d(TAG, "Camera 9.");
+
+        // Perform edge detection on the frame
+        List<PointF> edgePoints = EdgeDetectionUtils.detectDocumentEdges(bitmap);
+        Log.d(TAG, "Camera 10.");
+
+        // Update the overlay with the detected edges on the main thread
+        requireActivity().runOnUiThread(() -> edgeOverlayView.updateEdges(edgePoints));
+        Log.d(TAG, "Camera 11.");
+
+        image.close();
     }
 
     private void setupButtonListeners() {
@@ -180,7 +219,7 @@ public class CameraFragment extends Fragment {
             }
 
             // Capture image into memory for faster preview
-            imageCapture.takePicture(
+            /* imageCapture.takePicture(
                     ContextCompat.getMainExecutor(requireContext()),
                     new ImageCapture.OnImageCapturedCallback() {
                         @Override
@@ -196,6 +235,34 @@ public class CameraFragment extends Fragment {
                             Toast.makeText(requireContext(), R.string.image_capture_failed, Toast.LENGTH_SHORT).show();
                         }
                     }
+            );*/
+
+            // Capture image and perform edge detection
+            imageCapture.takePicture(
+                ContextCompat.getMainExecutor(requireContext()),
+                new ImageCapture.OnImageCapturedCallback() {
+                    @Override
+                    public void onCaptureSuccess(@NonNull ImageProxy image) {
+                        Log.d(TAG, "Image captured successfully.");
+                        Bitmap bitmap = ImageUtils.imageProxyToBitmap(image); // Utility function to convert ImageProxy to Bitmap
+                        Log.d(TAG, "Camera 11.");
+                        Bitmap edgeDetectedBitmap = EdgeDetectionUtils.detectEdges(bitmap); // Perform edge detection
+                        Log.d(TAG, "Camera 12.");
+
+                        requireActivity().runOnUiThread(() -> {
+                            showImageConfirmation(edgeDetectedBitmap); // Show the processed image
+                            Log.d(TAG, "Camera 13.");
+                        });
+
+                        image.close();
+                    }
+
+                    @Override
+                    public void onError(@NonNull ImageCaptureException exception) {
+                        Log.e(TAG, "Image capture failed", exception);
+                        Toast.makeText(requireContext(), R.string.image_capture_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }
             );
         });
 
@@ -262,12 +329,17 @@ public class CameraFragment extends Fragment {
         });
     }
 
-    private void showImageConfirmation() {
+    private void showImageConfirmation(Bitmap edgeDetectedBitmap) {
         previewView.setVisibility(View.GONE);
 
         // Show the captured image as a Bitmap
-        if (capturedImageUri != null) {
+        /*if (capturedImageUri != null) {
             capturedImageView.setImageURI(capturedImageUri); // Set the Bitmap as the preview
+            capturedImageView.setVisibility(View.VISIBLE);
+        }*/
+
+        if (edgeDetectedBitmap != null) {
+            capturedImageView.setImageBitmap(edgeDetectedBitmap); // Set the processed bitmap as preview
             capturedImageView.setVisibility(View.VISIBLE);
         }
 
@@ -280,7 +352,7 @@ public class CameraFragment extends Fragment {
     }
 
     private void resetCaptureState() {
-        capturedImageView.setImageURI(null);
+        capturedImageView.setImageBitmap(null);
         capturedImageView.setVisibility(View.GONE);
 
         previewView.setVisibility(View.VISIBLE);

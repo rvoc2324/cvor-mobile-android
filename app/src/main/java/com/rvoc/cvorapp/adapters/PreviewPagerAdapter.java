@@ -5,19 +5,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.bumptech.glide.Glide;
+import com.bumptech.glide.Glide;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ItemImagePreviewBinding;
 import com.rvoc.cvorapp.databinding.ItemPdfPreviewBinding;
-
-import com.tom_roush.pdfbox.pdmodel.PDDocument;
-import com.tom_roush.pdfbox.rendering.PDFRenderer;
+import com.rvoc.cvorapp.utils.PDFRenderingUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,26 +23,8 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_PDF = 2;
-    private static final String TAG = "Preview Adapter";
 
     private final List<File> fileList = new ArrayList<>();
-
-    public void submitList(List<File> files) {
-        fileList.clear();
-        fileList.addAll(files);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        File file = fileList.get(position);
-        if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
-            return TYPE_IMAGE;
-        } else if (file.getName().endsWith(".pdf")) {
-            return TYPE_PDF;
-        }
-        throw new IllegalArgumentException("Unsupported file type: " + file.getName());
-    }
 
     @NonNull
     @Override
@@ -53,11 +33,10 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (viewType == TYPE_IMAGE) {
             ItemImagePreviewBinding binding = ItemImagePreviewBinding.inflate(inflater, parent, false);
             return new ImageViewHolder(binding);
-        } else if (viewType == TYPE_PDF) {
+        } else {
             ItemPdfPreviewBinding binding = ItemPdfPreviewBinding.inflate(inflater, parent, false);
             return new PdfViewHolder(binding);
         }
-        throw new IllegalArgumentException("Invalid view type");
     }
 
     @Override
@@ -71,11 +50,26 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
+    public int getItemViewType(int position) {
+        File file = fileList.get(position);
+        return file.getName().endsWith(".pdf") ? TYPE_PDF : TYPE_IMAGE;
+    }
+
+    @Override
     public int getItemCount() {
         return fileList.size();
     }
 
+    public void submitList(List<File> files) {
+        fileList.clear();
+        if (files != null) {
+            fileList.addAll(files);
+        }
+        notifyDataSetChanged();
+    }
+
     static class ImageViewHolder extends RecyclerView.ViewHolder {
+
         private final ItemImagePreviewBinding binding;
 
         public ImageViewHolder(@NonNull ItemImagePreviewBinding binding) {
@@ -86,15 +80,14 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void bind(File imageFile) {
             Glide.with(binding.imageView.getContext())
                     .load(imageFile)
-                    .placeholder(R.drawable.ic_image) // Placeholder for loading
-                    .error(R.drawable.baseline_error_24) // Error image
+                    .placeholder(R.drawable.ic_image)
+                    .error(R.drawable.baseline_error_24)
                     .into(binding.imageView);
-
-            // Optional: Add click listener or additional logic
         }
     }
 
     static class PdfViewHolder extends RecyclerView.ViewHolder {
+
         private final ItemPdfPreviewBinding binding;
 
         public PdfViewHolder(@NonNull ItemPdfPreviewBinding binding) {
@@ -103,20 +96,21 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public void bind(File pdfFile) {
-            try {
-                PDDocument document = PDDocument.load(pdfFile);
-                PDFRenderer renderer = new PDFRenderer(document);
+            PDFRenderingUtils pdfRendering = new PDFRenderingUtils();
+            pdfRendering.renderPDFPageAsync(pdfFile, 0, new PDFRenderingUtils.PDFRenderCallback() {
+                @Override
+                public void onSuccess(List<Bitmap> bitmaps) {
+                    if (!bitmaps.isEmpty()) {
+                        binding.pdfView.setImageBitmap(bitmaps.get(0)); // Display the first page of the PDF
+                    }
+                }
 
-                // Render the first page (or modify for additional pages)
-                Bitmap bitmap = renderer.renderImageWithDPI(0, 300);
-                document.close();
-
-                // Set the bitmap to ImageView
-                binding.pdfPageImageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                Log.e(TAG, "Error showing preview");
-                binding.pdfPageImageView.setImageResource(R.drawable.baseline_error_24);
-            }
+                @Override
+                public void onError(Exception e) {
+                    Log.e("PreviewPagerAdapter", "Error rendering PDF: " + e.getMessage());
+                    binding.pdfView.setImageResource(R.drawable.baseline_error_24); // Display error image
+                }
+            });
         }
     }
 }

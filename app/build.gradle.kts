@@ -41,6 +41,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     /*
     kapt {
@@ -72,6 +73,9 @@ dependencies {
 
     //PDF Libraries
     implementation(libs.pdfbox.android)
+
+    //OpenCV Libraries
+    implementation(libs.opencv)
 
     // Image loading/caching libraries
     implementation(libs.glide)

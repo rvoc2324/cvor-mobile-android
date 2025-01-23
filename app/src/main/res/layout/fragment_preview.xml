@@ -32,6 +32,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/button_container" />
 
+    <!-- Warning -->
+    <TextView
+        android:id="@+id/no_files_selected"
+        style="@style/TextStyle.Label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:text="@string/no_files_selected"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Button Container -->
     <LinearLayout
         android:id="@+id/button_container"

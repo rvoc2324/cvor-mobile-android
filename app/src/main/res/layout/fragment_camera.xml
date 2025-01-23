@@ -26,6 +26,15 @@
         android:scaleType="fitCenter"
         android:contentDescription="@string/captured_image" />
 
+    <!-- Edge overlay view -->
+    <com.rvoc.cvorapp.views.EdgeOverlayView
+        android:id="@+id/edgeOverlayView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center" />
+
     <!-- Top Black Padding -->
     <View
         android:id="@+id/topPadding"

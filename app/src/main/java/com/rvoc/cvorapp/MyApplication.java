@@ -46,8 +46,12 @@ public class MyApplication extends Application {
         loggingInitialiser.initialise();
         pdfBoxInitialiser.initialise();
 
-        long endTime = System.currentTimeMillis();
-        Log.d(TAG, "Application initialised successfully in " + (endTime - startTime) + " ms.");
+        /*
+        if (!OpenCVLoader.initLocal()) {
+            Log.e("OpenCV", "Initialization failed!");
+        } else {
+            Log.d("OpenCV", "OpenCV loaded successfully!");
+        }*/
 
         /*
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -63,5 +67,8 @@ public class MyApplication extends Application {
             @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
             @Override public void onActivityDestroyed(Activity activity) {}
         });*/
+
+        long endTime = System.currentTimeMillis();
+        Log.d(TAG, "Application initialised successfully in " + (endTime - startTime) + " ms.");
     }
 }
