@@ -42,7 +42,16 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        dataBinding = true
     }
+
+    packaging {
+        jniLibs.pickFirsts.add("lib/arm64-v8a/libc++_shared.so")
+        jniLibs.pickFirsts.add("lib/x86_64/libc++_shared.so")
+        jniLibs.pickFirsts.add("lib/x86/libc++_shared.so")
+        jniLibs.pickFirsts.add("lib/armeabi-v7a/libc++_shared.so")
+    }
+
     /*
     kapt {
         correctErrorTypes = true
@@ -56,6 +65,7 @@ dependencies {
     implementation(libs.splashscreen)
     implementation(libs.constraintlayout)
     implementation(libs.cardView)
+    // implementation(libs.git.repo)
 
     // Lifecycle Components
     implementation(libs.lifecycle.livedata.ktx)
@@ -73,12 +83,14 @@ dependencies {
 
     //PDF Libraries
     implementation(libs.pdfbox.android)
+    implementation(libs.pdf.viewer)
 
     //OpenCV Libraries
     implementation(libs.opencv)
 
     // Image loading/caching libraries
     implementation(libs.glide)
+    // implementation(libs.core)
     ksp(libs.glide.compiler)
 
     // Room Database

@@ -1,4 +1,6 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <!-- Primary Colors -->
     <color name="colorPrimary">#0C1F3F</color> <!-- Deep, rich navy blue for trust and security -->
     <color name="colorPrimaryDark">#08152A</color> <!-- Slightly darker variant -->
@@ -11,7 +13,7 @@
     <color name="buttonSecondary">#193C5B</color> <!-- Muted secondary button color -->
     <color name="buttonHighlightPrimary">#18A1D7</color> <!-- Bright cyan for hover/highlight -->
     <color name="buttonHighlightSecondary">#225978</color> <!-- Supporting secondary highlight -->
-    <color name="buttonDisabled">#6A8093</color> <!-- Accessible muted tone for disabled buttons -->
+    <color name="buttonDisabled">#738394</color> <!-- Accessible muted tone for disabled buttons -->
 
     <!-- Text Colors -->
     <color name="text">#F4F8FA</color> <!-- Soft white for high contrast -->

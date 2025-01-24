@@ -131,10 +131,10 @@ public class WatermarkFragment extends Fragment {
     // Enable or disable the Preview button based on inputs and watermark text
     private void validateInputs() {
         String shareWith = Objects.requireNonNull(shareWithInput.getText()).toString().trim();
-        String purpose = Objects.requireNonNull(purposeInput.getText()).toString().trim();
+        // String purpose = Objects.requireNonNull(purposeInput.getText()).toString().trim();
         String watermarkText = watermarkViewModel.getWatermarkText().getValue();
 
-        previewButton.setEnabled(!shareWith.isEmpty() && !purpose.isEmpty() && watermarkText != null && !watermarkText.isEmpty());
+        previewButton.setEnabled(!shareWith.isEmpty() && watermarkText != null && !watermarkText.isEmpty());
     }
 
     // Handle the Preview button click

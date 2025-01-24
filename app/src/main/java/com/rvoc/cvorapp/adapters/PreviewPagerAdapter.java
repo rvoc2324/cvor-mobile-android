@@ -1,30 +1,30 @@
 package com.rvoc.cvorapp.adapters;
 
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
+import com.github.barteksc.pdfviewer.PDFView;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ItemImagePreviewBinding;
 import com.rvoc.cvorapp.databinding.ItemPdfPreviewBinding;
-import com.rvoc.cvorapp.utils.PDFRenderingUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_IMAGE = 1;
-    private static final int TYPE_PDF = 2;
+    private static final int TYPE_IMAGE = 0;
+    private static final int TYPE_PDF = 1;
 
     private final List<File> fileList = new ArrayList<>();
+
+    @Override
+    public int getItemViewType(int position) {
+        File file = fileList.get(position);
+        return file.getName().endsWith(".pdf") ? TYPE_PDF : TYPE_IMAGE;
+    }
 
     @NonNull
     @Override
@@ -50,26 +50,17 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public int getItemViewType(int position) {
-        File file = fileList.get(position);
-        return file.getName().endsWith(".pdf") ? TYPE_PDF : TYPE_IMAGE;
-    }
-
-    @Override
     public int getItemCount() {
         return fileList.size();
     }
 
     public void submitList(List<File> files) {
         fileList.clear();
-        if (files != null) {
-            fileList.addAll(files);
-        }
+        fileList.addAll(files);
         notifyDataSetChanged();
     }
 
     static class ImageViewHolder extends RecyclerView.ViewHolder {
-
         private final ItemImagePreviewBinding binding;
 
         public ImageViewHolder(@NonNull ItemImagePreviewBinding binding) {
@@ -77,17 +68,16 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.binding = binding;
         }
 
-        public void bind(File imageFile) {
+        void bind(File imageFile) {
             Glide.with(binding.imageView.getContext())
                     .load(imageFile)
-                    .placeholder(R.drawable.ic_image)
-                    .error(R.drawable.baseline_error_24)
+                    .placeholder(R.drawable.ic_image) // Placeholder while loading
+                    .error(R.drawable.baseline_error_24) // Fallback for errors
                     .into(binding.imageView);
         }
     }
 
     static class PdfViewHolder extends RecyclerView.ViewHolder {
-
         private final ItemPdfPreviewBinding binding;
 
         public PdfViewHolder(@NonNull ItemPdfPreviewBinding binding) {
@@ -95,22 +85,14 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             this.binding = binding;
         }
 
-        public void bind(File pdfFile) {
-            PDFRenderingUtils pdfRendering = new PDFRenderingUtils();
-            pdfRendering.renderPDFPageAsync(pdfFile, 0, new PDFRenderingUtils.PDFRenderCallback() {
-                @Override
-                public void onSuccess(List<Bitmap> bitmaps) {
-                    if (!bitmaps.isEmpty()) {
-                        binding.pdfView.setImageBitmap(bitmaps.get(0)); // Display the first page of the PDF
-                    }
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    Log.e("PreviewPagerAdapter", "Error rendering PDF: " + e.getMessage());
-                    binding.pdfView.setImageResource(R.drawable.baseline_error_24); // Display error image
-                }
-            });
+        void bind(File pdfFile) {
+            binding.pdfView.fromFile(pdfFile)
+                    .defaultPage(0)
+                    .enableSwipe(true)
+                    .swipeHorizontal(false)
+                    .enableDoubletap(true)
+                    .onError(t -> System.out.println("Error rendering PDF: " + t.getMessage()))
+                    .load();
         }
     }
 }

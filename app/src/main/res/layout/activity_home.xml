@@ -27,21 +27,6 @@
         android:layout_gravity="center"
         android:padding="16dp">
 
-        <!-- Add Watermark Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add_watermark"
-            style="@style/PrimaryButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:text="@string/add_watermark_button"
-            android:elevation="8dp"
-            android:layout_marginBottom="16dp"
-            app:cornerRadius="16dp"
-            app:strokeWidth="2dp"
-            app:strokeColor="@color/borderColor"
-            android:stateListAnimator="@animator/button_lift_animator"
-            app:rippleColor="@color/rippleEffect" />
-
         <!-- 2x2 grid layout for buttons -->
         <GridLayout
             android:layout_width="match_parent"
@@ -53,6 +38,41 @@
             android:alignmentMode="alignMargins"
             android:useDefaultMargins="true">
 
+            <!-- Add Watermark Button (on the first row, first position) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_watermark"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="@string/add_watermark_button"
+                android:elevation="6dp"
+                app:cornerRadius="16dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/borderColor"
+                android:stateListAnimator="@animator/button_lift_animator"
+                app:rippleColor="@color/rippleEffect"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Share File Button (on the first row, second position) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_share_file"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="@string/share_file_button"
+                android:elevation="6dp"
+                app:cornerRadius="16dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/borderColor"
+                android:stateListAnimator="@animator/button_lift_animator"
+                app:rippleColor="@color/rippleEffect"
+                android:layout_marginStart="8dp" />
+
+            <!-- Combine PDFs Button (on the second row, first position) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_combine_pdfs"
                 style="@style/SecondaryButtonStyle"
@@ -69,7 +89,7 @@
                 app:rippleColor="@color/rippleEffect"
                 android:layout_marginEnd="8dp" />
 
-            <!-- Convert Images to PDF Button -->
+            <!-- Convert Images to PDF Button (on the second row, second position) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_convert_to_pdf"
                 style="@style/SecondaryButtonStyle"
@@ -85,6 +105,7 @@
                 android:stateListAnimator="@animator/button_lift_animator"
                 app:rippleColor="@color/rippleEffect"
                 android:layout_marginStart="8dp" />
+
         </GridLayout>
     </LinearLayout>
 

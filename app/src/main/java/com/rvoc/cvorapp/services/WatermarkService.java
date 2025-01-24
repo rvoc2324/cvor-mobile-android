@@ -64,8 +64,8 @@ public class WatermarkService {
             // Set up paint for watermark text
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
-            paint.setAlpha(100); // 40% transparency
-            paint.setTextSize(36);
+            paint.setAlpha(80); // 40% transparency
+            paint.setTextSize(18);
             paint.setAntiAlias(true);
             Log.d(TAG, "Watermark service 3.");
 

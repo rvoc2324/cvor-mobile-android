@@ -16,22 +16,17 @@
 
     <!-- Button Styles -->
     <style name="PrimaryButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/buttonPrimary</item>
-        <item name="android:textColor">@color/text</item>
+        <item name="android:backgroundTint">@color/primary_button_state</item>
+        <item name="android:textColor">@color/text_button_state</item>
     </style>
 
     <style name="SecondaryButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:backgroundTint">@color/buttonSecondary</item>
-        <item name="android:textColor">@color/text</item>
-    </style>
-
-    <style name="DisabledButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/buttonDisabled</item>
-        <item name="android:textColor">@color/textDisabled</item>
+        <item name="android:backgroundTint">@color/secondary_button_state</item>
+        <item name="android:textColor">@color/text_button_state</item>
     </style>
 
     <style name="TextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/buttonPrimary</item>
+        <item name="android:textColor">@color/text_button_state</item>
     </style>
 
     <!-- Text Styles -->

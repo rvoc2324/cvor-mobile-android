@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Secondary button state list -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/buttonDisabled" android:state_enabled="false" />
+    <item android:color="@color/buttonSecondary" android:state_enabled="true" />
+</selector>
+

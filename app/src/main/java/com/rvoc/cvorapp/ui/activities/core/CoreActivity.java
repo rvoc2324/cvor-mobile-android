@@ -242,18 +242,20 @@ public class CoreActivity extends AppCompatActivity {
 
             switch (actionType) {
                 case "addwatermark":
+                    Log.d(TAG, "CoreActivity 17.");
                     navController.navigate(R.id.action_watermarkFragment_to_previewFragment);
                     break;
 
                 case "combinepdf":
                 case "convertpdf":
+                    Log.d(TAG, "CoreActivity 18.");
                     navController.navigate(R.id.action_PdfHandlingFragment_to_previewFragment);
                     break;
 
                 default:
                     Log.e("CoreActivity", "Unknown actionType: " + actionType);
             }
-            Log.d(TAG, "CoreActivity 17.");
+            Log.d(TAG, "CoreActivity 19.");
         } catch (Exception e) {
             Log.e("CoreActivity", "Navigation to PreviewFragment failed: " + e.getMessage(), e);
         }
