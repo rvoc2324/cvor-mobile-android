@@ -49,9 +49,13 @@ public class WatermarkService {
      * @return The watermarked image file.
      * @throws Exception If there are errors in processing the file.
      */
-    public File applyWatermarkImage(Uri inputUri,  String watermarkText) throws Exception {
+    public File applyWatermarkImage(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
         File outputFile = new File(context.getCacheDir(), "watermarked_image.png");
         Log.d(TAG, "Watermark service 1.");
+
+        // Default Integer parameters are null
+        opacity = (opacity != null) ? opacity : 40; // Default alpha to 80
+        fontSize = (fontSize != null) ? fontSize : 18; // Default text size to 18
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputUri)) {
             Bitmap originalBitmap = android.graphics.BitmapFactory.decodeStream(inputStream);
@@ -64,8 +68,8 @@ public class WatermarkService {
             // Set up paint for watermark text
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
-            paint.setAlpha(80); // 40% transparency
-            paint.setTextSize(18);
+            paint.setAlpha((opacity * 255) / 100);
+            paint.setTextSize(fontSize);
             paint.setAntiAlias(true);
             Log.d(TAG, "Watermark service 3.");
 
@@ -104,10 +108,17 @@ public class WatermarkService {
      * @return The watermarked PDF file.
      * @throws Exception If there are errors in processing the file.
      */
-    public File applyWatermarkPDF(Uri inputUri, String watermarkText) throws Exception {
+    public File applyWatermarkPDF(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
         File outputFile = new File(context.getCacheDir(), "watermarked_document.pdf");
 
         PDDocument document = null;
+
+        // Default Integer parameters are null
+        opacity = (opacity != null) ? opacity : 40; // Default opacity to 40
+        fontSize = (fontSize != null) ? fontSize : 18; // Default text size to 18
+
+        // Convert it to a value between 0.0f and 1.0f
+        float alphaValue = opacity / 100.0f; // This gives 0.5f for 50%
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputUri)) {
             try {
@@ -124,8 +135,7 @@ public class WatermarkService {
                 } catch (Exception decryptionException) {
                     Log.e(TAG, "Failed to decrypt the PDF: " + decryptionException.getMessage(), decryptionException);
                     throw new Exception("The PDF is encrypted and could not be processed.", decryptionException);
-                }
-            }
+                }            }
 
             // Apply watermark to each page
             if (document != null) {
@@ -140,9 +150,8 @@ public class WatermarkService {
                         Log.d(TAG, "Watermark service 6.");
 
                         // Set font and color
-                        float fontSize = 40;
                         contentStream.setFont(PDType1Font.HELVETICA, fontSize);
-                        contentStream.setNonStrokingColor(new PDColor(new float[]{0.588f, 0.588f, 0.588f}, PDDeviceRGB.INSTANCE)); // Light gray
+                        contentStream.setNonStrokingColor(new PDColor(new float[]{0.588f, 0.588f, 0.588f, alphaValue}, PDDeviceRGB.INSTANCE)); // Light gray
 
                         // Calculate page dimensions and watermark metrics
                         float pageWidth = page.getMediaBox().getWidth();

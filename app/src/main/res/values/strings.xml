@@ -37,7 +37,9 @@
     <string name="purpose">Purpose</string>
     <string name="watermark_text">Watermark preview</string>
     <string name="repeat_watermark_check">Repeat watermark?</string>
-    <string name="preview_button">Preview  watermarked  file</string>
+    <string name="opacity_text">Opacity (20-100%)</string>
+    <string name="fontsize_text">Font size (8-30)</string>
+    <string name="preview_button">Preview</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="combine_pdf">Combine PDFs</string>
@@ -47,6 +49,7 @@
     <string name="image_icon">Image icon</string>
     <string name="preview_desc">Preview of processed file</string>
     <string name="preview_fragment_title">Preview files</string>
+    <string name="download_icon">Download files</string>
     <string name="no_files_selected">No files available to preview. Go back to choose a file.</string>
     <string name="back_button">Back</string>
     <string name="share_button">Share</string>

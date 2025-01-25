@@ -3,6 +3,9 @@ package com.rvoc.cvorapp.ui.fragments.share;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -15,15 +18,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.models.ShareHistory;
 import com.rvoc.cvorapp.repositories.ShareHistoryRepository;
-import com.rvoc.cvorapp.ui.activities.whatsnew.WhatsNewActivity;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
+import com.rvoc.cvorapp.databinding.FragmentShareBinding; // Import the generated View Binding class
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -32,7 +37,9 @@ public class ShareFragment extends Fragment {
 
     private CoreViewModel coreViewModel;
     private WatermarkViewModel watermarkViewModel;
-    private ShareHistoryRepository shareHistoryRepository;
+    @Inject
+    ShareHistoryRepository shareHistoryRepository;
+    private FragmentShareBinding binding; // Declare the binding variable
 
     // ActivityResultLauncher to replace startActivityForResult
     private final ActivityResultLauncher<Intent> shareLauncher =
@@ -53,10 +60,19 @@ public class ShareFragment extends Fragment {
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
         watermarkViewModel = new ViewModelProvider(requireActivity()).get(WatermarkViewModel.class);
-        shareHistoryRepository = new ShareHistoryRepository(requireContext()); // Initialize repository
+        // shareHistoryRepository = new ShareHistoryRepository(requireContext()); // Initialize repository
 
         // Automatically launch the share modal
         openNativeShareModal();
+    }
+
+    @Override
+    public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout and return the root view
+        if (inflater != null) {
+            binding = FragmentShareBinding.inflate(inflater, container, false);
+        }
+        return binding.getRoot(); // Return the root view from the binding
     }
 
     private void openNativeShareModal() {
@@ -139,9 +155,7 @@ public class ShareFragment extends Fragment {
     }
 
     private void navigateToWhatsNew() {
-        Intent intent = new Intent(requireContext(), WhatsNewActivity.class);
-        startActivity(intent);
-        requireActivity().finish(); // End ShareFragment lifecycle
+        coreViewModel.setNavigationEvent("navigate_to_whatsnew");
     }
 
     /**
@@ -156,5 +170,12 @@ public class ShareFragment extends Fragment {
 
         // Fallback if MIME type is not found
         return mimeType != null ? mimeType : "application/octet-stream";
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Set the binding to null to avoid memory leaks
+        binding = null;
     }
 }

@@ -5,13 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.Fragment;
 
+import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ActivityHomeBinding;
 import com.rvoc.cvorapp.ui.activities.core.CoreActivity;
-
-import javax.inject.Inject;
+import com.rvoc.cvorapp.ui.activities.sharehistory.ShareHistoryActivity;
+import com.rvoc.cvorapp.ui.fragments.ReferFragment;
+import com.rvoc.cvorapp.ui.fragments.SettingsFragment;
+import com.rvoc.cvorapp.ui.fragments.WhatsNewFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -40,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
         // Set up ViewBinding
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setupBottomNavigationView();
 
         // Example: Reading a value from SharedPreferences
         // String lastUsedFeature = sharedPreferences.getString("last_used_feature", "none");
@@ -77,43 +84,51 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    private int getActionIdForType(String actionType) {
-        return switch (actionType) {
-            case "addwatermark" -> R.id.action_home_to_coreActivity_watermark;
-            case "combinepdf" -> R.id.action_home_to_coreActivity_combine;
-            case "converttopdf" -> R.id.action_home_to_coreActivity_convert;
-            default -> -1;  // Invalid action type
-        };
-    }*/
-
-    /*
-    // Set up bottom navigation
-    private void setupBottomNavigation() {
-        bottomNavigationView.setOnItemSelectedListener(item -> switch (item.getItemId()) {
-            case R.id.nav_share_history ->
-                    navigateToShareHistoryActivity();
-                    yield true;
-            case R.id.nav_whatsnew -> {
-                navigateToWhatsNewActivity();
-                yield true;
-            }
-            case R.id.nav_settings -> {
-                navigateToSettings();
-                yield true;
-            }
-            default -> false;
-        });
+    /**
+     * Sets up the bottom navigation menu.
+     */
+    private void setupBottomNavigationView() {
+        binding.bottomNavigation.setOnItemSelectedListener(this::onNavigationItemSelected);
     }
 
-    // Navigate to WhatsNewActivity
-    private void navigateToWhatsNewActivity() {
-        try {
-            Intent intent = new Intent(HomeActivity.this, WhatsNewActivity.class);
-            startActivity(intent);
-        } catch (Exception e) {
-            Log.e("HomeActivity", "Failed to navigate to WhatsNewActivity: " + e.getMessage());
-            Toast.makeText(this, "Failed to navigate to What's New", Toast.LENGTH_SHORT).show();
+    /**
+     * Handles bottom navigation item selection.
+     *
+     * @param item The selected menu item.
+     * @return true if the item was successfully handled, false otherwise.
+     */
+    private boolean onNavigationItemSelected(@NonNull android.view.MenuItem item) {
+        if (item.getItemId() == R.id.nav_refer) {
+            loadFragment(new ReferFragment());
+        } else if (item.getItemId() == R.id.nav_share_history) {
+            navigateToShareHistory();
+        } else if (item.getItemId() == R.id.nav_whats_new) {
+            loadFragment(new WhatsNewFragment());
+        } else if (item.getItemId() == R.id.nav_settings) {
+            loadFragment(new SettingsFragment());
         }
-    }*/
+        return false;
+    }
+    /**
+     * Replaces the current fragment with the specified fragment.
+     *
+     * @param fragment The fragment to load.
+     */
+    private void loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment_home, fragment)
+                    .commit();
+        }
+    }
+
+    /**
+     * Navigates to the ShareHistoryActivity.
+     */
+    private void navigateToShareHistory() {
+        Intent intent = new Intent(this, ShareHistoryActivity.class);
+        startActivity(intent);
+        Log.d(TAG, "Navigated to ShareHistoryActivity.");
+    }
 }

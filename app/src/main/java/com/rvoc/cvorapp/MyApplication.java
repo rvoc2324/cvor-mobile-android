@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.rvoc.cvorapp.repositories.ShareHistoryRepository;
 import com.rvoc.cvorapp.utils.AppThemeInitialiser;
 import com.rvoc.cvorapp.utils.CrashlyticsInitialiser;
 import com.rvoc.cvorapp.utils.LoggingInitialiser;

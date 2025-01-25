@@ -111,6 +111,10 @@ public class CoreViewModel extends AndroidViewModel {
         processedFiles.setValue(files);
     }
 
+    public void resetProcessedFiles() {
+        processedFiles.setValue(new ArrayList<>());
+    }
+
     // Navigation Events
     public void setNavigationEvent(String event) {
         navigationEvent.setValue(event);

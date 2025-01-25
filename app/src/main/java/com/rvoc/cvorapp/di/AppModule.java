@@ -4,10 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.rvoc.cvorapp.adapters.FileActionListener;
-import com.rvoc.cvorapp.adapters.FileListAdapter;
 import com.rvoc.cvorapp.utils.PDFBoxInitialiser;
-import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -37,25 +34,4 @@ public class AppModule {
     public PDFBoxInitialiser providePDFBoxInitialiser(Context context) {
         return new PDFBoxInitialiser(context);
     }
-    /*
-    // Provide FileActionListener
-    @Provides
-    @Singleton
-    public FileActionListener provideFileActionListener(CoreViewModel coreViewModel) {
-        return new FileActionListener(coreViewModel);
-    }
-
-    // Provide FileListAdapter, injected with the OnFileActionListener
-    @Provides
-    @Singleton
-    public FileListAdapter provideFileListAdapter(FileActionListener fileActionListener) {
-        return new FileListAdapter(fileActionListener);
-    }
-
-    // Provide DragAndDropAdapter
-    @Provides
-    @Singleton
-    public DragAndDropAdapter provideDragAndDropAdapter(DragAndDropAdapter.OnItemMoveListener listener) {
-        return new DragAndDropAdapter(listener);
-    }*/
 }

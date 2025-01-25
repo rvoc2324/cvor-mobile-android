@@ -28,6 +28,10 @@ public class WatermarkViewModel extends AndroidViewModel {
     private final MutableLiveData<Bitmap> signature = new MutableLiveData<>(); // Captures user signature as a Bitmap
     private final MutableLiveData<Boolean> repeatWatermark = new MutableLiveData<>(); // Whether to repeat the watermark
 
+    private final MutableLiveData<Integer> opacity = new MutableLiveData<>();
+
+    private final MutableLiveData<Integer> fontSize = new MutableLiveData<>();
+
     @Inject
     public WatermarkViewModel(@NonNull Application application) {
         super(application);
@@ -41,12 +45,16 @@ public class WatermarkViewModel extends AndroidViewModel {
      * @param purpose          The purpose for sharing.
      // * @param signature        The user's signature for watermarking (Bitmap).
      * @param repeat           Whether the watermark should be repeated.
+     * @param opacity           Watermark opacity
+     * @param fontSize           Watermark font size.
      */
-    public void setInputs(String organizationName, String purpose, boolean repeat) {
+    public void setInputs(String organizationName, String purpose, Integer opacity, Integer fontSize, boolean repeat) {
         this.shareWith.setValue(organizationName);
         this.purpose.setValue(purpose);
         // this.signature.setValue(signature);
         this.repeatWatermark.setValue(repeat);
+        this.opacity.setValue(opacity);
+        this.fontSize.setValue(fontSize);
 
         String watermarkText = "Shared with " + organizationName +
                 " for " + (purpose == null || purpose.isEmpty() ? "general purposes" : purpose) +
@@ -73,5 +81,13 @@ public class WatermarkViewModel extends AndroidViewModel {
 
     public LiveData<Boolean> getRepeatWatermark() {
         return repeatWatermark;
+    }
+
+    public LiveData<Integer> getOpacity() {
+        return opacity;
+    }
+
+    public LiveData<Integer> getFontSize() {
+        return fontSize;
     }
 }

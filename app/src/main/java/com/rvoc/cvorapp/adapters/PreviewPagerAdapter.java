@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ItemImagePreviewBinding;
@@ -73,6 +74,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .load(imageFile)
                     .placeholder(R.drawable.ic_image) // Placeholder while loading
                     .error(R.drawable.baseline_error_24) // Fallback for errors
+                    .override(Target.SIZE_ORIGINAL)
                     .into(binding.imageView);
         }
     }
@@ -89,8 +91,12 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             binding.pdfView.fromFile(pdfFile)
                     .defaultPage(0)
                     .enableSwipe(true)
-                    .swipeHorizontal(false)
+                    .swipeHorizontal(true)
+                    .pageSnap(true)
+                    .autoSpacing(true)
+                    .pageFling(true)
                     .enableDoubletap(true)
+                    .fitEachPage(true)
                     .onError(t -> System.out.println("Error rendering PDF: " + t.getMessage()))
                     .load();
         }

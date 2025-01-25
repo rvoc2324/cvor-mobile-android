@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <!-- Intent Queries -->
     <queries>
         <intent>
@@ -42,13 +44,18 @@
 
         <!-- Additional Activities -->
         <activity
-            android:name="com.rvoc.cvorapp.ui.activities.whatsnew.WhatsNewActivity"
+            android:name="com.rvoc.cvorapp.ui.activities.sharehistory.ShareHistoryActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.rvoc.cvorapp.ui.activities.core.CoreActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.rvoc.cvorapp.ui.activities.managefiles.ManageFilesActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+
 
         <!-- FileProvider -->
         <provider

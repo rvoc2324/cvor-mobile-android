@@ -89,13 +89,15 @@
         android:label="Share Fragment"
         tools:layout="@layout/fragment_share">
         <action
-            android:id="@+id/action_shareFragment_to_whatsnewActivity"
-            app:destination="@id/whatsnewActivity" />
+            android:id="@+id/action_shareFragment_to_whatsNewFragment"
+            app:destination="@id/whatsNewFragment" />
     </fragment>
 
-    <!-- Whats New Activity -->
-    <activity
-        android:id="@+id/whatsnewActivity"
-        android:name="com.rvoc.cvorapp.ui.activities.whatsnew.WhatsNewActivity"
-        android:label="Whats New Activity" />
+    <!-- Share Fragment -->
+    <fragment
+        android:id="@+id/whatsNewFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.WhatsNewFragment"
+        android:label="Whats New Fragment"
+        tools:layout="@layout/fragment_whatsnew">
+    </fragment>
 </navigation>

@@ -85,6 +85,9 @@ public class PdfHandlingFragment extends Fragment {
 
         // Handle action button click
         binding.actionButton.setOnClickListener(v -> processFiles(currentActionType));
+
+        // Handle back button click
+        binding.backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
     }
 
     private void setupRecyclerView() {

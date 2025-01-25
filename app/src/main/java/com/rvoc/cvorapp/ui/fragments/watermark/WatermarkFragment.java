@@ -8,9 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,12 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.services.WatermarkService;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
+import com.rvoc.cvorapp.databinding.FragmentWatermarkBinding;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,19 +34,18 @@ public class WatermarkFragment extends Fragment {
 
     @Inject
     WatermarkService watermarkService;
+
     private static final String TAG = "WatermarkFragment";
     private WatermarkViewModel watermarkViewModel;
     private CoreViewModel coreViewModel;
 
-    private TextInputEditText shareWithInput, purposeInput;
-    private CheckBox repeatInput;
-    private ProgressBar progressIndicator;
-    private TextView watermarkTextView;
-    private MaterialButton previewButton;
+    private FragmentWatermarkBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_watermark, container, false);
+        // Inflate the layout using ViewBinding
+        binding = FragmentWatermarkBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -62,25 +56,18 @@ public class WatermarkFragment extends Fragment {
         watermarkViewModel = new ViewModelProvider(this).get(WatermarkViewModel.class);
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
-        // Bind UI components
-        shareWithInput = view.findViewById(R.id.input_sharing_with);
-        purposeInput = view.findViewById(R.id.input_purpose);
-        repeatInput = view.findViewById(R.id.input_repeat);
-        progressIndicator = view.findViewById(R.id.progress_indicator);
-        watermarkTextView = view.findViewById(R.id.text_generated_watermark);
-        previewButton = view.findViewById(R.id.button_preview);
-
-        repeatInput.setChecked(true);
-        previewButton.setEnabled(false);
+        // Bind UI components through ViewBinding
+        binding.inputRepeat.setChecked(true);
+        binding.previewButton.setEnabled(false);
 
         // Observe Watermark Text and update dynamically
         watermarkViewModel.getWatermarkText().observe(getViewLifecycleOwner(), watermarkText -> {
-            watermarkTextView.setText(watermarkText);
+            binding.textGeneratedWatermark.setText(watermarkText);
             validateInputs(); // Ensure the Preview button updates accordingly
         });
 
         // Text change listeners to dynamically update inputs in WatermarkViewModel
-        shareWithInput.addTextChangedListener(new TextWatcher() {
+        binding.inputSharingWith.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // No-op
@@ -97,7 +84,7 @@ public class WatermarkFragment extends Fragment {
             }
         });
 
-        purposeInput.addTextChangedListener(new TextWatcher() {
+        binding.inputPurpose.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // No-op
@@ -115,26 +102,30 @@ public class WatermarkFragment extends Fragment {
         });
 
         // Handle Preview Button click
-        previewButton.setOnClickListener(v -> handlePreviewClick());
+        binding.previewButton.setOnClickListener(v -> handlePreviewClick());
+
+        // Handle Back Button click
+        binding.backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
     }
 
     // Update the WatermarkViewModel with current input values
     private void updateWatermarkViewModel() {
-        String shareWith = Objects.requireNonNull(shareWithInput.getText()).toString().trim();
-        String purpose = Objects.requireNonNull(purposeInput.getText()).toString().trim();
-        boolean repeat = repeatInput.isChecked();
+        String shareWith = Objects.requireNonNull(binding.inputSharingWith.getText()).toString().trim();
+        String purpose = Objects.requireNonNull(binding.inputPurpose.getText()).toString().trim();
+        boolean repeat = binding.inputRepeat.isChecked();
+        Integer opacity = binding.seekBarOpacity.getProgress();
+        Integer fontSize = binding.seekBarFontSize.getProgress();
 
-        watermarkViewModel.setInputs(shareWith, purpose, repeat);
+        watermarkViewModel.setInputs(shareWith, purpose, opacity, fontSize, repeat);
         // validateInputs();
     }
 
     // Enable or disable the Preview button based on inputs and watermark text
     private void validateInputs() {
-        String shareWith = Objects.requireNonNull(shareWithInput.getText()).toString().trim();
-        // String purpose = Objects.requireNonNull(purposeInput.getText()).toString().trim();
+        String shareWith = Objects.requireNonNull(binding.inputSharingWith.getText()).toString().trim();
         String watermarkText = watermarkViewModel.getWatermarkText().getValue();
 
-        previewButton.setEnabled(!shareWith.isEmpty() && watermarkText != null && !watermarkText.isEmpty());
+        binding.previewButton.setEnabled(!shareWith.isEmpty() && watermarkText != null && !watermarkText.isEmpty());
     }
 
     // Handle the Preview button click
@@ -145,9 +136,12 @@ public class WatermarkFragment extends Fragment {
             return;
         }
 
-        progressIndicator.setVisibility(View.VISIBLE);
+        binding.progressIndicator.setVisibility(View.VISIBLE);
         List<File> watermarkedFiles = new ArrayList<>();
         String watermarkText = watermarkViewModel.getWatermarkText().getValue();
+        Boolean repeat =  watermarkViewModel.getRepeatWatermark().getValue();
+        Integer opacity = watermarkViewModel.getOpacity().getValue();
+        Integer fontSize = watermarkViewModel.getFontSize().getValue();
 
         for (Uri selectedFileUri : selectedFileUris) {
             try {
@@ -155,9 +149,9 @@ public class WatermarkFragment extends Fragment {
                 File processedFile = null;
 
                 if ("application/pdf".equals(fileType)) {
-                    processedFile = watermarkService.applyWatermarkPDF(selectedFileUri, watermarkText);
+                    processedFile = watermarkService.applyWatermarkPDF(selectedFileUri, watermarkText, opacity, fontSize, repeat);
                 } else if ("image/jpeg".equals(fileType) || "image/png".equals(fileType)) {
-                    processedFile = watermarkService.applyWatermarkImage(selectedFileUri, watermarkText);
+                    processedFile = watermarkService.applyWatermarkImage(selectedFileUri, watermarkText, opacity, fontSize, repeat);
                 }
 
                 if (processedFile != null) {
@@ -178,6 +172,12 @@ public class WatermarkFragment extends Fragment {
             Toast.makeText(requireContext(), "No files were watermarked.", Toast.LENGTH_SHORT).show();
         }
 
-        progressIndicator.setVisibility(View.GONE);
+        binding.progressIndicator.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Avoid memory leaks by clearing binding reference
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/homeActivity">
 
     <!-- HomeActivity -->
@@ -9,43 +10,27 @@
         android:name="com.rvoc.cvorapp.ui.activities.home.HomeActivity"
         android:label="Home"/>
 
-    <!-- CoreActivity -->
-    <activity
-        android:id="@+id/coreActivity"
-        android:name="com.rvoc.cvorapp.ui.activities.core.CoreActivity">
-        <argument
-            android:name="actionType"
-            app:argType="string" />
-    </activity>
+    <!-- Refer Fragment -->
+    <fragment
+        android:id="@+id/referFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.ReferFragment"
+        android:label="Refer Fragment"
+        tools:layout="@layout/fragment_refer">
+    </fragment>
 
-    <!-- Navigation Actions -->
-    <action
-        android:id="@+id/action_home_to_coreActivity_watermark"
-        app:destination="@id/coreActivity">
-        <argument
-            android:name="actionType"
-            android:value="addwatermark" />
-    </action>
+    <!-- Whats New Fragment -->
+    <fragment
+        android:id="@+id/whatsNewFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.WhatsNewFragment"
+        android:label="Refer Fragment"
+        tools:layout="@layout/fragment_whatsnew">
+    </fragment>
 
-    <action
-        android:id="@+id/action_home_to_coreActivity_combine"
-        app:destination="@id/coreActivity">
-        <argument
-            android:name="actionType"
-            android:value="combinepdf" />
-    </action>
-
-    <action
-        android:id="@+id/action_home_to_coreActivity_convert"
-        app:destination="@id/coreActivity">
-        <argument
-            android:name="actionType"
-            android:value="converttopdf" />
-    </action>
-
-    <!-- Whats New Activity -->
-    <activity
-        android:id="@+id/whatsnewActivity"
-        android:name="com.rvoc.cvorapp.ui.activities.whatsnew.WhatsNewActivity"
-        android:label="Whats New Activity" />
+    <!-- Settings Fragment -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.SettingsFragment"
+        android:label="Refer Fragment"
+        tools:layout="@layout/fragment_settings">
+    </fragment>
 </navigation>
