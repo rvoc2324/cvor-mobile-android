@@ -79,6 +79,10 @@ public class CoreViewModel extends AndroidViewModel {
         }
     }
 
+    public void resetSelectedFiles() {
+        selectedFiles.setValue(new HashMap<>());
+    }
+
     public void reorderSelectedFiles(int fromPosition, int toPosition) {
         Map<Uri, String> files = getValueOrEmptyMaps(selectedFiles);
 

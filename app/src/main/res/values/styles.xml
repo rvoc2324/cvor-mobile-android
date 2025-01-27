@@ -88,4 +88,15 @@
         <item name="android:background">@color/transparent</item>
         <item name="android:textColor">@color/text</item>
     </style>
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- Adjust the drawablePadding to increase or decrease spacing -->
+        <item name="android:drawablePadding">10dp</item> <!-- Adjust this value as needed -->
+        <item name="android:paddingTop">4dp</item> <!-- Optional: Adjust vertical padding -->
+        <item name="android:paddingBottom">4dp</item> <!-- Optional: Adjust vertical padding -->
+
+        <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
 </resources>

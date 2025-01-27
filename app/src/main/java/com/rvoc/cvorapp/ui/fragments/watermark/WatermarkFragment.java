@@ -1,5 +1,6 @@
 package com.rvoc.cvorapp.ui.fragments.watermark;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,9 +51,11 @@ public class WatermarkFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "Watermark fragment 1.");
 
         // Initialize ViewModels
         watermarkViewModel = new ViewModelProvider(this).get(WatermarkViewModel.class);
@@ -60,6 +64,8 @@ public class WatermarkFragment extends Fragment {
         // Bind UI components through ViewBinding
         binding.inputRepeat.setChecked(true);
         binding.previewButton.setEnabled(false);
+        binding.textOpacity.setText("Opacity(20-100%): 40% ");
+        binding.textFontSize.setText("Font Size(8-30): 18 ");
 
         // Observe Watermark Text and update dynamically
         watermarkViewModel.getWatermarkText().observe(getViewLifecycleOwner(), watermarkText -> {
@@ -102,11 +108,53 @@ public class WatermarkFragment extends Fragment {
             }
         });
 
+        binding.seekBarOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // Update the ViewModel when the SeekBar progress changes
+                binding.textOpacity.setText("Opacity(20-100%): " + progress);
+                updateWatermarkViewModel();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // No-op (optional: handle touch start if needed)
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // No-op (optional: handle touch stop if needed)
+            }
+        });
+
+        binding.seekBarFontSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // Update the ViewModel when the SeekBar progress changes
+                binding.textFontSize.setText("Font Size(8-30): " + progress);
+                updateWatermarkViewModel();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // No-op (optional: handle touch start if needed)
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // No-op (optional: handle touch stop if needed)
+            }
+        });
+
+
         // Handle Preview Button click
         binding.previewButton.setOnClickListener(v -> handlePreviewClick());
 
-        // Handle Back Button click
-        binding.backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
+        // Handle back button click
+        binding.backButton.setOnClickListener(v -> {
+            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            coreViewModel.resetSelectedFiles();
+        });
     }
 
     // Update the WatermarkViewModel with current input values
@@ -117,6 +165,7 @@ public class WatermarkFragment extends Fragment {
         Integer opacity = binding.seekBarOpacity.getProgress();
         Integer fontSize = binding.seekBarFontSize.getProgress();
         Log.d(TAG, "Font size: " + fontSize);
+        Log.d(TAG, "Opacity: " + opacity);
 
         watermarkViewModel.setInputs(shareWith, purpose, opacity, fontSize, repeat);
         // validateInputs();
@@ -131,6 +180,7 @@ public class WatermarkFragment extends Fragment {
 
     // Handle the Preview button click
     private void handlePreviewClick() {
+        Log.d(TAG, "Watermark fragment 2.");
         Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
         if (selectedFiles == null || selectedFiles.isEmpty()) {
             Toast.makeText(requireContext(), "No file selected.", Toast.LENGTH_SHORT).show();
@@ -138,6 +188,7 @@ public class WatermarkFragment extends Fragment {
         }
 
         binding.progressIndicator.setVisibility(View.VISIBLE);
+
         List<File> watermarkedFiles = new ArrayList<>();
         String watermarkText = watermarkViewModel.getWatermarkText().getValue();
         Boolean repeat =  watermarkViewModel.getRepeatWatermark().getValue();
@@ -167,13 +218,12 @@ public class WatermarkFragment extends Fragment {
             for (File file : watermarkedFiles) {
                 coreViewModel.addProcessedFile(file);
             }
+            binding.progressIndicator.setVisibility(View.GONE);
             Toast.makeText(requireContext(), "Watermarking completed.", Toast.LENGTH_SHORT).show();
             coreViewModel.setNavigationEvent("navigate_to_preview");
         } else {
             Toast.makeText(requireContext(), "No files were watermarked.", Toast.LENGTH_SHORT).show();
         }
-
-        binding.progressIndicator.setVisibility(View.GONE);
     }
 
     @Override

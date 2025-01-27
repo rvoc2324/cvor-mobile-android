@@ -27,7 +27,7 @@
     <string name="permission_required_message">Applicable permission is required to use the feature.</string>
     <string name="image_picker_icon_desc">Image picker icon</string>
     <string name="pdf_picker_icon_desc">PDF picker icon</string>
-    <string name="file_manager_fragment_title">Reorder or remove files (if required)</string>
+    <string name="file_manager_fragment_title">Review files</string>
     <string name="file_name">File Name</string>
     <string name="refer">Refer</string>
     <string name="share_history">Share history</string>
@@ -49,7 +49,7 @@
     <string name="pdf_icon">PDF icon</string>
     <string name="image_icon">Image icon</string>
     <string name="preview_desc">Preview of processed file</string>
-    <string name="preview_fragment_title">Preview files</string>
+    <string name="preview_fragment_title">Preview</string>
     <string name="download_icon">Download files</string>
     <string name="no_files_selected">No files available to preview. Go back to choose a file.</string>
     <string name="back_button">Back</string>

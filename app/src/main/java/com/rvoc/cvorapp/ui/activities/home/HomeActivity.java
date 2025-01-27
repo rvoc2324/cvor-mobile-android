@@ -60,12 +60,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setupBottomNavigationView() {
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_share_history) {
-                navigateToShareHistoryActivity();
-                return true;
-            } else {
-                return NavigationUI.onNavDestinationSelected(item, navController);
-            }
+            // Directly use NavigationUI for handling navigation
+            return NavigationUI.onNavDestinationSelected(item, navController);
         });
     }
 

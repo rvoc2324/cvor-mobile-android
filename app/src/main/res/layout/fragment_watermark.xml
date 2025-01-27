@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_primary"
-    android:paddingTop="30dp">
+    android:paddingTop="50dp">
 
     <TextView
         android:id="@+id/title"
@@ -91,6 +91,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/text_opacity"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/opacity_text"
@@ -113,6 +114,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/text_font_size"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/fontsize_text"

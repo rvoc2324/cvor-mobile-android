@@ -1,10 +1,5 @@
 package com.rvoc.cvorapp.ui.fragments.preview;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,15 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import android.app.DownloadManager;
 import android.widget.Toast;
-
 
 import com.rvoc.cvorapp.adapters.PreviewPagerAdapter;
 import com.rvoc.cvorapp.databinding.FragmentPreviewBinding;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -89,50 +87,35 @@ public class PreviewFragment extends Fragment {
             return;
         }
 
-        DownloadManager downloadManager = (DownloadManager) requireContext().getSystemService(Context.DOWNLOAD_SERVICE);
-        if (downloadManager == null) {
-            Toast.makeText(getContext(), "Download Manager not available", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+        Toast.makeText(getContext(), "Downloading files...", Toast.LENGTH_SHORT).show();
         for (File fileToDownload : files) {
             try {
-                Uri fileUri = Uri.fromFile(fileToDownload);
-                DownloadManager.Request request = new DownloadManager.Request(fileUri)
-                        .setTitle(fileToDownload.getName())
-                        .setDescription("Downloading file")
-                        .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-                // Handle destination for different Android versions
+                // Destination directory
+                File downloadsDir;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    // Use MediaStore for Android 10 and above
-                    request.setDestinationInExternalFilesDir(requireContext(), Environment.DIRECTORY_DOWNLOADS, fileToDownload.getName());
+                    downloadsDir = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileToDownload.getName());
                 } else {
-                    // Use traditional external storage for older versions
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileToDownload.getName());
+                    downloadsDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileToDownload.getName());
                 }
 
-                // Enqueue the download
-                downloadManager.enqueue(request);
-
+                // Copy file to the destination
+                copyFile(fileToDownload, downloadsDir);
+                Toast.makeText(getContext(), "Download completed successfully. Check your Downloads folder.", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                Log.e(TAG, "Error while setting up download for file: " + fileToDownload.getName(), e);
+                Log.e(TAG, "Error while copying file: " + fileToDownload.getName(), e);
             }
         }
+    }
 
-        // Inform user downloads have started
-        Toast.makeText(getContext(), "Downloads started for " + files.size() + " file(s)", Toast.LENGTH_SHORT).show();
-
-        // Register BroadcastReceiver for completed downloads
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireContext().registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                    Log.d(TAG, "Download complete for ID: " + downloadId);
-                    Toast.makeText(context, "File downloaded successfully", Toast.LENGTH_SHORT).show();
-                }
-            }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_NOT_EXPORTED);
+    // Utility method to copy file
+    private void copyFile(File src, File dest) throws IOException {
+        try (InputStream in = new FileInputStream(src);
+             OutputStream out = new FileOutputStream(dest)) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
         }
     }
 

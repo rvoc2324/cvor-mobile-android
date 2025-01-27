@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradient_primary"
         tools:context=".ui.fragments.preview.PreviewFragment"
-        android:paddingTop="30dp">
+        android:paddingTop="40dp">
 
         <!-- Top Row (Title and Download Icon) -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +44,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/title"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- ViewPager2 -->

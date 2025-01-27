@@ -2,28 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Selected state -->
     <item android:state_checked="true">
-        <layer-list>
-            <item android:left="0dp">
-                <!-- Left parenthesis -->
-                <shape>
-                    <corners
-                        android:radius="45dp"
-                        android:topRightRadius="45dp"
-                        android:bottomRightRadius="45dp" />
-                    <solid android:color="@color/buttonTranslucent" />
-                </shape>
-            </item>
-            <item android:right="0dp">
-                <!-- Right parenthesis -->
-                <shape>
-                    <corners
-                        android:radius="45dp"
-                        android:topLeftRadius="45dp"
-                        android:bottomLeftRadius="45dp" />
-                    <solid android:color="@color/buttonTranslucent" />
-                </shape>
-            </item>
-        </layer-list>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/buttonTranslucent" />
+            <corners android:radius="25dp" /> <!-- Less curved -->
+            <padding
+                android:left="8dp"
+                android:right="8dp" />
+        </shape>
     </item>
 
     <!-- Default state -->

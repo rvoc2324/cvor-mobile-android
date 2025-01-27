@@ -99,6 +99,8 @@ public class CameraFragment extends Fragment {
         hideSystemUI();
         checkAndRequestPermissions();
         setupButtonListeners();
+
+        requireActivity().getOnBackPressedDispatcher().onBackPressed();
     }
 
     private void hideSystemUI() {

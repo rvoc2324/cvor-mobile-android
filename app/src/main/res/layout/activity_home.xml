@@ -20,15 +20,17 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:layout_gravity="bottom"
         android:paddingBottom="0dp"
         android:background="@color/colorPrimary"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
+        app:itemIconSize="30dp"
         app:itemBackground="@drawable/bottom_nav_item_background"
-        style="@style/TextStyle.Menu"
-        android:divider="@drawable/nav_divider"
-        android:showDividers= "middle"
-        app:labelVisibilityMode= "labeled" />
+        style="@style/BottomNavigationViewStyle"
+        app:labelVisibilityMode= "unlabeled" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

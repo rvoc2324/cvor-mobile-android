@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,7 +72,6 @@ public class FileManagerFragment extends Fragment {
                             } else {
                                 Log.w(TAG, "FileManagerFragment: File selection cancelled.");
                                 Toast.makeText(requireContext(), "File selection cancelled", Toast.LENGTH_SHORT).show();
-                                coreViewModel.setNavigationEvent("navigate_back");
                             }
                         } catch (Exception e) {
                             Log.e(TAG, "FileManagerFragment: Error handling file picker result.", e);
@@ -96,7 +96,6 @@ public class FileManagerFragment extends Fragment {
                             } else {
                                 Log.w(TAG, "FileManagerFragment: No photos selected.");
                                 Toast.makeText(requireContext(), "No images selected", Toast.LENGTH_SHORT).show();
-                                coreViewModel.setNavigationEvent("navigate_back");
                             }
                         } catch (Exception e) {
                             Log.e(TAG, "FileManagerFragment: Error handling photo picker result.", e);
@@ -105,6 +104,8 @@ public class FileManagerFragment extends Fragment {
 
             Log.d(TAG, "FileManagerFragment: Photo picker launcher initialized.");
             Log.d(TAG, "FileManagerFragment: onCreate completed.");
+
+            requireActivity().getOnBackPressedDispatcher().onBackPressed();
         } catch (Exception e) {
             Log.e(TAG, "FileManagerFragment: Error during onCreate.", e);
         }
@@ -155,6 +156,14 @@ public class FileManagerFragment extends Fragment {
         Log.d(TAG, "File Manager fragment 5.");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         Log.d(TAG, "File Manager fragment 6.");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+        // Set the initial URI to the Documents folder
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Android 10+ (API level 29+)
+            Uri documentsUri = Uri.parse("content://com.android.externalstorage.documents/document/primary:Documents");
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, documentsUri);
+        }
+
         filePickerLauncher.launch(intent);
     }
 
@@ -171,6 +180,7 @@ public class FileManagerFragment extends Fragment {
             intent.setType("image/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             filePickerLauncher.launch(intent);
         }
     }
@@ -208,5 +218,10 @@ public class FileManagerFragment extends Fragment {
             fileName = uri.getLastPathSegment();
         }
         return fileName;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

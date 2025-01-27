@@ -20,3 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.shockwave.**
+-keep public class com.bumptech.glide.** { *; }
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** { *; }

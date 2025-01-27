@@ -1,17 +1,18 @@
 package com.rvoc.cvorapp.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rvoc.cvorapp.R;
@@ -21,14 +22,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
 
     private List<Map.Entry<Uri, String>> fileEntries = new ArrayList<>();
     private final FileActionListener fileActionListener;
+    private final ExecutorService executorService; // Thread pool for asynchronous tasks
+    private final LruCache<String, Bitmap> thumbnailCache; // In-memory cache for thumbnails
 
     public FileListAdapter(FileActionListener fileActionListener) {
         this.fileActionListener = fileActionListener;
+
+        // Initialize ExecutorService with a fixed thread pool
+        this.executorService = Executors.newFixedThreadPool(4);
+
+        // Initialize LruCache for thumbnail caching (10 MB cache size)
+        final int cacheSize = 10 * 1024 * 1024; // 10 MB
+        this.thumbnailCache = new LruCache<>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap value) {
+                return value.getByteCount(); // Cache size in bytes
+            }
+        };
     }
 
     public void submitList(List<Map.Entry<Uri, String>> entries) {
@@ -57,11 +74,8 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
 
         // Set the file name text
         holder.binding.fileNameTextView.setText(fileName);
+        loadFileThumbnail(fileUri, fileName, holder);
 
-        // Load the file thumbnail or preview (image or PDF)
-        loadFileThumbnail(fileUri, holder);
-
-        // Delete button action
         holder.binding.deleteButton.setOnClickListener(v -> fileActionListener.onRemove(fileUri));
     }
 
@@ -70,18 +84,26 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         return fileEntries.size();
     }
 
-    // Helper method to load the file thumbnail (for image or PDF files)
-    private void loadFileThumbnail(Uri fileUri, FileViewHolder holder) {
-        String fileExtension = getFileExtension(fileUri);
+    private void loadFileThumbnail(Uri fileUri, String fileName, FileViewHolder holder) {
+        Context context = holder.binding.getRoot().getContext();
+        String fileExtension = getFileExtension(fileUri, context);
 
         if (fileExtension != null) {
-            if (fileExtension.equalsIgnoreCase("pdf")) {
-                // Load PDF thumbnail (first page)
-                loadPdfThumbnail(fileUri, holder);
-            } else if (isImageFile(fileExtension)) {
-                // Load image thumbnail
-                loadImageThumbnail(fileUri, holder);
+            Bitmap cachedBitmap = thumbnailCache.get(fileName);
+            if (cachedBitmap != null) {
+                holder.binding.fileTypeImageView.setImageBitmap(cachedBitmap); // Use cached thumbnail
+            } else {
+                // Generate thumbnail asynchronously
+                if (fileExtension.equalsIgnoreCase("pdf")) {
+                    executorService.execute(() -> loadPdfThumbnailAsync(fileUri, fileName, holder));
+                } else if (isImageFile(fileExtension)) {
+                    executorService.execute(() -> loadImageThumbnailAsync(fileUri, fileName, holder));
+                } else {
+                    holder.binding.fileTypeImageView.setImageResource(R.drawable.baseline_error_24);
+                }
             }
+        } else {
+            holder.binding.fileTypeImageView.setImageResource(R.drawable.baseline_error_24);
         }
     }
 
@@ -90,46 +112,52 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         return extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg") || extension.equalsIgnoreCase("png");
     }
 
-    // Helper method to load image thumbnails
-    private void loadImageThumbnail(Uri imageUri, FileViewHolder holder) {
+    private void loadImageThumbnailAsync(Uri imageUri, String fileName, FileViewHolder holder) {
+        Context context = holder.binding.getRoot().getContext();
         try {
-            Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
-                    holder.binding.getRoot().getContext().getContentResolver(),
-                    Long.parseLong(imageUri.getLastPathSegment()), // Using image ID
-                    0, // 0 means using default size for the thumbnail
-                    null
-            );
-            holder.binding.fileTypeImageView.setImageBitmap(bitmap);
-        } catch (Exception e) {
+            // Use MediaStore to load the image thumbnail
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+            Bitmap scaledBitmap = scaleBitmap(bitmap, 128); // Scale to thumbnail size
+            thumbnailCache.put(fileName, scaledBitmap); // Cache the thumbnail
+
+            holder.binding.getRoot().post(() -> holder.binding.fileTypeImageView.setImageBitmap(scaledBitmap));
+        } catch (IOException e) {
             Log.e("FileListAdapter", "Error loading image thumbnail", e);
-            holder.binding.fileTypeImageView.setImageResource(R.drawable.ic_image);  // Default image icon in case of error
+            holder.binding.getRoot().post(() -> holder.binding.fileTypeImageView.setImageResource(R.drawable.ic_image));
         }
     }
 
-    // Helper method to load PDF thumbnails (first page)
-    private void loadPdfThumbnail(Uri pdfUri, FileViewHolder holder) {
+    private void loadPdfThumbnailAsync(Uri pdfUri, String fileName, FileViewHolder holder) {
         ParcelFileDescriptor fileDescriptor = null;
         try {
-            fileDescriptor = holder.binding.getRoot().getContext().getContentResolver().openFileDescriptor(pdfUri, "r");
+            Context context = holder.binding.getRoot().getContext();
+            fileDescriptor = context.getContentResolver().openFileDescriptor(pdfUri, "r");
 
             if (fileDescriptor != null) {
                 PdfRenderer pdfRenderer = new PdfRenderer(fileDescriptor);
-                PdfRenderer.Page page = pdfRenderer.openPage(0);  // Load the first page
+                PdfRenderer.Page page = pdfRenderer.openPage(0);
 
-                Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
+                float aspectRatio = (float) page.getWidth() / page.getHeight();
+                int thumbnailSize = 128;
+                int scaledWidth = aspectRatio >= 1 ? thumbnailSize : Math.round(thumbnailSize * aspectRatio);
+                int scaledHeight = aspectRatio < 1 ? thumbnailSize : Math.round(thumbnailSize / aspectRatio);
+
+                Bitmap bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
                 page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-                holder.binding.fileTypeImageView.setImageBitmap(bitmap);
+                thumbnailCache.put(fileName, bitmap); // Cache the thumbnail
+
+                holder.binding.getRoot().post(() -> holder.binding.fileTypeImageView.setImageBitmap(bitmap));
 
                 page.close();
                 pdfRenderer.close();
             }
         } catch (IOException e) {
             Log.e("FileListAdapter", "Error loading PDF thumbnail", e);
-            holder.binding.fileTypeImageView.setImageResource(R.drawable.ic_pdf);  // Default PDF icon in case of error
+            holder.binding.getRoot().post(() -> holder.binding.fileTypeImageView.setImageResource(R.drawable.ic_pdf));
         } finally {
             if (fileDescriptor != null) {
                 try {
-                    fileDescriptor.close();  // Close the file descriptor
+                    fileDescriptor.close();
                 } catch (IOException e) {
                     Log.e("FileListAdapter", "Error closing file descriptor", e);
                 }
@@ -138,12 +166,19 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
     }
 
     // Helper method to get file extension from Uri
-    private String getFileExtension(Uri uri) {
-        String path = uri.getPath();
-        if (path != null && path.lastIndexOf('.') > 0) {
-            return path.substring(path.lastIndexOf('.') + 1);
+    private String getFileExtension(Uri uri, Context context) {
+        String mimeType = context.getContentResolver().getType(uri);
+        if (mimeType != null) {
+            return mimeType.split("/")[1];
         }
-        return null;  // Return null if no extension
+        return null;
+    }
+
+    private Bitmap scaleBitmap(Bitmap bitmap, int maxSize) {
+        float aspectRatio = (float) bitmap.getWidth() / bitmap.getHeight();
+        int width = aspectRatio >= 1 ? maxSize : Math.round(maxSize * aspectRatio);
+        int height = aspectRatio < 1 ? maxSize : Math.round(maxSize / aspectRatio);
+        return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 
     public static class FileViewHolder extends RecyclerView.ViewHolder {

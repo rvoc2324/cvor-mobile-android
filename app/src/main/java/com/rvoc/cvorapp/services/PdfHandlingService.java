@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.tom_roush.pdfbox.io.MemoryUsageSetting;
 import com.tom_roush.pdfbox.multipdf.PDFMergerUtility;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.PDPage;
@@ -21,8 +22,10 @@ import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -47,41 +50,17 @@ public class PdfHandlingService {
     // Combine multiple PDFs into one
     public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile) throws Exception {
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
-        Log.d(TAG, "PDF Service 5.");
 
         for (Uri uri : inputFiles) {
-            PDDocument document;
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
                 if (inputStream == null) {
                     throw new IOException("Unable to open input stream for URI: " + uri);
                 }
 
-                try {
-                    // Attempt to load the PDF document
-                    document = PDDocument.load(inputStream);
-                    Log.d(TAG, "PDF Service 6.");
-                } catch (IOException e) {
-                    // Handle password-protected PDFs
-                    if (e.getMessage() != null && e.getMessage().contains("password")) {
-                        // Attempt to decrypt the document
-                        document = decryptPDF(inputStream);
-                        Log.d(TAG, "PDF Service 7.");
-                    } else {
-                        // Handle corrupted files
-                        throw new IOException("Corrupted PDF or unsupported format: " + uri, e);
-                    }
-                }
-
-                // Add the document to the merger utility if it's valid
-                if (document != null) {
-                    ByteArrayOutputStream decryptedStream = new ByteArrayOutputStream();
-                    document.save(decryptedStream);
-                    Log.d(TAG, "PDF Service 8.");
-                    document.close();
-                    mergerUtility.addSource(new ByteArrayInputStream(decryptedStream.toByteArray()));
-                }
+                // Add the input stream directly to the merger utility
+                mergerUtility.addSource(inputStream);
             } catch (Exception e) {
-                Log.e("PdfHandlingService", "Error processing file: " + uri, e);
+                Log.e(TAG, "Error processing file: " + uri, e);
                 throw new IOException("Failed to process file: " + uri.toString(), e);
             }
         }
@@ -89,41 +68,96 @@ public class PdfHandlingService {
         // Set the destination file and merge the documents
         mergerUtility.setDestinationFileName(outputFile.getPath());
         mergerUtility.mergeDocuments(null);
-        Log.d(TAG, "PDF Service 9.");
+
+        Log.d(TAG, "PDF merge completed successfully.");
         return outputFile;
     }
 
+
     // Convert images to a single PDF
     public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {
-        Log.d(TAG, "PDF Service 1.");
+        Log.d(TAG, "PDF Service - Converting Images to PDF");
+
         try (PDDocument document = new PDDocument()) {
             for (Uri uri : imageUris) {
                 try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-                    // Convert the image to PDImageXObject
-                    assert inputStream != null;
+                    if (inputStream == null) {
+                        throw new IOException("Unable to open input stream for URI: " + uri);
+                    }
+
+                    // Create PDImageXObject directly from input stream
                     PDImageXObject pdImage = PDImageXObject.createFromByteArray(
                             document,
                             readStream(inputStream),
                             "image"
                     );
-                    Log.d(TAG, "PDF Service 2.");
 
-                    // Create a new page and add the image
-                    PDPage page = new PDPage(new PDRectangle(pdImage.getWidth(), pdImage.getHeight()));
+                    // Limit page size to PDF specification if the image is too large
+                    float pageWidth = Math.min(pdImage.getWidth(), PDRectangle.A4.getWidth());
+                    float pageHeight = (pageWidth / pdImage.getWidth()) * pdImage.getHeight();
+                    pageHeight = Math.min(pageHeight, PDRectangle.A4.getHeight());
+
+                    PDPage page = new PDPage(new PDRectangle(pageWidth, pageHeight));
                     document.addPage(page);
-                    Log.d(TAG, "PDF Service 3.");
+
+                    // Add image to the page
                     try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                        contentStream.drawImage(pdImage, 0, 0, pdImage.getWidth(), pdImage.getHeight());
+                        float xOffset = (pageWidth - pdImage.getWidth()) / 2;
+                        float yOffset = (pageHeight - pdImage.getHeight()) / 2;
+                        contentStream.drawImage(pdImage, xOffset, yOffset, pageWidth, pageHeight);
                     }
                 } catch (Exception e) {
-                    Log.e("PdfHandlingService", "Error processing image: " + uri, e);
+                    Log.e(TAG, "Error processing image: " + uri, e);
                     throw new IOException("Failed to process image: " + uri.toString(), e);
                 }
             }
 
+            // Save the document
             document.save(outputFile);
         }
+
+        Log.d(TAG, "PDF Service - Conversion Completed");
         return outputFile;
+    }
+
+    // Split a pdf file
+    public static List<File> splitPDF(@NonNull Context context, @NonNull Uri inputFileUri, @NonNull File outputDir) throws Exception {
+        List<File> splitFiles = new ArrayList<>();
+
+        // Ensure output directory exists
+        if (!outputDir.exists() && !outputDir.mkdirs()) {
+            throw new IOException("Failed to create output directory: " + outputDir.getAbsolutePath());
+        }
+
+        try (InputStream inputStream = context.getContentResolver().openInputStream(inputFileUri)) {
+            if (inputStream == null) {
+                throw new IOException("Unable to open input stream for URI: " + inputFileUri);
+            }
+
+            try (PDDocument document = PDDocument.load(inputStream)) {
+                int totalPages = document.getNumberOfPages();
+                Log.d(TAG, "Total pages in PDF: " + totalPages);
+
+                for (int i = 0; i < totalPages; i++) {
+                    try (PDDocument singlePageDoc = new PDDocument()) {
+                        singlePageDoc.addPage(document.getPage(i));
+
+                        File outputFile = new File(outputDir, "page_" + (i + 1) + ".pdf");
+                        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                            singlePageDoc.save(fos);
+                        }
+
+                        splitFiles.add(outputFile);
+                        Log.d(TAG, "Created split PDF: " + outputFile.getAbsolutePath());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error splitting PDF file: " + inputFileUri, e);
+            throw e;
+        }
+
+        return splitFiles;
     }
 
     // Decrypt a PDF document if it's password-protected

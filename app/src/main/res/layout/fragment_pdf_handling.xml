@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_primary"
-    android:paddingTop="30dp">
+    android:paddingTop="50dp">
 
     <!-- Title Text -->
     <TextView
@@ -45,7 +45,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             style="@style/SecondaryButtonStyle"
@@ -55,7 +55,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/action_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             style="@style/PrimaryButtonStyle"
