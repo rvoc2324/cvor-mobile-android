@@ -25,7 +25,9 @@ import com.rvoc.cvorapp.services.PdfHandlingService;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -66,10 +68,11 @@ public class PdfHandlingFragment extends Fragment {
         // Setup RecyclerView
         setupRecyclerView();
 
-        // Observe selected files and update adapter
-        coreViewModel.getSelectedFileUris().observe(getViewLifecycleOwner(), uris -> {
+        // Observe selected files uris and update adapter
+        coreViewModel.getSelectedFiles().observe(getViewLifecycleOwner(), uris -> {
             if (uris != null) {
-                fileListAdapter.submitList(uris);
+                List<Map.Entry<Uri, String>> entries = new ArrayList<>(uris.entrySet());
+                fileListAdapter.submitList(entries);
             }
         });
 
@@ -95,7 +98,7 @@ public class PdfHandlingFragment extends Fragment {
         binding.recyclerViewFiles.addItemDecoration(divider);
 
         // Initialize FileActionListener
-        fileActionListener = new FileActionListener(uri -> coreViewModel.removeSelectedFileUri(uri));
+        fileActionListener = new FileActionListener(uri -> coreViewModel.removeSelectedFiles(uri));
 
         // Initialize FileListAdapter
         fileListAdapter = new FileListAdapter(fileActionListener);
@@ -119,17 +122,19 @@ public class PdfHandlingFragment extends Fragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
-                coreViewModel.reorderSelectedFileUris(fromPosition, toPosition);
+                coreViewModel.reorderSelectedFiles(fromPosition, toPosition);
                 return true;
             }
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                List<Uri> uris = coreViewModel.getSelectedFileUris().getValue();
+                Map<Uri, String> uris = coreViewModel.getSelectedFiles().getValue();
                 if (uris != null && position >= 0 && position < uris.size()) {
-                    Uri uriToRemove = uris.get(position);
-                    coreViewModel.removeSelectedFileUri(uriToRemove);
+                    Uri uriToRemove = getUriFromPosition(position, uris);
+                    if (uriToRemove != null) {
+                        coreViewModel.removeSelectedFiles(uriToRemove); // Remove the Uri from the map
+                    }
                 }
             }
         });
@@ -142,7 +147,7 @@ public class PdfHandlingFragment extends Fragment {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
-            List<Uri> selectedFiles = coreViewModel.getSelectedFileUris().getValue();
+            Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
             if (selectedFiles == null || selectedFiles.isEmpty()) {
                 requireActivity().runOnUiThread(() -> {
                     binding.progressIndicator.setVisibility(View.GONE);
@@ -152,13 +157,18 @@ public class PdfHandlingFragment extends Fragment {
                 return;
             }
 
-            File outputFile = new File(requireContext().getCacheDir(), "processed_file.pdf");
+            List<Uri> urisList = new ArrayList<>(selectedFiles.keySet());
+
             try {
                 File processedFile;
                 if ("combinepdf".equals(actionType)) {
-                    processedFile = pdfHandlingService.combinePDF(selectedFiles, outputFile);
+                    String fileName = "combined_" + System.currentTimeMillis() + ".pdf";
+                    File outputFile = new File(requireContext().getCacheDir(), fileName);
+                    processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
                 } else if ("convertpdf".equals(actionType)) {
-                    processedFile = pdfHandlingService.convertImagesToPDF(selectedFiles, outputFile);
+                    String fileName = "converted_" + System.currentTimeMillis() + ".pdf";
+                    File outputFile = new File(requireContext().getCacheDir(), fileName);
+                    processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
                 } else {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
@@ -180,6 +190,16 @@ public class PdfHandlingFragment extends Fragment {
             }
         });
         executorService.shutdown();
+    }
+
+    private Uri getUriFromPosition(int position, Map<Uri, String> uris) {
+        if (uris == null || position < 0 || position >= uris.size()) {
+            return null;
+        }
+
+        // Convert the map to a list of entries and return the Uri at the given position
+        List<Map.Entry<Uri, String>> entryList = new ArrayList<>(uris.entrySet());
+        return entryList.get(position).getKey(); // Retrieve the Uri (key) at the given position
     }
 
     @Override

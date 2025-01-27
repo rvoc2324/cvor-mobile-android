@@ -50,7 +50,8 @@ public class WatermarkService {
      * @throws Exception If there are errors in processing the file.
      */
     public File applyWatermarkImage(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
-        File outputFile = new File(context.getCacheDir(), "watermarked_image.png");
+        String fileName = "watermarked_" + System.currentTimeMillis() + ".png";
+        File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service 1.");
 
         // Default Integer parameters are null
@@ -109,7 +110,8 @@ public class WatermarkService {
      * @throws Exception If there are errors in processing the file.
      */
     public File applyWatermarkPDF(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
-        File outputFile = new File(context.getCacheDir(), "watermarked_document.pdf");
+        String fileName = "watermarked_" + System.currentTimeMillis() + ".pdf";
+        File outputFile = new File(context.getCacheDir(), fileName);
 
         PDDocument document = null;
 

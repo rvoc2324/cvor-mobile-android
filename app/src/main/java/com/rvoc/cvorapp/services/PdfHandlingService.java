@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
@@ -154,7 +152,7 @@ public class PdfHandlingService {
             } catch (IOException e) {
                 // Handle incorrect password
                 if (e.getMessage() != null && e.getMessage().contains("password")) {
-                    showToast("Incorrect password. Please try again.");
+                    showToast();
                 } else {
                     throw new IOException("Failed to decrypt PDF.", e);
                 }
@@ -205,10 +203,10 @@ public class PdfHandlingService {
     }
 
     // Helper to show a toast
-    private void showToast(String message) {
+    private void showToast() {
         if (context instanceof Activity) {
             ((Activity) context).runOnUiThread(() ->
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
             );
         }
     }

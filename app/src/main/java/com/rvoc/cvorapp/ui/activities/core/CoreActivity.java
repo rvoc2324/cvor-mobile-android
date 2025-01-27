@@ -1,9 +1,7 @@
 package com.rvoc.cvorapp.ui.activities.core;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
@@ -282,6 +280,7 @@ public class CoreActivity extends AppCompatActivity {
     /**
      * Navigate to Whats New Fragment from ShareFragment.
      */
+
     private void navToWhatsNew() {
         try {
             navController.navigate(R.id.action_shareFragment_to_whatsNewFragment);

@@ -23,6 +23,7 @@ import com.rvoc.cvorapp.databinding.FragmentWatermarkBinding;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -115,6 +116,7 @@ public class WatermarkFragment extends Fragment {
         boolean repeat = binding.inputRepeat.isChecked();
         Integer opacity = binding.seekBarOpacity.getProgress();
         Integer fontSize = binding.seekBarFontSize.getProgress();
+        Log.d(TAG, "Font size: " + fontSize);
 
         watermarkViewModel.setInputs(shareWith, purpose, opacity, fontSize, repeat);
         // validateInputs();
@@ -123,15 +125,14 @@ public class WatermarkFragment extends Fragment {
     // Enable or disable the Preview button based on inputs and watermark text
     private void validateInputs() {
         String shareWith = Objects.requireNonNull(binding.inputSharingWith.getText()).toString().trim();
-        String watermarkText = watermarkViewModel.getWatermarkText().getValue();
 
-        binding.previewButton.setEnabled(!shareWith.isEmpty() && watermarkText != null && !watermarkText.isEmpty());
+        binding.previewButton.setEnabled(!shareWith.isEmpty());
     }
 
     // Handle the Preview button click
     private void handlePreviewClick() {
-        List<Uri> selectedFileUris = coreViewModel.getSelectedFileUris().getValue();
-        if (selectedFileUris == null || selectedFileUris.isEmpty()) {
+        Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
+        if (selectedFiles == null || selectedFiles.isEmpty()) {
             Toast.makeText(requireContext(), "No file selected.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -143,7 +144,7 @@ public class WatermarkFragment extends Fragment {
         Integer opacity = watermarkViewModel.getOpacity().getValue();
         Integer fontSize = watermarkViewModel.getFontSize().getValue();
 
-        for (Uri selectedFileUri : selectedFileUris) {
+        for (Uri selectedFileUri : selectedFiles.keySet()) {
             try {
                 String fileType = requireContext().getContentResolver().getType(selectedFileUri);
                 File processedFile = null;

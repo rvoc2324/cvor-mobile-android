@@ -14,6 +14,7 @@
     <color name="buttonHighlightPrimary">#18A1D7</color> <!-- Bright cyan for hover/highlight -->
     <color name="buttonHighlightSecondary">#225978</color> <!-- Supporting secondary highlight -->
     <color name="buttonDisabled">#738394</color> <!-- Accessible muted tone for disabled buttons -->
+    <color name="buttonTranslucent">#4D146A8D</color> <!-- Accessible muted tone for disabled buttons -->
 
     <!-- Text Colors -->
     <color name="text">#F4F8FA</color> <!-- Soft white for high contrast -->

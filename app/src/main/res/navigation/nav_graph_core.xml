@@ -93,7 +93,7 @@
             app:destination="@id/whatsNewFragment" />
     </fragment>
 
-    <!-- Share Fragment -->
+    <!-- Whats New Fragment -->
     <fragment
         android:id="@+id/whatsNewFragment"
         android:name="com.rvoc.cvorapp.ui.fragments.WhatsNewFragment"

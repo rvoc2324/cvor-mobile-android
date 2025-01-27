@@ -54,6 +54,12 @@
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
+    <style name="TextStyle.Menu">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
     <style name="TextStyle.Caption">
         <item name="android:textColor">@color/textSubdued</item>
         <item name="android:textSize">16sp</item>

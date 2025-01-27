@@ -12,6 +12,8 @@ import com.rvoc.cvorapp.utils.CrashlyticsInitialiser;
 import com.rvoc.cvorapp.utils.LoggingInitialiser;
 import com.rvoc.cvorapp.utils.PDFBoxInitialiser;
 
+import org.opencv.android.OpenCVLoader;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.HiltAndroidApp;
@@ -47,12 +49,12 @@ public class MyApplication extends Application {
         loggingInitialiser.initialise();
         pdfBoxInitialiser.initialise();
 
-        /*
+
         if (!OpenCVLoader.initLocal()) {
             Log.e("OpenCV", "Initialization failed!");
         } else {
             Log.d("OpenCV", "OpenCV loaded successfully!");
-        }*/
+        }
 
         /*
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

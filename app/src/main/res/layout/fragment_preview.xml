@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradient_primary"
         tools:context=".ui.fragments.preview.PreviewFragment"
-        android:paddingTop="25dp">
+        android:paddingTop="30dp">
 
         <!-- Top Row (Title and Download Icon) -->
         <androidx.constraintlayout.widget.ConstraintLayout

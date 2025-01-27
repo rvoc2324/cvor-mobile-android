@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.net.Uri;
@@ -283,8 +284,9 @@ public class CameraFragment extends Fragment {
                     }
                 }
 
+                String fileName = getFileNameFromUri(savedUri);
                 // Update coreViewModel
-                coreViewModel.addSelectedFileUri(savedUri);
+                coreViewModel.addSelectedFile(savedUri, fileName);
 
                 File tempFile = new File(capturedImageUri.getPath());
                 if (tempFile.exists() && tempFile.delete()) {
@@ -378,6 +380,24 @@ public class CameraFragment extends Fragment {
         Uri uri = Uri.fromParts("package", requireContext().getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
+    }
+
+    // Helper method to get the file name from the URI
+    private String getFileNameFromUri(Uri uri) {
+        String[] projection = {MediaStore.MediaColumns.DISPLAY_NAME};
+        try (Cursor cursor = requireContext().getContentResolver().query(uri, projection, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int displayNameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+                if (displayNameIndex != -1) {
+                    return cursor.getString(displayNameIndex);
+                } else {
+                    Log.e(TAG, "DISPLAY_NAME column not found in the URI.");
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting file name", e);
+        }
+        return null;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package com.rvoc.cvorapp.ui.fragments.filesource;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -175,10 +177,36 @@ public class FileManagerFragment extends Fragment {
 
     private void handleSelectedFile(@NonNull Uri fileUri) {
         try {
-            coreViewModel.addSelectedFileUri(fileUri);
-            Log.d(TAG, "File Manager fragment 8.");
+            String fileName = getFileName(fileUri);
+            if (fileName != null) {
+                coreViewModel.addSelectedFile(fileUri, fileName);
+                Log.d(TAG, "File selected: " + fileName);
+            } else {
+                Toast.makeText(requireContext(), "Unable to determine file name", Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
             Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error processing file: ", e);
         }
+    }
+
+    private String getFileName(@NonNull Uri uri) {
+        String fileName = null;
+        if ("content".equals(uri.getScheme())) {
+            try (Cursor cursor = requireContext().getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {
+                        fileName = cursor.getString(nameIndex);
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error retrieving file name", e);
+            }
+        }
+        if (fileName == null) {
+            fileName = uri.getLastPathSegment();
+        }
+        return fileName;
     }
 }

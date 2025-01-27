@@ -2,18 +2,36 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/homeActivity">
+    app:startDestination="@id/homeFragment">
 
-    <!-- HomeActivity -->
-    <activity
-        android:id="@+id/homeActivity"
-        android:name="com.rvoc.cvorapp.ui.activities.home.HomeActivity"
-        android:label="Home"/>
+    <!-- Login Fragment -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.auth.LoginFragment"
+        android:label="Login Fragment"
+        tools:layout="@layout/fragment_login">
+    </fragment>
+
+    <!-- Register Fragment -->
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.auth.RegisterFragment"
+        android:label="Register Fragment"
+        tools:layout="@layout/fragment_register">
+    </fragment>
+
+    <!-- Home Fragment -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.home.HomeFragment"
+        android:label="Home Fragment"
+        tools:layout="@layout/fragment_home">
+    </fragment>
 
     <!-- Refer Fragment -->
     <fragment
         android:id="@+id/referFragment"
-        android:name="com.rvoc.cvorapp.ui.fragments.ReferFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.refer.ReferFragment"
         android:label="Refer Fragment"
         tools:layout="@layout/fragment_refer">
     </fragment>
@@ -21,7 +39,7 @@
     <!-- Whats New Fragment -->
     <fragment
         android:id="@+id/whatsNewFragment"
-        android:name="com.rvoc.cvorapp.ui.fragments.WhatsNewFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.whatsnew.WhatsNewFragment"
         android:label="Refer Fragment"
         tools:layout="@layout/fragment_whatsnew">
     </fragment>
@@ -29,7 +47,7 @@
     <!-- Settings Fragment -->
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.rvoc.cvorapp.ui.fragments.SettingsFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.settings.SettingsFragment"
         android:label="Refer Fragment"
         tools:layout="@layout/fragment_settings">
     </fragment>

@@ -10,8 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -27,7 +29,7 @@ public class CoreViewModel extends AndroidViewModel {
     }
 
     private final MutableLiveData<SourceType> sourceType = new MutableLiveData<>(null);
-    private final MutableLiveData<List<Uri>> selectedFileUris = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Map<Uri, String>> selectedFiles = new MutableLiveData<>(new HashMap<>());
     private final MutableLiveData<List<File>> processedFiles = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> actionType = new MutableLiveData<>("");
 
@@ -57,40 +59,44 @@ public class CoreViewModel extends AndroidViewModel {
         return sourceType;
     }
 
-    // Selected File URIs
-    public void setSelectedFileUris(List<Uri> uris) {
-        selectedFileUris.setValue(uris != null ? new ArrayList<>(uris) : new ArrayList<>());
+    public LiveData<Map<Uri, String>> getSelectedFiles() {
+        return selectedFiles;
     }
 
-    public LiveData<List<Uri>> getSelectedFileUris() {
-        return selectedFileUris;
-    }
-
-    public void addSelectedFileUri(Uri uri) {
-        if (uri == null) return;
-
-        List<Uri> uris = getValueOrEmpty(selectedFileUris);
-        if (!uris.contains(uri)) {
-            uris.add(uri);
-            selectedFileUris.setValue(uris);
+    public void addSelectedFile(Uri fileUri, String fileName) {
+        Map<Uri, String> currentFiles = selectedFiles.getValue();
+        if (currentFiles != null) {
+            currentFiles.put(fileUri, fileName);
+            selectedFiles.setValue(currentFiles);
         }
     }
 
-    public void removeSelectedFileUri(Uri uri) {
-        if (uri == null) return;
-
-        List<Uri> uris = getValueOrEmpty(selectedFileUris);
-        if (uris.remove(uri)) {
-            selectedFileUris.setValue(uris);
+    public void removeSelectedFiles(Uri uriToRemove) {
+        Map<Uri, String> currentFiles = selectedFiles.getValue();
+        if (currentFiles != null) {
+            currentFiles.remove(uriToRemove); // Removes the file for the given Uri
+            selectedFiles.setValue(currentFiles); // Update the LiveData with the modified map
         }
     }
 
-    public void reorderSelectedFileUris(int fromPosition, int toPosition) {
-        List<Uri> uris = getValueOrEmpty(selectedFileUris);
-        if (fromPosition >= 0 && toPosition >= 0 && fromPosition < uris.size() && toPosition < uris.size()) {
-            Uri movedUri = uris.remove(fromPosition);
-            uris.add(toPosition, movedUri);
-            selectedFileUris.setValue(uris);
+    public void reorderSelectedFiles(int fromPosition, int toPosition) {
+        Map<Uri, String> files = getValueOrEmptyMaps(selectedFiles);
+
+        // Convert Map to a List of Map.Entry
+        List<Map.Entry<Uri, String>> fileList = new ArrayList<>(files.entrySet());
+
+        if (fromPosition >= 0 && toPosition >= 0 && fromPosition < fileList.size() && toPosition < fileList.size()) {
+            // Remove and add the file entry to reorder
+            Map.Entry<Uri, String> movedFile = fileList.remove(fromPosition);
+            fileList.add(toPosition, movedFile);
+
+            // Rebuild the Map from the reordered list
+            Map<Uri, String> reorderedMap = new LinkedHashMap<>();
+            for (Map.Entry<Uri, String> entry : fileList) {
+                reorderedMap.put(entry.getKey(), entry.getValue());
+            }
+
+            selectedFiles.setValue(reorderedMap);
         }
     }
 
@@ -137,7 +143,7 @@ public class CoreViewModel extends AndroidViewModel {
     // Clear State
     public void clearState() {
         sourceType.setValue(null);
-        selectedFileUris.setValue(new ArrayList<>());
+        selectedFiles.setValue(new HashMap<>());
         processedFiles.setValue(new ArrayList<>());
         navigationEvent.setValue(null);
     }
@@ -146,5 +152,11 @@ public class CoreViewModel extends AndroidViewModel {
     private <T> List<T> getValueOrEmpty(MutableLiveData<List<T>> liveData) {
         List<T> value = liveData.getValue();
         return value != null ? value : new ArrayList<>();
+    }
+
+    // Helper to get a non-null map from LiveData
+    private Map<Uri, String> getValueOrEmptyMaps(MutableLiveData<Map<Uri, String>> liveData) {
+        Map<Uri, String> value = liveData.getValue();
+        return value != null ? value : new LinkedHashMap<>();
     }
 }

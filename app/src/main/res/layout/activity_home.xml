@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient_primary">
+    android:layout_height="match_parent">
 
     <!-- Fragment Container -->
     <androidx.fragment.app.FragmentContainerView
@@ -13,111 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_primary"
-        app:navGraph="@navigation/nav_graph_core"
+        app:navGraph="@navigation/nav_graph_home"
         app:defaultNavHost="true" />
-
-    <!-- Main content area -->
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="50dp"
-        android:letterSpacing="0.3"
-        android:text="@string/app_name"
-        android:textColor="@color/text"
-        android:textSize="40sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:padding="16dp">
-
-        <!-- 2x2 grid layout for buttons -->
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:rowCount="2"
-            android:columnCount="2"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:alignmentMode="alignMargins"
-            android:useDefaultMargins="true">
-
-            <!-- Add Watermark Button (on the first row, first position) -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_watermark"
-                style="@style/PrimaryButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:text="@string/add_watermark_button"
-                android:elevation="6dp"
-                app:cornerRadius="16dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/borderColor"
-                android:stateListAnimator="@animator/button_lift_animator"
-                app:rippleColor="@color/rippleEffect"
-                android:layout_marginEnd="8dp" />
-
-            <!-- Share File Button (on the first row, second position) -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_share_file"
-                style="@style/SecondaryButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:text="@string/share_file_button"
-                android:elevation="6dp"
-                app:cornerRadius="16dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/borderColor"
-                android:stateListAnimator="@animator/button_lift_animator"
-                app:rippleColor="@color/rippleEffect"
-                android:layout_marginStart="8dp" />
-
-            <!-- Combine PDFs Button (on the second row, first position) -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_combine_pdfs"
-                style="@style/SecondaryButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:text="@string/combine_pdfs_button"
-                android:elevation="6dp"
-                app:cornerRadius="16dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/borderColor"
-                android:stateListAnimator="@animator/button_lift_animator"
-                app:rippleColor="@color/rippleEffect"
-                android:layout_marginEnd="8dp" />
-
-            <!-- Convert Images to PDF Button (on the second row, second position) -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_convert_to_pdf"
-                style="@style/SecondaryButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:text="@string/convert_to_pdf_button"
-                android:elevation="6dp"
-                app:cornerRadius="16dp"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/borderColor"
-                android:stateListAnimator="@animator/button_lift_animator"
-                app:rippleColor="@color/rippleEffect"
-                android:layout_marginStart="8dp" />
-
-        </GridLayout>
-    </LinearLayout>
 
     <!-- Bottom navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -129,11 +25,10 @@
         android:background="@color/colorPrimary"
         app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/white"
-        app:itemTextColor="@color/text"
-        app:itemRippleColor="@color/ripple"
-        style="@style/TextStyle.Label"
+        app:itemTextColor="@color/white"
+        app:itemBackground="@drawable/bottom_nav_item_background"
+        style="@style/TextStyle.Menu"
         android:divider="@drawable/nav_divider"
-        android:showDividers="middle"
-        app:labelVisibilityMode="labeled" />
-
+        android:showDividers= "middle"
+        app:labelVisibilityMode= "labeled" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
