@@ -39,15 +39,6 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
         binding = FragmentFileSourceBinding.inflate(getLayoutInflater());
         dialog.setContentView(binding.getRoot());
 
-        // Apply rounded background to the BottomSheet
-        dialog.setOnShowListener(dialogInterface -> {
-            BottomSheetDialog d = (BottomSheetDialog) dialogInterface;
-            FrameLayout bottomSheet = d.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-            if (bottomSheet != null) {
-                bottomSheet.setBackgroundResource(R.drawable.rounded_top_border);
-            }
-        });
-
         Log.d(TAG, "File source 2.");
 
         // Initialize ViewModel

@@ -52,6 +52,12 @@ public class ImageUtils {
      * @return Converted Bitmap.
      */
     private static Bitmap yuvToBitmap(Image image, int width, int height) {
+        Image.Plane[] planes = image.getPlanes();
+        if (planes.length < 3) {
+            Log.e(TAG, "Expected 3 planes for YUV_420_888, but found " + planes.length);
+            return null; // Handle this case appropriately.
+        }
+
         ByteBuffer yBuffer = image.getPlanes()[0].getBuffer(); // Y channel
         ByteBuffer uBuffer = image.getPlanes()[1].getBuffer(); // U channel
         ByteBuffer vBuffer = image.getPlanes()[2].getBuffer(); // V channel

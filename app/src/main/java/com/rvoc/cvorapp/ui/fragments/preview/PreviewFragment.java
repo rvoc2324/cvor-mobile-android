@@ -1,8 +1,12 @@
 package com.rvoc.cvorapp.ui.fragments.preview;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -90,19 +95,34 @@ public class PreviewFragment extends Fragment {
         Toast.makeText(getContext(), "Downloading files...", Toast.LENGTH_SHORT).show();
         for (File fileToDownload : files) {
             try {
-                // Destination directory
-                File downloadsDir;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    downloadsDir = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileToDownload.getName());
+                    // Use MediaStore for Android 10 and above
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileToDownload.getName()); // File name
+                    values.put(MediaStore.MediaColumns.MIME_TYPE, "application/octet-stream"); // MIME type (adjust if needed)
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS); // Save to Downloads
+
+                    ContentResolver resolver = requireContext().getContentResolver();
+                    Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+
+                    // Copy the file to the URI
+                    if (uri != null) {
+                        try (OutputStream outputStream = resolver.openOutputStream(uri)) {
+                            Files.copy(fileToDownload.toPath(), outputStream);
+                        }
+                    }
+
                 } else {
-                    downloadsDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileToDownload.getName());
+                    // For Android 9 (API level 28) and below, use the old method
+                    File downloadsDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileToDownload.getName());
+                    copyFile(fileToDownload, downloadsDir);
                 }
 
-                // Copy file to the destination
-                copyFile(fileToDownload, downloadsDir);
                 Toast.makeText(getContext(), "Download completed successfully. Check your Downloads folder.", Toast.LENGTH_SHORT).show();
+
             } catch (Exception e) {
                 Log.e(TAG, "Error while copying file: " + fileToDownload.getName(), e);
+                Toast.makeText(getContext(), "Failed to download file: " + fileToDownload.getName(), Toast.LENGTH_SHORT).show();
             }
         }
     }

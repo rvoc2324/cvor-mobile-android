@@ -15,22 +15,10 @@
         android:text="@string/app_name"
         android:textColor="@color/text"
         style="@style/TextStyle.Headline"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Subtle Divider -->
-    <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/shadow"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="16dp" />
 
     <!-- Button Grid Container -->
     <LinearLayout
@@ -64,8 +52,10 @@
             android:useDefaultMargins="true">
 
             <!-- Add Watermark Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_watermark"
+                android:backgroundTint="@null"
+                android:background="@drawable/gradient_deepblue"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
@@ -84,6 +74,8 @@
             <!-- Share File Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_share_file"
+                android:backgroundTint="@null"
+                android:background="@drawable/gradient_teal"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
@@ -102,6 +94,8 @@
             <!-- Combine PDFs Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_combine_pdfs"
+                android:backgroundTint="@null"
+                android:background="@drawable/gradient_purple"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
@@ -120,6 +114,8 @@
             <!-- Convert Images to PDF Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_convert_to_pdf"
+                android:backgroundTint="@null"
+                android:background="@drawable/gradient_orange"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
@@ -140,6 +136,8 @@
     <!-- Share History Container -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_share_history"
+        android:backgroundTint="@null"
+        android:background="@drawable/gradient_cyan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/share_history"

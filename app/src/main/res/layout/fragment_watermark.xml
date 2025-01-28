@@ -172,30 +172,36 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             style="@style/SecondaryButtonStyle"
-            app:cornerRadius="16dp"
+            app:cornerRadius="12dp"
             android:text="@string/back_button" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/preview_button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:text="@string/preview_button"
             style="@style/PrimaryButtonStyle"
-            app:cornerRadius="16dp" />
+            app:cornerRadius="12dp"
+            android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"/>
     </LinearLayout>
 
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progress_indicator"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:indeterminate="true"
         android:visibility="gone"
-        android:indeterminate="true"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </RelativeLayout>

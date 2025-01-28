@@ -16,6 +16,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.models.ShareHistory;
 import com.rvoc.cvorapp.repositories.ShareHistoryRepository;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
@@ -84,6 +85,7 @@ public class ShareFragment extends Fragment {
         }
 
         Intent shareIntent;
+        String shareText = getString(R.string.share_text);
 
         if (processedFiles.size() == 1) {
             // Single file share
@@ -96,6 +98,7 @@ public class ShareFragment extends Fragment {
 
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
             shareIntent.setType(getMimeType(file.getName())); // Get the MIME type dynamically
         } else {
             // Multiple file share
@@ -111,6 +114,7 @@ public class ShareFragment extends Fragment {
 
             shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, fileUris);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
             shareIntent.setType("*/*"); // Allow sharing multiple files of various types
         }
 

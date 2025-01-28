@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -94,13 +95,22 @@ public class CameraFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        // Add custom back press handling logic for fragment navigation
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                setEnabled(false); // Disable this callback to prevent recursion
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         hideSystemUI();
         checkAndRequestPermissions();
         setupButtonListeners();
-
-        requireActivity().getOnBackPressedDispatcher().onBackPressed();
+        Log.d(TAG, "Camera 1.");
     }
 
     private void hideSystemUI() {
@@ -161,7 +171,13 @@ public class CameraFragment extends Fragment {
 
     private void analyzeFrame(ImageProxy image) {
         Bitmap bitmap = ImageUtils.imageProxyToBitmap(image);
-        List<PointF> edgePoints = EdgeDetectionUtils.detectDocumentEdges(bitmap);
+        Bitmap scaledBitmap = null;
+        if (bitmap != null) {
+            scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2, bitmap.getHeight() / 2, true);
+        }
+        Log.d(TAG, "Camera 2.");
+        List<PointF> edgePoints = EdgeDetectionUtils.detectDocumentEdges(scaledBitmap);
+        Log.d(TAG, "Camera 3.");
 
         requireActivity().runOnUiThread(() -> binding.edgeOverlayView.updateEdges(edgePoints));
 
@@ -192,6 +208,7 @@ public class CameraFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.camera_not_ready, Toast.LENGTH_SHORT).show();
                 return;
             }
+            Log.d(TAG, "Camera 4.");
 
             // Capture image into memory for faster preview
             /* imageCapture.takePicture(
@@ -220,13 +237,13 @@ public class CameraFragment extends Fragment {
                         public void onCaptureSuccess(@NonNull ImageProxy image) {
                             Log.d(TAG, "Image captured successfully.");
                             Bitmap bitmap = ImageUtils.imageProxyToBitmap(image); // Utility function to convert ImageProxy to Bitmap
-                            Log.d(TAG, "Camera 11.");
+                            Log.d(TAG, "Camera 5.");
                             Bitmap edgeDetectedBitmap = EdgeDetectionUtils.detectEdges(bitmap); // Perform edge detection
-                            Log.d(TAG, "Camera 12.");
+                            Log.d(TAG, "Camera 6.");
 
                             requireActivity().runOnUiThread(() -> {
                                 showImageConfirmation(edgeDetectedBitmap); // Show the processed image
-                                Log.d(TAG, "Camera 13.");
+                                Log.d(TAG, "Camera 7.");
                             });
 
                             image.close();

@@ -2,11 +2,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Primary Colors -->
-    <color name="colorPrimary">#0C1F3F</color> <!-- Deep, rich navy blue for trust and security -->
-    <color name="colorPrimaryDark">#08152A</color> <!-- Slightly darker variant -->
-    <color name="colorSecondary">#162B46</color> <!-- Refined dark blue for background elements -->
-    <color name="colorAccentPrimary">#146A8D</color> <!-- Vibrant teal for accents -->
-    <color name="colorAccentSecondary">#0B5672</color> <!-- Subtle darker teal for cohesion -->
+    <color name="colorPrimary">#0D1B2A</color> <!-- Deep, rich navy blue for trust and security -->
+    <color name="colorPrimaryDark">#0D1B2A</color> <!-- Slightly darker variant -->
+    <color name="colorSecondary">#192734</color> <!-- Refined dark blue for background elements -->
+    <color name="colorAccentPrimary">#121212</color> <!-- Vibrant teal for accents -->
+    <color name="colorAccentSecondary">#1F2D3C</color> <!-- Subtle darker teal for cohesion -->
 
     <!-- Button Colors -->
     <color name="buttonPrimary">#0C72C8</color> <!-- Bright but professional blue for CTAs -->
@@ -50,4 +50,5 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="shine">#2B658B</color> <!-- Subtle, polished shine effect -->
     <color name="ripple">#33FFFFFF</color> <!-- Light ripple for contrast -->
+
 </resources>

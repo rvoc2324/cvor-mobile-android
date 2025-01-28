@@ -1,7 +1,9 @@
 package com.rvoc.cvorapp.ui.activities.core;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
@@ -38,16 +40,29 @@ public class CoreActivity extends AppCompatActivity {
 
             initialiseNavController();
 
-            // Handle the back button using OnBackPressedDispatcher
-            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-                @Override
-                public void handleOnBackPressed() {
-                    if (navController != null && !navController.popBackStack()) {
-                        // If the NavController cannot handle the back stack, finish the activity
-                        finish();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
+                // Use OnBackInvokedCallback
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                        OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                        () -> {
+                            if (navController != null && !navController.popBackStack()) {
+                                // If the NavController cannot handle the back stack, finish the activity
+                                finish();
+                            }
+                        }
+                );
+            } else {
+                // Use OnBackPressedCallback for older versions
+                getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        if (navController != null && !navController.popBackStack()) {
+                            // If the NavController cannot handle the back stack, finish the activity
+                            finish();
+                        }
                     }
-                }
-            });
+                });
+            }
 
             // Handle actionType from intent extras
             String actionType = getIntent().getStringExtra("actionType");

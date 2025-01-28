@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CVOR</string>
     <string name="app_toolbar_title">Welcome to CVOR</string>
-    <string name="app_slogan">CVOR - Making your data secure</string>
+    <string name="app_action">What would you like to do?</string>
     <string name="home">Home</string>
     <string name="add_watermark_button">Add Watermark</string>
     <string name="share_file_button">Share file</string>
@@ -54,4 +54,5 @@
     <string name="no_files_selected">No files available to preview. Go back to choose a file.</string>
     <string name="back_button">Back</string>
     <string name="share_button">Share</string>
+    <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
 </resources>

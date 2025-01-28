@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -105,7 +106,6 @@ public class FileManagerFragment extends Fragment {
             Log.d(TAG, "FileManagerFragment: Photo picker launcher initialized.");
             Log.d(TAG, "FileManagerFragment: onCreate completed.");
 
-            requireActivity().getOnBackPressedDispatcher().onBackPressed();
         } catch (Exception e) {
             Log.e(TAG, "FileManagerFragment: Error during onCreate.", e);
         }
@@ -123,6 +123,15 @@ public class FileManagerFragment extends Fragment {
     public void onViewCreated(@NonNull android.view.View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "File manager fragment 3.");
+
+        // Add custom back press handling logic for fragment navigation
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                setEnabled(false); // Disable this callback to prevent recursion
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
 
         // Observe the source type and launch appropriate picker
         coreViewModel.getSourceType().observe(getViewLifecycleOwner(), sourceType -> {
@@ -160,7 +169,7 @@ public class FileManagerFragment extends Fragment {
 
         // Set the initial URI to the Documents folder
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Android 10+ (API level 29+)
-            Uri documentsUri = Uri.parse("content://com.android.externalstorage.documents/document/primary:Documents");
+            Uri documentsUri = Uri.parse("content://com.android.externalstorage.documents/document/primary:Downloads");
             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, documentsUri);
         }
 

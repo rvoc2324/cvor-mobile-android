@@ -1,4 +1,3 @@
-// HomeFragment.java
 package com.rvoc.cvorapp.ui.fragments.home;
 
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.FragmentHomeBinding;
 import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
 
@@ -21,6 +21,19 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+        binding.btnAddWatermark.setBackgroundResource(R.drawable.gradient_deepblue);
+        binding.btnShareFile.setBackgroundResource(R.drawable.gradient_teal);
+        binding.btnCombinePdfs.setBackgroundResource(R.drawable.gradient_purple);
+        binding.btnConvertToPdf.setBackgroundResource(R.drawable.gradient_orange);
+        binding.btnShareHistory.setBackgroundResource(R.drawable.gradient_cyan);
+
+        binding.btnAddWatermark.setBackgroundTintList(null);
+        binding.btnShareFile.setBackgroundTintList(null);
+        binding.btnCombinePdfs.setBackgroundTintList(null);
+        binding.btnConvertToPdf.setBackgroundTintList(null);
+        binding.btnShareHistory.setBackgroundTintList(null);
+
         return binding.getRoot();
     }
 
@@ -37,6 +50,7 @@ public class HomeFragment extends Fragment {
     private void setupListeners() {
 
         binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark"));
+        binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("shareFile"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
         binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf"));
 

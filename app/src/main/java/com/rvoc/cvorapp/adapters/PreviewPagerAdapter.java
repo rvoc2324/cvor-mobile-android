@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.github.barteksc.pdfviewer.PDFView;
 
+import com.github.barteksc.pdfviewer.util.FitPolicy;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ItemImagePreviewBinding;
 import com.rvoc.cvorapp.databinding.ItemPdfPreviewBinding;
@@ -68,13 +69,12 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<PreviewPagerAdapte
             // Enable vertical scrolling for PDF pages
             pdfBinding.pdfView.fromFile(pdfFile)
                     .defaultPage(0)
-                    .enableSwipe(false) // Disable swipe to avoid conflicts with vertical scrolling
+                    .enableSwipe(true) // Disable swipe to avoid conflicts with vertical scrolling
                     .swipeHorizontal(false) // Vertical scrolling
-                    .pageSnap(false)
+                    .pageSnap(true)
                     .autoSpacing(true)
-                    .pageFling(false)
+                    .pageFling(true)
                     .enableDoubletap(true) // Enable tap zoom
-                    .fitEachPage(true) // Fit each page to the view
                     .load();
         }
 
@@ -84,7 +84,6 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<PreviewPagerAdapte
                     .load(imageFile)
                     .placeholder(R.drawable.ic_image) // Placeholder while loading
                     .error(R.drawable.baseline_error_24) // Fallback for errors
-                    .override(Target.SIZE_ORIGINAL) // Load full resolution
                     .into(imageBinding.imageView);
 
             // Add tap zoom using PhotoView (library for pinch-to-zoom)

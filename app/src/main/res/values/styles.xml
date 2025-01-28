@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+
     <!-- Toolbar Styles -->
     <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="android:background">@color/colorPrimary</item>
@@ -32,13 +33,19 @@
     <!-- Text Styles -->
     <style name="TextStyle">
         <item name="android:textColor">@color/text</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
     <style name="TextStyle.Headline">
         <item name="android:textColor">@color/text</item>
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextStyle.SubTitle">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
@@ -50,19 +57,19 @@
 
     <style name="TextStyle.Label">
         <item name="android:textColor">@color/textSecondary</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
     <style name="TextStyle.Menu">
         <item name="android:textColor">@color/text</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
     <style name="TextStyle.Caption">
         <item name="android:textColor">@color/textSubdued</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
@@ -74,13 +81,13 @@
 
     <!-- Container Styles -->
     <style name="CardStyle">
-        <item name="android:background">@color/fragment1Background</item>
+        <item name="android:background">@drawable/gradient_secondary</item>
         <item name="android:elevation">4dp</item>
         <item name="android:padding">16dp</item>
     </style>
 
     <style name="DialogStyle" parent="Theme.MaterialComponents.Dialog">
-        <item name="android:background">@color/fragment2Background</item>
+        <item name="android:background">@drawable/gradient_secondary</item>
         <item name="android:textColor">@color/text</item>
     </style>
 
