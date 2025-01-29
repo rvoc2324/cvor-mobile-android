@@ -91,8 +91,10 @@ public class PdfHandlingFragment extends Fragment {
 
         // Handle back button click
         binding.backButton.setOnClickListener(v -> {
+            if (coreViewModel != null) {
+                coreViewModel.resetSelectedFiles(); // Reset the files
+            }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
-            coreViewModel.resetSelectedFiles();
         });
     }
 

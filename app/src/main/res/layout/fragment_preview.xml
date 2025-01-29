@@ -26,7 +26,7 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                style="@style/TextStyle.Headline"
+                style="@style/TextStyle.SubTitle"
                 android:text="@string/preview_fragment_title"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintTop_toTopOf="parent"

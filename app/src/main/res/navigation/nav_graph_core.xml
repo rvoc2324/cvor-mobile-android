@@ -96,7 +96,7 @@
     <!-- Whats New Fragment -->
     <fragment
         android:id="@+id/whatsNewFragment"
-        android:name="com.rvoc.cvorapp.ui.fragments.WhatsNewFragment"
+        android:name="com.rvoc.cvorapp.ui.fragments.whatsnew.WhatsNewFragment"
         android:label="Whats New Fragment"
         tools:layout="@layout/fragment_whatsnew">
     </fragment>

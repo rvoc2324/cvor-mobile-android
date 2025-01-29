@@ -3,6 +3,7 @@ package com.rvoc.cvorapp.ui.fragments.share;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class ShareFragment extends Fragment {
 
+    private static final String TAG = "Share Fragment";
     private CoreViewModel coreViewModel;
     private WatermarkViewModel watermarkViewModel;
     @Inject
@@ -97,9 +99,9 @@ public class ShareFragment extends Fragment {
             );
 
             shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
             shareIntent.setType(getMimeType(file.getName())); // Get the MIME type dynamically
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
         } else {
             // Multiple file share
             ArrayList<Uri> fileUris = new ArrayList<>();
@@ -113,9 +115,9 @@ public class ShareFragment extends Fragment {
             }
 
             shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.setType(processedFiles.get(0).getName());
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, fileUris);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-            shareIntent.setType("*/*"); // Allow sharing multiple files of various types
         }
 
         // Grant URI permissions to external apps
@@ -142,6 +144,8 @@ public class ShareFragment extends Fragment {
         String sharingApp = shareIntent.getComponent() != null
                 ? shareIntent.getComponent().getPackageName()
                 : "Unknown";
+
+        Log.d(TAG, "Shared app: " + sharingApp);
 
         // Capture share details and save to the repository
         for (File file : processedFiles) {

@@ -52,17 +52,8 @@ public class PdfHandlingService {
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
 
         for (Uri uri : inputFiles) {
-            try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-                if (inputStream == null) {
-                    throw new IOException("Unable to open input stream for URI: " + uri);
-                }
-
-                // Add the input stream directly to the merger utility
-                mergerUtility.addSource(inputStream);
-            } catch (Exception e) {
-                Log.e(TAG, "Error processing file: " + uri, e);
-                throw new IOException("Failed to process file: " + uri.toString(), e);
-            }
+            byte[] pdfBytes = readUriToByteArray(uri);
+            mergerUtility.addSource(new ByteArrayInputStream(pdfBytes));
         }
 
         // Set the destination file and merge the documents
@@ -73,8 +64,6 @@ public class PdfHandlingService {
         return outputFile;
     }
 
-
-    // Convert images to a single PDF
     public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {
         Log.d(TAG, "PDF Service - Converting Images to PDF");
 
@@ -92,19 +81,28 @@ public class PdfHandlingService {
                             "image"
                     );
 
-                    // Limit page size to PDF specification if the image is too large
-                    float pageWidth = Math.min(pdImage.getWidth(), PDRectangle.A4.getWidth());
-                    float pageHeight = (pageWidth / pdImage.getWidth()) * pdImage.getHeight();
-                    pageHeight = Math.min(pageHeight, PDRectangle.A4.getHeight());
+                    // Get original image dimensions
+                    float imageWidth = pdImage.getWidth();
+                    float imageHeight = pdImage.getHeight();
 
+                    // Define PDF page size (A4)
+                    float pageWidth = PDRectangle.A4.getWidth();
+                    float pageHeight = PDRectangle.A4.getHeight();
+
+                    // Scale image to fit within the PDF page while maintaining aspect ratio
+                    float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+                    float scaledWidth = imageWidth * scale;
+                    float scaledHeight = imageHeight * scale;
+
+                    // Create a new page with A4 dimensions
                     PDPage page = new PDPage(new PDRectangle(pageWidth, pageHeight));
                     document.addPage(page);
 
-                    // Add image to the page
+                    // Add image to the center of the page
                     try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                        float xOffset = (pageWidth - pdImage.getWidth()) / 2;
-                        float yOffset = (pageHeight - pdImage.getHeight()) / 2;
-                        contentStream.drawImage(pdImage, xOffset, yOffset, pageWidth, pageHeight);
+                        float xOffset = (pageWidth - scaledWidth) / 2;
+                        float yOffset = (pageHeight - scaledHeight) / 2;
+                        contentStream.drawImage(pdImage, xOffset, yOffset, scaledWidth, scaledHeight);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "Error processing image: " + uri, e);
@@ -256,6 +254,27 @@ public class PdfHandlingService {
         }
         buffer.flush();
         return buffer.toByteArray();
+    }
+
+    /**
+     * Reads a PDF from a URI into a byte array (efficient, avoids stream closing issues).
+     */
+    private byte[] readUriToByteArray(Uri uri) throws IOException {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            if (inputStream == null) {
+                throw new IOException("Unable to open input stream for URI: " + uri);
+            }
+
+            byte[] buffer = new byte[8192]; // 8KB buffer for speed
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            return outputStream.toByteArray();
+        }
     }
 
     // Check if a file is large, and if so, handle it in the background (Worker)

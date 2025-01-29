@@ -80,7 +80,12 @@ public class PreviewFragment extends Fragment {
     }
 
     private void setupButtons() {
-        binding.backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
+        binding.backButton.setOnClickListener(v -> {
+            if (coreViewModel != null) {
+                coreViewModel.resetProcessedFiles(); // Reset the files
+            }
+            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+        });
         binding.shareButton.setOnClickListener(v -> coreViewModel.setNavigationEvent("navigate_to_share"));
         binding.downloadIcon.setOnClickListener(v -> downloadFiles());
     }
@@ -142,9 +147,6 @@ public class PreviewFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (coreViewModel != null) {
-            coreViewModel.resetProcessedFiles(); // Reset the files
-        }
         binding = null;
     }
 }

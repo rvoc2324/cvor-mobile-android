@@ -108,6 +108,10 @@ public class WatermarkFragment extends Fragment {
             }
         });
 
+        binding.inputRepeat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            updateWatermarkViewModel();
+        });
+
         binding.seekBarOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -152,8 +156,10 @@ public class WatermarkFragment extends Fragment {
 
         // Handle back button click
         binding.backButton.setOnClickListener(v -> {
+            if (coreViewModel != null) {
+                coreViewModel.resetSelectedFiles(); // Reset the files
+            }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
-            coreViewModel.resetSelectedFiles();
         });
     }
 

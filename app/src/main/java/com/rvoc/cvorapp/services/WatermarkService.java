@@ -91,7 +91,7 @@ public class WatermarkService {
                         canvas.drawText(watermarkText, x, y, paint);
                         x += textWidth + 50; // Add spacing between watermarks
                     }
-                    y += textHeight + 50; // Add spacing between rows
+                    y += textHeight + 75; // Add spacing between rows
                 }
             } else {
                 // Draw watermark text in the center of the image
@@ -156,14 +156,14 @@ public class WatermarkService {
 
                     // Set font and color
                     contentStream.setFont(font, fontSize);
-                    contentStream.setNonStrokingColor(new PDColor(new float[]{0.0f, 0.0f, 0.0f}, PDDeviceRGB.INSTANCE));
+                    contentStream.setNonStrokingColor(new PDColor(new float[]{0.0f, 0.0f, 0.0f, alphaValue}, PDDeviceRGB.INSTANCE));
 
                     if (repeatWatermark) {
                         // Render watermark repeatedly across the page
-                        for (float y = 50; y < pageHeight; y += 200) {
-                            for (float x = 50; x < pageWidth; x += textWidth + 100) {
+                        for (float y = 0; y < pageHeight; y += 75) {
+                            for (float x = 0; x < pageWidth; x += textWidth + 50) {
                                 contentStream.saveGraphicsState();
-                                contentStream.transform(Matrix.getRotateInstance(Math.toRadians(45), x, y));
+                                contentStream.transform(Matrix.getRotateInstance(Math.toRadians(0), x, y));
                                 contentStream.beginText();
                                 contentStream.newLineAtOffset(x, y);
                                 contentStream.showText(watermarkText);
@@ -176,7 +176,7 @@ public class WatermarkService {
                         float centerX = (pageWidth - textWidth) / 2;
                         float centerY = pageHeight / 2;
                         contentStream.saveGraphicsState();
-                        contentStream.transform(Matrix.getRotateInstance(Math.toRadians(45), centerX, centerY));
+                        contentStream.transform(Matrix.getRotateInstance(Math.toRadians(0), centerX, centerY));
                         contentStream.beginText();
                         contentStream.newLineAtOffset(centerX, centerY);
                         contentStream.showText(watermarkText);
