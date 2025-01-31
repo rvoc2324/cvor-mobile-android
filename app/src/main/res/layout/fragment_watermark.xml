@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:text="@string/add_watermark_button"
+        android:letterSpacing="0.1"
         style="@style/TextStyle.SubTitle" />
 
     <ScrollView
@@ -47,9 +48,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/sharing_with"
-                        app:boxStrokeColor="@color/inputBox"
+                        app:boxBackgroundColor="@color/inputBox"
                         app:hintTextAppearance="@style/TextInputHintStyle"
-                        app:hintTextColor="@color/textSecondary">
+                        app:hintTextColor="@color/textSecondary"
+                        app:boxBackgroundMode="outline"
+                        app:boxStrokeColor="@color/borderColor"
+                        app:boxStrokeWidth="2dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_sharing_with"
@@ -65,9 +69,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="@string/purpose"
-                        app:boxStrokeColor="@color/inputBox"
                         app:hintTextAppearance="@style/TextInputHintStyle"
-                        app:hintTextColor="@color/textSecondary">
+                        app:hintTextColor="@color/textSecondary"
+                        app:boxBackgroundColor="@color/inputBox"
+                        app:boxBackgroundMode="outline"
+                        app:boxStrokeColor="@color/borderColor"
+                        app:boxStrokeWidth="2dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_purpose"
@@ -204,8 +211,5 @@
         android:layout_margin="16dp"
         android:indeterminate="true"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

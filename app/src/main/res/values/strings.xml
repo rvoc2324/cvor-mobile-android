@@ -5,8 +5,8 @@
     <string name="home">Home</string>
     <string name="add_watermark_button">Add Watermark</string>
     <string name="share_file_button">Share file</string>
-    <string name="combine_pdfs_button">Combine PDF</string>
-    <string name="convert_to_pdf_button">Convert Images to PDF</string>
+    <string name="combine_pdfs_button">Combine</string>
+    <string name="convert_to_pdf_button">Convert</string>
     <string name="flash_toggle">Flash ON</string>
     <string name="capture_image">Take Photo</string>
     <string name="retake_image">Retake the photo</string>

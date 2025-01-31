@@ -1,10 +1,14 @@
 package com.rvoc.cvorapp.ui.activities.home;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
@@ -41,6 +45,41 @@ public class HomeActivity extends AppCompatActivity {
         setupNavigation();
 
         setupBottomNavigationView();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
+            // Use OnBackInvokedCallback
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                    OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                    () -> {
+                        if (navController != null && !navController.popBackStack()) {
+                            // If the NavController cannot handle the back stack, finish the activity
+                            finish();
+                        }
+                    }
+            );
+        } else {
+            // Use OnBackPressedCallback for older versions
+            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    if (navController != null && !navController.popBackStack()) {
+                        // If the NavController cannot handle the back stack, finish the activity
+                        finish();
+                    }
+                }
+            });
+        }
+
+        // Check if deep link exists in the intent
+        Intent intent = getIntent();
+        if (intent != null && Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null) {
+            Uri uri = intent.getData();
+            if ("app".equals(uri.getScheme()) && "cvorapp".equals(uri.getHost())) {
+                if ("/whatsnew".equals(uri.getPath())) {
+                    navController.navigate(R.id.nav_whats_new);
+                }
+            }
+        }
 
         splashScreen.setKeepOnScreenCondition(() -> false);
     }
@@ -81,6 +120,6 @@ public class HomeActivity extends AppCompatActivity {
     public void navigateToShareHistoryActivity() {
         Intent intent = new Intent(this, ShareHistoryActivity.class);
         startActivity(intent);
-        Log.d(TAG, "Navigated to ShareHistoryActivity.");
+        Log.d(TAG, "Navigated to SharedHistoryActivity.");
     }
 }

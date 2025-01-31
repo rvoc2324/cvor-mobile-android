@@ -1,8 +1,11 @@
 package com.rvoc.cvorapp.ui.activities.core;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.OnBackPressedCallback;
@@ -13,6 +16,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.databinding.ActivityCoreBinding;
+import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -21,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class CoreActivity extends AppCompatActivity {
 
     private static final String TAG = "Core Activity";
+    private ActivityCoreBinding binding;
     private NavController navController;
     private CoreViewModel coreViewModel;
 
@@ -31,7 +37,9 @@ public class CoreActivity extends AppCompatActivity {
 
         try {
             // Inflate the layout
-            setContentView(R.layout.activity_core);
+            binding = ActivityCoreBinding.inflate(getLayoutInflater());
+            setContentView(binding.getRoot());
+
             Log.d(TAG, "CoreActivity 1.");
 
             // Retrieve the ViewModel
@@ -45,9 +53,11 @@ public class CoreActivity extends AppCompatActivity {
                 getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
                         OnBackInvokedDispatcher.PRIORITY_DEFAULT,
                         () -> {
-                            if (navController != null && !navController.popBackStack()) {
-                                // If the NavController cannot handle the back stack, finish the activity
-                                finish();
+                            if (navController.getCurrentDestination() != null
+                                    && navController.getCurrentDestination().getId() == R.id.fileSourceFragment) {
+                                finish(); // Exit CoreActivity when FileSourceFragment is the only one
+                            } else if (!navController.popBackStack()) {
+                                finish(); // If no fragments left, exit
                             }
                         }
                 );
@@ -56,9 +66,11 @@ public class CoreActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
                     @Override
                     public void handleOnBackPressed() {
-                        if (navController != null && !navController.popBackStack()) {
-                            // If the NavController cannot handle the back stack, finish the activity
-                            finish();
+                        if (navController.getCurrentDestination() != null
+                                && navController.getCurrentDestination().getId() == R.id.fileSourceFragment) {
+                            finish(); // Exit CoreActivity when FileSourceFragment is the only one
+                        } else if (!navController.popBackStack()) {
+                            finish(); // If no fragments left, exit
                         }
                     }
                 });
@@ -298,11 +310,14 @@ public class CoreActivity extends AppCompatActivity {
 
     private void navToWhatsNew() {
         try {
-            navController.navigate(R.id.action_shareFragment_to_whatsNewFragment);
-            Log.d(TAG, "CoreActivity 18.");
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("app://cvorapp/whatsnew"));
+            startActivity(intent);
             finish();
         } catch (Exception e) {
-            Log.e("CoreActivity", "Navigation to ShareFragment failed: " + e.getMessage(), e);
+            Log.e(TAG, "Navigation error: " + e.getMessage(), e);
+            Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -123,13 +123,12 @@ public class PreviewFragment extends Fragment {
                     copyFile(fileToDownload, downloadsDir);
                 }
 
-                Toast.makeText(getContext(), "Download completed successfully. Check your Downloads folder.", Toast.LENGTH_SHORT).show();
-
             } catch (Exception e) {
                 Log.e(TAG, "Error while copying file: " + fileToDownload.getName(), e);
                 Toast.makeText(getContext(), "Failed to download file: " + fileToDownload.getName(), Toast.LENGTH_SHORT).show();
             }
         }
+        Toast.makeText(getContext(), "Download completed successfully. Check your Downloads folder.", Toast.LENGTH_SHORT).show();
     }
 
     // Utility method to copy file

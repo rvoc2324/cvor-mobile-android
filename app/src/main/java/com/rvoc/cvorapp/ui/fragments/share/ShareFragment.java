@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -42,17 +44,20 @@ public class ShareFragment extends Fragment {
     private WatermarkViewModel watermarkViewModel;
     @Inject
     ShareHistoryRepository shareHistoryRepository;
-    private FragmentShareBinding binding; // Declare the binding variable
+    final ExecutorService executorService = Executors.newSingleThreadExecutor();
+   private FragmentShareBinding binding; // Declare the binding variable
 
     // ActivityResultLauncher to replace startActivityForResult
     private final ActivityResultLauncher<Intent> shareLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == android.app.Activity.RESULT_OK) {
+                    /*
                     // Pass the intent to logShareDetails
                     Intent shareIntent = result.getData(); // Get the intent used for sharing
                     if (shareIntent != null) {
                         logShareDetails(shareIntent); // Pass the intent to the method
                     }
+                    Log.d(TAG, "Share fragment 1.");*/
                     navigateToWhatsNew();
                 }
             });
@@ -60,10 +65,10 @@ public class ShareFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "Share fragment 2.");
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
         watermarkViewModel = new ViewModelProvider(requireActivity()).get(WatermarkViewModel.class);
-        // shareHistoryRepository = new ShareHistoryRepository(requireContext()); // Initialize repository
 
         // Automatically launch the share modal
         openNativeShareModal();
@@ -75,11 +80,14 @@ public class ShareFragment extends Fragment {
         if (inflater != null) {
             binding = FragmentShareBinding.inflate(inflater, container, false);
         }
+        Log.d(TAG, "Share fragment 3.");
         return binding.getRoot(); // Return the root view from the binding
     }
 
     private void openNativeShareModal() {
+
         List<File> processedFiles = coreViewModel.getProcessedFiles().getValue();
+        Log.d(TAG, "Share fragment 4.");
 
         if (processedFiles == null || processedFiles.isEmpty()) {
             Toast.makeText(requireContext(), "No files to share", Toast.LENGTH_SHORT).show();
@@ -88,6 +96,7 @@ public class ShareFragment extends Fragment {
 
         Intent shareIntent;
         String shareText = getString(R.string.share_text);
+        Log.d(TAG, "Share fragment 5.");
 
         if (processedFiles.size() == 1) {
             // Single file share
@@ -97,11 +106,14 @@ public class ShareFragment extends Fragment {
                     requireContext().getPackageName() + ".fileprovider",
                     file
             );
+            Log.d(TAG, "Share fragment 6.");
 
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType(getMimeType(file.getName())); // Get the MIME type dynamically
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
             shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
         } else {
             // Multiple file share
             ArrayList<Uri> fileUris = new ArrayList<>();
@@ -113,20 +125,32 @@ public class ShareFragment extends Fragment {
                 );
                 fileUris.add(fileUri);
             }
+            Log.d(TAG, "Share fragment 7.");
 
             shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-            shareIntent.setType(processedFiles.get(0).getName());
+            Log.d(TAG, "Share fragment 8.");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
+            Log.d(TAG, "Share fragment 10.");
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, fileUris);
+            Log.d(TAG, "Share fragment 11.");
+
+            String commonMimeType = getMimeType(processedFiles.get(0).getName());
+            shareIntent.setType(commonMimeType);
+
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
+        // Log the share details in the background before launching the share dialog
+        executorService.submit(() -> logShareDetails(shareIntent));
+
         // Grant URI permissions to external apps
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         shareIntent = Intent.createChooser(shareIntent, "Share Files");
         shareLauncher.launch(shareIntent);
+        Log.d(TAG, "Share fragment 12.");
     }
 
     private void logShareDetails(Intent shareIntent) {
+        Log.d(TAG, "Share fragment 13.");
         List<File> processedFiles = coreViewModel.getProcessedFiles().getValue();
         if (processedFiles == null || processedFiles.isEmpty()) return;
 
@@ -139,9 +163,9 @@ public class ShareFragment extends Fragment {
         if (purpose == null || purpose.isEmpty()) {
             purpose = "General purpose";
         }
-
+        Log.d(TAG, "Share fragment 14.");
         // Extract the sharing app's package name
-        String sharingApp = shareIntent.getComponent() != null
+        String sharingApp = (shareIntent != null && shareIntent.getComponent() != null)
                 ? shareIntent.getComponent().getPackageName()
                 : "Unknown";
 
@@ -156,6 +180,7 @@ public class ShareFragment extends Fragment {
                     sharedWith,
                     purpose
             );
+            Log.d(TAG, "Share fragment 15.");
 
             // Persist the share history
             shareHistoryRepository.insertShareHistory(shareHistory);
@@ -163,6 +188,8 @@ public class ShareFragment extends Fragment {
     }
 
     private void navigateToWhatsNew() {
+
+        Log.d(TAG, "Share fragment 16.");
         coreViewModel.setNavigationEvent("navigate_to_whatsnew");
     }
 
@@ -176,7 +203,6 @@ public class ShareFragment extends Fragment {
         String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT);
         String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 
-        // Fallback if MIME type is not found
         return mimeType != null ? mimeType : "application/octet-stream";
     }
 

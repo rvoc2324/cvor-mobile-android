@@ -50,10 +50,10 @@ public class HomeFragment extends Fragment {
     private void setupListeners() {
 
         binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark"));
-        binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("shareFile"));
+        // binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("shareFile"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
         binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf"));
-
+        binding.btnShareHistory.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToShareHistoryActivity());
     }
 
     @Override

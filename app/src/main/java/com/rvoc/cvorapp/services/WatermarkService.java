@@ -13,9 +13,6 @@ import com.tom_roush.pdfbox.pdmodel.PDPage;
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
 import com.tom_roush.pdfbox.pdmodel.font.PDType1Font;
 import com.tom_roush.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
-import com.tom_roush.pdfbox.pdmodel.graphics.color.PDColor;
-import com.tom_roush.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
-import com.tom_roush.pdfbox.util.Matrix;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,7 +50,7 @@ public class WatermarkService {
      * @throws Exception If there are errors in processing the file.
      */
     public File applyWatermarkImage(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
-        String fileName = "watermarked_" + System.currentTimeMillis() + ".png";
+        String fileName = "CVOR_watermarked_" + System.currentTimeMillis() + ".png";
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service started.");
 
@@ -73,7 +70,7 @@ public class WatermarkService {
             Paint paint = new Paint();
             paint.setColor(Color.BLACK);
             paint.setAlpha((opacity * 255) / 100); // Opacity from 0 to 255
-            paint.setTextSize(fontSize * (originalBitmap.getWidth() / 500f)); // Scale font size based on image width
+            paint.setTextSize(fontSize);
             paint.setAntiAlias(true);
 
             // Calculate text width and height
@@ -83,15 +80,19 @@ public class WatermarkService {
             Log.d(TAG, "Watermark service 2.");
 
             if (repeatWatermark) {
+
+                float horizontalSpacing = textWidth * 0.2f; // Adjust horizontal gap
+                float verticalSpacing = textHeight * 0.3f; // Adjust vertical gap
+
                 // Draw watermark text repeatedly across the image
                 float y = textHeight;
                 while (y < watermarkedBitmap.getHeight() + textHeight) {
                     float x = 0;
                     while (x < watermarkedBitmap.getWidth() + textWidth) {
                         canvas.drawText(watermarkText, x, y, paint);
-                        x += textWidth + 50; // Add spacing between watermarks
+                        x += textWidth + horizontalSpacing; // Add spacing between watermarks
                     }
-                    y += textHeight + 75; // Add spacing between rows
+                    y += textHeight + verticalSpacing; // Add spacing between rows
                 }
             } else {
                 // Draw watermark text in the center of the image
@@ -110,10 +111,8 @@ public class WatermarkService {
             Log.e(TAG, "Error applying watermark to image: " + e.getMessage(), e);
             throw new Exception("Failed to process the image file.", e);
         }
-
         return outputFile;
     }
-
 
     /**
      * Applies a watermark to a PDF file.
@@ -123,7 +122,7 @@ public class WatermarkService {
      * @throws Exception If there are errors in processing the file.
      */
     public File applyWatermarkPDF(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
-        String fileName = "watermarked_" + System.currentTimeMillis() + ".pdf";
+        String fileName = "CVOR_watermarked_" + System.currentTimeMillis() + ".pdf";
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service 4.");
 
@@ -152,43 +151,41 @@ public class WatermarkService {
                     // Set transparency
                     PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();
                     graphicsState.setNonStrokingAlphaConstant(alphaValue);
+                    page.getResources().add(graphicsState);
                     contentStream.setGraphicsStateParameters(graphicsState);
 
                     // Set font and color
                     contentStream.setFont(font, fontSize);
-                    contentStream.setNonStrokingColor(new PDColor(new float[]{0.0f, 0.0f, 0.0f, alphaValue}, PDDeviceRGB.INSTANCE));
+                    contentStream.setNonStrokingColor(0.7f);
 
                     if (repeatWatermark) {
                         // Render watermark repeatedly across the page
-                        for (float y = 0; y < pageHeight; y += 75) {
-                            for (float x = 0; x < pageWidth; x += textWidth + 50) {
-                                contentStream.saveGraphicsState();
-                                contentStream.transform(Matrix.getRotateInstance(Math.toRadians(0), x, y));
+                        float ySpacing = 75; // Adjust vertical spacing
+                        float xSpacing = textWidth + 20; // Adjust horizontal spacing
+
+                        for (float y = 0; y < pageHeight; y += ySpacing) {
+                            for (float x = 0; x < pageWidth; x += xSpacing) {
                                 contentStream.beginText();
                                 contentStream.newLineAtOffset(x, y);
                                 contentStream.showText(watermarkText);
                                 contentStream.endText();
-                                contentStream.restoreGraphicsState();
                             }
                         }
                     } else {
                         // Render watermark in the center of the page
                         float centerX = (pageWidth - textWidth) / 2;
                         float centerY = pageHeight / 2;
-                        contentStream.saveGraphicsState();
-                        contentStream.transform(Matrix.getRotateInstance(Math.toRadians(0), centerX, centerY));
                         contentStream.beginText();
                         contentStream.newLineAtOffset(centerX, centerY);
                         contentStream.showText(watermarkText);
                         contentStream.endText();
-                        contentStream.restoreGraphicsState();
                     }
                 }
             }
 
             // Save the watermarked PDF
             document.save(outputFile);
-            Log.d(TAG, "Watermark service 7.");
+            Log.d(TAG, "Watermark service completed.");
         } catch (Exception e) {
             Log.e(TAG, "Error applying watermark to PDF", e);
             throw new IOException("Failed to apply watermark to PDF.", e);
@@ -197,5 +194,3 @@ public class WatermarkService {
         return outputFile;
     }
 }
-
-

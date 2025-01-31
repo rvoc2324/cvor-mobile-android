@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -43,6 +45,8 @@ public class WatermarkFragment extends Fragment {
     private CoreViewModel coreViewModel;
 
     private FragmentWatermarkBinding binding;
+
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -186,51 +190,77 @@ public class WatermarkFragment extends Fragment {
 
     // Handle the Preview button click
     private void handlePreviewClick() {
-        Log.d(TAG, "Watermark fragment 2.");
-        Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
-        if (selectedFiles == null || selectedFiles.isEmpty()) {
-            Toast.makeText(requireContext(), "No file selected.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         binding.progressIndicator.setVisibility(View.VISIBLE);
+        binding.previewButton.setEnabled(false);
 
-        List<File> watermarkedFiles = new ArrayList<>();
-        String watermarkText = watermarkViewModel.getWatermarkText().getValue();
-        Boolean repeat =  watermarkViewModel.getRepeatWatermark().getValue();
-        Integer opacity = watermarkViewModel.getOpacity().getValue();
-        Integer fontSize = watermarkViewModel.getFontSize().getValue();
+        executorService.execute(() -> {
+            Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
 
-        for (Uri selectedFileUri : selectedFiles.keySet()) {
+            if (selectedFiles == null || selectedFiles.isEmpty()) {
+                // Show message if no files are selected
+                requireActivity().runOnUiThread(() -> {
+                    binding.progressIndicator.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), "No files selected. Go back to select a file.", Toast.LENGTH_SHORT).show();
+                });
+                return;
+            }
+
+            List<File> watermarkedFiles = new ArrayList<>();
+            String watermarkText = watermarkViewModel.getWatermarkText().getValue();
+            Boolean repeat = watermarkViewModel.getRepeatWatermark().getValue();
+            Integer opacity = watermarkViewModel.getOpacity().getValue();
+            Integer fontSize = watermarkViewModel.getFontSize().getValue();
+
             try {
-                String fileType = requireContext().getContentResolver().getType(selectedFileUri);
-                File processedFile = null;
+                for (Uri selectedFileUri : selectedFiles.keySet()) {
+                    try {
+                        String fileType = requireContext().getContentResolver().getType(selectedFileUri);
+                        File processedFile = null;
 
-                if ("application/pdf".equals(fileType)) {
-                    processedFile = watermarkService.applyWatermarkPDF(selectedFileUri, watermarkText, opacity, fontSize, repeat);
-                } else if ("image/jpeg".equals(fileType) || "image/png".equals(fileType)) {
-                    processedFile = watermarkService.applyWatermarkImage(selectedFileUri, watermarkText, opacity, fontSize, repeat);
+                        if ("application/pdf".equals(fileType)) {
+                            processedFile = watermarkService.applyWatermarkPDF(selectedFileUri, watermarkText, opacity, fontSize, repeat);
+                        } else if ("image/jpeg".equals(fileType) || "image/png".equals(fileType)) {
+                            processedFile = watermarkService.applyWatermarkImage(selectedFileUri, watermarkText, opacity, fontSize, repeat);
+                        }
+
+                        if (processedFile != null) {
+                            watermarkedFiles.add(processedFile);
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error processing file: " + e.getMessage(), e);
+                    }
                 }
 
-                if (processedFile != null) {
-                    watermarkedFiles.add(processedFile);
-                }
+                // Handle the results and update UI
+                requireActivity().runOnUiThread(() -> {
+                    binding.progressIndicator.setVisibility(View.GONE);
+                    if (!watermarkedFiles.isEmpty()) {
+                        // Add processed files to the ViewModel
+                        for (File file : watermarkedFiles) {
+                            coreViewModel.addProcessedFile(file);
+                        }
+                        Toast.makeText(requireContext(), "Watermarking completed.", Toast.LENGTH_SHORT).show();
+                        coreViewModel.setNavigationEvent("navigate_to_preview");
+                    } else {
+                        Toast.makeText(requireContext(), "No files were watermarked.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    binding.previewButton.setEnabled(true);
+                });
+
             } catch (Exception e) {
-                Log.e(TAG, "Error processing file: " + e.getMessage(), e);
+                // Handle any unforeseen errors
+                Log.e(TAG, "Error during watermarking process: " + e.getMessage(), e);
+                requireActivity().runOnUiThread(() -> {
+                    binding.progressIndicator.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), "An error occurred during watermarking. Try again.", Toast.LENGTH_SHORT).show();
+                    binding.previewButton.setEnabled(true);
+                });
             }
-        }
-
-        if (!watermarkedFiles.isEmpty()) {
-            for (File file : watermarkedFiles) {
-                coreViewModel.addProcessedFile(file);
-            }
-            binding.progressIndicator.setVisibility(View.GONE);
-            Toast.makeText(requireContext(), "Watermarking completed.", Toast.LENGTH_SHORT).show();
-            coreViewModel.setNavigationEvent("navigate_to_preview");
-        } else {
-            Toast.makeText(requireContext(), "No files were watermarked.", Toast.LENGTH_SHORT).show();
-        }
+        });
     }
+
 
     @Override
     public void onDestroyView() {

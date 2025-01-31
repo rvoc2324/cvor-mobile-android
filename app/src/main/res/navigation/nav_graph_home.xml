@@ -42,6 +42,8 @@
         android:name="com.rvoc.cvorapp.ui.fragments.whatsnew.WhatsNewFragment"
         android:label="Refer Fragment"
         tools:layout="@layout/fragment_whatsnew">
+        <deepLink
+            app:uri="app://cvorapp/whatsnew" />
     </fragment>
 
     <!-- Settings Fragment -->

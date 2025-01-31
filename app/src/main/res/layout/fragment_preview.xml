@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradient_primary"
         tools:context=".ui.fragments.preview.PreviewFragment"
-        android:paddingTop="40dp">
+        android:paddingTop="50dp">
 
         <!-- Top Row (Title and Download Icon) -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +27,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/TextStyle.SubTitle"
+                android:letterSpacing="0.1"
                 android:text="@string/preview_fragment_title"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintTop_toTopOf="parent"
@@ -52,6 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toBottomOf="@id/top_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

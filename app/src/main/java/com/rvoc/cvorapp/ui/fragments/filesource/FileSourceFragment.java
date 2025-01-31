@@ -53,7 +53,9 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
         // Add a listener to handle dismissal action
         dialog.setOnDismissListener(dialogInterface -> {
             Log.d(TAG, "FileSourceFragment dismissed.");
-            requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            if (!requireActivity().isFinishing()) {
+                requireActivity().finish();  // Ensure CoreActivity exits
+            }
         });
 
         return dialog;
@@ -118,8 +120,9 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
         Log.d(TAG, "File source 8.");
         coreViewModel.clearState();
 
-        // Finish the activity if the fragment is dismissed
-        requireActivity().getOnBackPressedDispatcher().onBackPressed();
+        if (!requireActivity().isFinishing()) {
+            requireActivity().finish();  // Exit CoreActivity if no other fragments exist
+        }
     }
 
     @Override

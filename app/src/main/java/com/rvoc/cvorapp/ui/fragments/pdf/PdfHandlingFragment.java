@@ -48,6 +48,7 @@ public class PdfHandlingFragment extends Fragment {
     private FileListAdapter fileListAdapter;
     private String currentActionType;
     FileActionListener fileActionListener;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Nullable
     @Override
@@ -79,9 +80,9 @@ public class PdfHandlingFragment extends Fragment {
         // Observe action type and update button label
         coreViewModel.getActionType().observe(getViewLifecycleOwner(), actionType -> {
             if ("combinepdf".equals(actionType)) {
-                binding.actionButton.setText(R.string.combine_pdf);
+                binding.actionButton.setText(R.string.combine_pdfs_button);
             } else if ("convertpdf".equals(actionType)) {
-                binding.actionButton.setText(R.string.convert_to_pdf);
+                binding.actionButton.setText(R.string.convert_to_pdf_button);
             }
             currentActionType = actionType;
         });
@@ -150,7 +151,6 @@ public class PdfHandlingFragment extends Fragment {
         binding.progressIndicator.setVisibility(View.VISIBLE);
         binding.actionButton.setEnabled(false);
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
             if (selectedFiles == null || selectedFiles.isEmpty()) {
@@ -167,11 +167,11 @@ public class PdfHandlingFragment extends Fragment {
             try {
                 File processedFile;
                 if ("combinepdf".equals(actionType)) {
-                    String fileName = "combined_" + System.currentTimeMillis() + ".pdf";
+                    String fileName = "CVOR_combined_" + System.currentTimeMillis() + ".pdf";
                     File outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
                 } else if ("convertpdf".equals(actionType)) {
-                    String fileName = "converted_" + System.currentTimeMillis() + ".pdf";
+                    String fileName = "CVOR_converted_" + System.currentTimeMillis() + ".pdf";
                     File outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
                 } else {

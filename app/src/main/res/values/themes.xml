@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/colorAccentSecondary</item>
 
         <!-- Background and Surface Colors -->
-        <item name="android:windowBackground">@color/fragment1Background</item>
+        <item name="android:windowBackground">@drawable/gradient_secondary</item>
        <!-- <item name="colorBackground">@color/fragment1Background</item> -->
         <item name="colorSurface">@color/inputBox</item>
 
