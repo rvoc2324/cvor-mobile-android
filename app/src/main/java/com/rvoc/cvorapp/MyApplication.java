@@ -49,14 +49,13 @@ public class MyApplication extends Application {
         loggingInitialiser.initialise();
         pdfBoxInitialiser.initialise();
 
-
+        /*
         if (!OpenCVLoader.initLocal()) {
             Log.e("OpenCV", "Initialization failed!");
         } else {
             Log.d("OpenCV", "OpenCV loaded successfully!");
         }
 
-        /*
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
             @Override

@@ -22,6 +22,7 @@ import com.rvoc.cvorapp.adapters.FileActionListener;
 import com.rvoc.cvorapp.adapters.FileListAdapter;
 import com.rvoc.cvorapp.databinding.FragmentPdfHandlingBinding;
 import com.rvoc.cvorapp.services.PdfHandlingService;
+import com.rvoc.cvorapp.utils.CacheUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;
@@ -163,27 +164,31 @@ public class PdfHandlingFragment extends Fragment {
             }
 
             List<Uri> urisList = new ArrayList<>(selectedFiles.keySet());
+            File processedFile = null;
+            File outputFile = null;
 
             try {
-                File processedFile;
                 if ("combinepdf".equals(actionType)) {
                     String fileName = "CVOR_combined_" + System.currentTimeMillis() + ".pdf";
-                    File outputFile = new File(requireContext().getCacheDir(), fileName);
+                    outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
                 } else if ("convertpdf".equals(actionType)) {
                     String fileName = "CVOR_converted_" + System.currentTimeMillis() + ".pdf";
-                    File outputFile = new File(requireContext().getCacheDir(), fileName);
+                    outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
                 } else {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
 
+                File finalProcessedFile = processedFile;
                 requireActivity().runOnUiThread(() -> {
                     binding.progressIndicator.setVisibility(View.GONE);
                     binding.actionButton.setEnabled(true);
-                    coreViewModel.addProcessedFile(processedFile);
+                    coreViewModel.addProcessedFile(finalProcessedFile);
                     Toast.makeText(requireContext(), "PDF Action completed.", Toast.LENGTH_SHORT).show();
                     coreViewModel.setNavigationEvent("navigate_to_preview");
+
+                    CacheUtils.cleanupCache(requireContext());
                 });
             } catch (Exception e) {
                 Log.e(TAG, "Error processing files", e);

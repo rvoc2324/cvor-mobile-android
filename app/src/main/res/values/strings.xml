@@ -54,5 +54,7 @@
     <string name="no_files_selected">No files available to preview. Go back to choose a file.</string>
     <string name="back_button">Back</string>
     <string name="share_button">Share</string>
+    <string name="share_app_text">Select the app to share</string>
+    <string name="share_app_icon_desc">App available to share the files</string>
     <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
 </resources>

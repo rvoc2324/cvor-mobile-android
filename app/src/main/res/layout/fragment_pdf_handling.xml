@@ -38,7 +38,7 @@
         android:id="@+id/card_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
+        android:layout_margin="10dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="6dp"
         app:cardBackgroundColor="@color/colorSecondary"
@@ -52,7 +52,7 @@
             android:id="@+id/recycler_view_files"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp" />
+            android:layout_margin="5dp" />
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Buttons -->
@@ -61,7 +61,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="12dp"
         android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

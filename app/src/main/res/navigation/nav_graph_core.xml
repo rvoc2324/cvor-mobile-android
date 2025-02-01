@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_fileManagerFragment_to_PdfHandlingFragment"
             app:destination="@id/PdfHandlingFragment" />
+        <action
+            android:id="@+id/action_fileManagerFragment_to_shareFragment"
+            app:destination="@id/shareFragment" />
     </fragment>
 
     <!-- Camera Fragment -->
@@ -47,6 +50,9 @@
         <action
             android:id="@+id/action_cameraFragment_to_PdfHandlingFragment"
             app:destination="@id/PdfHandlingFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_shareFragment"
+            app:destination="@id/shareFragment" />
     </fragment>
 
     <!-- Watermark Fragment -->
@@ -88,16 +94,5 @@
         android:name="com.rvoc.cvorapp.ui.fragments.share.ShareFragment"
         android:label="Share Fragment"
         tools:layout="@layout/fragment_share">
-        <action
-            android:id="@+id/action_shareFragment_to_whatsNewFragment"
-            app:destination="@id/whatsNewFragment" />
-    </fragment>
-
-    <!-- Whats New Fragment -->
-    <fragment
-        android:id="@+id/whatsNewFragment"
-        android:name="com.rvoc.cvorapp.ui.fragments.whatsnew.WhatsNewFragment"
-        android:label="Whats New Fragment"
-        tools:layout="@layout/fragment_whatsnew">
     </fragment>
 </navigation>

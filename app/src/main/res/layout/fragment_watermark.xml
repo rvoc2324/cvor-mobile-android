@@ -6,20 +6,36 @@
     android:background="@drawable/gradient_primary"
     android:paddingTop="50dp">
 
-    <TextView
-        android:id="@+id/title"
+    <!-- Title Background Container for Elevated Effect -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:text="@string/add_watermark_button"
-        android:letterSpacing="0.1"
-        style="@style/TextStyle.SubTitle" />
+        android:layout_marginBottom="4dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="16dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Title Text -->
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_watermark_button"
+            android:letterSpacing="0.1"
+            style="@style/TextStyle.SubTitle"
+            android:padding="16dp"
+            android:textColor="@color/white"
+            android:textAlignment="viewStart"/>
+    </com.google.android.material.card.MaterialCardView>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@id/title"
+        android:layout_below="@id/title_container"
         android:layout_above="@id/button_container"
         android:padding="16dp">
 
@@ -48,12 +64,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/sharing_with"
-                        app:boxBackgroundColor="@color/inputBox"
+                        app:boxStrokeColor="@color/inputBox"
                         app:hintTextAppearance="@style/TextInputHintStyle"
-                        app:hintTextColor="@color/textSecondary"
-                        app:boxBackgroundMode="outline"
-                        app:boxStrokeColor="@color/borderColor"
-                        app:boxStrokeWidth="2dp">
+                        app:hintTextColor="@color/textSecondary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_sharing_with"
@@ -69,12 +82,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="@string/purpose"
+                        app:boxStrokeColor="@color/inputBox"
                         app:hintTextAppearance="@style/TextInputHintStyle"
-                        app:hintTextColor="@color/textSecondary"
-                        app:boxBackgroundColor="@color/inputBox"
-                        app:boxBackgroundMode="outline"
-                        app:boxStrokeColor="@color/borderColor"
-                        app:boxStrokeWidth="2dp">
+                        app:hintTextColor="@color/textSecondary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_purpose"

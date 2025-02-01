@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.services.WatermarkService;
+import com.rvoc.cvorapp.utils.CacheUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
 import com.rvoc.cvorapp.databinding.FragmentWatermarkBinding;
@@ -245,7 +246,7 @@ public class WatermarkFragment extends Fragment {
                     } else {
                         Toast.makeText(requireContext(), "No files were watermarked.", Toast.LENGTH_SHORT).show();
                     }
-
+                    CacheUtils.cleanupCache(requireContext());
                     binding.previewButton.setEnabled(true);
                 });
 
@@ -259,8 +260,8 @@ public class WatermarkFragment extends Fragment {
                 });
             }
         });
+        executorService.shutdown();
     }
-
 
     @Override
     public void onDestroyView() {

@@ -124,6 +124,7 @@ public class CoreActivity extends AppCompatActivity {
                         break;
 
                     case "navigate_to_share":
+                        Log.d(TAG, "Navigating to share");
                         navToShare();
                         break;
 
@@ -226,6 +227,10 @@ public class CoreActivity extends AppCompatActivity {
                     Log.d(TAG, "CoreActivity 16.");
                     break;
 
+                case "sharefile":
+                    navController.navigate(R.id.action_cameraFragment_to_shareFragment);
+                    break;
+
                 case "combinepdf":
                 case "convertpdf":
                     navController.navigate(R.id.action_cameraFragment_to_PdfHandlingFragment);
@@ -244,6 +249,10 @@ public class CoreActivity extends AppCompatActivity {
             switch (actionType) {
                 case "addwatermark":
                     navController.navigate(R.id.action_fileManagerFragment_to_watermarkFragment);
+                    break;
+
+                case "sharefile":
+                    navController.navigate(R.id.action_fileManagerFragment_to_shareFragment);
                     break;
 
                 case "combinepdf":
@@ -297,8 +306,8 @@ public class CoreActivity extends AppCompatActivity {
      */
     private void navToShare() {
         try {
-            navController.navigate(R.id.action_previewFragment_to_shareFragment);
             Log.d(TAG, "CoreActivity 18.");
+            navController.navigate(R.id.action_previewFragment_to_shareFragment);
         } catch (Exception e) {
             Log.e("CoreActivity", "Navigation to ShareFragment failed: " + e.getMessage(), e);
         }

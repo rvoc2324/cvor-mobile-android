@@ -5,18 +5,17 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.FragmentFileSourceBinding;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
+
 
 /**
  * FileSourceFragment is a modal bottom sheet allowing users to choose between Camera or File Manager as the file source.
@@ -84,6 +83,12 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
                         binding.optionCamera.setVisibility(View.VISIBLE);
                         binding.optionImagePicker.setVisibility(View.VISIBLE);
                         binding.optionPDFPicker.setVisibility(View.GONE);
+                        break;
+                    case "sharefile":
+                        Log.d(TAG, "File source 13a.");
+                        binding.optionCamera.setVisibility(View.VISIBLE);
+                        binding.optionImagePicker.setVisibility(View.VISIBLE);
+                        binding.optionPDFPicker.setVisibility(View.VISIBLE);
                         break;
                 }
             }

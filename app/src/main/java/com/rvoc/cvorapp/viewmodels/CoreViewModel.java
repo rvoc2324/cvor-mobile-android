@@ -2,6 +2,7 @@ package com.rvoc.cvorapp.viewmodels;
 
 import android.app.Application;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,11 +10,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -21,7 +27,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class CoreViewModel extends AndroidViewModel {
-
     public enum SourceType {
         CAMERA,
         PDF_PICKER,
@@ -38,12 +43,29 @@ public class CoreViewModel extends AndroidViewModel {
 
     @Inject
     public CoreViewModel(@NonNull Application application) {
+
         super(application);
+
+        // Observe selectedFiles and update processedFiles when actionType is "shareFile"
+        selectedFiles.observeForever(selectedFilesMap -> {
+            if ("shareFile".equals(actionType.getValue())) {
+                List<File> files = new ArrayList<>();
+                for (Uri uri : selectedFilesMap.keySet()) {
+                    File file = uriToFile(uri);
+                    if (file != null) {
+                        files.add(file);
+                    }
+                }
+                processedFiles.postValue(files);
+            }
+        });
     }
 
     // Action Type
     public void setActionType(String type) {
+
         actionType.setValue(type);
+
     }
 
     public LiveData<String> getActionType() {
@@ -68,6 +90,18 @@ public class CoreViewModel extends AndroidViewModel {
         if (currentFiles != null) {
             currentFiles.put(fileUri, fileName);
             selectedFiles.setValue(currentFiles);
+
+            // If actionType is "shareFile", update processedFiles immediately
+            if ("shareFile".equals(actionType.getValue())) {
+                List<File> files = new ArrayList<>();
+                for (Uri uri : currentFiles.keySet()) {
+                    File file = uriToFile(uri);
+                    if (file != null) {
+                        files.add(file);
+                    }
+                }
+                processedFiles.postValue(files);
+            }
         }
     }
 
@@ -162,5 +196,29 @@ public class CoreViewModel extends AndroidViewModel {
     private Map<Uri, String> getValueOrEmptyMaps(MutableLiveData<Map<Uri, String>> liveData) {
         Map<Uri, String> value = liveData.getValue();
         return value != null ? value : new LinkedHashMap<>();
+    }
+
+    // private method to map uris to file
+    private File uriToFile(Uri uri) {
+        if (uri == null) return null;
+
+        if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return new File(uri.getPath());
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            File file = new File(getApplication().getCacheDir(), "temp_file_" + System.currentTimeMillis());
+            try (InputStream inputStream = getApplication().getContentResolver().openInputStream(uri);
+                 OutputStream outputStream = new FileOutputStream(file)) {
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = Objects.requireNonNull(inputStream).read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+                return file;
+            } catch (IOException e) {
+                Log.e("CoreViewModel", "Error converting URI to File: " + uri, e);
+            }
+        }
+        return null;
     }
 }

@@ -34,24 +34,24 @@
     <style name="TextStyle">
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:fontFamily">@font/goldman</item>
     </style>
 
     <style name="TextStyle.Headline">
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">40sp</item>
-        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:fontFamily">@font/goldman</item>
     </style>
 
     <style name="TextStyle.SubTitle">
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:fontFamily">@font/goldman</item>
     </style>
 
     <style name="TextStyle.Body">
         <item name="android:textColor">@color/text</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 

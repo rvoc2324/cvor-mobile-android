@@ -86,7 +86,10 @@ public class PreviewFragment extends Fragment {
             }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
-        binding.shareButton.setOnClickListener(v -> coreViewModel.setNavigationEvent("navigate_to_share"));
+        binding.shareButton.setOnClickListener(v -> {
+            Log.d(TAG, "Navigate to share logged");
+            coreViewModel.setNavigationEvent("navigate_to_share");
+        });
         binding.downloadIcon.setOnClickListener(v -> downloadFiles());
     }
 

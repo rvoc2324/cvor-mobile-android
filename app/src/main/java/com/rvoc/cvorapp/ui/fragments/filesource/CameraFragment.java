@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +27,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ExperimentalZeroShutterLag;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
@@ -33,12 +37,14 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
+import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.FragmentCameraBinding;
+import com.rvoc.cvorapp.utils.CacheUtils;
 import com.rvoc.cvorapp.utils.EdgeDetectionUtils;
 import com.rvoc.cvorapp.utils.ImageUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
@@ -140,6 +146,7 @@ public class CameraFragment extends Fragment {
         }, ContextCompat.getMainExecutor(requireContext()));
     }
 
+    @OptIn(markerClass = ExperimentalZeroShutterLag.class)
     private void bindCameraUseCases() {
         if (cameraProvider == null) return;
 
@@ -151,18 +158,21 @@ public class CameraFragment extends Fragment {
         preview.setSurfaceProvider(binding.cameraPreview.getSurfaceProvider());
 
         imageCapture = new ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_ZERO_SHUTTER_LAG)
                 .setFlashMode(isFlashOn ? ImageCapture.FLASH_MODE_ON : ImageCapture.FLASH_MODE_OFF)
                 .build();
 
+        /*
         ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
 
-        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), this::analyzeFrame);
+        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), this::analyzeFrame);*/
 
         cameraProvider.unbindAll();
         try {
-            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis, imageCapture);
+            // cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis, imageCapture);
+            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
         } catch (IllegalStateException | IllegalArgumentException e) {
             Log.e(TAG, "Failed to bind camera use cases", e);
         }
@@ -202,120 +212,130 @@ public class CameraFragment extends Fragment {
     }
 
     private void captureImage() {
-        binding.buttonCapture.setOnClickListener(v -> {
-            if (imageCapture == null) {
-                Toast.makeText(requireContext(), R.string.camera_not_ready, Toast.LENGTH_SHORT).show();
-                return;
+        if (imageCapture == null) {
+            Toast.makeText(requireContext(), R.string.camera_not_ready, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.d(TAG, "Camera 4.");
+
+        // Capture image into memory for faster preview
+        imageCapture.takePicture(
+            new ImageCapture.OutputFileOptions.Builder(new File(requireContext().getCacheDir(), "temp_capture_" + System.currentTimeMillis() + ".jpg")).build(),
+            ContextCompat.getMainExecutor(requireContext()),
+            new ImageCapture.OnImageSavedCallback() {
+                @Override
+                public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                    capturedImageUri = outputFileResults.getSavedUri();
+
+                    if (capturedImageUri == null) {
+                        capturedImageUri = Uri.fromFile(new File(requireContext().getCacheDir(), "temp_capture.jpg"));
+                    }
+                    Log.d(TAG, "Image saved at: " + capturedImageUri);
+
+                    File imageFile = new File(capturedImageUri.getPath());
+                    try {
+                        // Convert to bitmap and fix orientation
+                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                        Bitmap rotatedBitmap = correctImageRotation(bitmap, imageFile);
+
+                        requireActivity().runOnUiThread(() -> showImageConfirmation(rotatedBitmap));
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error processing captured image", e);
+                    }
+                }
+
+                @Override
+                public void onError(@NonNull ImageCaptureException exception) {
+                    Log.e(TAG, "Image capture failed", exception);
+                    Toast.makeText(requireContext(), R.string.image_capture_failed, Toast.LENGTH_SHORT).show();
+                }
             }
-            Log.d(TAG, "Camera 4.");
+        );
 
-            // Capture image into memory for faster preview
-            /* imageCapture.takePicture(
-                    ContextCompat.getMainExecutor(requireContext()),
-                    new ImageCapture.OnImageCapturedCallback() {
-                        @Override
-                        public void onCaptureSuccess(@NonNull ImageProxy image) {
+        // Capture image and perform edge detection
+        /* imageCapture.takePicture(
+                ContextCompat.getMainExecutor(requireContext()),
+                new ImageCapture.OnImageCapturedCallback() {
+                    @Override
+                    public void onCaptureSuccess(@NonNull ImageProxy image) {
+                        Log.d(TAG, "Image captured successfully.");
+                        Bitmap bitmap = ImageUtils.imageProxyToBitmap(image); // Utility function to convert ImageProxy to Bitmap
+                        Log.d(TAG, "Camera 5.");
+                        // Bitmap edgeDetectedBitmap = EdgeDetectionUtils.detectEdges(bitmap); // Perform edge detection
+                        Log.d(TAG, "Camera 6.");
 
-                            File photoFile = new File(requireContext().getCacheDir(), "temp_capture_" + System.currentTimeMillis() + ".jpg");
-                            capturedImageUri = Uri.fromFile(photoFile);
-                            showImageConfirmation();
-                        }
-                        @Override
-                        public void onError(@NonNull ImageCaptureException exception) {
-                            Log.e(TAG, "Image capture failed", exception);
-                            Toast.makeText(requireContext(), R.string.image_capture_failed, Toast.LENGTH_SHORT).show();
-                        }
+                        requireActivity().runOnUiThread(() -> {
+                            showImageConfirmation(bitmap); // Show the processed image without edge detection
+                            // showImageConfirmation(edgeDetectedBitmap); // Show the processed image with edge detection
+                            Log.d(TAG, "Camera 7.");
+                        });
+
+                        image.close();
                     }
-            );*/
 
-            // Capture image and perform edge detection
-            imageCapture.takePicture(
-                    ContextCompat.getMainExecutor(requireContext()),
-                    new ImageCapture.OnImageCapturedCallback() {
-                        @Override
-                        public void onCaptureSuccess(@NonNull ImageProxy image) {
-                            Log.d(TAG, "Image captured successfully.");
-                            Bitmap bitmap = ImageUtils.imageProxyToBitmap(image); // Utility function to convert ImageProxy to Bitmap
-                            Log.d(TAG, "Camera 5.");
-                            Bitmap edgeDetectedBitmap = EdgeDetectionUtils.detectEdges(bitmap); // Perform edge detection
-                            Log.d(TAG, "Camera 6.");
-
-                            requireActivity().runOnUiThread(() -> {
-                                showImageConfirmation(edgeDetectedBitmap); // Show the processed image
-                                Log.d(TAG, "Camera 7.");
-                            });
-
-                            image.close();
-                        }
-
-                        @Override
-                        public void onError(@NonNull ImageCaptureException exception) {
-                            Log.e(TAG, "Image capture failed", exception);
-                            Toast.makeText(requireContext(), R.string.image_capture_failed, Toast.LENGTH_SHORT).show();
-                        }
+                    @Override
+                    public void onError(@NonNull ImageCaptureException exception) {
+                        Log.e(TAG, "Image capture failed", exception);
+                        Toast.makeText(requireContext(), R.string.image_capture_failed, Toast.LENGTH_SHORT).show();
                     }
-            );
-        });
+                }
+        );*/
     }
 
     private void retakeImage() {
-        binding.buttonRetake.setOnClickListener(v -> {
-            if (capturedImageUri != null) {
-                File file = new File(capturedImageUri.getPath());
-                if (file.exists() && file.delete()) {
-                    Log.d(TAG, "Temporary file deleted successfully.");
-                } else {
-                    Log.w(TAG, "Failed to delete the temporary file.");
-                }
-                capturedImageUri = null;
-                Log.d(TAG, "Camera 8.");
+        if (capturedImageUri != null) {
+            File file = new File(capturedImageUri.getPath());
+            if (file.exists() && file.delete()) {
+                Log.d(TAG, "Temporary file deleted successfully.");
+            } else {
+                Log.w(TAG, "Failed to delete the temporary file.");
             }
-            resetCaptureState();
-        });
+            capturedImageUri = null;
+            Log.d(TAG, "Camera 8.");
+        }
+        resetCaptureState();
     }
 
     private void confirmImage() {
-        binding.buttonConfirm.setOnClickListener(v -> {
-            if (capturedImageUri != null) {
-                // Move the temporary file to permanent storage (e.g., gallery)
-                String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis());
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "cvor_" + timestamp);
-                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+        if (capturedImageUri != null) {
+            // Move the temporary file to permanent storage (e.g., gallery)
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis());
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "cvor_" + timestamp);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
 
-                Uri savedUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            Uri savedUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
-                if (savedUri != null) {
-                    try (OutputStream outputStream = requireContext().getContentResolver().openOutputStream(savedUri);
-                         InputStream inputStream = new FileInputStream(capturedImageUri.getPath())) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = inputStream.read(buffer)) != -1) {
-                            if (outputStream != null) {
-                                outputStream.write(buffer, 0, bytesRead);
-                            }
+            if (savedUri != null) {
+                try (OutputStream outputStream = requireContext().getContentResolver().openOutputStream(savedUri);
+                     InputStream inputStream = new FileInputStream(capturedImageUri.getPath())) {
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        if (outputStream != null) {
+                            outputStream.write(buffer, 0, bytesRead);
                         }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Failed to save image", e);
-                        Toast.makeText(requireContext(), R.string.image_save_failed, Toast.LENGTH_SHORT).show();
-                        return;
                     }
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to save image", e);
+                    Toast.makeText(requireContext(), R.string.image_save_failed, Toast.LENGTH_SHORT).show();
+                    return;
                 }
-
-                String fileName = getFileNameFromUri(savedUri);
-                // Update coreViewModel
-                coreViewModel.addSelectedFile(savedUri, fileName);
-
-                File tempFile = new File(capturedImageUri.getPath());
-                if (tempFile.exists() && tempFile.delete()) {
-                    Log.d(TAG, "Temporary file deleted successfully.");
-                }
-
-                askCaptureMoreImages();
-            } else {
-                Toast.makeText(requireContext(), R.string.no_image_to_confirm, Toast.LENGTH_SHORT).show();
             }
-        });
+
+            String fileName = getFileNameFromUri(savedUri);
+            // Update coreViewModel
+            coreViewModel.addSelectedFile(savedUri, fileName);
+
+            File tempFile = new File(capturedImageUri.getPath());
+            if (tempFile.exists() && tempFile.delete()) {
+                Log.d(TAG, "Temporary file deleted successfully.");
+            }
+
+            askCaptureMoreImages();
+        } else {
+            Toast.makeText(requireContext(), R.string.no_image_to_confirm, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void switchCamera() {
@@ -323,17 +343,19 @@ public class CameraFragment extends Fragment {
         bindCameraUseCases();
     }
 
-    private void showImageConfirmation(Bitmap edgeDetectedBitmap) {
+    private void showImageConfirmation(Bitmap bitmap) {
         binding.cameraPreview.setVisibility(View.GONE);
 
-        // Show the captured image as a Bitmap
-        /*if (capturedImageUri != null) {
-            capturedImageView.setImageURI(capturedImageUri); // Set the Bitmap as the preview
-            capturedImageView.setVisibility(View.VISIBLE);
+        /*
+        // Show the captured image as a Uri
+        if (capturedImageUri != null) {
+            binding.capturedImageView.setImageURI(capturedImageUri); // Set the Uri as the preview
+            binding.capturedImageView.setVisibility(View.VISIBLE);
         }*/
 
-        if (edgeDetectedBitmap != null) {
-            binding.capturedImageView.setImageBitmap(edgeDetectedBitmap); // Set the processed bitmap as preview
+        // Show the captured image as a Bitmap
+        if (bitmap != null) {
+            binding.capturedImageView.setImageBitmap(bitmap); // Set the processed bitmap as preview
             binding.capturedImageView.setVisibility(View.VISIBLE);
         }
 
@@ -347,6 +369,7 @@ public class CameraFragment extends Fragment {
 
     private void resetCaptureState() {
         binding.capturedImageView.setImageBitmap(null);
+        // binding.capturedImageView.setImageURI(null);
         binding.capturedImageView.setVisibility(View.GONE);
 
         binding.cameraPreview.setVisibility(View.VISIBLE);
@@ -386,6 +409,7 @@ public class CameraFragment extends Fragment {
         negativeButton.setOnClickListener(v -> {
             dialog.dismiss();
             coreViewModel.setNavigationEvent("navigate_to_action");
+            CacheUtils.cleanupCache(requireContext());
             Log.e(TAG, "navigate to watermark");
         });
 
@@ -416,6 +440,26 @@ public class CameraFragment extends Fragment {
             Log.e(TAG, "Error getting file name", e);
         }
         return null;
+    }
+
+    // Method to correct image orientation
+    private Bitmap correctImageRotation(Bitmap bitmap, File imageFile) throws IOException {
+        ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        int rotationDegrees = switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90 -> 90;
+            case ExifInterface.ORIENTATION_ROTATE_180 -> 180;
+            case ExifInterface.ORIENTATION_ROTATE_270 -> 270;
+            default -> 0;
+        };
+
+        if (rotationDegrees != 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotationDegrees);
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        }
+        return bitmap;
     }
 
     @Override
