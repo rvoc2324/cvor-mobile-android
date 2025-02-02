@@ -2,6 +2,7 @@ package com.rvoc.cvorapp.ui.fragments.share;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -103,18 +104,29 @@ public class ShareFragment extends BottomSheetDialogFragment {
     }
 
     private List<ResolveInfo> getShareableApps() {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("*/*");  // Use a wildcard MIME type to include all shareable content
+        PackageManager packageManager = requireContext().getPackageManager();
 
-        // Add a dummy file URI to ensure more apps are listed
-        Uri dummyUri = Uri.parse("content://com.android.externalstorage.documents/document/dummy.txt");
-        intent.putExtra(Intent.EXTRA_STREAM, dummyUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        // Query for PDFs
+        Intent pdfIntent = new Intent(Intent.ACTION_SEND);
+        pdfIntent.setType("application/pdf");
+        List<ResolveInfo> allShareableApps = new ArrayList<>(packageManager.queryIntentActivities(pdfIntent, 0));
 
-        Log.d(TAG, "getShareableApps: Querying shareable apps.");
-        return requireContext().getPackageManager().queryIntentActivities(intent, 0);
+        // Query for Images
+        Intent imageIntent = new Intent(Intent.ACTION_SEND);
+        imageIntent.setType("image/*");
+        allShareableApps.addAll(packageManager.queryIntentActivities(imageIntent, 0));
+
+        // Remove duplicates (if any)
+        List<ResolveInfo> uniqueApps = new ArrayList<>();
+        for (ResolveInfo app : allShareableApps) {
+            if (!uniqueApps.contains(app)) {
+                uniqueApps.add(app);
+            }
+        }
+
+        Log.d(TAG, "getShareableApps: Found " + uniqueApps.size() + " shareable apps.");
+        return uniqueApps;
     }
-
 
     private void initiateSharing(List<File> files, String packageName) {
         Log.d(TAG, "initiateSharing: Preparing to share with " + packageName);

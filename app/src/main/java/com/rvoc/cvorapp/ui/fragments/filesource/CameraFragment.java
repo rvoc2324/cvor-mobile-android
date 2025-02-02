@@ -220,7 +220,7 @@ public class CameraFragment extends Fragment {
 
         // Capture image into memory for faster preview
         imageCapture.takePicture(
-            new ImageCapture.OutputFileOptions.Builder(new File(requireContext().getCacheDir(), "temp_capture_" + System.currentTimeMillis() + ".jpg")).build(),
+            new ImageCapture.OutputFileOptions.Builder(new File(requireContext().getCacheDir(), "CVOR_temp_capture_" + System.currentTimeMillis() + ".jpg")).build(),
             ContextCompat.getMainExecutor(requireContext()),
             new ImageCapture.OnImageSavedCallback() {
                 @Override
@@ -409,7 +409,6 @@ public class CameraFragment extends Fragment {
         negativeButton.setOnClickListener(v -> {
             dialog.dismiss();
             coreViewModel.setNavigationEvent("navigate_to_action");
-            CacheUtils.cleanupCache(requireContext());
             Log.e(TAG, "navigate to watermark");
         });
 
@@ -445,22 +444,33 @@ public class CameraFragment extends Fragment {
     // Method to correct image orientation
     private Bitmap correctImageRotation(Bitmap bitmap, File imageFile) throws IOException {
         ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
-        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
         int rotationDegrees = switch (orientation) {
             case ExifInterface.ORIENTATION_ROTATE_90 -> 90;
             case ExifInterface.ORIENTATION_ROTATE_180 -> 180;
             case ExifInterface.ORIENTATION_ROTATE_270 -> 270;
-            default -> 0;
+            default -> 0; // No rotation needed
         };
 
         if (rotationDegrees != 0) {
             Matrix matrix = new Matrix();
             matrix.postRotate(rotationDegrees);
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+            // Ensure the new bitmap is mutable and not the same reference
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+            // Recycle the old bitmap to free up memory
+            if (rotatedBitmap != bitmap) {
+                bitmap.recycle();
+            }
+
+            return rotatedBitmap;
         }
+
         return bitmap;
     }
+
 
     @Override
     public void onDestroyView() {

@@ -46,19 +46,6 @@ public class CoreViewModel extends AndroidViewModel {
 
         super(application);
 
-        // Observe selectedFiles and update processedFiles when actionType is "shareFile"
-        selectedFiles.observeForever(selectedFilesMap -> {
-            if ("shareFile".equals(actionType.getValue())) {
-                List<File> files = new ArrayList<>();
-                for (Uri uri : selectedFilesMap.keySet()) {
-                    File file = uriToFile(uri);
-                    if (file != null) {
-                        files.add(file);
-                    }
-                }
-                processedFiles.postValue(files);
-            }
-        });
     }
 
     // Action Type
@@ -100,7 +87,7 @@ public class CoreViewModel extends AndroidViewModel {
                         files.add(file);
                     }
                 }
-                processedFiles.postValue(files);
+                processedFiles.setValue(files);
             }
         }
     }

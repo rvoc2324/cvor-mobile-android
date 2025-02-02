@@ -188,7 +188,6 @@ public class PdfHandlingFragment extends Fragment {
                     Toast.makeText(requireContext(), "PDF Action completed.", Toast.LENGTH_SHORT).show();
                     coreViewModel.setNavigationEvent("navigate_to_preview");
 
-                    CacheUtils.cleanupCache(requireContext());
                 });
             } catch (Exception e) {
                 Log.e(TAG, "Error processing files", e);

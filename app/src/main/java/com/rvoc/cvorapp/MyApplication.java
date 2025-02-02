@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+
 import com.rvoc.cvorapp.repositories.ShareHistoryRepository;
 import com.rvoc.cvorapp.utils.AppThemeInitialiser;
+import com.rvoc.cvorapp.utils.CacheUtils;
 import com.rvoc.cvorapp.utils.CrashlyticsInitialiser;
 import com.rvoc.cvorapp.utils.LoggingInitialiser;
 import com.rvoc.cvorapp.utils.PDFBoxInitialiser;
@@ -36,6 +39,8 @@ public class MyApplication extends Application {
     @Inject
     PDFBoxInitialiser pdfBoxInitialiser;
 
+    private int activityCount = 0;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -48,6 +53,37 @@ public class MyApplication extends Application {
         crashlyticsInitialiser.initialise();
         loggingInitialiser.initialise();
         pdfBoxInitialiser.initialise();
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {}
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+                activityCount++;
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+                activityCount--;
+                if (activityCount == 0) {
+                    // App is in the background, clear cache
+                    CacheUtils.cleanupCache(getApplicationContext());
+                }
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {}
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {}
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {}
+        });
 
         /*
         if (!OpenCVLoader.initLocal()) {
