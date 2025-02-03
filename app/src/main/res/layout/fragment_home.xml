@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_action"
             android:paddingBottom="60dp"
+            android:letterSpacing="0.08"
             style="@style/TextStyle.SubTitle"/>
 
         <GridLayout
@@ -61,13 +62,15 @@
             android:rowCount="2"
             android:columnCount="2"
             android:alignmentMode="alignMargins"
-            android:useDefaultMargins="true">
+            android:useDefaultMargins="true"
+            android:weightSum="2">
 
             <!-- Add Watermark Button -->
             <Button
                 android:id="@+id/btn_add_watermark"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="120dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:text="@string/add_watermark_button"
@@ -75,7 +78,7 @@
                 android:paddingTop="20dp"
                 app:icon="@drawable/baseline_secure_add_24"
                 app:iconGravity="top"
-                app:iconPadding="5dp"
+                app:iconPadding="20dp"
                 app:iconSize="24dp"
                 android:elevation="6dp"
                 app:cornerRadius="16dp"
@@ -86,7 +89,8 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_share_file"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="120dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
                 android:text="@string/share_file_button"
@@ -94,7 +98,7 @@
                 android:paddingTop="20dp"
                 app:icon="@drawable/baseline_share_24"
                 app:iconGravity="top"
-                app:iconPadding="5dp"
+                app:iconPadding="20dp"
                 app:iconSize="24dp"
                 android:elevation="6dp"
                 app:cornerRadius="16dp"
@@ -105,15 +109,16 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_combine_pdfs"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="120dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:text="@string/combine_pdfs_button"
+                android:text="@string/combine_pdf"
                 style="@style/TextStyle.Body"
                 android:paddingTop="20dp"
                 app:icon="@drawable/baseline_merge_24"
                 app:iconGravity="top"
-                app:iconPadding="5dp"
+                app:iconPadding="20dp"
                 app:iconSize="24dp"
                 android:elevation="6dp"
                 app:cornerRadius="16dp"
@@ -124,15 +129,16 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_convert_to_pdf"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="120dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:text="@string/convert_to_pdf_button"
+                android:text="@string/convert_to_pdf"
                 style="@style/TextStyle.Body"
                 android:paddingTop="20dp"
                 app:icon="@drawable/baseline_convert_24"
                 app:iconGravity="top"
-                app:iconPadding="5dp"
+                app:iconPadding="20dp"
                 app:iconSize="24dp"
                 android:elevation="6dp"
                 app:cornerRadius="16dp"

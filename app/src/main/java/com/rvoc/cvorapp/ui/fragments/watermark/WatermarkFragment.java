@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.services.WatermarkService;
 import com.rvoc.cvorapp.utils.CacheUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
@@ -24,8 +25,11 @@ import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
 import com.rvoc.cvorapp.databinding.FragmentWatermarkBinding;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -47,7 +51,7 @@ public class WatermarkFragment extends Fragment {
 
     private FragmentWatermarkBinding binding;
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ExecutorService executorService;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +66,9 @@ public class WatermarkFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "Watermark fragment 1.");
 
+        // Initialize executor service in the fragment
+        executorService = Executors.newSingleThreadExecutor(); // Adjust pool size as needed
+
         // Initialize ViewModels
         watermarkViewModel = new ViewModelProvider(this).get(WatermarkViewModel.class);
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
@@ -69,8 +76,8 @@ public class WatermarkFragment extends Fragment {
         // Bind UI components through ViewBinding
         binding.inputRepeat.setChecked(true);
         binding.previewButton.setEnabled(false);
-        binding.textOpacity.setText("Opacity(20-100%): 40% ");
-        binding.textFontSize.setText("Font Size(8-30): 18 ");
+        binding.textOpacity.setText(getString(R.string.opacity_text, 40));
+        binding.textFontSize.setText(getString(R.string.fontsize_text,18));
 
         // Observe Watermark Text and update dynamically
         watermarkViewModel.getWatermarkText().observe(getViewLifecycleOwner(), watermarkText -> {
@@ -113,15 +120,13 @@ public class WatermarkFragment extends Fragment {
             }
         });
 
-        binding.inputRepeat.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            updateWatermarkViewModel();
-        });
+        binding.inputRepeat.setOnCheckedChangeListener((buttonView, isChecked) -> updateWatermarkViewModel());
 
         binding.seekBarOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // Update the ViewModel when the SeekBar progress changes
-                binding.textOpacity.setText("Opacity(20-100%): " + progress);
+                binding.textOpacity.setText(getString(R.string.opacity_text, progress));
                 updateWatermarkViewModel();
             }
 
@@ -140,7 +145,7 @@ public class WatermarkFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // Update the ViewModel when the SeekBar progress changes
-                binding.textFontSize.setText("Font Size(8-30): " + progress);
+                binding.textFontSize.setText(getString(R.string.fontsize_text, progress));
                 updateWatermarkViewModel();
             }
 
@@ -175,10 +180,15 @@ public class WatermarkFragment extends Fragment {
         boolean repeat = binding.inputRepeat.isChecked();
         Integer opacity = binding.seekBarOpacity.getProgress();
         Integer fontSize = binding.seekBarFontSize.getProgress();
-        Log.d(TAG, "Font size: " + fontSize);
-        Log.d(TAG, "Opacity: " + opacity);
 
-        watermarkViewModel.setInputs(shareWith, purpose, opacity, fontSize, repeat);
+        // Get the purpose text, using the general purpose fallback if necessary
+        String purposeText = purpose.isEmpty() ? getString(R.string.text_general_purposes) : purpose;
+
+        // Format the watermark text using string resources and placeholders
+        String watermarkText = getString(R.string.text_watermark, shareWith, purposeText,
+                new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
+
+        watermarkViewModel.setInputs(shareWith, purpose, opacity, fontSize, repeat, watermarkText);
         // validateInputs();
     }
 
@@ -246,7 +256,6 @@ public class WatermarkFragment extends Fragment {
                     } else {
                         Toast.makeText(requireContext(), "No files were watermarked.", Toast.LENGTH_SHORT).show();
                     }
-                    CacheUtils.cleanupCache(requireContext());
                     binding.previewButton.setEnabled(true);
                 });
 

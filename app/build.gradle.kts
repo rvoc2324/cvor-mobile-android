@@ -68,6 +68,7 @@ dependencies {
     // implementation(libs.git.repo)
 
     // Lifecycle Components
+    implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
 
@@ -90,6 +91,7 @@ dependencies {
 
     // Image loading/caching libraries
     implementation(libs.glide)
+    implementation(libs.ucrop)
     // implementation(libs.core)
     ksp(libs.glide.compiler)
 

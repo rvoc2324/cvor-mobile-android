@@ -49,7 +49,7 @@ public class PdfHandlingFragment extends Fragment {
     private FileListAdapter fileListAdapter;
     private String currentActionType;
     FileActionListener fileActionListener;
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private ExecutorService executorService;
 
     @Nullable
     @Override
@@ -63,6 +63,9 @@ public class PdfHandlingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Log.d(TAG, "PDF Handling Initialized.");
+
+        // Initialize executor service in the fragment
+        executorService = Executors.newSingleThreadExecutor(); // Adjust pool size as needed
 
         // Initialize the CoreViewModel
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
@@ -164,8 +167,8 @@ public class PdfHandlingFragment extends Fragment {
             }
 
             List<Uri> urisList = new ArrayList<>(selectedFiles.keySet());
-            File processedFile = null;
-            File outputFile = null;
+            File processedFile;
+            File outputFile;
 
             try {
                 if ("combinepdf".equals(actionType)) {
@@ -198,7 +201,6 @@ public class PdfHandlingFragment extends Fragment {
                 });
             }
         });
-        executorService.shutdown();
     }
 
     private Uri getUriFromPosition(int position, Map<Uri, String> uris) {
@@ -214,6 +216,9 @@ public class PdfHandlingFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdown(); // Shutdown the executor service when the fragment's view is destroyed
+        }
         binding = null; // Avoid memory leaks
     }
 }

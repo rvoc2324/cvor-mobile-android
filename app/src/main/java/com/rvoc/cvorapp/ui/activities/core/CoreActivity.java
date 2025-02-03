@@ -53,11 +53,14 @@ public class CoreActivity extends AppCompatActivity {
                 getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
                         OnBackInvokedDispatcher.PRIORITY_DEFAULT,
                         () -> {
-                            if (navController.getCurrentDestination() != null
-                                    && navController.getCurrentDestination().getId() == R.id.fileSourceFragment) {
-                                finish(); // Exit CoreActivity when FileSourceFragment is the only one
-                            } else if (!navController.popBackStack()) {
-                                finish(); // If no fragments left, exit
+                            // Check the current fragment destination and close the activity if necessary
+                            if (navController.getCurrentDestination() != null) {
+                                int currentFragmentId = navController.getCurrentDestination().getId();
+                                if (currentFragmentId == R.id.fileSourceFragment || currentFragmentId == R.id.cameraFragment || currentFragmentId == R.id.fileManagerFragment) {
+                                    finish(); // Exit CoreActivity when FileManagerFragment or CameraFragment is visible
+                                } else if (!navController.popBackStack()) {
+                                    finish(); // If no fragments left, exit the activity
+                                }
                             }
                         }
                 );
@@ -66,15 +69,18 @@ public class CoreActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
                     @Override
                     public void handleOnBackPressed() {
-                        if (navController.getCurrentDestination() != null
-                                && navController.getCurrentDestination().getId() == R.id.fileSourceFragment) {
-                            finish(); // Exit CoreActivity when FileSourceFragment is the only one
-                        } else if (!navController.popBackStack()) {
-                            finish(); // If no fragments left, exit
+                        if (navController.getCurrentDestination() != null) {
+                            int currentFragmentId = navController.getCurrentDestination().getId();
+                            if (currentFragmentId == R.id.fileSourceFragment || currentFragmentId == R.id.cameraFragment || currentFragmentId == R.id.fileManagerFragment) {
+                                finish(); // Exit CoreActivity when FileManagerFragment or CameraFragment is visible
+                            } else if (!navController.popBackStack()) {
+                                finish(); // If no fragments left, exit the activity
+                            }
                         }
                     }
                 });
             }
+
 
             // Handle actionType from intent extras
             String actionType = getIntent().getStringExtra("actionType");

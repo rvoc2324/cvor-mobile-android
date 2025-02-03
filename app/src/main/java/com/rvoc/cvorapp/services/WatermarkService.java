@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.util.Log;
 
+import com.tom_roush.pdfbox.cos.COSName;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.PDPage;
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
@@ -82,17 +83,19 @@ public class WatermarkService {
             if (repeatWatermark) {
 
                 float horizontalSpacing = textWidth * 0.2f; // Adjust horizontal gap
-                float verticalSpacing = textHeight * 0.3f; // Adjust vertical gap
+                float verticalSpacing = textHeight * 0.4f; // Adjust vertical gap
 
                 // Draw watermark text repeatedly across the image
                 float y = textHeight;
+                boolean shiftRow = false; // To alternate row shifting
                 while (y < watermarkedBitmap.getHeight() + textHeight) {
-                    float x = 0;
+                    float x = shiftRow ? ((textWidth + horizontalSpacing) / 2) : 0;
                     while (x < watermarkedBitmap.getWidth() + textWidth) {
                         canvas.drawText(watermarkText, x, y, paint);
                         x += textWidth + horizontalSpacing; // Add spacing between watermarks
                     }
                     y += textHeight + verticalSpacing; // Add spacing between rows
+                    shiftRow = !shiftRow;
                 }
             } else {
                 // Draw watermark text in the center of the image
@@ -151,25 +154,32 @@ public class WatermarkService {
                     // Set transparency
                     PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();
                     graphicsState.setNonStrokingAlphaConstant(alphaValue);
-                    page.getResources().add(graphicsState);
-                    contentStream.setGraphicsStateParameters(graphicsState);
+                    page.getResources().put(COSName.getPDFName("TransparentState"), graphicsState);
 
                     // Set font and color
                     contentStream.setFont(font, fontSize);
                     contentStream.setNonStrokingColor(0.7f);
 
+
                     if (repeatWatermark) {
                         // Render watermark repeatedly across the page
                         float ySpacing = 75; // Adjust vertical spacing
                         float xSpacing = textWidth + 20; // Adjust horizontal spacing
+                        boolean shiftRow = false; // Toggle shifting every row
 
                         for (float y = 0; y < pageHeight; y += ySpacing) {
-                            for (float x = 0; x < pageWidth; x += xSpacing) {
+                            float xStart = shiftRow ? xSpacing / 2 : 0; // Shift alternate rows
+
+                            for (float x = xStart; x < pageWidth; x += xSpacing) {
+                                contentStream.saveGraphicsState(); // Save state before applying transparency
+                                contentStream.setGraphicsStateParameters(graphicsState); // Apply transparency settings
+
                                 contentStream.beginText();
                                 contentStream.newLineAtOffset(x, y);
                                 contentStream.showText(watermarkText);
                                 contentStream.endText();
                             }
+                            shiftRow = !shiftRow;
                         }
                     } else {
                         // Render watermark in the center of the page

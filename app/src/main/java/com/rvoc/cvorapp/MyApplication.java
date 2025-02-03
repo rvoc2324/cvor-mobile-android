@@ -66,10 +66,10 @@ public class MyApplication extends Application {
             @Override
             public void onActivityStopped(@NonNull Activity activity) {
                 activityCount--;
-                if (activityCount == 0) {
+                /*if (activityCount == 0) {
                     // App is in the background, clear cache
                     CacheUtils.cleanupCache(getApplicationContext());
-                }
+                }*/
             }
 
             @Override
@@ -82,7 +82,12 @@ public class MyApplication extends Application {
             public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
 
             @Override
-            public void onActivityDestroyed(@NonNull Activity activity) {}
+            public void onActivityDestroyed(@NonNull Activity activity) {
+                activityCount--;
+                if (activityCount == 0) {
+                    CacheUtils.cleanupCache(getApplicationContext());
+                }
+            }
         });
 
         /*

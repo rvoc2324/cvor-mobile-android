@@ -22,3 +22,6 @@
 -keep class com.shockwave.**
 -keep public class com.bumptech.glide.** { *; }
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** { *; }
+-dontwarn com.yalantis.ucrop**
+-keep class com.yalantis.ucrop** { *; }
+-keep interface com.yalantis.ucrop** { *; }

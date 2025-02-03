@@ -79,7 +79,7 @@ public class CoreViewModel extends AndroidViewModel {
             selectedFiles.setValue(currentFiles);
 
             // If actionType is "shareFile", update processedFiles immediately
-            if ("shareFile".equals(actionType.getValue())) {
+            if ("sharefile".equals(actionType.getValue())) {
                 List<File> files = new ArrayList<>();
                 for (Uri uri : currentFiles.keySet()) {
                     File file = uriToFile(uri);

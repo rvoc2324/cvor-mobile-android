@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+    <!-- Top Black Padding -->
+    <View
+        android:id="@+id/topPadding"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Camera Preview -->
     <androidx.camera.view.PreviewView
         android:id="@+id/cameraPreview"
@@ -20,30 +30,35 @@
     <!-- Captured image overlay -->
     <ImageView
         android:id="@+id/capturedImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
         android:scaleType="fitCenter"
-        android:contentDescription="@string/captured_image" />
+        android:contentDescription="@string/captured_image"
+        app:layout_constraintTop_toBottomOf="@id/topPadding"
+        app:layout_constraintBottom_toTopOf="@id/bottomControlArea"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Edge overlay view -->
+    <!-- uCrop view for cropping the image -->
+    <com.yalantis.ucrop.view.UCropView
+        android:id="@+id/ucropView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/topPadding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Edge overlay view
     <com.rvoc.cvorapp.views.EdgeOverlayView
         android:id="@+id/edgeOverlayView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         android:scaleType="fitCenter"
-        android:layout_gravity="center" />
-
-    <!-- Top Black Padding -->
-    <View
-        android:id="@+id/topPadding"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:background="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_gravity="center" /> -->
 
     <!-- Top Controls -->
     <ImageButton

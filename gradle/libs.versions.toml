@@ -7,6 +7,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 splashscreen = '1.0.1'
 constraintlayout = "2.2.0"
+lifecycleRuntimeKtx = "2.8.7"
 lifecycleLivedataKtx = "2.8.7"
 lifecycleViewmodelKtx = "2.8.7"
 navigationFragment = "2.8.5"
@@ -23,8 +24,7 @@ pdf-viewer = "3.2.0-beta.1"
 cardView = "1.0.0"
 glide = "4.16.0"
 opencv = "4.9.0"
-#core = "1.47.0"
-#git-repo = "Tag"
+ucrop = "2.2.10"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -34,6 +34,7 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
@@ -59,9 +60,7 @@ cardView = { group = "androidx.cardview", name = "cardview", version.ref = "card
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 opencv = { group = "org.opencv", name = "opencv", version.ref = "opencv" }
-#core = { group = "com.google.ar", name = "core", version.ref = "core" }
-#git-repo = { group = "com.github.User", name = "Repo", version.ref = "git-repo" }
-
+ucrop = { group = "com.github.yalantis", name = "ucrop", version.ref = "ucrop"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

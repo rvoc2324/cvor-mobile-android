@@ -1,13 +1,12 @@
 package com.rvoc.cvorapp.ui.fragments.share;
 
-import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,22 +14,18 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.rvoc.cvorapp.R;
-import com.rvoc.cvorapp.adapters.ShareAppAdapter;
-import com.rvoc.cvorapp.databinding.FragmentShareBinding;
 import com.rvoc.cvorapp.models.ShareHistory;
 import com.rvoc.cvorapp.repositories.ShareHistoryRepository;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
+import com.rvoc.cvorapp.databinding.FragmentShareBinding; // Import the generated View Binding class
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,110 +38,125 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ShareFragment extends BottomSheetDialogFragment {
+public class ShareFragment extends Fragment {
 
-    private static final String TAG = "ShareFragment";
-    private FragmentShareBinding binding;
     private CoreViewModel coreViewModel;
     private WatermarkViewModel watermarkViewModel;
-
     @Inject
     ShareHistoryRepository shareHistoryRepository;
+    private FragmentShareBinding binding;
+    private PendingIntent shareResultPendingIntent;
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
-        Log.d(TAG, "onCreateDialog: Share fragment initialized.");
-        dialog.setDismissWithAnimation(true);
-        return dialog;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: Inflating layout.");
-        binding = FragmentShareBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
+    // ActivityResultLauncher to replace startActivityForResult
+    private final ActivityResultLauncher<Intent> shareLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == android.app.Activity.RESULT_OK) {
+                    navigateToWhatsNew();
+                }
+            });
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated: Initializing ViewModels.");
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
         watermarkViewModel = new ViewModelProvider(requireActivity()).get(WatermarkViewModel.class);
+        // shareHistoryRepository = new ShareHistoryRepository(requireContext()); // Initialize repository
 
-        openCustomShareModal();
+        // Create a PendingIntent to handle the result
+        Intent resultIntent = new Intent(getContext(), ShareResultReceiver.class);
+        shareResultPendingIntent = PendingIntent.getBroadcast(
+                getContext(), 0, resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        // Automatically launch the share modal
+        openNativeShareModal();
     }
 
-    private void openCustomShareModal() {
-        List<File> processedFiles = coreViewModel.getProcessedFiles().getValue();
-        Log.d(TAG, "openCustomShareModal: Checking processed files.");
-
-        if (processedFiles == null || processedFiles.isEmpty()) {
-            Toast.makeText(requireContext(), "No files to share", Toast.LENGTH_SHORT).show();
-            new Handler(Looper.getMainLooper()).postDelayed(this::dismiss, 300);
-            return;
+    @Override
+    public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Inflate the layout and return the root view
+        if (inflater != null) {
+            binding = FragmentShareBinding.inflate(inflater, container, false);
         }
-
-        Log.d(TAG, "openCustomShareModal: Setting up RecyclerView.");
-        binding.shareAppList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-
-        List<ResolveInfo> shareableApps = getShareableApps();
-        ShareAppAdapter adapter = new ShareAppAdapter(requireContext(), shareableApps, appInfo -> {
-            dismiss();
-            initiateSharing(processedFiles, appInfo.activityInfo.packageName);
-        });
-
-        binding.shareAppList.setAdapter(adapter);
+        return binding.getRoot(); // Return the root view from the binding
     }
 
-    private List<ResolveInfo> getShareableApps() {
-        PackageManager packageManager = requireContext().getPackageManager();
+    public class ShareResultReceiver extends BroadcastReceiver {
 
-        // Query for PDFs
-        Intent pdfIntent = new Intent(Intent.ACTION_SEND);
-        pdfIntent.setType("application/pdf");
-        List<ResolveInfo> allShareableApps = new ArrayList<>(packageManager.queryIntentActivities(pdfIntent, 0));
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Check if the result contains the chosen component
+            ComponentName componentName = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
+            if (componentName != null) {
+                String sharingApp = componentName.getPackageName();
+                Log.d("ShareResultReceiver", "Chosen app: " + sharingApp);
 
-        // Query for Images
-        Intent imageIntent = new Intent(Intent.ACTION_SEND);
-        imageIntent.setType("image/*");
-        allShareableApps.addAll(packageManager.queryIntentActivities(imageIntent, 0));
-
-        // Remove duplicates (if any)
-        List<ResolveInfo> uniqueApps = new ArrayList<>();
-        for (ResolveInfo app : allShareableApps) {
-            if (!uniqueApps.contains(app)) {
-                uniqueApps.add(app);
+                // Log the sharing app (optional, save to database, etc.)
+                logShareDetails(sharingApp);
             }
         }
 
-        Log.d(TAG, "getShareableApps: Found " + uniqueApps.size() + " shareable apps.");
-        return uniqueApps;
+        private void logShareDetails(String sharingApp) {
+            // Capture share details and save to the repository or log it
+            List<File> processedFiles = coreViewModel.getProcessedFiles().getValue();
+            if (processedFiles == null || processedFiles.isEmpty()) return;
+
+            String sharedWith = watermarkViewModel.getShareWith().getValue();
+            if ((sharedWith == null) || sharedWith.isEmpty()) {
+                sharedWith = "Unknown";
+            }
+            String purpose = watermarkViewModel.getPurpose().getValue();
+            if (purpose == null || purpose.isEmpty()) {
+                purpose = "General purpose";
+            }
+
+            // Log the share details for each file
+            for (File file : processedFiles) {
+                ShareHistory shareHistory = new ShareHistory(
+                        file.getName(),
+                        new Date(),
+                        "Shared with app: " + sharingApp,
+                        sharedWith,
+                        purpose
+                );
+
+                // Persist the share history
+                shareHistoryRepository.insertShareHistory(shareHistory);
+            }
+        }
     }
 
-    private void initiateSharing(List<File> files, String packageName) {
-        Log.d(TAG, "initiateSharing: Preparing to share with " + packageName);
+    private void openNativeShareModal() {
+        List<File> processedFiles = coreViewModel.getProcessedFiles().getValue();
+
+        if (processedFiles == null || processedFiles.isEmpty()) {
+            Toast.makeText(requireContext(), "No files to share", Toast.LENGTH_SHORT).show();
+            requireActivity().getSupportFragmentManager().popBackStack();  // This will close the activity
+            return;
+        }
 
         Intent shareIntent;
-        String shareText = getString(R.string.share_text);
 
-        if (files.size() == 1) {
-            File file = files.get(0);
+        if (processedFiles.size() == 1) {
+            // Single file share
+            File file = processedFiles.get(0);
             Uri fileUri = FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().getPackageName() + ".fileprovider",
                     file
             );
-            shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType(getMimeType(file.getName()));
+
+            shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Shared via CVOR");
             shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+            shareIntent.setType(getMimeType(file.getName())); // Get the MIME type dynamically
         } else {
+            // Multiple file share
             ArrayList<Uri> fileUris = new ArrayList<>();
-            for (File file : files) {
+            for (File file : processedFiles) {
                 Uri fileUri = FileProvider.getUriForFile(
                         requireContext(),
                         requireContext().getPackageName() + ".fileprovider",
@@ -154,53 +164,45 @@ public class ShareFragment extends BottomSheetDialogFragment {
                 );
                 fileUris.add(fileUri);
             }
-            shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-            shareIntent.setType(getMimeType(files.get(0).getName()));
+
+            shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Shared via CVOR");
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, fileUris);
+            shareIntent.setType(getMimeType(processedFiles.get(0).getName()));
         }
 
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareText);
-        shareIntent.setPackage(packageName);
+        // Add PendingIntent for result handling
+        shareIntent.putExtra(Intent.EXTRA_REFERRER, shareResultPendingIntent);
+
+        // Grant URI permissions to external apps
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        startActivity(shareIntent);
-        logShareDetails(files, packageName);
+        shareIntent = Intent.createChooser(shareIntent, null);
+        shareLauncher.launch(shareIntent);
     }
 
-    private void logShareDetails(List<File> files, String packageName) {
-        Log.d(TAG, "logShareDetails: Logging share details.");
-
-        String sharedWith = watermarkViewModel.getShareWith().getValue();
-        if (sharedWith == null || sharedWith.isEmpty()) {
-            sharedWith = "Unknown";
-        }
-
-        String purpose = watermarkViewModel.getPurpose().getValue();
-        if (purpose == null || purpose.isEmpty()) {
-            purpose = "General purpose";
-        }
-
-        for (File file : files) {
-            ShareHistory shareHistory = new ShareHistory(
-                    file.getName(),
-                    new Date(),
-                    "Shared with app: " + packageName,
-                    sharedWith,
-                    purpose
-            );
-            shareHistoryRepository.insertShareHistory(shareHistory);
-        }
+    private void navigateToWhatsNew() {
+        coreViewModel.setNavigationEvent("navigate_to_whatsnew");
     }
 
+    /**
+     * Returns the MIME type based on the file's extension.
+     *
+     * @param fileName The name of the file.
+     * @return The MIME type as a string.
+     */
     private String getMimeType(String fileName) {
         String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT);
         String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
+        // Fallback if MIME type is not found
         return mimeType != null ? mimeType : "application/octet-stream";
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // Set the binding to null to avoid memory leaks
         binding = null;
     }
 }

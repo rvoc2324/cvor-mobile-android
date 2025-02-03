@@ -46,7 +46,7 @@
     <style name="TextStyle.SubTitle">
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/goldman</item>
+        <item name="android:fontFamily">@font/poppins</item>
     </style>
 
     <style name="TextStyle.Body">

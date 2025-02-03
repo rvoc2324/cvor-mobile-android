@@ -6,7 +6,7 @@
     android:layout_margin="50dp"
     android:padding="24dp"
     android:elevation="6dp"
-    android:background="@drawable/dialog_background"
+    android:background="@color/fragment1Background"
     android:gravity="center">
 
     <TextView

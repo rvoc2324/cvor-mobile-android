@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">CVOR</string>
-    <string name="app_toolbar_title">Welcome to CVOR</string>
+    <string name="app_name" translatable="false">CVOR</string>
     <string name="app_action">What would you like to do?</string>
     <string name="home">Home</string>
     <string name="add_watermark_button">Add Watermark</string>
@@ -36,15 +35,17 @@
     <string name="cancel">Cancel</string>
     <string name="sharing_with">Sharing with</string>
     <string name="purpose">Purpose</string>
-    <string name="watermark_text">Watermark preview</string>
+    <string name="text_watermark">Shared with %1$s for %2$s on %3$s</string>
+    <string name="text_general_purposes">General purposes</string>
+    <string name="watermark_preview">Watermark preview</string>
     <string name="repeat_watermark_check">Repeat watermark?</string>
-    <string name="opacity_text">Opacity (20-100%)</string>
-    <string name="fontsize_text">Font size (8-30)</string>
+    <string name="opacity_text">Opacity (20–100%%): %d</string>
+    <string name="fontsize_text">Font size (8–50): %d</string>
     <string name="preview_button">Preview</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="combine_pdf">Combine PDFs</string>
-    <string name="convert_to_pdf">Convert to PDF</string>
+    <string name="combine_pdf">Combine PDF</string>
+    <string name="convert_to_pdf">Convert Images to PDF</string>
     <string name="delete_icon">Delete icon</string>
     <string name="pdf_icon">PDF icon</string>
     <string name="image_icon">Image icon</string>

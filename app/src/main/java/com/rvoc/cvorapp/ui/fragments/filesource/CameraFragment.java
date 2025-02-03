@@ -1,6 +1,7 @@
 package com.rvoc.cvorapp.ui.fragments.filesource;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.rvoc.cvorapp.utils.EdgeDetectionUtils;
 import com.rvoc.cvorapp.utils.ImageUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.views.EdgeOverlayView;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,7 +75,7 @@ public class CameraFragment extends Fragment {
     private boolean isFlashOn = false;
     private boolean isUsingBackCamera = true;
     private Uri capturedImageUri;
-
+    private Bitmap previewBitmap;
     private CoreViewModel coreViewModel;
     private ProcessCameraProvider cameraProvider;
 
@@ -89,6 +91,28 @@ public class CameraFragment extends Fragment {
                             .show();
                 }
             });
+
+    private final ActivityResultLauncher<Intent> uCropLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    // Get the cropped image URI from uCrop
+                    Uri croppedImageUri = UCrop.getOutput(result.getData());
+                    if (croppedImageUri != null) {
+                        // Process the cropped image
+                        processCroppedImage(croppedImageUri);
+                    }
+                } else if (result.getResultCode() == UCrop.RESULT_ERROR) {
+                    // Handle uCrop error
+                    Throwable error = null;
+                    if (result.getData() != null) {
+                        error = UCrop.getError(result.getData());
+                    }
+                    Log.e(TAG, "uCrop error: ", error);
+                    Toast.makeText(requireContext(), "Failed to crop image", Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -178,7 +202,7 @@ public class CameraFragment extends Fragment {
         }
     }
 
-    private void analyzeFrame(ImageProxy image) {
+    /* private void analyzeFrame(ImageProxy image) {
         Bitmap bitmap = ImageUtils.imageProxyToBitmap(image);
         Bitmap scaledBitmap = null;
         if (bitmap != null) {
@@ -191,7 +215,7 @@ public class CameraFragment extends Fragment {
         requireActivity().runOnUiThread(() -> binding.edgeOverlayView.updateEdges(edgePoints));
 
         image.close();
-    }
+    }*/
 
     private void setupButtonListeners() {
         binding.buttonFlashToggle.setOnClickListener(v -> toggleFlash());
@@ -232,16 +256,8 @@ public class CameraFragment extends Fragment {
                     }
                     Log.d(TAG, "Image saved at: " + capturedImageUri);
 
-                    File imageFile = new File(capturedImageUri.getPath());
-                    try {
-                        // Convert to bitmap and fix orientation
-                        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                        Bitmap rotatedBitmap = correctImageRotation(bitmap, imageFile);
-
-                        requireActivity().runOnUiThread(() -> showImageConfirmation(rotatedBitmap));
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error processing captured image", e);
-                    }
+                    // Launch uCrop with the captured image URI
+                    launchUCrop(capturedImageUri);
                 }
 
                 @Override
@@ -297,8 +313,8 @@ public class CameraFragment extends Fragment {
     }
 
     private void confirmImage() {
-        if (capturedImageUri != null) {
-            // Move the temporary file to permanent storage (e.g., gallery)
+        if (previewBitmap != null) {
+            // Generate a timestamped filename
             String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis());
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "cvor_" + timestamp);
@@ -307,15 +323,15 @@ public class CameraFragment extends Fragment {
             Uri savedUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
             if (savedUri != null) {
-                try (OutputStream outputStream = requireContext().getContentResolver().openOutputStream(savedUri);
-                     InputStream inputStream = new FileInputStream(capturedImageUri.getPath())) {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        if (outputStream != null) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
+                try {
+                    // Save the already processed rotated bitmap
+                    OutputStream outputStream = requireContext().getContentResolver().openOutputStream(savedUri);
+
+                    if (outputStream != null) {
+                        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                        outputStream.close();
                     }
+
                 } catch (IOException e) {
                     Log.e(TAG, "Failed to save image", e);
                     Toast.makeText(requireContext(), R.string.image_save_failed, Toast.LENGTH_SHORT).show();
@@ -324,9 +340,10 @@ public class CameraFragment extends Fragment {
             }
 
             String fileName = getFileNameFromUri(savedUri);
-            // Update coreViewModel
+            // Update ViewModel
             coreViewModel.addSelectedFile(savedUri, fileName);
 
+            // Delete the temporary file
             File tempFile = new File(capturedImageUri.getPath());
             if (tempFile.exists() && tempFile.delete()) {
                 Log.d(TAG, "Temporary file deleted successfully.");
@@ -341,6 +358,50 @@ public class CameraFragment extends Fragment {
     private void switchCamera() {
         isUsingBackCamera = !isUsingBackCamera;
         bindCameraUseCases();
+    }
+
+    private void launchUCrop(Uri sourceUri) {
+        // Define the destination URI for the cropped image
+        File croppedFile = new File(requireContext().getCacheDir(), "CVOR_cropped_" + System.currentTimeMillis() + ".jpg");
+        Uri destinationUri = Uri.fromFile(croppedFile);
+
+        // Configure uCrop options
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionQuality(90); // Set compression quality (0-100)
+        options.setToolbarTitle("Crop Image");
+        options.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary)); // Customize toolbar color
+        options.setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)); // Customize status bar color
+        options.setToolbarWidgetColor(ContextCompat.getColor(requireContext(), R.color.text)); // Customize active widget color
+
+        // Create the UCrop intent
+        UCrop uCrop = UCrop.of(sourceUri, destinationUri)
+               // .withAspectRatio(1, 1) // Set aspect ratio (1:1 for square, or customize as needed)
+                .withOptions(options);
+
+        // Launch uCrop using the ActivityResultLauncher
+        uCropLauncher.launch(uCrop.getIntent(requireContext()));
+    }
+
+    private void processCroppedImage(Uri croppedImageUri) {
+        try {
+            // Convert the cropped image URI to a Bitmap
+            InputStream inputStream = requireContext().getContentResolver().openInputStream(croppedImageUri);
+            Bitmap croppedBitmap = BitmapFactory.decodeStream(inputStream);
+            if (inputStream != null) {
+                inputStream.close();
+            }
+
+            // Fix the orientation of the cropped image
+            File croppedFile = new File(croppedImageUri.getPath());
+            Bitmap rotatedBitmap = correctImageRotation(croppedBitmap, croppedFile);
+            previewBitmap = rotatedBitmap;
+
+            // Show the cropped and rotated image for confirmation
+            requireActivity().runOnUiThread(() -> showImageConfirmation(rotatedBitmap));
+        } catch (IOException e) {
+            Log.e(TAG, "Error processing cropped image", e);
+            Toast.makeText(requireContext(), "Failed to process cropped image", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showImageConfirmation(Bitmap bitmap) {
@@ -470,7 +531,6 @@ public class CameraFragment extends Fragment {
 
         return bitmap;
     }
-
 
     @Override
     public void onDestroyView() {

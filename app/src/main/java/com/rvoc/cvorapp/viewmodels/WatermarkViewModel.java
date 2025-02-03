@@ -8,10 +8,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -24,7 +20,7 @@ public class WatermarkViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> shareWith = new MutableLiveData<>();
     private final MutableLiveData<String> purpose = new MutableLiveData<>();
-    private final MutableLiveData<String> generatedWatermarkText = new MutableLiveData<>();
+    private final MutableLiveData<String> watermarkText = new MutableLiveData<>();
     private final MutableLiveData<Bitmap> signature = new MutableLiveData<>(); // Captures user signature as a Bitmap
     private final MutableLiveData<Boolean> repeatWatermark = new MutableLiveData<>(); // Whether to repeat the watermark
 
@@ -48,19 +44,14 @@ public class WatermarkViewModel extends AndroidViewModel {
      * @param opacity           Watermark opacity
      * @param fontSize           Watermark font size.
      */
-    public void setInputs(String organizationName, String purpose, Integer opacity, Integer fontSize, boolean repeat) {
+    public void setInputs(String organizationName, String purpose, Integer opacity, Integer fontSize, boolean repeat, String watermarkText) {
         this.shareWith.setValue(organizationName);
         this.purpose.setValue(purpose);
         // this.signature.setValue(signature);
         this.repeatWatermark.setValue(repeat);
         this.opacity.setValue(opacity);
         this.fontSize.setValue(fontSize);
-
-        String watermarkText = "Shared with " + organizationName +
-                " for " + (purpose == null || purpose.isEmpty() ? "general purposes" : purpose) +
-                " on " + new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-
-        generatedWatermarkText.setValue(watermarkText);
+        this.watermarkText.setValue(watermarkText);
     }
 
     public LiveData<String> getShareWith() {
@@ -72,7 +63,7 @@ public class WatermarkViewModel extends AndroidViewModel {
     }
 
     public LiveData<String> getWatermarkText() {
-        return generatedWatermarkText;
+        return watermarkText;
     }
 
     public LiveData<Bitmap> getSignature() {
