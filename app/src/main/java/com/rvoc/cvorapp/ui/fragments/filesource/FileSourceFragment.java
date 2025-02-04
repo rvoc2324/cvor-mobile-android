@@ -56,7 +56,6 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
                 requireActivity().finish();  // Ensure CoreActivity exits
             }
         });
-
         return dialog;
     }
 

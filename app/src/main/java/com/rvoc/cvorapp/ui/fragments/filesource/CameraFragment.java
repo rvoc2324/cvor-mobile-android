@@ -6,11 +6,9 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,10 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ExperimentalZeroShutterLag;
-import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
-import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
@@ -45,23 +41,19 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.FragmentCameraBinding;
-import com.rvoc.cvorapp.utils.CacheUtils;
-import com.rvoc.cvorapp.utils.EdgeDetectionUtils;
-import com.rvoc.cvorapp.utils.ImageUtils;
+import com.rvoc.cvorapp.ui.activities.core.CustomUCropActivity;
+import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
-import com.rvoc.cvorapp.views.EdgeOverlayView;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -129,8 +121,12 @@ public class CameraFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                setEnabled(false); // Disable this callback to prevent recursion
-                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                if (isAdded() && (getParentFragmentManager().getBackStackEntryCount() == 0)) {
+                    requireActivity().finish(); // Finish activity if no back stack
+                } else {
+                    setEnabled(false); // Prevent recursion
+                    requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                }
             }
         });
 
@@ -339,9 +335,13 @@ public class CameraFragment extends Fragment {
                 }
             }
 
-            String fileName = getFileNameFromUri(savedUri);
-            // Update ViewModel
-            coreViewModel.addSelectedFile(savedUri, fileName);
+            String actionType = coreViewModel.getActionType().getValue();
+            if(Objects.equals(actionType, "sharefile")){
+                FileUtils.processFileForSharing(requireContext(), savedUri, coreViewModel);
+            } else {
+                String fileName = FileUtils.getFileNameFromUri(requireContext(), savedUri);
+                coreViewModel.addSelectedFile(savedUri, fileName);
+            }
 
             // Delete the temporary file
             File tempFile = new File(capturedImageUri.getPath());
@@ -374,12 +374,12 @@ public class CameraFragment extends Fragment {
         options.setToolbarWidgetColor(ContextCompat.getColor(requireContext(), R.color.text)); // Customize active widget color
 
         // Create the UCrop intent
-        UCrop uCrop = UCrop.of(sourceUri, destinationUri)
-               // .withAspectRatio(1, 1) // Set aspect ratio (1:1 for square, or customize as needed)
-                .withOptions(options);
+        Intent uCropIntent = UCrop.of(sourceUri, destinationUri)
+                .withOptions(options)
+                .getIntent(requireContext());
 
-        // Launch uCrop using the ActivityResultLauncher
-        uCropLauncher.launch(uCrop.getIntent(requireContext()));
+        uCropIntent.setClass(requireContext(), CustomUCropActivity.class);
+        uCropLauncher.launch(uCropIntent);
     }
 
     private void processCroppedImage(Uri croppedImageUri) {
@@ -482,24 +482,6 @@ public class CameraFragment extends Fragment {
         Uri uri = Uri.fromParts("package", requireContext().getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
-    }
-
-    // Helper method to get the file name from the URI
-    private String getFileNameFromUri(Uri uri) {
-        String[] projection = {MediaStore.MediaColumns.DISPLAY_NAME};
-        try (Cursor cursor = requireContext().getContentResolver().query(uri, projection, null, null, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                int displayNameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
-                if (displayNameIndex != -1) {
-                    return cursor.getString(displayNameIndex);
-                } else {
-                    Log.e(TAG, "DISPLAY_NAME column not found in the URI.");
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error getting file name", e);
-        }
-        return null;
     }
 
     // Method to correct image orientation

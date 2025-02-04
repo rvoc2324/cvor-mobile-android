@@ -22,7 +22,6 @@ import com.rvoc.cvorapp.adapters.FileActionListener;
 import com.rvoc.cvorapp.adapters.FileListAdapter;
 import com.rvoc.cvorapp.databinding.FragmentPdfHandlingBinding;
 import com.rvoc.cvorapp.services.PdfHandlingService;
-import com.rvoc.cvorapp.utils.CacheUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;

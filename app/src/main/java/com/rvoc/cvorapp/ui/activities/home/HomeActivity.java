@@ -18,7 +18,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ActivityHomeBinding;
 import com.rvoc.cvorapp.ui.activities.core.CoreActivity;
-import com.rvoc.cvorapp.ui.activities.sharehistory.ShareHistoryActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -115,11 +114,5 @@ public class HomeActivity extends AppCompatActivity {
             Log.e(TAG, "Navigation error: " + e.getMessage(), e);
             Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void navigateToShareHistoryActivity() {
-        Intent intent = new Intent(this, ShareHistoryActivity.class);
-        startActivity(intent);
-        Log.d(TAG, "Navigated to SharedHistoryActivity.");
     }
 }

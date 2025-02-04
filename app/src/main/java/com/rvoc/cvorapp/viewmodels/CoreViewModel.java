@@ -77,18 +77,6 @@ public class CoreViewModel extends AndroidViewModel {
         if (currentFiles != null) {
             currentFiles.put(fileUri, fileName);
             selectedFiles.setValue(currentFiles);
-
-            // If actionType is "shareFile", update processedFiles immediately
-            if ("sharefile".equals(actionType.getValue())) {
-                List<File> files = new ArrayList<>();
-                for (Uri uri : currentFiles.keySet()) {
-                    File file = uriToFile(uri);
-                    if (file != null) {
-                        files.add(file);
-                    }
-                }
-                processedFiles.setValue(files);
-            }
         }
     }
 
@@ -183,29 +171,5 @@ public class CoreViewModel extends AndroidViewModel {
     private Map<Uri, String> getValueOrEmptyMaps(MutableLiveData<Map<Uri, String>> liveData) {
         Map<Uri, String> value = liveData.getValue();
         return value != null ? value : new LinkedHashMap<>();
-    }
-
-    // private method to map uris to file
-    private File uriToFile(Uri uri) {
-        if (uri == null) return null;
-
-        if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return new File(uri.getPath());
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            File file = new File(getApplication().getCacheDir(), "temp_file_" + System.currentTimeMillis());
-            try (InputStream inputStream = getApplication().getContentResolver().openInputStream(uri);
-                 OutputStream outputStream = new FileOutputStream(file)) {
-
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = Objects.requireNonNull(inputStream).read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
-                }
-                return file;
-            } catch (IOException e) {
-                Log.e("CoreViewModel", "Error converting URI to File: " + uri, e);
-            }
-        }
-        return null;
     }
 }

@@ -10,6 +10,9 @@
         android:name="com.rvoc.cvorapp.ui.fragments.auth.LoginFragment"
         android:label="Login Fragment"
         tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
     </fragment>
 
     <!-- Register Fragment -->
@@ -18,6 +21,9 @@
         android:name="com.rvoc.cvorapp.ui.fragments.auth.RegisterFragment"
         android:label="Register Fragment"
         tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
     </fragment>
 
     <!-- Home Fragment -->
@@ -26,6 +32,9 @@
         android:name="com.rvoc.cvorapp.ui.fragments.home.HomeFragment"
         android:label="Home Fragment"
         tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_shareHistoryFragment"
+            app:destination="@id/nav_share_history" />
     </fragment>
 
     <!-- Refer Fragment -->
@@ -34,6 +43,20 @@
         android:name="com.rvoc.cvorapp.ui.fragments.refer.ReferFragment"
         android:label="Refer Fragment"
         tools:layout="@layout/fragment_refer">
+        <action
+            android:id="@+id/action_referFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
+    </fragment>
+
+    <!-- Share History Fragment -->
+    <fragment
+        android:id="@+id/nav_share_history"
+        android:name="com.rvoc.cvorapp.ui.fragments.sharehistory.ShareHistoryFragment"
+        android:label="Share History Fragment"
+        tools:layout="@layout/fragment_share_history">
+        <action
+            android:id="@+id/action_shareHistoryFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
     </fragment>
 
     <!-- Whats New Fragment -->
@@ -44,6 +67,9 @@
         tools:layout="@layout/fragment_whatsnew">
         <deepLink
             app:uri="app://cvorapp/whatsnew" />
+        <action
+            android:id="@+id/action_whatsnewFragment_to_homeFragment"
+            app:destination="@id/nav_home" />
     </fragment>
 
     <!-- Settings Fragment -->

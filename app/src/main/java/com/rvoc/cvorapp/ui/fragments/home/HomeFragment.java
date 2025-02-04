@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.FragmentHomeBinding;
@@ -53,7 +55,10 @@ public class HomeFragment extends Fragment {
         binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
         binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf"));
-        binding.btnShareHistory.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToShareHistoryActivity());
+        binding.btnShareHistory.setOnClickListener(v -> {
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_homeFragment_to_shareHistoryFragment);
+        });
     }
 
     @Override

@@ -23,7 +23,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
+
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -73,13 +76,12 @@ public class FileManagerFragment extends Fragment {
                             } else {
                                 Log.w(TAG, "FileManagerFragment: File selection cancelled.");
                                 Toast.makeText(requireContext(), "File selection cancelled", Toast.LENGTH_SHORT).show();
+                                requireActivity().finish();
                             }
                         } catch (Exception e) {
                             Log.e(TAG, "FileManagerFragment: Error handling file picker result.", e);
                         }
                     });
-
-            Log.d(TAG, "FileManagerFragment: File picker launcher initialized.");
 
             // Register photo picker launcher (for Android 13+)
             photoPickerLauncher = registerForActivityResult(
@@ -97,14 +99,12 @@ public class FileManagerFragment extends Fragment {
                             } else {
                                 Log.w(TAG, "FileManagerFragment: No photos selected.");
                                 Toast.makeText(requireContext(), "No images selected", Toast.LENGTH_SHORT).show();
+                                requireActivity().finish();
                             }
                         } catch (Exception e) {
                             Log.e(TAG, "FileManagerFragment: Error handling photo picker result.", e);
                         }
                     });
-
-            Log.d(TAG, "FileManagerFragment: Photo picker launcher initialized.");
-            Log.d(TAG, "FileManagerFragment: onCreate completed.");
 
         } catch (Exception e) {
             Log.e(TAG, "FileManagerFragment: Error during onCreate.", e);
@@ -123,15 +123,6 @@ public class FileManagerFragment extends Fragment {
     public void onViewCreated(@NonNull android.view.View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "File manager fragment 3.");
-
-        // Add custom back press handling logic for fragment navigation
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                setEnabled(false); // Disable this callback to prevent recursion
-                requireActivity().getOnBackPressedDispatcher().onBackPressed();
-            }
-        });
 
         // Observe the source type and launch appropriate picker
         coreViewModel.getSourceType().observe(getViewLifecycleOwner(), sourceType -> {
@@ -195,38 +186,23 @@ public class FileManagerFragment extends Fragment {
     }
 
     private void handleSelectedFile(@NonNull Uri fileUri) {
-        try {
-            String fileName = getFileName(fileUri);
-            if (fileName != null) {
-                coreViewModel.addSelectedFile(fileUri, fileName);
-                Log.d(TAG, "File selected: " + fileName);
-            } else {
-                Toast.makeText(requireContext(), "Unable to determine file name", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Error processing file: ", e);
-        }
-    }
-
-    private String getFileName(@NonNull Uri uri) {
-        String fileName = null;
-        if ("content".equals(uri.getScheme())) {
-            try (Cursor cursor = requireContext().getContentResolver().query(uri, null, null, null, null)) {
-                if (cursor != null && cursor.moveToFirst()) {
-                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                    if (nameIndex != -1) {
-                        fileName = cursor.getString(nameIndex);
-                    }
+        String actionType = coreViewModel.getActionType().getValue();
+        if(Objects.equals(actionType, "sharefile")){
+            FileUtils.processFileForSharing(requireContext(), fileUri, coreViewModel);
+        } else {
+            try {
+                String fileName = FileUtils.getFileNameFromUri(requireContext(),fileUri);
+                if (fileName != null) {
+                    coreViewModel.addSelectedFile(fileUri, fileName);
+                    Log.d(TAG, "File selected: " + fileName);
+                } else {
+                    Toast.makeText(requireContext(), "Unable to determine file name", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
-                Log.e(TAG, "Error retrieving file name", e);
+                Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error processing file: ", e);
             }
         }
-        if (fileName == null) {
-            fileName = uri.getLastPathSegment();
-        }
-        return fileName;
     }
 
     @Override

@@ -43,11 +43,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Additional Activities -->
-        <activity
-            android:name="com.rvoc.cvorapp.ui.activities.sharehistory.ShareHistoryActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme" />
         <activity
             android:name="com.rvoc.cvorapp.ui.activities.core.CoreActivity"
             android:exported="false"
@@ -58,8 +53,12 @@
             android:theme="@style/AppTheme" />
 
         <activity
+            android:name="com.rvoc.cvorapp.ui.activities.core.CustomUCropActivity"
+            android:theme="@style/AppTheme"/>
+
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
 
         <!-- FileProvider -->
         <provider
@@ -71,6 +70,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 </manifest>
