@@ -30,6 +30,11 @@
     <string name="file_name">File Name</string>
     <string name="refer">Refer</string>
     <string name="share_history">Share history</string>
+    <string name="share_history_body">Below is the history of all the files you have shared via CVOR. You can filter the history below.</string>
+    <string name="sharehistory_hint">Search by file name, date, organisation</string>
+    <string name="from_date_picker">From</string>
+    <string name="to_date_picker">To</string>
+    <string name="filter_dropdown">Filters ▼</string>
     <string name="whatsnew">Whats New</string>
     <string name="settings">Settings</string>
     <string name="cancel">Cancel</string>

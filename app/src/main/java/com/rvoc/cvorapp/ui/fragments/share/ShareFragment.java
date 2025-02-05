@@ -56,7 +56,7 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == android.app.Activity.RESULT_OK) {
                     Log.d(TAG, "Share fragment 5.");
-                    navigateToWhatsNew();
+                    navigateToShareHistory();
                 }
             });
 
@@ -186,8 +186,8 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         shareLauncher.launch(chooser);
     }
 
-    private void navigateToWhatsNew() {
-        coreViewModel.setNavigationEvent("navigate_to_whatsnew");
+    private void navigateToShareHistory() {
+        coreViewModel.setNavigationEvent("navigate_to_sharehistory");
     }
 
     /**

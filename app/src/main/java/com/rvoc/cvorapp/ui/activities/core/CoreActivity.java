@@ -134,8 +134,8 @@ public class CoreActivity extends AppCompatActivity {
                         navToShare();
                         break;
 
-                    case "navigate_to_whatsnew":
-                        navToWhatsNew();
+                    case "navigate_to_sharehistory":
+                        navToShareHistory();
                         break;
 
                     default:
@@ -323,11 +323,11 @@ public class CoreActivity extends AppCompatActivity {
      * Navigate to Whats New Fragment from ShareFragment.
      */
 
-    private void navToWhatsNew() {
+    private void navToShareHistory() {
         try {
             Intent intent = new Intent(this, HomeActivity.class);
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("app://cvorapp/whatsnew"));
+            intent.setData(Uri.parse("app://cvorapp/sharehistory"));
             startActivity(intent);
             finish();
         } catch (Exception e) {

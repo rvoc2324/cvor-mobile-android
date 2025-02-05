@@ -13,8 +13,9 @@ public class ShareHistory {
     private String fileName;
     private Date sharedDate;
     private String shareMedium;
-    private String sharedWith; // New field
-    private String purpose;    // New field
+    private String sharedWith;
+    private String purpose;
+
     // private String additionalDetails;
 
     public ShareHistory(String fileName, Date sharedDate, String shareMedium, String sharedWith, String purpose) {
@@ -74,6 +75,7 @@ public class ShareHistory {
     public void setPurpose(String purpose) {
         this.purpose = purpose;
     }
+
     /*
     public String getAdditionalDetails() {
         return additionalDetails;

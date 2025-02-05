@@ -369,6 +369,7 @@ public class CameraFragment extends Fragment {
         UCrop.Options options = new UCrop.Options();
         options.setCompressionQuality(90); // Set compression quality (0-100)
         options.setToolbarTitle("Crop Image");
+        options.setFreeStyleCropEnabled(true);
         options.setToolbarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary)); // Customize toolbar color
         options.setStatusBarColor(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)); // Customize status bar color
         options.setToolbarWidgetColor(ContextCompat.getColor(requireContext(), R.color.text)); // Customize active widget color

@@ -1,16 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_primary">
+    android:background="@drawable/gradient_primary"
+    android:paddingTop="50dp">
 
-    <!-- Placeholder Message -->
-    <TextView
-        android:id="@+id/placeholder_message"
-        android:layout_width="wrap_content"
+    <!-- Title Background Container for Elevated Effect -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/title_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="This feature is coming soon!"
-        android:textSize="20sp"
-        android:textColor="@color/text" />
-</FrameLayout>
+        android:layout_marginBottom="4dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="16dp"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/body_container">
+
+        <!-- Title Text -->
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/share_history"
+            android:letterSpacing="0.1"
+            style="@style/TextStyle.SubTitle"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textAlignment="viewStart"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Body Container containing Filter Toggle, Search Box, and Date Pickers -->
+    <LinearLayout
+        android:id="@+id/body_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/title_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/card_container">
+
+        <!-- Body Text -->
+        <TextView
+            android:id="@+id/body_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/share_history_body"
+            android:letterSpacing="0.1"
+            style="@style/TextStyle.Body"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textAlignment="viewStart" />
+
+        <!-- Filter Toggle -->
+        <TextView
+            android:id="@+id/filterToggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_dropdown"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:padding="12dp"
+            android:gravity="center_vertical"
+            android:drawablePadding="8dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Collapsible Filter Container (Initially Gone) -->
+        <LinearLayout
+            android:id="@+id/filterContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:visibility="gone">
+
+            <!-- Search Box -->
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/search_box"
+                style="@style/TextInputHintStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/inputBox"
+                android:hint="@string/sharehistory_hint"
+                android:padding="10dp"
+                android:textColor="@color/text" />
+
+            <!-- From & To Date Pickers (Stacked) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
+
+                <!-- From Date -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fromDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/fragment2Background"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="@string/to_date_picker"
+                        android:textColor="@color/text" />
+                </LinearLayout>
+
+                <!-- Spacer Between From & To -->
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="match_parent" />
+
+                <!-- To Date -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/toDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/fragment2Background"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="@string/to_date_picker"
+                        android:textColor="@color/text" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <!-- CardView containing RecyclerView -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@id/body_container"
+        app:layout_constraintBottom_toTopOf="@id/button_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Button Container containing Home Button -->
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/home_button"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            style="@style/PrimaryButtonStyle"
+            android:text="@string/home"
+            app:cornerRadius="12dp"
+            android:gravity="center"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

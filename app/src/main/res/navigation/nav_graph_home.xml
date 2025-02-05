@@ -54,6 +54,8 @@
         android:name="com.rvoc.cvorapp.ui.fragments.sharehistory.ShareHistoryFragment"
         android:label="Share History Fragment"
         tools:layout="@layout/fragment_share_history">
+        <deepLink
+            app:uri="app://cvorapp/sharehistory" />
         <action
             android:id="@+id/action_shareHistoryFragment_to_homeFragment"
             app:destination="@id/nav_home" />

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@color/fragment1Background">
+
+    <!-- File Name (Larger Font) -->
+    <TextView
+        android:id="@+id/fileName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/shareMedium"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Document.pdf" />
+
+    <!-- Shared With -->
+    <TextView
+        android:id="@+id/sharedWith"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="14sp"
+        android:textColor="@color/text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/shareMedium"
+        app:layout_constraintTop_toBottomOf="@id/fileName"
+        tools:text="Shared with: John Doe" />
+
+    <!-- Purpose -->
+    <TextView
+        android:id="@+id/purpose"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="14sp"
+        android:textColor="@color/text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/shareMedium"
+        app:layout_constraintTop_toBottomOf="@id/sharedWith"
+        tools:text="Purpose: Business" />
+
+    <!-- Share Medium Logo
+    <ImageView
+        android:id="@+id/ivShareMedium"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_pdf" /> -->
+
+    <!-- Share Medium Logo -->
+<TextView
+    android:id="@+id/shareMedium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:textSize="16sp"
+    android:textStyle="italic"
+    android:textColor="@color/text"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="Whatsapp" />
+
+    <!-- Shared Date -->
+    <TextView
+        android:id="@+id/sharedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:textColor="@color/text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shareMedium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Jan 25, 2025" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
