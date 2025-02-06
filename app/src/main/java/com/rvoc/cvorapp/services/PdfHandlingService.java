@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import com.tom_roush.pdfbox.io.MemoryUsageSetting;
 import com.tom_roush.pdfbox.multipdf.PDFMergerUtility;
@@ -159,11 +160,11 @@ public class PdfHandlingService {
     }
 
     // Decrypt a PDF document if it's password-protected
-    public PDDocument decryptPDF(@NonNull InputStream inputStream) throws Exception {
+    public Uri decryptPDF(@NonNull Activity activity, @NonNull InputStream inputStream) throws Exception {
         PDDocument document = null;
 
         while (document == null) {
-            String password = promptForPassword();
+            String password = promptForPassword(activity);
 
             if (password == null) {
                 // User canceled, destroy the activity and notify them
@@ -173,7 +174,7 @@ public class PdfHandlingService {
                     );
                     ((Activity) context).finish();
                 }
-                throw new IOException("User canceled password entry.");
+                throw new IOException("User canceled password prompt.");
             }
 
             try {
@@ -184,23 +185,28 @@ public class PdfHandlingService {
             } catch (IOException e) {
                 // Handle incorrect password
                 if (e.getMessage() != null && e.getMessage().contains("password")) {
-                    showToast();
+                    showToast(activity);
                 } else {
                     throw new IOException("Failed to decrypt PDF.", e);
                 }
             }
         }
-        return document;
+        try {
+
+            File decryptedFile = new File(context.getCacheDir(), "decrypted_" + System.currentTimeMillis() + ".pdf");
+            document.save(decryptedFile);
+
+            return FileProvider.getUriForFile(context, "com.rvoc.cvorapp.fileprovider", decryptedFile);
+        } catch (IOException e) {
+            Log.e(TAG, "Error saving decrypted PDF", e);
+            return null;
+        }
     }
 
     // Password prompt
-    private String promptForPassword() {
+    private String promptForPassword(@NonNull Activity activity) {
         final String[] password = new String[1];
         final CountDownLatch latch = new CountDownLatch(1);
-
-        if (!(context instanceof Activity activity)) {
-            throw new IllegalStateException("Context must be an Activity to show a dialog.");
-        }
 
         activity.runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -235,12 +241,10 @@ public class PdfHandlingService {
     }
 
     // Helper to show a toast
-    private void showToast() {
-        if (context instanceof Activity) {
-            ((Activity) context).runOnUiThread(() ->
-                    Toast.makeText(context, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
-            );
-        }
+    private void showToast(@NonNull Activity activity) {
+        activity.runOnUiThread(() ->
+                Toast.makeText(context, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
+        );
     }
 
     // Helper to read InputStream into a byte array

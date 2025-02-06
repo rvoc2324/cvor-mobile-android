@@ -9,15 +9,16 @@ import com.rvoc.cvorapp.models.ShareHistory;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class ShareHistoryRepository {
 
     private final ShareHistoryDao shareHistoryDao;
 
     @Inject
-    public ShareHistoryRepository(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
-        this.shareHistoryDao = database.shareHistoryDao();
+    public ShareHistoryRepository(ShareHistoryDao shareHistoryDao) {
+        this.shareHistoryDao = shareHistoryDao;
     }
 
     public void insertShareHistory(ShareHistory shareHistory) {

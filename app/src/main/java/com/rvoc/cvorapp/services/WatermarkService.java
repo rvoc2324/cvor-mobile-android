@@ -60,16 +60,33 @@ public class WatermarkService {
         fontSize = (fontSize != null) ? fontSize : 18; // Default text size to 18
         boolean repeatWatermark = (repeat != null) ? repeat : true; // Default to repeat
 
+        int maxWidth = 1500; // Target width
+        int maxHeight = 1500; // Target height
+
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputUri)) {
             Bitmap originalBitmap = android.graphics.BitmapFactory.decodeStream(inputStream);
+
+            int originalWidth = originalBitmap.getWidth();
+            int originalHeight = originalBitmap.getHeight();
+
+            float scale = Math.min((float) maxWidth / originalWidth, (float) maxHeight / originalHeight);
+
+            if (scale < 1) { // Resize only if the image is large
+                int newWidth = Math.round(originalWidth * scale);
+                int newHeight = Math.round(originalHeight * scale);
+                originalBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
+            }
 
             // Create a mutable bitmap to draw the watermark
             Bitmap watermarkedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
             Canvas canvas = new Canvas(watermarkedBitmap);
 
+            int watermarkColour = getWatermarkColour(watermarkedBitmap);
+
             // Set up paint for watermark text
             Paint paint = new Paint();
-            paint.setColor(Color.BLACK);
+            paint.setColor(watermarkColour);
+            //paint.setColor(Color.BLACK);
             paint.setAlpha((opacity * 255) / 100); // Opacity from 0 to 255
             paint.setTextSize(fontSize);
             paint.setAntiAlias(true);
@@ -106,7 +123,7 @@ public class WatermarkService {
 
             // Save the watermarked bitmap to file
             try (FileOutputStream out = new FileOutputStream(outputFile)) {
-                watermarkedBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                watermarkedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, out);
                 Log.d(TAG, "Watermark service completed successfully.");
                 Log.d(TAG, "Watermark service 3.");
             }
@@ -203,4 +220,37 @@ public class WatermarkService {
 
         return outputFile;
     }
+
+    private int getWatermarkColour(Bitmap bitmap) {
+        long totalBrightness = 0;
+        int avgBrightness;
+        int watermarkColor;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int totalPixels = width * height;
+
+        // Sample every 10th pixel to speed up processing
+        for (int y = 0; y < height; y += 10) {
+            for (int x = 0; x < width; x += 10) {
+                int pixel = bitmap.getPixel(x, y);
+                int red = Color.red(pixel);
+                int green = Color.green(pixel);
+                int blue = Color.blue(pixel);
+                int brightness = (red + green + blue) / 3; // Average brightness per pixel
+                totalBrightness += brightness;
+            }
+        }
+        avgBrightness = (int) (totalBrightness / (totalPixels / 100)); // Get the average brightness
+
+        if (avgBrightness > 180) {  // Very bright image
+            watermarkColor = Color.rgb(68, 68, 68); // Dark gray (#444444)
+        } else if (avgBrightness > 100) {  // Medium brightness (multi-color)
+            watermarkColor = Color.rgb(136, 136, 136); // Neutral gray (#888888)
+        } else {  // Dark image
+            watermarkColor = Color.rgb(221, 221, 221); // Light gray (#DDDDDD)
+        }
+
+        return watermarkColor;
+    }
+
 }

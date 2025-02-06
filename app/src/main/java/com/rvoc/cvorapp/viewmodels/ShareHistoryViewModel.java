@@ -15,6 +15,9 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class ShareHistoryViewModel extends ViewModel {
     private final ShareHistoryRepository repository;
     private final MutableLiveData<List<ShareHistory>> shareHistoryLiveData = new MutableLiveData<>();

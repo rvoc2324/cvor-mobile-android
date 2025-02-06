@@ -14,6 +14,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.FragmentHomeBinding;
 import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
+import com.rvoc.cvorapp.utils.CleanupCache; // Ensure to import your CleanupCache utility
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomeFragment extends Fragment {
 
@@ -43,14 +47,25 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Trigger cache cleanup in a background thread
+        cleanupCacheInBackground();
+
         setupListeners();
+    }
+
+    /**
+     * Run cache cleanup on a background thread
+     */
+    private void cleanupCacheInBackground() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> CleanupCache.cleanUp(requireContext()));
+        executor.shutdown(); // Shut down after execution
     }
 
     /**
      * Set up click listeners for buttons in HomeFragment
      */
     private void setupListeners() {
-
         binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark"));
         binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));

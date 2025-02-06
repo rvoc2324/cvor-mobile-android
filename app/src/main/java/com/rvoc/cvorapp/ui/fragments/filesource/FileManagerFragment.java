@@ -1,5 +1,6 @@
 package com.rvoc.cvorapp.ui.fragments.filesource;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,13 +20,20 @@ import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.services.PdfHandlingService;
 import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
+import com.tom_roush.pdfbox.pdmodel.encryption.InvalidPasswordException;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -63,13 +71,13 @@ public class FileManagerFragment extends Fragment {
                                     int itemCount = data.getClipData().getItemCount();
                                     for (int i = 0; i < itemCount; i++) {
                                         Uri fileUri = data.getClipData().getItemAt(i).getUri();
-                                        handleSelectedFile(fileUri);
+                                        handleSelectedPDFFile(fileUri);
                                         Log.d(TAG, "FileManagerFragment: File processed: " + fileUri);
                                     }
                                     Toast.makeText(requireContext(), itemCount + " files selected", Toast.LENGTH_SHORT).show();
                                 } else if (data.getData() != null) {
                                     Log.d(TAG, "FileManagerFragment: Single file selected.");
-                                    handleSelectedFile(data.getData());
+                                    handleSelectedPDFFile(data.getData());
                                     Toast.makeText(requireContext(), "1 file selected", Toast.LENGTH_SHORT).show();
                                 }
                                 coreViewModel.setNavigationEvent("navigate_to_action");
@@ -92,7 +100,7 @@ public class FileManagerFragment extends Fragment {
                             if (uris != null && !uris.isEmpty()) {
                                 Log.d(TAG, "FileManagerFragment: Photos selected: " + uris.size());
                                 for (Uri uri : uris) {
-                                    handleSelectedFile(uri);
+                                    handleSelectedImageFile(uri);
                                     Log.d(TAG, "FileManagerFragment: Photo processed: " + uri);
                                 }
                                 coreViewModel.setNavigationEvent("navigate_to_action");
@@ -185,7 +193,7 @@ public class FileManagerFragment extends Fragment {
         }
     }
 
-    private void handleSelectedFile(@NonNull Uri fileUri) {
+    private void handleSelectedImageFile(@NonNull Uri fileUri) {
         String actionType = coreViewModel.getActionType().getValue();
         if(Objects.equals(actionType, "sharefile")){
             FileUtils.processFileForSharing(requireContext(), fileUri, coreViewModel);
@@ -202,6 +210,68 @@ public class FileManagerFragment extends Fragment {
                 Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Error processing file: ", e);
             }
+        }
+    }
+
+    private void handleSelectedPDFFile(@NonNull Uri fileUri) {
+        String actionType = coreViewModel.getActionType().getValue();
+        if (Objects.equals(actionType, "sharefile")) {
+            FileUtils.processFileForSharing(requireContext(), fileUri, coreViewModel);
+            return;
+        }
+
+        PdfHandlingService pdfService = new PdfHandlingService(requireContext());
+
+        try (InputStream inputStream = requireContext().getContentResolver().openInputStream(fileUri)) {
+            if (inputStream == null) {
+                Toast.makeText(requireContext(), "Failed to open file", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                // Try to load the document normally
+                PDDocument document = PDDocument.load(inputStream);
+                document.close(); // Close the document after checking encryption status
+
+                // If it loads without issues, it’s not encrypted
+                addFileToViewModel(fileUri);
+            } catch (InvalidPasswordException e) {
+                // This means the PDF is encrypted
+                Log.d(TAG, "PDF is encrypted, prompting for password...");
+
+                try (InputStream encryptedStream = requireContext().getContentResolver().openInputStream(fileUri)) {
+                    if (encryptedStream == null) {
+                        Toast.makeText(requireContext(), "Failed to open encrypted file", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Uri decryptedFileUri = pdfService.decryptPDF(requireActivity(), encryptedStream);
+
+
+                    if (decryptedFileUri != null) {
+                        addFileToViewModel(decryptedFileUri); // Use decrypted file
+                    } else {
+                        Log.e(TAG, "Failed to save decrypted PDF");
+                        Toast.makeText(requireContext(), "Unable to decrypt document.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error loading PDF, possibly corrupted", e);
+                Toast.makeText(requireContext(), "Failed to open document. It may be corrupted or unsupported.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error processing file: ", e);
+        }
+    }
+
+    private void addFileToViewModel(@NonNull Uri fileUri) {
+        String fileName = FileUtils.getFileNameFromUri(requireContext(), fileUri);
+        if (fileName != null) {
+            coreViewModel.addSelectedFile(fileUri, fileName);
+            Log.d(TAG, "File selected: " + fileName);
+        } else {
+            Toast.makeText(requireContext(), "Unable to determine file name", Toast.LENGTH_SHORT).show();
         }
     }
 
