@@ -63,19 +63,28 @@ public class ShareHistoryFragment extends Fragment {
         setupDateFilters();
         setupObservers();
 
-        // Hide bottom navigation
-        if (getActivity() != null) {
-            BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_navigation);
-            if (bottomNav != null) {
-                bottomNav.setVisibility(View.GONE);
-            }
-        }
-
         // Home Button Click
         binding.homeButton.setOnClickListener(v -> {
             Log.d(TAG, "Home button clicked.");
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_shareHistoryFragment_to_homeFragment);
+        });
+
+        binding.filterToggle.setOnClickListener(v -> {
+            if (binding.filterContainer.getVisibility() == View.VISIBLE) {
+                binding.filterContainer.animate()
+                        .alpha(0f)
+                        .setDuration(200)
+                        .withEndAction(() -> binding.filterContainer.setVisibility(View.GONE))
+                        .start();
+            } else {
+                binding.filterContainer.setAlpha(0f);
+                binding.filterContainer.setVisibility(View.VISIBLE);
+                binding.filterContainer.animate()
+                        .alpha(1f)
+                        .setDuration(200)
+                        .start();
+            }
         });
 
         // Load full share history initially
@@ -145,12 +154,6 @@ public class ShareHistoryFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (getActivity() != null) {
-            BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_navigation);
-            if (bottomNav != null) {
-                bottomNav.setVisibility(View.VISIBLE);
-            }
-        }
         binding = null;
     }
 }

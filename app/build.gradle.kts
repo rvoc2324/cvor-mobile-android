@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.cardView)
     // implementation(libs.git.repo)
+    implementation(libs.concurrent.futures)
+    implementation(libs.guava)
 
     // Lifecycle Components
     implementation(libs.lifecycle.runtime.ktx)
@@ -92,8 +94,11 @@ dependencies {
     // Image loading/caching libraries
     implementation(libs.glide)
     implementation(libs.ucrop)
-    // implementation(libs.core)
+    implementation(libs.photoView)
     ksp(libs.glide.compiler)
+
+    // Ad libraries
+    // implementation(libs.adMob)
 
     // Room Database
     implementation(libs.room.runtime)

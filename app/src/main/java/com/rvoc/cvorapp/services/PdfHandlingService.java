@@ -3,6 +3,7 @@ package com.rvoc.cvorapp.services;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.InputType;
 import android.util.Log;
@@ -11,14 +12,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+import androidx.core.util.Consumer;
 
+import com.rvoc.cvorapp.utils.FileUtils;
 import com.tom_roush.pdfbox.io.MemoryUsageSetting;
 import com.tom_roush.pdfbox.multipdf.PDFMergerUtility;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.PDPage;
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
 import com.tom_roush.pdfbox.pdmodel.common.PDRectangle;
+import com.tom_roush.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import com.tom_roush.pdfbox.rendering.PDFRenderer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,7 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -46,6 +51,11 @@ public class PdfHandlingService {
     @Inject
     public PdfHandlingService(@ApplicationContext Context context) {
         this.context = context;
+    }
+
+    public interface PasswordCallback {
+        void onPasswordEntered(@NonNull Uri decryptedUri);
+        void onPasswordCancelled();
     }
 
     // Combine multiple PDFs into one
@@ -120,7 +130,7 @@ public class PdfHandlingService {
     }
 
     // Split a pdf file
-    public static List<File> splitPDF(@NonNull Context context, @NonNull Uri inputFileUri, @NonNull File outputDir) throws Exception {
+    public List<File> splitPDF(@NonNull Uri inputFileUri, @NonNull File outputDir) throws Exception {
         List<File> splitFiles = new ArrayList<>();
 
         // Ensure output directory exists
@@ -159,89 +169,109 @@ public class PdfHandlingService {
         return splitFiles;
     }
 
-    // Decrypt a PDF document if it's password-protected
-    public Uri decryptPDF(@NonNull Activity activity, @NonNull InputStream inputStream) throws Exception {
-        PDDocument document = null;
+    // Compress a PDF file
+    public File compressPDF(@NonNull Uri inputFileUri, @NonNull File outputFile, Integer dpi) throws Exception {
+        Log.d(TAG, "Starting PDF compression...");
 
-        while (document == null) {
-            String password = promptForPassword(activity);
+        try (InputStream inputStream = context.getContentResolver().openInputStream(inputFileUri);
+             PDDocument document = PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly())) {
 
-            if (password == null) {
-                // User canceled, destroy the activity and notify them
-                if (context instanceof Activity) {
-                    ((Activity) context).runOnUiThread(() ->
-                            Toast.makeText(context, "Password is required to proceed.", Toast.LENGTH_SHORT).show()
-                    );
-                    ((Activity) context).finish();
-                }
-                throw new IOException("User canceled password prompt.");
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+            PDDocument compressedDoc = new PDDocument();
+
+            for (int i = 0; i < document.getNumberOfPages(); i++) {
+                PDPage page = document.getPage(i);
+                dpi = (dpi != null) ? dpi : 100; // Adjust DPI for compression (Lower DPI = more compression); (70 to 300)
+                float imageQuality;
+
+                imageQuality = (dpi < 100) ? 0.4f : (dpi < 150) ? 0.7f : 0.8f;
+
+                // Render page to Bitmap
+                Bitmap renderedImage = pdfRenderer.renderImage(i, dpi / 72.0f);
+
+                // Create new compressed page
+                PDPage newPage = new PDPage(page.getMediaBox());
+                compressedDoc.addPage(newPage);
+
+                // Convert Bitmap to compressed JPEG and add it to new document
+                PDPageContentStream contentStream = new PDPageContentStream(compressedDoc, newPage);
+                contentStream.drawImage(JPEGFactory.createFromImage(compressedDoc, renderedImage, imageQuality), 0, 0);
+                contentStream.close();
             }
 
-            try {
-                document = PDDocument.load(inputStream, password);
-                if (document.isEncrypted()) {
-                    document.setAllSecurityToBeRemoved(true);
-                }
-            } catch (IOException e) {
-                // Handle incorrect password
-                if (e.getMessage() != null && e.getMessage().contains("password")) {
-                    showToast(activity);
-                } else {
-                    throw new IOException("Failed to decrypt PDF.", e);
-                }
-            }
-        }
-        try {
+            // Optimize PDF & remove metadata
+            compressedDoc.setAllSecurityToBeRemoved(true);
+            compressedDoc.save(new FileOutputStream(outputFile));
+            compressedDoc.close();
 
-            File decryptedFile = new File(context.getCacheDir(), "decrypted_" + System.currentTimeMillis() + ".pdf");
-            document.save(decryptedFile);
-
-            return FileProvider.getUriForFile(context, "com.rvoc.cvorapp.fileprovider", decryptedFile);
-        } catch (IOException e) {
-            Log.e(TAG, "Error saving decrypted PDF", e);
-            return null;
+            Log.d(TAG, "PDF compression complete. Saved at: " + outputFile.getAbsolutePath());
+            return outputFile;
         }
     }
 
-    // Password prompt
-    private String promptForPassword(@NonNull Activity activity) {
-        final String[] password = new String[1];
-        final CountDownLatch latch = new CountDownLatch(1);
+    // Decrypt a PDF document if it's password-protected
+    public void decryptPDF(@NonNull Uri fileUri, @NonNull Activity activity, @NonNull PasswordCallback callback) {
+        requestPassword(activity, fileUri, password -> {
+            if (password == null || password.isEmpty()) {
+                Log.d(TAG, "PDF Decryption 1: User cancelled password entry.");
+                callback.onPasswordCancelled();
+                return;
+            }
 
+            try (InputStream inputStream = context.getContentResolver().openInputStream(fileUri);
+                 PDDocument document = PDDocument.load(inputStream, password)) {
+
+                Log.d(TAG, "PDF Decryption 2: Document opened with password.");
+
+                document.setAllSecurityToBeRemoved(true);
+                // Save the decrypted PDF
+                File decryptedFile = new File(context.getCacheDir(), "decrypted_" + System.currentTimeMillis() + ".pdf");
+                document.save(decryptedFile);
+                document.close();
+
+                // Return the result via callback
+                Uri decryptedUri = FileProvider.getUriForFile(context, "com.rvoc.cvorapp.fileprovider", decryptedFile);
+                callback.onPasswordEntered(decryptedUri);
+                Log.d(TAG, "PDF Decryption 3: Decryption successful.");
+
+            } catch (InvalidPasswordException e) {
+                Log.e(TAG, "PDF decryption failed: Incorrect password.");
+                Toast.makeText(context, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show();
+                decryptPDF(fileUri, activity, callback);  // **Retry password entry**
+            } catch (IOException e) {
+                Log.e(TAG, "Error decrypting PDF", e);
+                callback.onPasswordCancelled();
+            }
+        });
+    }
+
+
+    private void requestPassword(@NonNull Activity activity, @NonNull Uri fileUri, @NonNull Consumer<String> passwordConsumer) {
+
+        String fileName = FileUtils.getFileNameFromUri(context, fileUri);
+        Log.d(TAG, "PDF Decryption 4.");
         activity.runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Your file is password protected, enter password to continue.");
+            builder.setTitle("Enter Password for: " + fileName);
 
-            // Add an EditText to the dialog
             final EditText input = new EditText(activity);
             input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             builder.setView(input);
+            Log.d(TAG, "PDF Decryption 5.");
 
-            builder.setPositiveButton("OK", (dialog, which) -> {
-                password[0] = input.getText().toString();
-                latch.countDown(); // Release the latch
-            });
-            builder.setNegativeButton("Cancel", (dialog, which) -> {
-                password[0] = null; // User canceled
-                latch.countDown(); // Release the latch
-            });
+            builder.setPositiveButton("OK", (dialog, which) -> passwordConsumer.accept(input.getText().toString()));
+            builder.setNegativeButton("Cancel", (dialog, which) -> passwordConsumer.accept(null));
+            Log.d(TAG, "PDF Decryption 6.");
 
-            builder.setCancelable(false); // Ensure the dialog cannot be dismissed by clicking outside
+            builder.setCancelable(false);
             builder.show();
+            Log.d(TAG, "PDF Decryption 8.");
         });
-
-        try {
-            latch.await(); // Wait until the user responds
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return null;
-        }
-
-        return password[0];
     }
 
     // Helper to show a toast
     private void showToast(@NonNull Activity activity) {
+        Log.d(TAG, "PDF Decryption 16.");
         activity.runOnUiThread(() ->
                 Toast.makeText(context, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
         );

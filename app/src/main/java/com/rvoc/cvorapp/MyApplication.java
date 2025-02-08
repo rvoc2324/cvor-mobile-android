@@ -56,6 +56,15 @@ public class MyApplication extends Application {
         pdfBoxInitialiser.initialise();
 
         /*
+        // Initialising Ads display across the app
+        new Thread(
+                () -> {
+                    // Initialize the Google Mobile Ads SDK on a background thread.
+                    MobileAds.initialize(this, initializationStatus -> {});
+                })
+                .start(); */
+
+        /*
         // OpenCV initialisation for Edge detection and other image manipulation
         if (!OpenCVLoader.initLocal()) {
             Log.e("OpenCV", "Initialization failed!");

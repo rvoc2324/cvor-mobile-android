@@ -71,9 +71,12 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
 
         // Initialize ShareResultReceiver and pass the callback to it
         shareResultReceiver = new ShareResultReceiver();
-        shareResultFilter = new IntentFilter("com.rvoc.cvorapp.SHARE_RESULT");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireContext().registerReceiver(shareResultReceiver, shareResultFilter, Context.RECEIVER_NOT_EXPORTED);
+            requireContext().registerReceiver(
+                    shareResultReceiver,
+                    new IntentFilter(Intent.ACTION_CHOOSER),
+                    Context.RECEIVER_EXPORTED
+            );
         }
 
         // Set the callback
@@ -181,7 +184,7 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         );
 
         Intent chooser = Intent.createChooser(shareIntent, "Share via");
-        chooser.putExtra(Intent.EXTRA_CHOOSER_TARGETS, new IntentSender[]{pendingIntent.getIntentSender()});
+        chooser.putExtra(Intent.EXTRA_CHOSEN_COMPONENT_INTENT_SENDER, pendingIntent.getIntentSender());
 
         shareLauncher.launch(chooser);
     }
@@ -207,7 +210,7 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        ShareResultReceiver.setCallback(null);
         // Set the binding to null to avoid memory leaks
         if (binding != null) {
             binding = null; // Avoid memory leaks

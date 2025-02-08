@@ -73,7 +73,8 @@ public class WatermarkFragment extends Fragment {
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         // Bind UI components through ViewBinding
-        binding.inputRepeat.setChecked(true);
+        binding.gridCheck.setChecked(true);
+        binding.singleCheck.setChecked(false);
         binding.previewButton.setEnabled(false);
         binding.textOpacity.setText(getString(R.string.opacity_text, 40));
         binding.textFontSize.setText(getString(R.string.fontsize_text,18));
@@ -119,7 +120,23 @@ public class WatermarkFragment extends Fragment {
             }
         });
 
-        binding.inputRepeat.setOnCheckedChangeListener((buttonView, isChecked) -> updateWatermarkViewModel());
+        binding.gridCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // If gridCheck is checked, uncheck singleCheck
+            if (isChecked) {
+                binding.singleCheck.setChecked(false);
+            }
+            // Call your method to update watermark model
+            updateWatermarkViewModel();
+        });
+
+        binding.singleCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // If singleCheck is checked, uncheck gridCheck
+            if (isChecked) {
+                binding.gridCheck.setChecked(false);
+            }
+            // Call your method to update watermark model
+            updateWatermarkViewModel();
+        });
 
         binding.seekBarOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -159,7 +176,6 @@ public class WatermarkFragment extends Fragment {
             }
         });
 
-
         // Handle Preview Button click
         binding.previewButton.setOnClickListener(v -> handlePreviewClick());
 
@@ -176,7 +192,8 @@ public class WatermarkFragment extends Fragment {
     private void updateWatermarkViewModel() {
         String shareWith = Objects.requireNonNull(binding.inputSharingWith.getText()).toString().trim();
         String purpose = Objects.requireNonNull(binding.inputPurpose.getText()).toString().trim();
-        boolean repeat = binding.inputRepeat.isChecked();
+        boolean gridCheckChecked = binding.gridCheck.isChecked();
+        // boolean singleCheckChecked = binding.singleCheck.isChecked();
         Integer opacity = binding.seekBarOpacity.getProgress();
         Integer fontSize = binding.seekBarFontSize.getProgress();
 
@@ -187,7 +204,9 @@ public class WatermarkFragment extends Fragment {
         String watermarkText = getString(R.string.text_watermark, shareWith, purposeText,
                 new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
 
-        watermarkViewModel.setInputs(shareWith, purpose, opacity, fontSize, repeat, watermarkText);
+        // Define repeat based on the logic
+
+        watermarkViewModel.setInputs(shareWith, purpose, opacity, fontSize, gridCheckChecked, watermarkText);
         // validateInputs();
     }
 

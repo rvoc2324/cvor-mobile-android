@@ -149,17 +149,36 @@
 
                     </LinearLayout>
 
-                    <CheckBox
-                        android:id="@+id/input_repeat"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
                         android:layout_marginTop="16dp"
-                        android:buttonTint="@color/checkBoxColor"
-                        android:layout_gravity="center"
-                        android:checked="true"
-                        android:text="@string/repeat_watermark_check"
-                        android:textColor="@color/text" />
+                        android:weightSum="2">
 
+                        <CheckBox
+                            android:id="@+id/grid_check"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/checkBoxColor"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="@string/grid_watermark_check"
+                            android:textColor="@color/text" />
+
+                        <CheckBox
+                            android:id="@+id/single_check"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/checkBoxColor"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:checked="false"
+                            android:text="@string/single_watermark_check"
+                            android:textColor="@color/text" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

@@ -8,6 +8,8 @@ import android.util.Log;
 
 public class ShareResultReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "ShareResultReceiver";
+
     // Static callback interface
     public interface ShareResultCallback {
         void onShareResultReceived(String sharingApp);
@@ -24,18 +26,16 @@ public class ShareResultReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent == null) return;
 
-        // Check if the intent action is the chooser action
-        if (Intent.ACTION_CHOOSER.equals(intent.getAction())) {
-            ComponentName componentName = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
-            if (componentName != null) {
-                String sharingApp = componentName.getPackageName();
-                Log.d("ShareResultReceiver", "Chosen app: " + sharingApp);
+        // Extract the chosen component
+        ComponentName componentName = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);
+        if (componentName != null) {
+            String sharingApp = componentName.getPackageName();
+            Log.d(TAG, "Chosen app: " + sharingApp);
 
-                if (callback != null) {
-                    callback.onShareResultReceived(sharingApp);
-                }
+            // Notify the callback
+            if (callback != null) {
+                callback.onShareResultReceived(sharingApp);
             }
         }
     }
-
 }

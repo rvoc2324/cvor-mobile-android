@@ -1,4 +1,5 @@
 package com.rvoc.cvorapp.adapters;
+
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -74,6 +75,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .placeholder(R.drawable.ic_image) // Placeholder for loading
                     .error(R.drawable.baseline_error_24) // Error image
                     .into(binding.imageView);
+
             // Optional: Add click listener or additional logic
         }
     }
@@ -85,6 +87,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public void bind(File pdfFile) {
+            binding.pdfPagesRecyclerView.setAdapter(null);
             try {
                 PDDocument document = PDDocument.load(pdfFile);
                 PDFRenderer renderer = new PDFRenderer(document);

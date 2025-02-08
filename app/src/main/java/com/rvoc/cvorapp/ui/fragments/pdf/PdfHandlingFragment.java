@@ -168,6 +168,7 @@ public class PdfHandlingFragment extends Fragment {
             List<Uri> urisList = new ArrayList<>(selectedFiles.keySet());
             File processedFile;
             File outputFile;
+            List<File> outputFiles;
 
             try {
                 if ("combinepdf".equals(actionType)) {
@@ -178,7 +179,15 @@ public class PdfHandlingFragment extends Fragment {
                     String fileName = "CVOR_converted_" + System.currentTimeMillis() + ".pdf";
                     outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
-                } else {
+                } /*else if ("splitpdf".equals(actionType)) {
+                    String fileName = "CVOR_split_" + System.currentTimeMillis() + ".pdf";
+                    outputFiles = new File(requireContext().getCacheDir());
+                    processedFile = pdfHandlingService.splitPDF(uri, outputFiles);
+                } else if ("compresspdf".equals(actionType)) { // Need to add a way to capture dpi as user input and show pre and post compression file size in the file fragment
+                    String fileName = "CVOR_compressed_" + System.currentTimeMillis() + ".pdf";
+                    outputFile = new File(requireContext().getCacheDir(), fileName);
+                    processedFile = pdfHandlingService.compressPDF(uri, outputFile, dpi);
+                }*/ else {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
 

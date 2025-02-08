@@ -19,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class ShareHistoryViewModel extends ViewModel {
+
     private final ShareHistoryRepository repository;
     private final MutableLiveData<List<ShareHistory>> shareHistoryLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<ShareHistory>> filteredShareHistoryLiveData = new MutableLiveData<>();

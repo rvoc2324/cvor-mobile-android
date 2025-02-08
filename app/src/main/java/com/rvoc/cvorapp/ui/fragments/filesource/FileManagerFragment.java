@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -43,6 +45,9 @@ public class FileManagerFragment extends Fragment {
 
     private static final String TAG = "FileManagerFragment";
     private CoreViewModel coreViewModel;
+
+    @Inject
+    PdfHandlingService pdfHandlingService;
 
     // Launcher for file picker results
     private ActivityResultLauncher<Intent> filePickerLauncher;
@@ -220,8 +225,6 @@ public class FileManagerFragment extends Fragment {
             return;
         }
 
-        PdfHandlingService pdfService = new PdfHandlingService(requireContext());
-
         try (InputStream inputStream = requireContext().getContentResolver().openInputStream(fileUri)) {
             if (inputStream == null) {
                 Toast.makeText(requireContext(), "Failed to open file", Toast.LENGTH_SHORT).show();
@@ -229,39 +232,32 @@ public class FileManagerFragment extends Fragment {
             }
 
             try {
-                // Try to load the document normally
+                // Try loading the document
                 PDDocument document = PDDocument.load(inputStream);
-                document.close(); // Close the document after checking encryption status
+                document.close(); // No password needed
 
-                // If it loads without issues, it’s not encrypted
+                // If successful, add to ViewModel (not encrypted)
                 addFileToViewModel(fileUri);
             } catch (InvalidPasswordException e) {
-                // This means the PDF is encrypted
+                // The PDF is encrypted, handle password prompt and decryption
                 Log.d(TAG, "PDF is encrypted, prompting for password...");
 
-                try (InputStream encryptedStream = requireContext().getContentResolver().openInputStream(fileUri)) {
-                    if (encryptedStream == null) {
-                        Toast.makeText(requireContext(), "Failed to open encrypted file", Toast.LENGTH_SHORT).show();
-                        return;
+                pdfHandlingService.decryptPDF(fileUri, requireActivity(), new PdfHandlingService.PasswordCallback() {
+                    @Override
+                    public void onPasswordEntered(@NonNull Uri decryptedUri) {
+                        Log.d(TAG, "Decrypted PDF saved at: " + decryptedUri);
+                        addFileToViewModel(decryptedUri); // Use decrypted file
                     }
 
-                    Uri decryptedFileUri = pdfService.decryptPDF(requireActivity(), encryptedStream);
-
-
-                    if (decryptedFileUri != null) {
-                        addFileToViewModel(decryptedFileUri); // Use decrypted file
-                    } else {
-                        Log.e(TAG, "Failed to save decrypted PDF");
-                        Toast.makeText(requireContext(), "Unable to decrypt document.", Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onPasswordCancelled() {
+                        Toast.makeText(requireContext(), "Password entry cancelled.", Toast.LENGTH_SHORT).show();
                     }
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "Error loading PDF, possibly corrupted", e);
-                Toast.makeText(requireContext(), "Failed to open document. It may be corrupted or unsupported.", Toast.LENGTH_SHORT).show();
+                });
             }
-        } catch (Exception e) {
-            Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Error processing file: ", e);
+        } catch (IOException e) {
+            Log.e(TAG, "Error loading PDF, possibly corrupted", e);
+            Toast.makeText(requireContext(), "Failed to open document. It may be corrupted or unsupported.", Toast.LENGTH_SHORT).show();
         }
     }
 

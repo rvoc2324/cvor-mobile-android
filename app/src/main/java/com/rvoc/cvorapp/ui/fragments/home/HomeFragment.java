@@ -66,6 +66,8 @@ public class HomeFragment extends Fragment {
      * Set up click listeners for buttons in HomeFragment
      */
     private void setupListeners() {
+
+        // Without ad flow
         binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark"));
         binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
@@ -74,6 +76,18 @@ public class HomeFragment extends Fragment {
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_homeFragment_to_shareHistoryFragment);
         });
+
+        /*
+        // With ad flow
+        binding.btnAddWatermark.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark")); });
+        binding.btnShareFile.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile")); });
+        binding.btnCombinePdfs.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf")); });
+        binding.btnConvertToPdf.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf")); });
+        binding.btnShareHistory.setOnClickListener(v -> {
+            showInterstitialAd(() - >
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_homeFragment_to_shareHistoryFragment);
+        });*/
     }
 
     @Override

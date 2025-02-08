@@ -60,8 +60,8 @@ public class WatermarkService {
         fontSize = (fontSize != null) ? fontSize : 18; // Default text size to 18
         boolean repeatWatermark = (repeat != null) ? repeat : true; // Default to repeat
 
-        int maxWidth = 1500; // Target width
-        int maxHeight = 1500; // Target height
+        int maxWidth = 1024; // Target width
+        int maxHeight = 1024; // Target height
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputUri)) {
             Bitmap originalBitmap = android.graphics.BitmapFactory.decodeStream(inputStream);

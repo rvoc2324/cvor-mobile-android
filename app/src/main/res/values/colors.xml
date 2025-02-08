@@ -47,6 +47,7 @@
     <color name="white">#FFFFFF</color> <!-- Standard white -->
     <color name="black">#000000</color> <!-- Standard black -->
     <color name="grey">#74828F</color> <!-- Neutral gray -->
+    <color name="green">#32A237</color> <!-- Neutral gray -->
     <color name="transparent">#00FFFFFF</color>
     <color name="shine">#2B658B</color> <!-- Subtle, polished shine effect -->
     <color name="ripple">#33FFFFFF</color> <!-- Light ripple for contrast -->
