@@ -37,6 +37,7 @@ public class CoreViewModel extends AndroidViewModel {
     private final MutableLiveData<Map<Uri, String>> selectedFiles = new MutableLiveData<>(new HashMap<>());
     private final MutableLiveData<List<File>> processedFiles = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> actionType = new MutableLiveData<>("");
+    private final MutableLiveData<String> customFileName = new MutableLiveData<>("");
 
     // Navigation events (SingleLiveEvent recommended for one-time events)
     private final MutableLiveData<String> navigationEvent = new MutableLiveData<>(null);
@@ -49,14 +50,17 @@ public class CoreViewModel extends AndroidViewModel {
     }
 
     // Action Type
-    public void setActionType(String type) {
-
-        actionType.setValue(type);
-
-    }
+    public void setActionType(String type) { actionType.setValue(type); }
 
     public LiveData<String> getActionType() {
         return actionType;
+    }
+
+    // Custom File Name
+    public void setCustomFileName(String type) { customFileName.setValue(type); }
+
+    public LiveData<String> getCustomFileName() {
+        return customFileName;
     }
 
     // Source Type

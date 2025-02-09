@@ -6,6 +6,8 @@
     <string name="share_file_button">Share file</string>
     <string name="combine_pdfs_button">Combine</string>
     <string name="convert_to_pdf_button">Convert</string>
+    <string name="split_pdf_button">Split</string>
+    <string name="compress_pdf_button">Compress</string>
     <string name="flash_toggle">Flash ON</string>
     <string name="capture_image">Take Photo</string>
     <string name="retake_image">Retake the photo</string>
@@ -29,7 +31,7 @@
     <string name="file_manager_fragment_title">Review files</string>
     <string name="file_name">File Name</string>
     <string name="refer">Refer</string>
-    <string name="share_history">Share history</string>
+    <string name="share_history">Share history (watermarked)</string>
     <string name="share_history_body">Below is the history of all the files you have shared via CVOR. You can filter the history below.</string>
     <string name="sharehistory_hint">Search by file name, shared with or purpose</string>
     <string name="from_date_picker">From</string>
@@ -51,7 +53,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="combine_pdf">Combine PDF</string>
-    <string name="convert_to_pdf">Convert Images to PDF</string>
+    <string name="convert_to_pdf">Scan to PDF</string>
+    <string name="split_pdf">Split PDF</string>
+    <string name="compress_pdf">Compress PDF</string>
     <string name="delete_icon">Delete icon</string>
     <string name="pdf_icon">PDF icon</string>
     <string name="image_icon">Image icon</string>
@@ -61,6 +65,10 @@
     <string name="no_files_selected">No files available to preview. Go back to choose a file.</string>
     <string name="back_button">Back</string>
     <string name="share_button">Share</string>
+    <string name="share_again_button">Share again</string>
+    <string name="done_button">Done</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="share_title">Share</string>
     <string name="share_app_text">Select the app to share</string>
     <string name="share_app_icon_desc">App available to share the files</string>
     <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>

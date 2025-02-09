@@ -20,6 +20,7 @@ public class WatermarkViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> shareWith = new MutableLiveData<>();
     private final MutableLiveData<String> purpose = new MutableLiveData<>();
+    private final MutableLiveData<String> shareApp = new MutableLiveData<>();
     private final MutableLiveData<String> watermarkText = new MutableLiveData<>();
     private final MutableLiveData<Bitmap> signature = new MutableLiveData<>(); // Captures user signature as a Bitmap
     private final MutableLiveData<Boolean> repeatWatermark = new MutableLiveData<>(); // Whether to repeat the watermark
@@ -54,13 +55,17 @@ public class WatermarkViewModel extends AndroidViewModel {
         this.watermarkText.setValue(watermarkText);
     }
 
+    public void setShareApp(String shareApp) {
+        this.shareApp.setValue(shareApp);
+    }
+
     public LiveData<String> getShareWith() {
         return shareWith;
     }
 
-    public LiveData<String> getPurpose() {
-        return purpose;
-    }
+    public LiveData<String> getPurpose() { return purpose; }
+
+    public LiveData<String> getShareApp() { return shareApp; }
 
     public LiveData<String> getWatermarkText() {
         return watermarkText;

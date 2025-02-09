@@ -239,6 +239,8 @@ public class CoreActivity extends AppCompatActivity {
 
                 case "combinepdf":
                 case "convertpdf":
+                case "splitpdf":
+                case "compresspdf":
                     navController.navigate(R.id.action_cameraFragment_to_PdfHandlingFragment);
                     break;
 
@@ -263,6 +265,8 @@ public class CoreActivity extends AppCompatActivity {
 
                 case "combinepdf":
                 case "convertpdf":
+                case "splitpdf":
+                case "compresspdf":
                     navController.navigate(R.id.action_fileManagerFragment_to_PdfHandlingFragment);
                     break;
 
@@ -294,6 +298,8 @@ public class CoreActivity extends AppCompatActivity {
 
                 case "combinepdf":
                 case "convertpdf":
+                case "splitpdf":
+                case "compresspdf":
                     Log.d(TAG, "CoreActivity 18.");
                     navController.navigate(R.id.action_PdfHandlingFragment_to_previewFragment);
                     break;

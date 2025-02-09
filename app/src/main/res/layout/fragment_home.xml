@@ -52,14 +52,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_action"
-            android:paddingBottom="60dp"
+            android:paddingBottom="30dp"
             android:letterSpacing="0.08"
             style="@style/TextStyle.SubTitle"/>
 
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:rowCount="2"
+            android:rowCount="3"
             android:columnCount="2"
             android:alignmentMode="alignMargins"
             android:useDefaultMargins="true"
@@ -79,6 +79,26 @@
                 app:icon="@drawable/baseline_secure_add_24"
                 app:iconGravity="top"
                 app:iconPadding="15dp"
+                app:iconSize="28dp"
+                android:elevation="6dp"
+                app:cornerRadius="16dp"
+                android:layout_margin="5dp"
+                app:rippleColor="@color/rippleEffect" />
+
+            <!-- Convert Images to PDF Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_convert_to_pdf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="120dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="@string/convert_to_pdf"
+                style="@style/TextStyle.Body"
+                android:paddingTop="15dp"
+                app:icon="@drawable/baseline_document_scanner_24"
+                app:iconGravity="top"
+                app:iconPadding="20dp"
                 app:iconSize="28dp"
                 android:elevation="6dp"
                 app:cornerRadius="16dp"
@@ -125,18 +145,38 @@
                 android:layout_margin="5dp"
                 app:rippleColor="@color/rippleEffect" />
 
-            <!-- Convert Images to PDF Button -->
+            <!-- Split PDF Button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_convert_to_pdf"
+                android:id="@+id/btn_split_pdf"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxHeight="120dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:text="@string/convert_to_pdf"
+                android:text="@string/split_pdf"
                 style="@style/TextStyle.Body"
                 android:paddingTop="15dp"
-                app:icon="@drawable/baseline_convert_24"
+                app:icon="@drawable/baseline_vertical_split_24"
+                app:iconGravity="top"
+                app:iconPadding="20dp"
+                app:iconSize="28dp"
+                android:elevation="6dp"
+                app:cornerRadius="16dp"
+                android:layout_margin="5dp"
+                app:rippleColor="@color/rippleEffect" />
+
+            <!-- Compress PDF Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_compress_pdf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="120dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="@string/compress_pdf"
+                style="@style/TextStyle.Body"
+                android:paddingTop="15dp"
+                app:icon="@drawable/baseline_compress_24"
                 app:iconGravity="top"
                 app:iconPadding="20dp"
                 app:iconSize="28dp"
@@ -153,6 +193,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/share_history"
+        android:visibility="gone"
         style="@style/TextStyle.Body"
         android:gravity="center_vertical"
         android:textAllCaps="false"

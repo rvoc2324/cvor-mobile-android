@@ -1,8 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient_primary">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_primary"
+        tools:context=".ui.fragments.share.ShareFragment"
+        android:paddingTop="50dp">
+
+        <!-- Title Background Container for Elevated Effect -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/title_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="16dp"
+            app:cardBackgroundColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Title Text -->
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/share_title"
+                android:letterSpacing="0.1"
+                style="@style/TextStyle.SubTitle"
+                android:padding="16dp"
+                android:textColor="@color/white"
+                android:textAlignment="viewStart"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- CardView to contain the buttons, Centered vertically and horizontally -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardElevation="8dp"
+            android:backgroundTint="@color/fragment1Background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- GridLayout for Button Arrangement inside CardView -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="2"
+                android:layout_margin="16dp">
+
+                <!-- Done Button on its own row -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/done_button"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="2"
+                    style="@style/PrimaryButtonStyle"
+                    app:cornerRadius="12dp"
+                    android:text="@string/done_button"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:drawableTop="@drawable/baseline_check_circle_24"
+                    android:layout_gravity="fill"
+                    app:rippleColor="@color/rippleEffect"/>
+
+                <!-- Back Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/back_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="120dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:text="@string/back_button"
+                    style="@style/SecondaryButtonStyle"
+                    android:padding="15dp"
+                    android:drawableLeft="@drawable/baseline_keyboard_arrow_left_24"
+                    android:elevation="6dp"
+                    app:cornerRadius="12dp"
+                    android:layout_margin="5dp"
+                    app:rippleColor="@color/rippleEffect" />
+
+                <!-- Share again button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/share_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="120dp"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:text="@string/share_again_button"
+                    style="@style/SecondaryButtonStyle"
+                    android:padding="15dp"
+                    android:drawableEnd="@drawable/baseline_share_24"
+                    android:drawablePadding="50dp"
+                    android:elevation="6dp"
+                    app:cornerRadius="12dp"
+                    android:layout_margin="5dp"
+                    app:rippleColor="@color/rippleEffect" />
+            </GridLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Cancel Button at the bottom outside the CardView with margin -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            android:backgroundTint="@color/grey"
+            app:cornerRadius="12dp"
+            android:text="@string/cancel_button"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginBottom="25dp"
+            app:rippleColor="@color/rippleEffect"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

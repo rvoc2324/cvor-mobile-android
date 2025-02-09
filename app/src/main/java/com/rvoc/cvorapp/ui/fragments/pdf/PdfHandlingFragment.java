@@ -22,6 +22,7 @@ import com.rvoc.cvorapp.adapters.FileActionListener;
 import com.rvoc.cvorapp.adapters.FileListAdapter;
 import com.rvoc.cvorapp.databinding.FragmentPdfHandlingBinding;
 import com.rvoc.cvorapp.services.PdfHandlingService;
+import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;
@@ -50,6 +51,8 @@ public class PdfHandlingFragment extends Fragment {
     FileActionListener fileActionListener;
     private ExecutorService executorService;
 
+    private String customFileName;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,6 +72,9 @@ public class PdfHandlingFragment extends Fragment {
         // Initialize the CoreViewModel
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
+        // Get custom file name
+        // customFileName = coreViewModel.getCustomFileName().getValue();
+
         // Setup RecyclerView
         setupRecyclerView();
 
@@ -86,6 +92,10 @@ public class PdfHandlingFragment extends Fragment {
                 binding.actionButton.setText(R.string.combine_pdfs_button);
             } else if ("convertpdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.convert_to_pdf_button);
+            } else if ("splitpdf".equals(actionType)) {
+                binding.actionButton.setText(R.string.split_pdf_button);
+            } else if ("compresspdf".equals(actionType)) {
+                binding.actionButton.setText(R.string.compress_pdf_button);
             }
             currentActionType = actionType;
         });
@@ -176,7 +186,7 @@ public class PdfHandlingFragment extends Fragment {
                     outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
                 } else if ("convertpdf".equals(actionType)) {
-                    String fileName = "CVOR_converted_" + System.currentTimeMillis() + ".pdf";
+                    String fileName = "CVOR_scan_" + System.currentTimeMillis() + ".pdf";
                     outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
                 } /*else if ("splitpdf".equals(actionType)) {

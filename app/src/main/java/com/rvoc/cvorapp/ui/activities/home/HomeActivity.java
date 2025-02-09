@@ -96,14 +96,14 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
         Log.d(TAG, "NavController initialized and linked with BottomNavigationView.");
 
-        // Listen for destination changes
+        /*// Listen for destination changes
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (destination.getId() == R.id.nav_share_history) {
                 binding.bottomNavigation.setVisibility(View.GONE); // Hide for Share History
             } else {
                 binding.bottomNavigation.setVisibility(View.VISIBLE); // Show for other fragments
             }
-        });
+        });*/
     }
 
     private void setupBottomNavigationView() {

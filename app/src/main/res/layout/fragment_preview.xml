@@ -39,8 +39,22 @@
                 android:id="@+id/download_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:visibility="visible"
                 android:src="@drawable/baseline_download_24"
                 android:contentDescription="@string/download_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/title"/>
+
+            <!-- Cancel Icon (Top Right) -->
+            <ImageView
+                android:id="@+id/cancel_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:visibility="gone"
+                android:src="@drawable/baseline_clear_24"
+                android:contentDescription="@string/cancel"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

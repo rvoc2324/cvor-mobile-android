@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.util.Log;
 
+import com.rvoc.cvorapp.utils.FileUtils;
 import com.tom_roush.pdfbox.cos.COSName;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.PDPage;
@@ -51,7 +52,8 @@ public class WatermarkService {
      * @throws Exception If there are errors in processing the file.
      */
     public File applyWatermarkImage(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
-        String fileName = "CVOR_watermarked_" + System.currentTimeMillis() + ".png";
+        String originalFileName = FileUtils.getFileNameFromUri(context, inputUri);
+        String fileName = "CVOR_watermarked_" + originalFileName + ".jpg";
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service started.");
 
@@ -81,12 +83,12 @@ public class WatermarkService {
             Bitmap watermarkedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
             Canvas canvas = new Canvas(watermarkedBitmap);
 
-            int watermarkColour = getWatermarkColour(watermarkedBitmap);
+            // int watermarkColour = getWatermarkColour(watermarkedBitmap);
 
             // Set up paint for watermark text
             Paint paint = new Paint();
-            paint.setColor(watermarkColour);
-            //paint.setColor(Color.BLACK);
+            // paint.setColor(watermarkColour);
+            paint.setColor(Color.BLACK);
             paint.setAlpha((opacity * 255) / 100); // Opacity from 0 to 255
             paint.setTextSize(fontSize);
             paint.setAntiAlias(true);
@@ -142,7 +144,8 @@ public class WatermarkService {
      * @throws Exception If there are errors in processing the file.
      */
     public File applyWatermarkPDF(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
-        String fileName = "CVOR_watermarked_" + System.currentTimeMillis() + ".pdf";
+        String originalFileName = FileUtils.getFileNameFromUri(context, inputUri);
+        String fileName = "CVOR_watermarked_" + originalFileName + ".pdf";
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service 4.");
 

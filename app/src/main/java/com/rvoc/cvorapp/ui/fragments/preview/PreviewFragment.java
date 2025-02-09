@@ -86,11 +86,32 @@ public class PreviewFragment extends Fragment {
             }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
+
+        // Without ad flow
         binding.shareButton.setOnClickListener(v -> {
             Log.d(TAG, "Navigate to share logged");
             coreViewModel.setNavigationEvent("navigate_to_share");
         });
-        binding.downloadIcon.setOnClickListener(v -> downloadFiles());
+
+        binding.downloadIcon.setOnClickListener(v -> {
+            downloadFiles();
+            binding.downloadIcon.setVisibility(View.GONE);
+            binding.cancelIcon.setVisibility(View.VISIBLE);
+        });
+
+        binding.cancelIcon.setOnClickListener(v -> requireActivity().finish());
+
+
+        /* // With ad flow
+        binding.shareButton.setOnClickListener(v -> {
+            showInterstitialAd(() -> coreViewModel.setNavigationEvent("navigate_to_share"));
+        });
+        binding.downloadIcon.setOnClickListener(v -> {
+            showInterstitialAd(() ->
+            downloadFiles());
+            binding.downloadIcon.setVisibility(View.GONE);
+            binding.cancelIcon.setVisibility(View.VISIBLE);
+        });*/
     }
 
     private void downloadFiles() {

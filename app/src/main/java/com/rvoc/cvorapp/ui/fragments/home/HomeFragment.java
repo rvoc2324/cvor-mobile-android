@@ -32,12 +32,16 @@ public class HomeFragment extends Fragment {
         binding.btnShareFile.setBackgroundResource(R.drawable.gradient_teal);
         binding.btnCombinePdfs.setBackgroundResource(R.drawable.gradient_purple);
         binding.btnConvertToPdf.setBackgroundResource(R.drawable.gradient_orange);
+        binding.btnSplitPdf.setBackgroundResource(R.drawable.gradient_lightblue);
+        binding.btnCompressPdf.setBackgroundResource(R.drawable.gradient_green);
         binding.btnShareHistory.setBackgroundResource(R.drawable.gradient_cyan);
 
         binding.btnAddWatermark.setBackgroundTintList(null);
         binding.btnShareFile.setBackgroundTintList(null);
         binding.btnCombinePdfs.setBackgroundTintList(null);
         binding.btnConvertToPdf.setBackgroundTintList(null);
+        binding.btnSplitPdf.setBackgroundTintList(null);
+        binding.btnCompressPdf.setBackgroundTintList(null);
         binding.btnShareHistory.setBackgroundTintList(null);
 
         return binding.getRoot();
@@ -72,6 +76,9 @@ public class HomeFragment extends Fragment {
         binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
         binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf"));
+        // binding.btnSplitPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("splitpdf"));
+        // binding.btnCompressPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("compresspdf"));
+
         binding.btnShareHistory.setOnClickListener(v -> {
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_homeFragment_to_shareHistoryFragment);
@@ -83,6 +90,9 @@ public class HomeFragment extends Fragment {
         binding.btnShareFile.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile")); });
         binding.btnCombinePdfs.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf")); });
         binding.btnConvertToPdf.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf")); });
+        binding.btnSplitPdf.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("splitpdf")); });
+        binding.btnCompressPdf.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("compresspdf")); });
+
         binding.btnShareHistory.setOnClickListener(v -> {
             showInterstitialAd(() - >
             NavController navController = NavHostFragment.findNavController(this);

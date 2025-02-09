@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,12 +64,12 @@ public class ShareHistoryFragment extends Fragment {
         setupDateFilters();
         setupObservers();
 
-        // Home Button Click
+        /*// Home Button Click
         binding.homeButton.setOnClickListener(v -> {
             Log.d(TAG, "Home button clicked.");
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_shareHistoryFragment_to_homeFragment);
-        });
+        });*/
 
         binding.filterToggle.setOnClickListener(v -> {
             if (binding.filterContainer.getVisibility() == View.VISIBLE) {
@@ -92,6 +93,9 @@ public class ShareHistoryFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
+        DividerItemDecoration divider = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
+        binding.recyclerView.addItemDecoration(divider);
+
         RecyclerView recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ShareHistoryAdapter(history -> {

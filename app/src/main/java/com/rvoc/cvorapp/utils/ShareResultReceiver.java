@@ -24,6 +24,7 @@ public class ShareResultReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "onReceive triggered in ShareResultReceiver");
         if (intent == null) return;
 
         // Extract the chosen component
@@ -35,6 +36,8 @@ public class ShareResultReceiver extends BroadcastReceiver {
             // Notify the callback
             if (callback != null) {
                 callback.onShareResultReceived(sharingApp);
+            } else {
+                Log.d(TAG, "Callback is null. Cannot send result.");
             }
         }
     }
