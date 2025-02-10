@@ -41,7 +41,7 @@
             android:id="@+id/button_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             app:cardElevation="8dp"
             android:backgroundTint="@color/fragment1Background"
             app:layout_constraintTop_toTopOf="parent"
@@ -57,15 +57,14 @@
                 android:rowCount="2"
                 android:layout_margin="16dp">
 
-                <!-- Done Button on its own row -->
+                <!-- Action Button on its own row -->
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/done_button"
+                    android:id="@+id/action_button"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_columnSpan="2"
                     style="@style/PrimaryButtonStyle"
                     app:cornerRadius="12dp"
-                    android:text="@string/done_button"
                     android:textSize="18sp"
                     android:gravity="center"
                     android:padding="10dp"
@@ -93,7 +92,7 @@
 
                 <!-- Share again button -->
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/share_button"
+                    android:id="@+id/share_again_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:maxHeight="120dp"

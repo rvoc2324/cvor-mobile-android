@@ -87,22 +87,29 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
             binding = FragmentShareBinding.inflate(inflater, container, false);
         }
 
-        binding.backButton.setOnClickListener(v -> { requireActivity().getOnBackPressedDispatcher().onBackPressed(); });
+        if ("addwatermark".equals(actionType)) {
+            binding.actionButton.setText(R.string.log_share_button);
+        } else {
+            binding.actionButton.setText(R.string.done_button);
+        }
+
+        binding.backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
 
         // Without ad flow
-        binding.shareButton.setOnClickListener(v -> openNativeShareModal());
+        binding.shareAgainButton.setOnClickListener(v -> openNativeShareModal());
 
         /*// With ad flow
         binding.shareButton.setOnClickListener(v -> {
             showInterstitialAd(() -> openNativeShareModal());
         });*/
 
-        binding.doneButton.setOnClickListener(v -> {
+        binding.actionButton.setOnClickListener(v -> {
             if (actionType.equals("addwatermark")) {
                 logShareDetails();
                 navigateToShareHistory();
+            } else {
+                requireActivity().finish();
             }
-            requireActivity().finish();
         });
         binding.cancelButton.setOnClickListener(v -> requireActivity().finish());
 

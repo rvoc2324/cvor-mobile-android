@@ -54,12 +54,24 @@ public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapte
         }
 
         public void bind(ShareHistory history) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yy", Locale.getDefault());
 
             binding.fileName.setText(history.getFileName());
             binding.sharedWith.setText(history.getSharedWith());
             binding.purpose.setText(history.getPurpose());
             binding.sharedDate.setText(dateFormat.format(history.getSharedDate()));
+
+            // Ensure the view resets its state when recycled
+            binding.fileName.setSelected(false);
+            binding.sharedWith.setSelected(false);
+            binding.shareMedium.setSelected(false);
+            binding.purpose.setSelected(false);
+
+            //Starting the marquee scroll when the view is bound
+            binding.fileName.setSelected(true);
+            binding.sharedWith.setSelected(true);
+            binding.shareMedium.setSelected(true);
+            binding.purpose.setSelected(true);
         }
     }
 }

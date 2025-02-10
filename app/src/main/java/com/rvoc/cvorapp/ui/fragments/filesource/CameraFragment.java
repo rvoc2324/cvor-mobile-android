@@ -40,6 +40,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.databinding.FragmentCameraBinding;
 import com.rvoc.cvorapp.ui.activities.core.CustomUCropActivity;
 import com.rvoc.cvorapp.utils.FileUtils;
@@ -448,27 +449,23 @@ public class CameraFragment extends Fragment {
 
     private void askCaptureMoreImages() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme);
-        LayoutInflater inflater = LayoutInflater.from(requireContext());
-        View dialogView = inflater.inflate(R.layout.dialog_layout, null);
 
-        // Set up dialog content
-        TextView dialogMessage = dialogView.findViewById(R.id.dialogMessage);
-        Button positiveButton = dialogView.findViewById(R.id.positiveButton);
-        Button negativeButton = dialogView.findViewById(R.id.negativeButton);
+        // Inflate the dialog layout using ViewBinding
+        DialogLayoutBinding binding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
 
         // Set the message dynamically
-        dialogMessage.setText(R.string.capture_more_images);
+        binding.dialogMessage.setText(R.string.capture_more_images);
 
         // Create the dialog
-        AlertDialog dialog = builder.setView(dialogView).create();
+        AlertDialog dialog = builder.setView(binding.getRoot()).create();
 
         // Set up button click listeners
-        positiveButton.setOnClickListener(v -> {
+        binding.positiveButton.setOnClickListener(v -> {
             dialog.dismiss();
             resetCaptureState();
         });
 
-        negativeButton.setOnClickListener(v -> {
+        binding.negativeButton.setOnClickListener(v -> {
             dialog.dismiss();
             coreViewModel.setNavigationEvent("navigate_to_action");
             Log.e(TAG, "navigate to watermark");

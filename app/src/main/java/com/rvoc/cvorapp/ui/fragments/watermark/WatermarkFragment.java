@@ -1,6 +1,8 @@
 package com.rvoc.cvorapp.ui.fragments.watermark;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.services.WatermarkService;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
@@ -78,6 +81,8 @@ public class WatermarkFragment extends Fragment {
         binding.previewButton.setEnabled(false);
         binding.textOpacity.setText(getString(R.string.opacity_text, 40));
         binding.textFontSize.setText(getString(R.string.fontsize_text,18));
+
+        binding.helpIcon.setOnClickListener(v -> showHelpDialog());
 
         // Observe Watermark Text and update dynamically
         watermarkViewModel.getWatermarkText().observe(getViewLifecycleOwner(), watermarkText -> {
@@ -236,9 +241,13 @@ public class WatermarkFragment extends Fragment {
 
             List<File> watermarkedFiles = new ArrayList<>();
             String watermarkText = watermarkViewModel.getWatermarkText().getValue();
+            Log.d(TAG, "Watermark text:" + watermarkText);
             Boolean repeat = watermarkViewModel.getRepeatWatermark().getValue();
+            Log.d(TAG, "Watermark repeat:" + repeat);
             Integer opacity = watermarkViewModel.getOpacity().getValue();
+            Log.d(TAG, "Watermark opacity:" + opacity);
             Integer fontSize = watermarkViewModel.getFontSize().getValue();
+            Log.d(TAG, "Watermark font size:" + fontSize);
 
             try {
                 for (Uri selectedFileUri : selectedFiles.keySet()) {
@@ -288,6 +297,28 @@ public class WatermarkFragment extends Fragment {
             }
         });
         executorService.shutdown();
+    }
+
+    private void showHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme);
+
+        // Inflate the dialog layout using ViewBinding
+        DialogLayoutBinding binding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
+
+        // Hide unnecessary elements
+        binding.inputField.setVisibility(View.GONE);
+        binding.positiveButton.setVisibility(View.GONE);
+        binding.negativeButton.setVisibility(View.GONE);
+
+        // Set the help text
+        binding.dialogMessage.setText(getString(R.string.watermark_help_text));
+
+        // Create the dialog
+        AlertDialog dialog = builder.setView(binding.getRoot()).create();
+        dialog.setCanceledOnTouchOutside(true); // Dismiss on outside tap
+
+        // Show the dialog
+        dialog.show();
     }
 
     @Override

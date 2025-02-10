@@ -1,5 +1,6 @@
 package com.rvoc.cvorapp.ui.fragments.pdf;
 
+import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.adapters.FileActionListener;
 import com.rvoc.cvorapp.adapters.FileListAdapter;
+import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.databinding.FragmentPdfHandlingBinding;
 import com.rvoc.cvorapp.services.PdfHandlingService;
 import com.rvoc.cvorapp.utils.FileUtils;
@@ -101,7 +103,9 @@ public class PdfHandlingFragment extends Fragment {
         });
 
         // Handle action button click
-        binding.actionButton.setOnClickListener(v -> processFiles(currentActionType));
+        binding.actionButton.setOnClickListener(v -> {
+            processFiles(currentActionType);
+        });
 
         // Handle back button click
         binding.backButton.setOnClickListener(v -> {
@@ -230,6 +234,28 @@ public class PdfHandlingFragment extends Fragment {
         List<Map.Entry<Uri, String>> entryList = new ArrayList<>(uris.entrySet());
         return entryList.get(position).getKey(); // Retrieve the Uri (key) at the given position
     }
+
+    /*private void showHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme);
+
+        // Inflate the dialog layout using ViewBinding
+        DialogLayoutBinding binding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
+
+        // Hide unnecessary elements
+        binding.inputField.setVisibility(View.VISIBLE);
+        binding.positiveButton.setVisibility(View.VISIBLE);
+        binding.negativeButton.setVisibility(View.VISIBLE);
+
+        // Set the dialog text
+        binding.dialogMessage.setText(getString(R.string.custom_file_name));
+
+        // Create the dialog
+        AlertDialog dialog = builder.setView(binding.getRoot()).create();
+        dialog.setCanceledOnTouchOutside(true); // Dismiss on outside tap
+
+        // Show the dialog
+        dialog.show();
+    }*/
 
     @Override
     public void onDestroyView() {

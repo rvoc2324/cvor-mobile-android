@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ItemImagePreviewBinding;
 import com.rvoc.cvorapp.databinding.ItemPdfPreviewBinding;
@@ -72,6 +74,8 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void bind(File imageFile) {
             Glide.with(binding.imageView.getContext())
                     .load(imageFile)
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)) // ensures updated file is shown in the preview
+                    .apply(RequestOptions.skipMemoryCacheOf(true)) // // ensures updated file is shown in the preview
                     .placeholder(R.drawable.ic_image) // Placeholder for loading
                     .error(R.drawable.baseline_error_24) // Error image
                     .into(binding.imageView);

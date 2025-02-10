@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -71,10 +72,12 @@ public class PreviewFragment extends Fragment {
                 binding.noFilesSelected.setVisibility(View.GONE);
                 binding.filePreviewPager.setVisibility(View.VISIBLE);
                 previewPagerAdapter.submitList(files);
+                binding.filePreviewPager.setCurrentItem(0, false);
                 Log.d(TAG, "Preview fragment 4.");
             } else {
                 binding.noFilesSelected.setVisibility(View.VISIBLE);
                 binding.filePreviewPager.setVisibility(View.GONE);
+                previewPagerAdapter.submitList(Collections.emptyList());
             }
         });
     }
@@ -84,6 +87,8 @@ public class PreviewFragment extends Fragment {
             if (coreViewModel != null) {
                 coreViewModel.resetProcessedFiles(); // Reset the files
             }
+            binding.filePreviewPager.setAdapter(null); // Detach adapter to clear state
+            binding.filePreviewPager.setAdapter(previewPagerAdapter); // Reattach
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
 

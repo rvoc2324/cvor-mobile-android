@@ -53,7 +53,7 @@ public class WatermarkService {
      */
     public File applyWatermarkImage(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
         String originalFileName = FileUtils.getFileNameFromUri(context, inputUri);
-        String fileName = "CVOR_watermarked_" + originalFileName + ".jpg";
+        String fileName = "CVOR_watermarked_" + originalFileName;
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service started.");
 
@@ -145,7 +145,7 @@ public class WatermarkService {
      */
     public File applyWatermarkPDF(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
         String originalFileName = FileUtils.getFileNameFromUri(context, inputUri);
-        String fileName = "CVOR_watermarked_" + originalFileName + ".pdf";
+        String fileName = "CVOR_watermarked_" + originalFileName;
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service 4.");
 
@@ -169,17 +169,17 @@ public class WatermarkService {
                 float textWidth = font.getStringWidth(watermarkText) / 1000 * fontSize;
 
                 try (PDPageContentStream contentStream = new PDPageContentStream(
-                        document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
+                        document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {
 
                     // Set transparency
                     PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();
                     graphicsState.setNonStrokingAlphaConstant(alphaValue);
                     page.getResources().put(COSName.getPDFName("TransparentState"), graphicsState);
+                    contentStream.setGraphicsStateParameters(graphicsState);
 
                     // Set font and color
                     contentStream.setFont(font, fontSize);
                     contentStream.setNonStrokingColor(0.7f);
-
 
                     if (repeatWatermark) {
                         // Render watermark repeatedly across the page
@@ -191,8 +191,6 @@ public class WatermarkService {
                             float xStart = shiftRow ? xSpacing / 2 : 0; // Shift alternate rows
 
                             for (float x = xStart; x < pageWidth; x += xSpacing) {
-                                contentStream.saveGraphicsState(); // Save state before applying transparency
-                                contentStream.setGraphicsStateParameters(graphicsState); // Apply transparency settings
 
                                 contentStream.beginText();
                                 contentStream.newLineAtOffset(x, y);

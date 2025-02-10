@@ -14,9 +14,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:visibility="visible"
         android:textColor="@color/text"
         android:textSize="16sp"
         android:gravity="center" />
+
+    <EditText
+        android:id="@+id/inputField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:padding="8dp"
+        android:background="@color/inputBox"
+        android:textColor="@color/text" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,20 +42,21 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="@color/buttonHighlightSecondary"
+            android:visibility="visible"
             android:text="@string/no"
             android:textColor="@color/white" />
 
-        <Space
-            android:layout_width="16dp"
-            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/positiveButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginStart="8dp"
             android:backgroundTint="@color/buttonHighlightSecondary"
+            android:visibility="visible"
             android:text="@string/yes"
             android:textColor="@color/white" />
     </LinearLayout>

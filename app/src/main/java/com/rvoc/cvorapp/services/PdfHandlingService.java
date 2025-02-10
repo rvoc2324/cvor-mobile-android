@@ -7,13 +7,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.InputType;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.core.util.Consumer;
 
+import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.utils.FileUtils;
 import com.tom_roush.pdfbox.io.MemoryUsageSetting;
 import com.tom_roush.pdfbox.multipdf.PDFMergerUtility;
@@ -246,12 +249,12 @@ public class PdfHandlingService {
     }
 
 
-    private void requestPassword(@NonNull Activity activity, @NonNull Uri fileUri, @NonNull Consumer<String> passwordConsumer) {
+    /*private void requestPassword(@NonNull Activity activity, @NonNull Uri fileUri, @NonNull Consumer<String> passwordConsumer) {
 
         String fileName = FileUtils.getFileNameFromUri(context, fileUri);
         Log.d(TAG, "PDF Decryption 4.");
         activity.runOnUiThread(() -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
             builder.setTitle("Enter Password for: " + fileName);
 
             final EditText input = new EditText(activity);
@@ -267,7 +270,45 @@ public class PdfHandlingService {
             builder.show();
             Log.d(TAG, "PDF Decryption 8.");
         });
+    }*/
+
+    private void requestPassword(@NonNull Activity activity, @NonNull Uri fileUri, @NonNull Consumer<String> passwordConsumer) {
+        String fileName = FileUtils.getFileNameFromUri(context, fileUri);
+        Log.d(TAG, "PDF Decryption 4.");
+
+        activity.runOnUiThread(() -> {
+            LayoutInflater inflater = LayoutInflater.from(activity);
+            DialogLayoutBinding binding = DialogLayoutBinding.inflate(inflater);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme)
+                    .setView(binding.getRoot())
+                    .setCancelable(false);
+
+            // Customize message
+            binding.dialogMessage.setText(activity.getString(R.string.password_prompt, fileName));
+            binding.inputField.setVisibility(View.VISIBLE);
+            binding.inputField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            binding.positiveButton.setText(R.string.ok);
+            binding.negativeButton.setText(R.string.cancel);
+
+            AlertDialog dialog = builder.create();
+
+            // Button click listeners
+            binding.positiveButton.setOnClickListener(v -> {
+                dialog.dismiss();
+                passwordConsumer.accept(binding.inputField.getText().toString());
+            });
+
+            binding.negativeButton.setOnClickListener(v -> {
+                dialog.dismiss();
+                passwordConsumer.accept(null);
+            });
+
+            dialog.show();
+            Log.d(TAG, "PDF Decryption 8.");
+        });
     }
+
 
     // Helper to show a toast
     private void showToast(@NonNull Activity activity) {
