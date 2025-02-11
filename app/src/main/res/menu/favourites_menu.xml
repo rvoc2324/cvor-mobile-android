@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/option_watermark"
+        android:title="@string/add_watermark_button"
+        android:icon="@drawable/baseline_secure_add_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/option_share"
+        android:title="@string/share_file_button"
+        android:icon="@drawable/baseline_share_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/option_remove"
+        android:title="@string/remove"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom"/>
+
+</menu>

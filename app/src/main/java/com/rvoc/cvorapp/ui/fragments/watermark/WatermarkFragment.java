@@ -6,8 +6,10 @@ import android.app.Dialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -312,6 +314,8 @@ public class WatermarkFragment extends Fragment {
 
         // Set the help text
         binding.dialogMessage.setText(getString(R.string.watermark_help_text));
+        binding.dialogMessage.setGravity(Gravity.START);
+        binding.dialogMessage.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
 
         // Create the dialog
         AlertDialog dialog = builder.setView(binding.getRoot()).create();

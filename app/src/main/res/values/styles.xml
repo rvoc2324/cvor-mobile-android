@@ -49,6 +49,12 @@
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
+    <style name="TextStyle.SectionHeadings">
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
     <style name="TextStyle.Body">
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">14sp</item>

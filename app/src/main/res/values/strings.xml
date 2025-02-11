@@ -9,6 +9,7 @@
     <string name="split_pdf_button">Split</string>
     <string name="compress_pdf_button">Compress</string>
     <string name="pdf_actions">PDF actions</string>
+    <string name="remove">Remove</string>
     <string name="favourites">Favourites</string>
     <string name="flash_toggle">Flash ON</string>
     <string name="capture_image">Take Photo</string>
@@ -42,7 +43,7 @@
     <string name="whatsnew">Whats New</string>
     <string name="settings">Settings</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="password_prompt">Enter password for: %s</string>
     <string name="sharing_with">Sharing the document with?</string>
     <string name="purpose">Purpose? (optional)</string>
@@ -86,5 +87,5 @@
     - <b>Grid Watermark:</b> Repeats across the document.\n
     - <b>Single Watermark:</b> Places one central watermark.\n
     - <b>Watermark Preview:</b> Shows a preview of the watermark to be applied.
-</string>
+    </string>
 </resources>

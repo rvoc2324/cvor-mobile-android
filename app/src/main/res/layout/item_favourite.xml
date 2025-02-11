@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:gravity="center_horizontal"
+    android:background="@color/fragment1Background">
+
+    <!-- File Thumbnail -->
+    <ImageView
+        android:id="@+id/file_type_image_view"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:contentDescription="@string/pdf_icon"
+        android:scaleType="centerCrop" />
+
+    <!-- File Name -->
+    <TextView
+        android:id="@+id/file_name_text_view"
+        style="@style/TextStyle.Body"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/file_name"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+</LinearLayout>

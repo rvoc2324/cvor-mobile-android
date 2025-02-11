@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.room.Room;
 
 import com.rvoc.cvorapp.database.AppDatabase;
+import com.rvoc.cvorapp.database.dao.FavouritesDao;
 import com.rvoc.cvorapp.database.dao.ShareHistoryDao;
 
 import javax.inject.Singleton;
@@ -30,5 +31,10 @@ public class DatabaseModule {
     @Provides
     public static ShareHistoryDao provideShareHistoryDao(AppDatabase database) {
         return database.shareHistoryDao();
+    }
+
+    @Provides
+    public static FavouritesDao provideFavouritesDao(AppDatabase database) {
+        return database.favouritesDao();
     }
 }

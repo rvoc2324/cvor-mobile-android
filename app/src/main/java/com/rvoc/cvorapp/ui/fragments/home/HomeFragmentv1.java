@@ -4,56 +4,46 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.rvoc.cvorapp.R;
-import com.rvoc.cvorapp.adapters.FavouritesActionListener;
-import com.rvoc.cvorapp.adapters.FavouritesAdapter;
 import com.rvoc.cvorapp.databinding.FragmentHomeBinding;
-import com.rvoc.cvorapp.models.FavouritesModel;
-import com.rvoc.cvorapp.services.FavouritesService;
 import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
 import com.rvoc.cvorapp.utils.CleanupCache;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HomeFragment extends Fragment {
+public class HomeFragmentv1 extends Fragment {
 
     private FragmentHomeBinding binding;
-    private FavouritesAdapter favouritesAdapter;
-    @Inject
-    FavouritesService favouritesService; // Injected via Hilt
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        // Set background resources
         binding.btnAddWatermark.setBackgroundResource(R.drawable.gradient_deepblue);
+        // binding.btnShareFile.setBackgroundResource(R.drawable.gradient_teal);
         binding.btnCombinePdfs.setBackgroundResource(R.drawable.gradient_purple);
         binding.btnConvertToPdf.setBackgroundResource(R.drawable.gradient_orange);
         binding.btnSplitPdf.setBackgroundResource(R.drawable.gradient_lightblue);
         binding.btnCompressPdf.setBackgroundResource(R.drawable.gradient_green);
+        // binding.btnShareHistory.setBackgroundResource(R.drawable.gradient_cyan);
 
         binding.btnAddWatermark.setBackgroundTintList(null);
+        // binding.btnShareFile.setBackgroundTintList(null);
         binding.btnCombinePdfs.setBackgroundTintList(null);
         binding.btnConvertToPdf.setBackgroundTintList(null);
         binding.btnSplitPdf.setBackgroundTintList(null);
         binding.btnCompressPdf.setBackgroundTintList(null);
+        // binding.btnShareHistory.setBackgroundTintList(null);
 
         return binding.getRoot();
     }
@@ -62,57 +52,10 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Trigger cache cleanup in a background thread
         cleanupCacheInBackground();
+
         setupListeners();
-        setupFavouritesRecyclerView();
-        observeFavourites();
-    }
-
-    /**
-     * Configures the horizontal RecyclerView for favourites
-     */
-    private void setupFavouritesRecyclerView() {
-        favouritesAdapter = new FavouritesAdapter(requireContext(), new FavouritesActionListener() {
-            @Override
-            public void onFavouriteClicked(FavouritesModel favourite) {
-                // Toast.makeText(requireContext(), "Opening: " + favourite.getFilePath(), Toast.LENGTH_SHORT).show();
-                // Open file preview logic can be added here
-            }
-
-            @Override
-            public void onFavouriteLongPressed(String actionType, String filePath) {
-                switch (actionType) {
-                    case "addWatermark":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_favourites("directWatermark", filePath);
-                        break;
-                    case "share":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_favourites("directShare", filePath);
-                        break;
-                    case "remove":
-                        favouritesService.removeFromFavourites(filePath);
-                        break;
-                }
-            }
-
-            @Override
-            public void onAddFavouriteClicked() {
-                ((HomeActivity) requireActivity()).navigateToCoreActivity("addFavourite");
-            }
-        });
-
-        binding.favouritesRecycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.favouritesRecycler.setAdapter(favouritesAdapter);
-    }
-
-    /**
-     * Observes favourites from FavouritesService and updates UI
-     */
-    private void observeFavourites() {
-        favouritesService.getFavourites().observe(getViewLifecycleOwner(), favourites -> {
-            if (favourites != null) {
-                favouritesAdapter.setFavourites(favourites);
-            }
-        });
     }
 
     /**
@@ -121,16 +64,41 @@ public class HomeFragment extends Fragment {
     private void cleanupCacheInBackground() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> CleanupCache.cleanUp(requireContext()));
-        executor.shutdown();
+        executor.shutdown(); // Shut down after execution
     }
 
     /**
      * Set up click listeners for buttons in HomeFragment
      */
     private void setupListeners() {
+
+        // Without ad flow
         binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark"));
+        // binding.btnShareFile.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
         binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf"));
+        // binding.btnSplitPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("splitpdf"));
+        // binding.btnCompressPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("compresspdf"));
+
+        /* binding.btnShareHistory.setOnClickListener(v -> {
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_homeFragment_to_shareHistoryFragment);
+        });*/
+
+        /*
+        // With ad flow
+        binding.btnAddWatermark.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark")); });
+        binding.btnShareFile.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("sharefile")); });
+        binding.btnCombinePdfs.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf")); });
+        binding.btnConvertToPdf.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf")); });
+        binding.btnSplitPdf.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("splitpdf")); });
+        binding.btnCompressPdf.setOnClickListener(v -> { showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity("compresspdf")); });
+
+        binding.btnShareHistory.setOnClickListener(v -> {
+            showInterstitialAd(() - >
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_homeFragment_to_shareHistoryFragment);
+        });*/
     }
 
     @Override

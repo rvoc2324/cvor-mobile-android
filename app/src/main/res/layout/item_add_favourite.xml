@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="72dp"
+    android:layout_height="72dp"
+    android:background="@drawable/dotted_border"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/add_favourite_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/baseline_add_circle_24"
+        android:backgroundTint="@color/grey"
+        android:layout_gravity="center"
+        android:contentDescription="@string/favourites" />
+</FrameLayout>

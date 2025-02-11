@@ -169,7 +169,7 @@ public class WatermarkService {
                 float textWidth = font.getStringWidth(watermarkText) / 1000 * fontSize;
 
                 try (PDPageContentStream contentStream = new PDPageContentStream(
-                        document, page, PDPageContentStream.AppendMode.PREPEND, true, true)) {
+                        document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
 
                     // Set transparency
                     PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();

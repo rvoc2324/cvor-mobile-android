@@ -125,4 +125,18 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void navigateToCoreActivity_favourites(String actionType, String filePath) {
+        try {
+            Intent intent = new Intent(this, CoreActivity.class);
+            intent.putExtra("actionType", actionType); // Add actionType
+            intent.putExtra("filePath", filePath); // Add filePath
+            startActivity(intent);
+
+            Log.d(TAG, "Navigating to CoreActivity with actionType: " + actionType);
+        } catch (Exception e) {
+            Log.e(TAG, "Navigation error: " + e.getMessage(), e);
+            Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
