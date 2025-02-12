@@ -25,8 +25,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.services.FavouritesService;
 import com.rvoc.cvorapp.services.PdfHandlingService;
 import com.rvoc.cvorapp.utils.FileUtils;
+import com.rvoc.cvorapp.utils.ImageUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.pdmodel.encryption.InvalidPasswordException;
@@ -48,6 +50,8 @@ public class FileManagerFragment extends Fragment {
 
     @Inject
     PdfHandlingService pdfHandlingService;
+    @Inject
+    FavouritesService favouritesService;
 
     // Launcher for file picker results
     private ActivityResultLauncher<Intent> filePickerLauncher;
@@ -199,9 +203,13 @@ public class FileManagerFragment extends Fragment {
     }
 
     private void handleSelectedImageFile(@NonNull Uri fileUri) {
+        // Handling favourites
         String actionType = coreViewModel.getActionType().getValue();
-        if(Objects.equals(actionType, "sharefile")){
-            FileUtils.processFileForSharing(requireContext(), fileUri, coreViewModel);
+        if(Objects.equals(actionType, "addFavourite")){
+            String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), fileUri);
+            favouritesService.addToFavourites(fileUri.toString(), thumbnailPath);
+            // FileUtils.processFileForSharing(requireContext(), fileUri, coreViewModel);
+            requireActivity().finish();
         } else {
             try {
                 String fileName = FileUtils.getFileNameFromUri(requireContext(),fileUri);
@@ -219,11 +227,8 @@ public class FileManagerFragment extends Fragment {
     }
 
     private void handleSelectedPDFFile(@NonNull Uri fileUri) {
+        // Handling favourites
         String actionType = coreViewModel.getActionType().getValue();
-        if (Objects.equals(actionType, "sharefile")) {
-            FileUtils.processFileForSharing(requireContext(), fileUri, coreViewModel);
-            return;
-        }
 
         try (InputStream inputStream = requireContext().getContentResolver().openInputStream(fileUri)) {
             if (inputStream == null) {
@@ -238,6 +243,10 @@ public class FileManagerFragment extends Fragment {
 
                 // If successful, add to ViewModel (not encrypted)
                 addFileToViewModel(fileUri);
+                if (Objects.equals(actionType, "addFavourite")) {
+                    addToFavourites(fileUri);
+                }
+
             } catch (InvalidPasswordException e) {
                 // The PDF is encrypted, handle password prompt and decryption
                 Log.d(TAG, "PDF is encrypted, prompting for password...");
@@ -247,6 +256,9 @@ public class FileManagerFragment extends Fragment {
                     public void onPasswordEntered(@NonNull Uri decryptedUri) {
                         Log.d(TAG, "Decrypted PDF saved at: " + decryptedUri);
                         addFileToViewModel(decryptedUri); // Use decrypted file
+                        if (Objects.equals(actionType, "addFavourite")) {
+                            addToFavourites(decryptedUri);
+                        }
                     }
 
                     @Override
@@ -269,6 +281,12 @@ public class FileManagerFragment extends Fragment {
         } else {
             Toast.makeText(requireContext(), "Unable to determine file name", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void addToFavourites(@NonNull Uri fileUri){
+        String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), fileUri);
+        favouritesService.addToFavourites(fileUri.toString(), thumbnailPath);
+        requireActivity().finish();
     }
 
     @Override

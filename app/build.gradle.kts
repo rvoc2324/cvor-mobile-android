@@ -109,6 +109,9 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
 
+    // Fix for - error: cannot access KSerializer
+    implementation(libs.serialization.json)
+
     // WorkManager for Background Tasks
     implementation(libs.work.runtime.ktx)
 

@@ -80,21 +80,22 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFavouriteLongPressed(String actionType, String filePath) {
+            public void onFavouriteLongPressed(String actionType, String fileUri) {
                 switch (actionType) {
-                    case "addWatermark":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_favourites("directWatermark", filePath);
+                    case "directWatermark":
+                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directWatermark", fileUri);
                         break;
-                    case "share":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_favourites("directShare", filePath);
+                    case "directShare":
+                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directShare", fileUri);
                         break;
                     case "remove":
-                        favouritesService.removeFromFavourites(filePath);
+                        favouritesService.removeFromFavourites(fileUri);
                         break;
                 }
             }
 
             @Override
+
             public void onAddFavouriteClicked() {
                 ((HomeActivity) requireActivity()).navigateToCoreActivity("addFavourite");
             }

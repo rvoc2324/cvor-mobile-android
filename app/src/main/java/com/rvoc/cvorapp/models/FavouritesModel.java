@@ -11,27 +11,27 @@ public class FavouritesModel {
 
     @PrimaryKey
     @NonNull
-    private String filePath; // Unique identifier
+    private String fileUri; // Unique identifier
     private String fileName;
-    private String fileType; // PDF, Image, etc.
+    // private String fileType; // PDF, Image, etc.
     private String thumbnailPath; // Cached thumbnail path
     private long addedTimestamp; // Timestamp for sorting
 
-    public FavouritesModel(@NonNull String filePath, String fileName, String fileType, String thumbnailPath, long addedTimestamp) {
-        this.filePath = filePath;
+    public FavouritesModel(@NonNull String fileUri, String fileName, String thumbnailPath, long addedTimestamp) {
+        this.fileUri = fileUri;
         this.fileName = fileName;
-        this.fileType = fileType;
+        // this.fileType = fileType;
         this.thumbnailPath = thumbnailPath;
         this.addedTimestamp = addedTimestamp;
     }
 
     @NonNull
-    public String getFilePath() {
-        return filePath;
+    public String getFileUri() {
+        return fileUri;
     }
 
-    public void setFilePath(@NonNull String filePath) {
-        this.filePath = filePath;
+    public void setFileUri(@NonNull String fileUri) {
+        this.fileUri = fileUri;
     }
 
     public String getFileName() {
@@ -42,13 +42,13 @@ public class FavouritesModel {
         this.fileName = fileName;
     }
 
-    public String getFileType() {
+    /*public String getFileType() {
         return fileType;
     }
 
     public void setFileType(String fileType) {
         this.fileType = fileType;
-    }
+    }*/
 
     public String getThumbnailPath() {
         return thumbnailPath;
@@ -71,13 +71,13 @@ public class FavouritesModel {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         FavouritesModel that = (FavouritesModel) obj;
-        return filePath.equals(that.filePath) &&
+        return fileUri.equals(that.fileUri) &&
                 Objects.equals(fileName, that.fileName) &&
                 Objects.equals(thumbnailPath, that.thumbnailPath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filePath, fileName, thumbnailPath);
+        return Objects.hash(fileUri, fileName, thumbnailPath);
     }
 }

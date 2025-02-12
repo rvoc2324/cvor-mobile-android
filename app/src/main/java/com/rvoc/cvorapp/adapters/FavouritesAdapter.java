@@ -4,9 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.adapters.FavouritesActionListener;
 import com.rvoc.cvorapp.models.FavouritesModel;
+import com.rvoc.cvorapp.databinding.ItemAddFavouriteBinding;
+import com.rvoc.cvorapp.databinding.ItemFavouriteBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +49,11 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == TYPE_ADD) {
-            View view = inflater.inflate(R.layout.item_add_favourite, parent, false);
-            return new AddFavouriteViewHolder(view);
+            ItemAddFavouriteBinding binding = ItemAddFavouriteBinding.inflate(inflater, parent, false);
+            return new AddFavouriteViewHolder(binding);
         } else {
-            View view = inflater.inflate(R.layout.item_favourite, parent, false);
-            return new FavouriteViewHolder(view);
+            ItemFavouriteBinding binding = ItemFavouriteBinding.inflate(inflater, parent, false);
+            return new FavouriteViewHolder(binding);
         }
     }
 
@@ -75,12 +75,15 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * ViewHolder for "+" button.
      */
     class AddFavouriteViewHolder extends RecyclerView.ViewHolder {
-        AddFavouriteViewHolder(@NonNull View itemView) {
-            super(itemView);
+        private final ItemAddFavouriteBinding binding;
+
+        AddFavouriteViewHolder(@NonNull ItemAddFavouriteBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         void bind() {
-            itemView.setOnClickListener(v -> listener.onAddFavouriteClicked());
+            binding.getRoot().setOnClickListener(v -> listener.onAddFavouriteClicked());
         }
     }
 
@@ -88,32 +91,30 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * ViewHolder for favourite items.
      */
     class FavouriteViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView thumbnail;
-        private final TextView fileName;
+        private final ItemFavouriteBinding binding;
 
-        FavouriteViewHolder(@NonNull View itemView) {
-            super(itemView);
-            thumbnail = itemView.findViewById(R.id.file_type_image_view);
-            fileName = itemView.findViewById(R.id.file_name_text_view);
+        FavouriteViewHolder(@NonNull ItemFavouriteBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         void bind(FavouritesModel favourite) {
-            fileName.setText(favourite.getFileName());
+            binding.fileNameTextView.setText(favourite.getFileName());
 
             Glide.with(context)
                     .load(favourite.getThumbnailPath())
                     .placeholder(R.drawable.ic_image)
-                    .into(thumbnail);
+                    .into(binding.fileTypeImageView);
 
-            itemView.setOnClickListener(v -> listener.onFavouriteClicked(favourite));
+            binding.getRoot().setOnClickListener(v -> listener.onFavouriteClicked(favourite));
 
-            itemView.setOnLongClickListener(v -> {
-                showPopupMenu(v, favourite.getFilePath());
+            binding.getRoot().setOnLongClickListener(v -> {
+                showPopupMenu(v, favourite.getFileUri());
                 return true;
             });
         }
 
-        private void showPopupMenu(View view, String filePath) {
+        private void showPopupMenu(View view, String fileUri) {
             PopupMenu popup = new PopupMenu(view.getContext(), view);
             popup.inflate(R.menu.favourites_menu);
 
@@ -121,21 +122,19 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 int itemId = item.getItemId();
 
                 if (itemId == R.id.option_watermark) {
-                    listener.onFavouriteLongPressed("addwatermark", filePath);
+                    listener.onFavouriteLongPressed("directWatermark", fileUri);
                     return true;
                 } else if (itemId == R.id.option_share) {
-                    listener.onFavouriteLongPressed("share", filePath);
+                    listener.onFavouriteLongPressed("directShare", fileUri);
                     return true;
                 } else if (itemId == R.id.option_remove) {
-                    listener.onFavouriteLongPressed("remove", filePath);
+                    listener.onFavouriteLongPressed("remove", fileUri);
                     return true;
                 }
-
                 return false;
             });
 
             popup.show();
         }
-
     }
 }

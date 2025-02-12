@@ -17,6 +17,23 @@ public class FileUtils {
     private static final String TAG = "FileUtils";
 
     /**
+     * Copies a file from a Uri and adds it to the CoreViewModel's processedFiles list.
+     *
+     * @param context       The application context.
+     * @param uri           The Uri of the file.
+     * @param coreViewModel The CoreViewModel instance.
+     */
+    public static void processFileForSharing(Context context, Uri uri, CoreViewModel coreViewModel) {
+        File copiedFile = copyFile(context, uri);
+        if (copiedFile != null) {
+            coreViewModel.addProcessedFile(copiedFile);
+            Log.d(TAG, "File added to processedFiles: " + copiedFile.getAbsolutePath());
+        } else {
+            Log.e(TAG, "Failed to copy file for sharing.");
+        }
+    }
+
+    /**
      * Copies a file from a Uri directly to the app's private storage directory.
      *
      * @param context The application context.
@@ -74,22 +91,5 @@ public class FileUtils {
             }
         }
         return null;
-    }
-
-    /**
-     * Copies a file from a Uri and adds it to the CoreViewModel's processedFiles list.
-     *
-     * @param context       The application context.
-     * @param uri           The Uri of the file.
-     * @param coreViewModel The CoreViewModel instance.
-     */
-    public static void processFileForSharing(Context context, Uri uri, CoreViewModel coreViewModel) {
-        File copiedFile = copyFile(context, uri);
-        if (copiedFile != null) {
-            coreViewModel.addProcessedFile(copiedFile);
-            Log.d(TAG, "File added to processedFiles: " + copiedFile.getAbsolutePath());
-        } else {
-            Log.e(TAG, "Failed to copy file for sharing.");
-        }
     }
 }

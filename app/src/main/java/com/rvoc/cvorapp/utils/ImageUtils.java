@@ -1,12 +1,17 @@
 package com.rvoc.cvorapp.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
+import android.graphics.pdf.PdfRenderer;
 import android.media.Image;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.annotation.OptIn;
@@ -14,11 +19,77 @@ import androidx.camera.core.ExperimentalGetImage;
 import androidx.camera.core.ImageProxy;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class ImageUtils {
 
     private static final String TAG = "ImageUtils";
+
+    public static String getThumbnailPath(Context context, Uri fileUri) {
+        try {
+            String mimeType = context.getContentResolver().getType(fileUri);
+            Bitmap thumbnail = null;
+
+            if (mimeType != null && mimeType.startsWith("image/")) {
+                thumbnail = generateImageThumbnail(context, fileUri);
+            } else if (mimeType != null && mimeType.equals("application/pdf")) {
+                thumbnail = generatePDFThumbnail(context, fileUri);
+            }
+
+            if (thumbnail != null) {
+                return saveThumbnailToCache(context, thumbnail, fileUri);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error generating thumbnail", e);
+        }
+        return null; // Return null if thumbnail generation fails
+    }
+
+    private static Bitmap generateImageThumbnail(Context context, Uri fileUri) throws IOException {
+        return MediaStore.Images.Media.getBitmap(context.getContentResolver(), fileUri);
+    }
+
+    private static Bitmap generatePDFThumbnail(Context context, Uri fileUri) throws IOException {
+        ParcelFileDescriptor fileDescriptor = context.getContentResolver().openFileDescriptor(fileUri, "r");
+        if (fileDescriptor != null) {
+            PdfRenderer renderer = new PdfRenderer(fileDescriptor);
+            PdfRenderer.Page page = renderer.openPage(0);
+
+            Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
+            page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+
+            page.close();
+            renderer.close();
+            fileDescriptor.close();
+
+            return bitmap;
+        }
+        return null;
+    }
+
+    private static String saveThumbnailToCache(Context context, Bitmap bitmap, Uri fileUri) {
+        File cacheDir = new File(context.getCacheDir(), "favourites_thumbnail");
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
+
+        String fileName = fileUri.getLastPathSegment() + "_thumb.jpg";
+        File thumbnailFile = new File(cacheDir, fileName);
+
+        try (FileOutputStream fos = new FileOutputStream(thumbnailFile)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            fos.flush();
+            return thumbnailFile.getAbsolutePath();
+        } catch (IOException e) {
+            Log.e(TAG, "Error saving thumbnail", e);
+        }
+        return null;
+    }
+
+
 
     /**
      * Converts an ImageProxy to a Bitmap.

@@ -42,8 +42,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.databinding.FragmentCameraBinding;
+import com.rvoc.cvorapp.services.FavouritesService;
 import com.rvoc.cvorapp.ui.activities.core.CustomUCropActivity;
 import com.rvoc.cvorapp.utils.FileUtils;
+import com.rvoc.cvorapp.utils.ImageUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.yalantis.ucrop.UCrop;
 
@@ -56,6 +58,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -63,12 +67,15 @@ public class CameraFragment extends Fragment {
 
     private static final String TAG = "CameraFragment";
 
+    @Inject
+    FavouritesService favouritesService;
     private FragmentCameraBinding binding;
     private ImageCapture imageCapture;
     private boolean isFlashOn = false;
     private boolean isUsingBackCamera = true;
     private Uri capturedImageUri;
     private Bitmap previewBitmap;
+    private String actionType;
     private CoreViewModel coreViewModel;
     private ProcessCameraProvider cameraProvider;
 
@@ -132,6 +139,7 @@ public class CameraFragment extends Fragment {
         });
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+        actionType = coreViewModel.getActionType().getValue();
 
         hideSystemUI();
         checkAndRequestPermissions();
@@ -336,9 +344,12 @@ public class CameraFragment extends Fragment {
                 }
             }
 
-            String actionType = coreViewModel.getActionType().getValue();
-            if(Objects.equals(actionType, "sharefile")){
-                FileUtils.processFileForSharing(requireContext(), savedUri, coreViewModel);
+            if(Objects.equals(actionType, "addFavourite")){
+                String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), savedUri);
+                if (savedUri != null) {
+                    favouritesService.addToFavourites(savedUri.toString(), thumbnailPath);
+                }
+                // FileUtils.processFileForSharing(requireContext(), savedUri, coreViewModel);
             } else {
                 String fileName = FileUtils.getFileNameFromUri(requireContext(), savedUri);
                 coreViewModel.addSelectedFile(savedUri, fileName);
@@ -467,6 +478,9 @@ public class CameraFragment extends Fragment {
 
         binding.negativeButton.setOnClickListener(v -> {
             dialog.dismiss();
+            if (Objects.equals(actionType, "addFavourite")) {
+                requireActivity().finish();
+            }
             coreViewModel.setNavigationEvent("navigate_to_action");
             Log.e(TAG, "navigate to watermark");
         });

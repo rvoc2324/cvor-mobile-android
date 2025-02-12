@@ -3,6 +3,7 @@
     <string name="app_action">What would you like to do?</string>
     <string name="home">Home</string>
     <string name="add_watermark_button">Add Watermark</string>
+    <string name="smart_share_button">Smart share</string>
     <string name="share_file_button">Share file</string>
     <string name="combine_pdfs_button">Combine</string>
     <string name="convert_to_pdf_button">Convert</string>
@@ -86,6 +87,7 @@
     - <b>Font Size:</b> Adjust size of watermark.\n
     - <b>Grid Watermark:</b> Repeats across the document.\n
     - <b>Single Watermark:</b> Places one central watermark.\n
+    - <b>Position: </b> Adjust the position of a single watermark.\n
     - <b>Watermark Preview:</b> Shows a preview of the watermark to be applied.
     </string>
 </resources>

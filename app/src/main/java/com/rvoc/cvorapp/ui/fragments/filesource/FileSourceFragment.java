@@ -66,6 +66,7 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
             if (actionType != null) {
                 switch (actionType) {
                     case "addwatermark":
+                    case "addFavourite":
                         Log.d(TAG, "File source 11.");
                         binding.optionCamera.setVisibility(View.VISIBLE);
                         binding.optionImagePicker.setVisibility(View.VISIBLE);

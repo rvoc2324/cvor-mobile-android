@@ -24,15 +24,15 @@ public class FavouritesRepository {
         new Thread(() -> favouritesDao.addFavourite(favourite)).start();
     }
 
-    public void removeFavourite(String filePath) {
-        new Thread(() -> favouritesDao.removeFavourite(filePath)).start();
+    public void removeFavourite(String fileUri) {
+        new Thread(() -> favouritesDao.removeFavourite(fileUri)).start();
     }
 
     public LiveData<List<FavouritesModel>> getAllFavourites() {
         return favouritesDao.getAllFavourites();
     }
 
-    public boolean isFileFavourite(String filePath) {
-        return favouritesDao.getFavouriteByPath(filePath) != null;
+    public boolean isFileFavourite(String fileUri) {
+        return favouritesDao.getFavouriteByUri(fileUri) != null;
     }
 }

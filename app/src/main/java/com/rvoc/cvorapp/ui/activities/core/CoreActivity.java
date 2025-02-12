@@ -9,15 +9,18 @@ import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ActivityCoreBinding;
 import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
+import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -46,7 +49,22 @@ public class CoreActivity extends AppCompatActivity {
             coreViewModel = new ViewModelProvider(this).get(CoreViewModel.class);
             Log.d(TAG, "CoreActivity 2.");
 
-            initialiseNavController();
+            // Handle actionType from intent extras
+            String actionType = getIntent().getStringExtra("actionType");
+            Log.d(TAG, "CoreActivity 4.");
+            if (actionType != null) {
+                coreViewModel.setActionType(actionType);
+                Log.d(TAG, "CoreActivity 5.");
+            } else {
+                // Log and handle if actionType is null
+                Log.e("CoreActivity", "No actionType passed in intent. Defaulting to 'view'.");
+                Log.d(TAG, "CoreActivity 6.");
+            }
+
+            // Handle fileUri for favourites from intent extras
+            String fileUri = getIntent().getStringExtra("fileUri");
+
+            initialiseNavController(actionType, fileUri);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
                 // Use OnBackInvokedCallback
@@ -81,26 +99,13 @@ public class CoreActivity extends AppCompatActivity {
                 });
             }
 
-
-            // Handle actionType from intent extras
-            String actionType = getIntent().getStringExtra("actionType");
-            Log.d(TAG, "CoreActivity 4.");
-            if (actionType != null) {
-                coreViewModel.setActionType(actionType);
-                Log.d(TAG, "CoreActivity 5.");
-            } else {
-                // Log and handle if actionType is null
-                Log.e("CoreActivity", "No actionType passed in intent. Defaulting to 'view'.");
-                Log.d(TAG, "CoreActivity 6.");
-                coreViewModel.setActionType("view"); // Default action
-                Log.d(TAG, "CoreActivity 7.");
-            }
-
             // Observe source type for navigation
             coreViewModel.getSourceType().observe(this, sourceType -> {
-                if (sourceType == null) {
-                    Log.e("CoreActivity", "sourceType is null! Navigation aborted.");
-                    return;
+                if (actionType==null) {
+                    if (sourceType == null) {
+                        Log.e("CoreActivity", "sourceType is null! Navigation aborted.");
+                        return;
+                    }
                 }
                 switch (sourceType) {
                     case CAMERA:
@@ -154,7 +159,7 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    private void initialiseNavController() {
+    private void initialiseNavController(String actionType, String fileUri) {
         try {
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.nav_host_fragment_core);
@@ -164,6 +169,19 @@ public class CoreActivity extends AppCompatActivity {
             }
 
             navController = navHostFragment.getNavController();
+
+            NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph_core);
+
+            // Modify the start destination dynamically
+            if ("directWatermark".equals(actionType)) {
+                addFileUriToViewModel(fileUri);
+                navGraph.setStartDestination(R.id.watermarkFragment);
+            } else if ("directShare".equals(actionType)) {
+                addFileToViewModel(fileUri);
+                navGraph.setStartDestination(R.id.previewFragment);
+            }
+
+            navController.setGraph(navGraph);
 
             Log.d(TAG, "NavController initialized successfully.");
         } catch (Exception e) {
@@ -233,10 +251,6 @@ public class CoreActivity extends AppCompatActivity {
                     Log.d(TAG, "CoreActivity 16.");
                     break;
 
-                case "sharefile":
-                    navController.navigate(R.id.action_cameraFragment_to_shareFragment);
-                    break;
-
                 case "combinepdf":
                 case "convertpdf":
                 case "splitpdf":
@@ -257,10 +271,6 @@ public class CoreActivity extends AppCompatActivity {
             switch (actionType) {
                 case "addwatermark":
                     navController.navigate(R.id.action_fileManagerFragment_to_watermarkFragment);
-                    break;
-
-                case "sharefile":
-                    navController.navigate(R.id.action_fileManagerFragment_to_shareFragment);
                     break;
 
                 case "combinepdf":
@@ -340,6 +350,22 @@ public class CoreActivity extends AppCompatActivity {
             Log.e(TAG, "Navigation error: " + e.getMessage(), e);
             Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void addFileUriToViewModel(@NonNull String fileUri) {
+        Uri uri = Uri.parse(fileUri);
+        String fileName = FileUtils.getFileNameFromUri(this, uri);
+        if (fileName != null) {
+            coreViewModel.addSelectedFile(uri, fileName);
+            Log.d(TAG, "File selected: " + fileName);
+        } else {
+            Toast.makeText(this, "Unable to determine file name", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void addFileToViewModel(@NonNull String fileUri) {
+        Uri uri = Uri.parse(fileUri);
+        FileUtils.processFileForSharing(this, uri, coreViewModel);
     }
 
     @Override

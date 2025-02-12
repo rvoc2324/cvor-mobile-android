@@ -126,11 +126,11 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void navigateToCoreActivity_favourites(String actionType, String filePath) {
+    public void navigateToCoreActivity_direct(String actionType, String fileUri) {
         try {
             Intent intent = new Intent(this, CoreActivity.class);
             intent.putExtra("actionType", actionType); // Add actionType
-            intent.putExtra("filePath", filePath); // Add filePath
+            intent.putExtra("fileUri", fileUri); // Add fileUri
             startActivity(intent);
 
             Log.d(TAG, "Navigating to CoreActivity with actionType: " + actionType);
