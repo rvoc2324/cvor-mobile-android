@@ -1,17 +1,21 @@
 package com.rvoc.cvorapp.adapters;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.rvoc.cvorapp.R;
-import com.rvoc.cvorapp.adapters.FavouritesActionListener;
+
 import com.rvoc.cvorapp.models.FavouritesModel;
 import com.rvoc.cvorapp.databinding.ItemAddFavouriteBinding;
 import com.rvoc.cvorapp.databinding.ItemFavouriteBinding;
@@ -21,6 +25,7 @@ import java.util.List;
 
 public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final String TAG = "Favourites Adapter";
     private static final int TYPE_ADD = 0;
     private static final int TYPE_FAVOURITE = 1;
 
@@ -44,6 +49,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return position == 0 ? TYPE_ADD : TYPE_FAVOURITE;
     }
 
+    /*
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,25 +61,39 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ItemFavouriteBinding binding = ItemFavouriteBinding.inflate(inflater, parent, false);
             return new FavouriteViewHolder(binding);
         }
+    }*/
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        ItemFavouriteBinding binding = ItemFavouriteBinding.inflate(inflater, parent, false);
+        return new FavouriteViewHolder(binding);
+
     }
 
-    @Override
+    /* @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof AddFavouriteViewHolder) {
             ((AddFavouriteViewHolder) holder).bind();
         } else {
             ((FavouriteViewHolder) holder).bind(favourites.get(position - 1)); // Adjust for "+" position
         }
+    }*/
+
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ((FavouriteViewHolder) holder).bind(favourites.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return favourites.size() + 1; // +1 for "+"
+        // return favourites.size() + 1; // +1 for "+"
+        return favourites.size();
     }
 
-    /**
+    /*
      * ViewHolder for "+" button.
-     */
+
     class AddFavouriteViewHolder extends RecyclerView.ViewHolder {
         private final ItemAddFavouriteBinding binding;
 
@@ -85,7 +105,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         void bind() {
             binding.getRoot().setOnClickListener(v -> listener.onAddFavouriteClicked());
         }
-    }
+    }*/
 
     /**
      * ViewHolder for favourite items.
@@ -100,6 +120,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         void bind(FavouritesModel favourite) {
             binding.fileNameTextView.setText(favourite.getFileName());
+            binding.fileNameTextView.setSelected(false);
+            binding.fileNameTextView.setSelected(true);
 
             Glide.with(context)
                     .load(favourite.getThumbnailPath())
@@ -109,32 +131,77 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             binding.getRoot().setOnClickListener(v -> listener.onFavouriteClicked(favourite));
 
             binding.getRoot().setOnLongClickListener(v -> {
-                showPopupMenu(v, favourite.getFileUri());
+                showPopupMenu(v, favourite.getFilePath());
                 return true;
             });
         }
 
-        private void showPopupMenu(View view, String fileUri) {
-            PopupMenu popup = new PopupMenu(view.getContext(), view);
-            popup.inflate(R.menu.favourites_menu);
+        private void showPopupMenu(View view, String filePath) {
+            // Inflate the custom menu layout
+            LayoutInflater inflater = LayoutInflater.from(view.getContext());
+            View popupView = inflater.inflate(R.layout.custom_popup_menu, new FrameLayout(context), false);
 
-            popup.setOnMenuItemClickListener(item -> {
-                int itemId = item.getItemId();
 
-                if (itemId == R.id.option_watermark) {
-                    listener.onFavouriteLongPressed("directWatermark", fileUri);
-                    return true;
-                } else if (itemId == R.id.option_share) {
-                    listener.onFavouriteLongPressed("directShare", fileUri);
-                    return true;
-                } else if (itemId == R.id.option_remove) {
-                    listener.onFavouriteLongPressed("remove", fileUri);
-                    return true;
-                }
-                return false;
+            // Get screen width in pixels
+            final PopupWindow popupWindow = getPopupWindow(view, popupView);
+
+            // Measure the height of the popup
+            popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            int popupHeight = popupView.getMeasuredHeight();
+
+            // Calculate available space below and above the anchor view
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            int anchorBottomY = location[1] + view.getHeight(); // Bottom Y-coordinate of the anchor
+            int screenHeight = view.getResources().getDisplayMetrics().heightPixels;
+            int spaceBelow = screenHeight - anchorBottomY; // Space below the view
+            int spaceAbove = location[1]; // Space above the view
+
+            // Determine whether to show the popup above or below the anchor view
+            if (spaceBelow >= popupHeight) {
+                // Enough space below, show as usual
+                popupWindow.showAsDropDown(view);
+            } else if (spaceAbove >= popupHeight) {
+                // Not enough space below, show above the view
+                popupWindow.showAsDropDown(view, 0, -view.getHeight() - popupHeight);
+            } else {
+                // Limited space both above and below, show as best as possible
+                popupWindow.showAsDropDown(view);
+            }
+
+            // Set click listeners for each option
+            popupView.findViewById(R.id.option_watermark).setOnClickListener(v -> {
+                listener.onFavouriteLongPressed("directWatermark", filePath);
+                popupWindow.dismiss();
             });
 
-            popup.show();
+            popupView.findViewById(R.id.option_share).setOnClickListener(v -> {
+                listener.onFavouriteLongPressed("directShare", filePath);
+                popupWindow.dismiss();
+            });
+
+            popupView.findViewById(R.id.option_remove).setOnClickListener(v -> {
+                listener.onFavouriteLongPressed("remove", filePath);
+                popupWindow.dismiss();
+            });
         }
+
+    }
+
+    @NonNull
+    private static PopupWindow getPopupWindow(View view, View popupView) {
+        DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
+        int screenWidth = displayMetrics.widthPixels;
+
+        // Set popup width as 40% of the screen width
+        int popupWidth = (int) (screenWidth * 0.4);
+
+        // Create PopupWindow
+        final PopupWindow popupWindow = new PopupWindow(popupView,
+                popupWidth,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
+        popupWindow.setElevation(8); // Add shadow for better UI effect
+        return popupWindow;
     }
 }

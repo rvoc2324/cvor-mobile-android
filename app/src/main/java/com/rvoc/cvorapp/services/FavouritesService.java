@@ -41,15 +41,16 @@ public class FavouritesService {
     /**
      * Adds a file to favourites.
      * Ensures no duplicate entries.
-     */
-    public void addToFavourites(String fileUri, String thumbnailPath) {
+     *
+     * */
+    public void addToFavourites(String filePath, String thumbnailPath) {
         executor.execute(() -> {
-            if (!favouritesRepository.isFileFavourite(fileUri)) {
+            if (!favouritesRepository.isFileFavourite(filePath)) {
                 long timestamp = System.currentTimeMillis(); // Capture current timestamp
                 FavouritesModel favourite = new FavouritesModel(
-                        fileUri,
-                        extractFileName(fileUri),
-                        // extractFileType(fileUri),
+                        filePath,
+                        extractFileName(filePath),
+                        // extractFileType(filePath),
                         thumbnailPath,
                         timestamp
                 );
@@ -61,17 +62,17 @@ public class FavouritesService {
     /**
      * Removes a file from favourites.
      */
-    public void removeFromFavourites(String fileUri) {
-        executor.execute(() -> favouritesRepository.removeFavourite(fileUri));
+    public void removeFromFavourites(String filePath) {
+        executor.execute(() -> favouritesRepository.removeFavourite(filePath));
     }
 
-    private String extractFileName(String fileUri) {
-        Uri uri = Uri.parse(fileUri);
-        return FileUtils.getFileNameFromUri(context, uri);
+    private String extractFileName(String filePath) {
+        if (filePath == null) return null;
+        return filePath.substring(filePath.lastIndexOf("/") + 1);
     }
 
-    private String extractFileType(String fileUri) {
-        return fileUri.endsWith(".pdf") ? "PDF" : "Image"; // Extend for other formats
+    private String extractFileType(String filePath) {
+        return filePath.endsWith(".pdf") ? "PDF" : "Image"; // Extend for other formats
     }
 
 }

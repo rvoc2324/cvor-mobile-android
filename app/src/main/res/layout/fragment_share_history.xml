@@ -210,7 +210,7 @@
             app:itemTextColor="@color/white"
             app:itemIconSize="30dp"
             app:labelVisibilityMode="unlabeled"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:itemBackground="@drawable/bottom_nav_item_background"
             app:layout_constraintBottom_toBottomOf="parent" />
     </LinearLayout>

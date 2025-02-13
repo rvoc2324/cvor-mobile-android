@@ -30,6 +30,7 @@
         app:itemTextColor="@color/white"
         app:itemIconSize="30dp"
         app:itemBackground="@drawable/bottom_nav_item_background"
+        app:itemRippleColor="@null"
         style="@style/BottomNavigationViewStyle"
         app:labelVisibilityMode= "unlabeled" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

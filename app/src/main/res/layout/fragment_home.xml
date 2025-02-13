@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginHorizontal="16dp">
 
                 <!-- Prompt Container -->
@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_action"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="40dp"
                     android:letterSpacing="0.08"
                     style="@style/TextStyle.SubTitle"/>
 
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="20dp">
 
                 <!-- PDF Actions Label with Dividers -->
                 <LinearLayout
@@ -258,18 +258,22 @@
                     android:orientation="horizontal"
                     android:gravity="center">
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/shadow" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/favourites"
                         android:paddingHorizontal="8dp"
-                        style="@style/TextStyle.SectionHeadings"/>
+                        style="@style/TextStyle.SubTitle"/>
+
+                    <ImageView
+                        android:id="@+id/add_favourite_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/baseline_add_circle_24"
+                        android:backgroundTint="@color/grey"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/favourites" />
 
                     <View
                         android:layout_width="0dp"
@@ -306,8 +310,8 @@
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:itemIconSize="30dp"
+        android:visibility="invisible"
         app:labelVisibilityMode="unlabeled"
         app:itemBackground="@drawable/bottom_nav_item_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:itemRippleColor="@color/ripple"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

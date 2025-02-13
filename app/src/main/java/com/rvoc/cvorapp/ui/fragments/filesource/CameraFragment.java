@@ -346,8 +346,9 @@ public class CameraFragment extends Fragment {
 
             if(Objects.equals(actionType, "addFavourite")){
                 String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), savedUri);
+                File filePath = FileUtils.copyFile(requireContext(), savedUri);
                 if (savedUri != null) {
-                    favouritesService.addToFavourites(savedUri.toString(), thumbnailPath);
+                    favouritesService.addToFavourites(String.valueOf(filePath), thumbnailPath);
                 }
                 // FileUtils.processFileForSharing(requireContext(), savedUri, coreViewModel);
             } else {

@@ -197,7 +197,7 @@ public class FileManagerFragment extends Fragment {
             intent.setType("image/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
             filePickerLauncher.launch(intent);
         }
     }
@@ -205,11 +205,9 @@ public class FileManagerFragment extends Fragment {
     private void handleSelectedImageFile(@NonNull Uri fileUri) {
         // Handling favourites
         String actionType = coreViewModel.getActionType().getValue();
-        if(Objects.equals(actionType, "addFavourite")){
-            String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), fileUri);
-            favouritesService.addToFavourites(fileUri.toString(), thumbnailPath);
-            // FileUtils.processFileForSharing(requireContext(), fileUri, coreViewModel);
-            requireActivity().finish();
+        if (Objects.equals(actionType, "addFavourite")) {
+            addToFavourites(fileUri);
+            // FileUtils.processFileForSharing(requireContext(), savedUri, coreViewModel);
         } else {
             try {
                 String fileName = FileUtils.getFileNameFromUri(requireContext(),fileUri);
@@ -229,6 +227,10 @@ public class FileManagerFragment extends Fragment {
     private void handleSelectedPDFFile(@NonNull Uri fileUri) {
         // Handling favourites
         String actionType = coreViewModel.getActionType().getValue();
+
+        /* // Persist file permission
+        final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+        requireContext().getContentResolver().takePersistableUriPermission(fileUri, takeFlags);*/
 
         try (InputStream inputStream = requireContext().getContentResolver().openInputStream(fileUri)) {
             if (inputStream == null) {
@@ -285,7 +287,8 @@ public class FileManagerFragment extends Fragment {
 
     private void addToFavourites(@NonNull Uri fileUri){
         String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), fileUri);
-        favouritesService.addToFavourites(fileUri.toString(), thumbnailPath);
+        File filePath = FileUtils.copyFile(requireContext(), fileUri);
+        favouritesService.addToFavourites(String.valueOf(filePath), thumbnailPath);
         requireActivity().finish();
     }
 

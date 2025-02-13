@@ -11,14 +11,14 @@ public class FavouritesModel {
 
     @PrimaryKey
     @NonNull
-    private String fileUri; // Unique identifier
+    private String filePath; // Unique identifier
     private String fileName;
     // private String fileType; // PDF, Image, etc.
     private String thumbnailPath; // Cached thumbnail path
     private long addedTimestamp; // Timestamp for sorting
 
-    public FavouritesModel(@NonNull String fileUri, String fileName, String thumbnailPath, long addedTimestamp) {
-        this.fileUri = fileUri;
+    public FavouritesModel(@NonNull String filePath, String fileName, String thumbnailPath, long addedTimestamp) {
+        this.filePath = filePath;
         this.fileName = fileName;
         // this.fileType = fileType;
         this.thumbnailPath = thumbnailPath;
@@ -26,12 +26,12 @@ public class FavouritesModel {
     }
 
     @NonNull
-    public String getFileUri() {
-        return fileUri;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setFileUri(@NonNull String fileUri) {
-        this.fileUri = fileUri;
+    public void setFilePath(@NonNull String filePath) {
+        this.filePath = filePath;
     }
 
     public String getFileName() {
@@ -71,13 +71,13 @@ public class FavouritesModel {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         FavouritesModel that = (FavouritesModel) obj;
-        return fileUri.equals(that.fileUri) &&
+        return filePath.equals(that.filePath) &&
                 Objects.equals(fileName, that.fileName) &&
                 Objects.equals(thumbnailPath, that.thumbnailPath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(fileUri, fileName, thumbnailPath);
+        return Objects.hash(filePath, fileName, thumbnailPath);
     }
 }

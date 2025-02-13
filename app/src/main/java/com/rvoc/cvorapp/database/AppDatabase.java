@@ -17,7 +17,7 @@ import com.rvoc.cvorapp.models.ShareHistory;
 import com.rvoc.cvorapp.utils.DateConverter;
 
 // Annotate the class as a Room database
-@Database(entities = {ShareHistory.class, FavouritesModel.class}, version = 2, exportSchema = false)
+@Database(entities = {ShareHistory.class, FavouritesModel.class}, version = 3, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -26,11 +26,11 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract FavouritesDao favouritesDao();
 
     // Migration from version 1 to 2
-    public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+    public static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             // Create the new Favourites table
-            database.execSQL("CREATE TABLE IF NOT EXISTS favourites (fileUri TEXT PRIMARY KEY NOT NULL, thumbnailPath TEXT)");
+            database.execSQL("CREATE TABLE IF NOT EXISTS favourites (filePath TEXT PRIMARY KEY NOT NULL, thumbnailPath TEXT)");
         }
     };
 

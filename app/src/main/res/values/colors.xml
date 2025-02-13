@@ -25,7 +25,7 @@
 
     <!-- Input Box and Border Colors -->
     <color name="inputBox">#2B475F</color> <!-- Muted blue-gray for inputs -->
-    <color name="borderColor">#1E3A56</color> <!-- Slightly brighter blue for borders -->
+    <color name="borderColor">#74828F</color> <!-- Slightly brighter blue for borders -->
     <color name="checkBoxColor">#18A1D7</color> <!-- Consistent with highlight accent -->
 
     <!-- Background Colors -->
@@ -41,7 +41,7 @@
 
     <!-- Shadows and Ripple Effects -->
     <color name="shadow">#40000000</color> <!-- Slightly stronger shadow -->
-    <color name="rippleEffect">#6618A1D7</color> <!-- Soft ripple effect matching accents -->
+    <color name="rippleEffect">#80FFFFFF</color> <!-- Light ripple for contrast -->
 
     <!-- Additional Common Colors -->
     <color name="white">#FFFFFF</color> <!-- Standard white -->
@@ -50,6 +50,6 @@
     <color name="green">#32A237</color> <!-- Neutral gray -->
     <color name="transparent">#00FFFFFF</color>
     <color name="shine">#2B658B</color> <!-- Subtle, polished shine effect -->
-    <color name="ripple">#33FFFFFF</color> <!-- Light ripple for contrast -->
+
 
 </resources>

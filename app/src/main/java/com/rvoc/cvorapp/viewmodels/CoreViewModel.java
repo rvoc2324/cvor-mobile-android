@@ -30,7 +30,8 @@ public class CoreViewModel extends AndroidViewModel {
     public enum SourceType {
         CAMERA,
         PDF_PICKER,
-        IMAGE_PICKER
+        IMAGE_PICKER,
+        DIRECT_ACTION
     }
 
     private final MutableLiveData<SourceType> sourceType = new MutableLiveData<>(null);

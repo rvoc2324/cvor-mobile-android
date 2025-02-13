@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.util.Log;
 
+import androidx.core.content.FileProvider;
+
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;
@@ -49,7 +51,12 @@ public class FileUtils {
             }
 
             // Define the destination file to app cache
-            File destFile = new File(context.getCacheDir(), fileName);
+            File cacheDir = new File(context.getCacheDir(), "favourites_thumbnail");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+
+            File destFile = new File(cacheDir, fileName);
 
             // Copy file content from Uri to app storage
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
@@ -92,4 +99,9 @@ public class FileUtils {
         }
         return null;
     }
+
+    public static Uri getUriFromFile(Context context, File file) {
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
+    }
+
 }

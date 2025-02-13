@@ -24,7 +24,7 @@ public class DatabaseModule {
     @Singleton
     public static AppDatabase provideDatabase(@ApplicationContext Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "app_database")
-                .addMigrations(AppDatabase.MIGRATION_1_2) // Handles version upgrades
+                .addMigrations(AppDatabase.MIGRATION_2_3) // Handles version upgrades
                 .build();
     }
 

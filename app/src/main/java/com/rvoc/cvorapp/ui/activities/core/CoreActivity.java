@@ -23,6 +23,8 @@ import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
 import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
+import java.io.File;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -62,9 +64,9 @@ public class CoreActivity extends AppCompatActivity {
             }
 
             // Handle fileUri for favourites from intent extras
-            String fileUri = getIntent().getStringExtra("fileUri");
+            String filePath = getIntent().getStringExtra("filePath");
 
-            initialiseNavController(actionType, fileUri);
+            initialiseNavController(actionType, filePath);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
                 // Use OnBackInvokedCallback
@@ -101,11 +103,13 @@ public class CoreActivity extends AppCompatActivity {
 
             // Observe source type for navigation
             coreViewModel.getSourceType().observe(this, sourceType -> {
-                if (actionType==null) {
-                    if (sourceType == null) {
+                if (sourceType == null) {
+                    if ("directWatermark".equals(actionType) || "directShare".equals(actionType)) {
+                        Log.d("CoreActivity", "Source type is null but proceeding due to action type: " + actionType);
+                    } else {
                         Log.e("CoreActivity", "sourceType is null! Navigation aborted.");
-                        return;
                     }
+                    return;
                 }
                 switch (sourceType) {
                     case CAMERA:
@@ -115,6 +119,10 @@ public class CoreActivity extends AppCompatActivity {
                     case PDF_PICKER:
                     case IMAGE_PICKER:
                         navToFileManager();
+                        break;
+
+                    case DIRECT_ACTION:
+                        // No action needed, already handled in handleFavouriteActions()
                         break;
                 }
             });
@@ -159,7 +167,7 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    private void initialiseNavController(String actionType, String fileUri) {
+    private void initialiseNavController(String actionType, String filePath ) {
         try {
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.nav_host_fragment_core);
@@ -170,23 +178,33 @@ public class CoreActivity extends AppCompatActivity {
 
             navController = navHostFragment.getNavController();
 
-            NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph_core);
-
-            // Modify the start destination dynamically
-            if ("directWatermark".equals(actionType)) {
-                addFileUriToViewModel(fileUri);
-                navGraph.setStartDestination(R.id.watermarkFragment);
-            } else if ("directShare".equals(actionType)) {
-                addFileToViewModel(fileUri);
-                navGraph.setStartDestination(R.id.previewFragment);
+            // If actionType is set, modify the start destination dynamically
+            if (actionType != null && filePath != null) {
+                handleFavouriteActions(actionType, filePath);
             }
-
-            navController.setGraph(navGraph);
 
             Log.d(TAG, "NavController initialized successfully.");
         } catch (Exception e) {
             throw new IllegalStateException("NavController could not be initialized. Check 'nav_host_fragment_core' in activity_core.xml.", e);
         }
+    }
+
+    private void handleFavouriteActions(String actionType, String filePath){
+        NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph_core);
+
+        File file = new File(filePath);
+        Uri fileUri = FileUtils.getUriFromFile(this, file);
+
+        // Modify the start destination dynamically
+        if ("directWatermark".equals(actionType)) {
+            addFileUriToViewModel(fileUri);
+            navGraph.setStartDestination(R.id.watermarkFragment);
+            coreViewModel.setSourceType(CoreViewModel.SourceType.DIRECT_ACTION);
+        } else if ("directShare".equals(actionType)) {
+            addFileToViewModel(file);
+            navGraph.setStartDestination(R.id.previewFragment);
+        }
+        navController.setGraph(navGraph);
     }
 
     /**
@@ -352,8 +370,7 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    private void addFileUriToViewModel(@NonNull String fileUri) {
-        Uri uri = Uri.parse(fileUri);
+    private void addFileUriToViewModel(@NonNull Uri uri) {
         String fileName = FileUtils.getFileNameFromUri(this, uri);
         if (fileName != null) {
             coreViewModel.addSelectedFile(uri, fileName);
@@ -363,9 +380,8 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    private void addFileToViewModel(@NonNull String fileUri) {
-        Uri uri = Uri.parse(fileUri);
-        FileUtils.processFileForSharing(this, uri, coreViewModel);
+    private void addFileToViewModel(@NonNull File file) {
+        coreViewModel.addProcessedFile(file);
     }
 
     @Override

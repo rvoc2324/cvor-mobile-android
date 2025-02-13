@@ -80,24 +80,22 @@ public class HomeFragment extends Fragment {
             }
 
             @Override
-            public void onFavouriteLongPressed(String actionType, String fileUri) {
+            public void onFavouriteLongPressed(String actionType, String filePath) {
                 switch (actionType) {
                     case "directWatermark":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directWatermark", fileUri);
+                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directWatermark", filePath);
                         break;
                     case "directShare":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directShare", fileUri);
+                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directShare", filePath);
                         break;
                     case "remove":
-                        favouritesService.removeFromFavourites(fileUri);
+                        favouritesService.removeFromFavourites(filePath);
                         break;
                 }
             }
-
             @Override
-
             public void onAddFavouriteClicked() {
-                ((HomeActivity) requireActivity()).navigateToCoreActivity("addFavourite");
+                //((HomeActivity) requireActivity()).navigateToCoreActivity("addFavourite");
             }
         });
 
@@ -132,6 +130,8 @@ public class HomeFragment extends Fragment {
         binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark"));
         binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
         binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf"));
+
+        binding.addFavouriteIcon.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addFavourite"));
     }
 
     @Override

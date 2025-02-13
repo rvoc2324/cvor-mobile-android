@@ -35,7 +35,7 @@
     <string name="file_manager_fragment_title">Review files</string>
     <string name="file_name">File Name</string>
     <string name="refer">Refer</string>
-    <string name="share_history">Share history (watermarked)</string>
+    <string name="share_history">Smart Share history</string>
     <string name="share_history_body">Below is the history of all the files you have shared via CVOR. You can filter the history below.</string>
     <string name="sharehistory_hint">Search by file name, shared with or purpose</string>
     <string name="from_date_picker">From</string>

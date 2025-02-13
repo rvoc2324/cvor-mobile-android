@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/option_watermark"
-        android:title="@string/add_watermark_button"
+        android:title="@string/smart_share_button"
         android:icon="@drawable/baseline_secure_add_24"
         app:showAsAction="ifRoom"/>
 

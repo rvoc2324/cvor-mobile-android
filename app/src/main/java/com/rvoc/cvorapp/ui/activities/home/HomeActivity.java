@@ -6,16 +6,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ActivityHomeBinding;
 import com.rvoc.cvorapp.ui.activities.core.CoreActivity;
@@ -111,6 +114,19 @@ public class HomeActivity extends AppCompatActivity {
             // Directly use NavigationUI for handling navigation
             return NavigationUI.onNavDestinationSelected(item, navController);
         });
+
+        BottomNavigationView bottomNavView = binding.bottomNavigation;
+
+        // Get the BottomNavigationMenuView (the container of item views)
+        ViewGroup menuView = (ViewGroup) bottomNavView.getChildAt(0);
+        if (menuView == null) return; // Safety check
+
+        for (int i = 0; i < menuView.getChildCount(); i++) {
+            View itemView = menuView.getChildAt(i); // Get the BottomNavigationItemView
+            if (itemView != null) {
+                itemView.setBackground(ContextCompat.getDrawable(this, R.drawable.bottom_nav_ripple));
+            }
+        }
     }
 
     public void navigateToCoreActivity(String actionType) {
@@ -126,11 +142,11 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void navigateToCoreActivity_direct(String actionType, String fileUri) {
+    public void navigateToCoreActivity_direct(String actionType, String filePath) {
         try {
             Intent intent = new Intent(this, CoreActivity.class);
             intent.putExtra("actionType", actionType); // Add actionType
-            intent.putExtra("fileUri", fileUri); // Add fileUri
+            intent.putExtra("filePath", filePath); // Add filePath
             startActivity(intent);
 
             Log.d(TAG, "Navigating to CoreActivity with actionType: " + actionType);

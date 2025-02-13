@@ -16,13 +16,13 @@ public interface FavouritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addFavourite(FavouritesModel favourite);
 
-    @Query("DELETE FROM favourites WHERE fileUri = :fileUri")
-    void removeFavourite(String fileUri);
+    @Query("DELETE FROM favourites WHERE filePath = :filePath")
+    void removeFavourite(String filePath);
 
     @Query("SELECT * FROM favourites ORDER BY addedTimestamp DESC")
     LiveData<List<FavouritesModel>> getAllFavourites();
 
-    @Query("SELECT * FROM favourites WHERE fileUri = :fileUri LIMIT 1")
-    FavouritesModel getFavouriteByUri(String fileUri);
+    @Query("SELECT * FROM favourites WHERE filePath = :filePath LIMIT 1")
+    FavouritesModel getFavouriteByPath(String filePath);
 
 }
