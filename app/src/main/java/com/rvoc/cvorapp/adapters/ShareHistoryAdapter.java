@@ -3,9 +3,11 @@ package com.rvoc.cvorapp.adapters;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.rvoc.cvorapp.databinding.ItemHistoryBinding;
 import com.rvoc.cvorapp.models.ShareHistory;
+import com.rvoc.cvorapp.utils.DiffCallBack;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapter.ViewHolder> {
-    private List<ShareHistory> shareHistoryList = new ArrayList<>(); // Initialize with empty list
+    private final List<ShareHistory> shareHistoryList = new ArrayList<>(); // Initialize with empty list
 
     public interface OnItemClickListener {
         void onItemClick(ShareHistory history);
@@ -23,9 +25,25 @@ public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapte
     }
 
     public void submitList(List<ShareHistory> newList) {
-        shareHistoryList = newList;
-        notifyDataSetChanged();
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                new DiffCallBack<>(shareHistoryList, newList, new DiffCallBack.DiffUtilComparer<>() {
+                    @Override
+                    public boolean areItemsTheSame(ShareHistory oldItem, ShareHistory newItem) {
+                        return oldItem.getId() == newItem.getId(); // Assuming IDs are unique
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(ShareHistory oldItem, ShareHistory newItem) {
+                        return oldItem.equals(newItem);
+                    }
+                })
+        );
+
+        shareHistoryList.clear();
+        shareHistoryList.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
     }
+
 
     @NonNull
     @Override
@@ -60,6 +78,7 @@ public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapte
             binding.sharedWith.setText(history.getSharedWith());
             binding.purpose.setText(history.getPurpose());
             binding.sharedDate.setText(dateFormat.format(history.getSharedDate()));
+            // binding.shareMedium.setText(history.getShareMedium());
 
             // Ensure the view resets its state when recycled
             binding.fileName.setSelected(false);

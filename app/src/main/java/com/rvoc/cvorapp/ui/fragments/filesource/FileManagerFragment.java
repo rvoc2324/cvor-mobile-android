@@ -259,7 +259,7 @@ public class FileManagerFragment extends Fragment {
                         Log.d(TAG, "Decrypted PDF saved at: " + decryptedUri);
                         addFileToViewModel(decryptedUri); // Use decrypted file
                         if (Objects.equals(actionType, "addFavourite")) {
-                            addToFavourites(decryptedUri);
+                            Toast.makeText(requireContext(), "Password protected files are not supported for favourites.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -289,7 +289,6 @@ public class FileManagerFragment extends Fragment {
         String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), fileUri);
         File filePath = FileUtils.copyFile(requireContext(), fileUri);
         favouritesService.addToFavourites(String.valueOf(filePath), thumbnailPath);
-        requireActivity().finish();
     }
 
     @Override

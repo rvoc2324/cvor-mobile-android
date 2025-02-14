@@ -1,16 +1,22 @@
 <resources>
     <string name="app_name" translatable="false">CVOR</string>
     <string name="app_action">What would you like to do?</string>
+    <string name="suggested_actions">Suggested Actions</string>
     <string name="home">Home</string>
     <string name="add_watermark_button">Add Watermark</string>
     <string name="smart_share_button">Smart share</string>
     <string name="share_file_button">Share file</string>
     <string name="combine_pdfs_button">Combine</string>
-    <string name="convert_to_pdf_button">Convert</string>
+    <string name="convert_to_pdf_button">Convert images</string>
+    <string name="scan_to_pdf_button">Scan to PDF</string>
     <string name="split_pdf_button">Split</string>
     <string name="compress_pdf_button">Compress</string>
-    <string name="pdf_actions">PDF actions</string>
+    <string name="pdf_tools">PDF tools</string>
     <string name="remove">Remove</string>
+    <string name="filename_change_prompt">Provide the new file name</string>
+    <string name="filename_change_check">File name required!</string>
+    <string name="custom_file_name">Change file name</string>
+    <string name="change">Change</string>
     <string name="favourites">Favourites</string>
     <string name="flash_toggle">Flash ON</string>
     <string name="capture_image">Take Photo</string>
@@ -59,7 +65,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="combine_pdf">Combine PDF</string>
-    <string name="convert_to_pdf">Scan to PDF</string>
+    <string name="convert_to_pdf">Convert images to PDF</string>
     <string name="split_pdf">Split PDF</string>
     <string name="compress_pdf">Compress PDF</string>
     <string name="delete_icon">Delete icon</string>
@@ -79,6 +85,10 @@
     <string name="share_app_text">Select the app to share</string>
     <string name="share_app_icon_desc">App available to share the files</string>
     <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
+    <string name="refer_message">Check out CVOR - A smarter way to share your data: https://www.google.com</string>
+    <string name="share_via">Share via</string>
+    <string name="review_text">Leave us a review ❤️</string>
+
 
     <string name="watermark_help_text">
     - <b>Sharing With:</b> Organisation/individual you are sharing the document with.\n

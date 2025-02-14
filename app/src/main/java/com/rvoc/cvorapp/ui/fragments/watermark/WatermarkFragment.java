@@ -74,7 +74,7 @@ public class WatermarkFragment extends Fragment {
         executorService = Executors.newSingleThreadExecutor(); // Adjust pool size as needed
 
         // Initialize ViewModels
-        watermarkViewModel = new ViewModelProvider(this).get(WatermarkViewModel.class);
+        watermarkViewModel = new ViewModelProvider(requireActivity()).get(WatermarkViewModel.class);
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
         // Bind UI components through ViewBinding

@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity(tableName = "share_history")
 public class ShareHistory {
@@ -76,12 +77,22 @@ public class ShareHistory {
         this.purpose = purpose;
     }
 
-    /*
-    public String getAdditionalDetails() {
-        return additionalDetails;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShareHistory that = (ShareHistory) o;
+        return id == that.id &&
+                Objects.equals(fileName, that.fileName) &&
+                Objects.equals(sharedDate, that.sharedDate) &&
+                Objects.equals(shareMedium, that.shareMedium) &&
+                Objects.equals(sharedWith, that.sharedWith) &&
+                Objects.equals(purpose, that.purpose);
     }
 
-    public void setAdditionalDetails(String additionalDetails) {
-        this.additionalDetails = additionalDetails;
-    }*/
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fileName, sharedDate, shareMedium, sharedWith, purpose);
+    }
+
 }

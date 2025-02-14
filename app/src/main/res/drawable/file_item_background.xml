@@ -6,7 +6,7 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="16dp" />
-            <solid android:color="@color/fragment1Background"/>
+            <solid android:color="@color/fragment2Background"/>
         </shape>
     </item>
 

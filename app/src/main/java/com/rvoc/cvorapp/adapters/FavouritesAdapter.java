@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +20,7 @@ import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.models.FavouritesModel;
 import com.rvoc.cvorapp.databinding.ItemAddFavouriteBinding;
 import com.rvoc.cvorapp.databinding.ItemFavouriteBinding;
+import com.rvoc.cvorapp.utils.DiffCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +41,22 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setFavourites(List<FavouritesModel> newFavourites) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                new DiffCallBack<>(favourites, newFavourites, new DiffCallBack.DiffUtilComparer<>() {
+                    @Override
+                    public boolean areItemsTheSame(FavouritesModel oldItem, FavouritesModel newItem) {
+                        return oldItem.getFilePath().equals(newItem.getFilePath());
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(FavouritesModel oldItem, FavouritesModel newItem) {
+                        return oldItem.equals(newItem);
+                    }
+                })
+        );
         favourites.clear();
         favourites.addAll(newFavourites);
-        notifyDataSetChanged();
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @Override
@@ -131,12 +146,12 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             binding.getRoot().setOnClickListener(v -> listener.onFavouriteClicked(favourite));
 
             binding.getRoot().setOnLongClickListener(v -> {
-                showPopupMenu(v, favourite.getFilePath());
+                showPopupMenu(v, favourite.getFilePath(), favourite.getThumbnailPath());
                 return true;
             });
         }
 
-        private void showPopupMenu(View view, String filePath) {
+        private void showPopupMenu(View view, String filePath, String thumbnailPath) {
             // Inflate the custom menu layout
             LayoutInflater inflater = LayoutInflater.from(view.getContext());
             View popupView = inflater.inflate(R.layout.custom_popup_menu, new FrameLayout(context), false);
@@ -171,17 +186,22 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             // Set click listeners for each option
             popupView.findViewById(R.id.option_watermark).setOnClickListener(v -> {
-                listener.onFavouriteLongPressed("directWatermark", filePath);
+                listener.onFavouriteLongPressed("directWatermark", filePath, null);
                 popupWindow.dismiss();
             });
 
             popupView.findViewById(R.id.option_share).setOnClickListener(v -> {
-                listener.onFavouriteLongPressed("directShare", filePath);
+                listener.onFavouriteLongPressed("directShare", filePath, null);
+                popupWindow.dismiss();
+            });
+
+            popupView.findViewById(R.id.option_custom_file_name).setOnClickListener(v -> {
+                listener.onFavouriteLongPressed("changeFileName", filePath, null);
                 popupWindow.dismiss();
             });
 
             popupView.findViewById(R.id.option_remove).setOnClickListener(v -> {
-                listener.onFavouriteLongPressed("remove", filePath);
+                listener.onFavouriteLongPressed("remove", filePath, thumbnailPath);
                 popupWindow.dismiss();
             });
         }

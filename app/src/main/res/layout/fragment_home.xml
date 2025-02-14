@@ -12,7 +12,6 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         app:cardCornerRadius="0dp"
         app:cardElevation="16dp"
         app:cardBackgroundColor="@color/colorPrimary"
@@ -43,275 +42,369 @@
     </com.google.android.material.card.MaterialCardView>
 
     <!-- ScrollView for content -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="12dp"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/title_container"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:paddingBottom="80dp">
 
         <!-- LinearLayout as a single child of ScrollView -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="40dp">
 
-            <!-- Button Grid Container -->
-            <LinearLayout
-                android:id="@+id/button_container"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
+                app:cardBackgroundColor="@color/colorSecondary"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp">
+
+                <!-- Button Grid Container -->
+                <LinearLayout
+                    android:id="@+id/button_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="start"
+                    android:padding="12dp">
+
+                    <!-- Prompt Container -->
+                    <TextView
+                        android:id="@+id/tv_prompt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/suggested_actions"
+                        android:padding="5dp"
+                        style="@style/TextStyle.SubTitle"/>
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:rowCount="1"
+                        android:columnCount="2"
+                        android:alignmentMode="alignMargins"
+                        android:useDefaultMargins="true">
+
+                        <!-- Add Watermark Button -->
+                        <Button
+                            android:id="@+id/btn_add_watermark"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="120dp"
+                            android:maxWidth="320dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:text="@string/smart_share_button"
+                            style="@style/TextStyle.Body"
+                            android:paddingTop="15dp"
+                            app:icon="@drawable/baseline_secure_add_24"
+                            app:iconGravity="top"
+                            app:iconPadding="15dp"
+                            app:iconSize="28dp"
+                            android:elevation="6dp"
+                            app:cornerRadius="16dp"
+                            android:layout_marginEnd="8dp"
+                            app:rippleColor="@color/rippleEffect" />
+
+                        <!-- Convert Images to PDF Button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_scan_to_pdf"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:maxHeight="120dp"
+                            android:maxWidth="320dp"
+                            android:layout_columnWeight="1"
+                            android:layout_rowWeight="1"
+                            android:text="@string/scan_to_pdf_button"
+                            style="@style/TextStyle.Body"
+                            android:paddingTop="15dp"
+                            app:icon="@drawable/baseline_document_scanner_24"
+                            app:iconGravity="top"
+                            app:iconPadding="20dp"
+                            app:iconSize="28dp"
+                            android:elevation="6dp"
+                            app:cornerRadius="16dp"
+                            android:layout_marginStart="8dp"
+                            app:rippleColor="@color/rippleEffect" />
+                    </GridLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorSecondary"
+                app:cardCornerRadius="16dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginHorizontal="16dp">
+                app:cardElevation="8dp">
+
+                <!-- PDF buttons Container -->
+                <LinearLayout
+                    android:id="@+id/pdf_button_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:gravity="center">
+
+                    <!-- PDF Actions Label with Dividers -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="start">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pdf_tools"
+                            android:padding="5dp"
+                            style="@style/TextStyle.SubTitle"/>
+                    </LinearLayout>
+
+                    <!-- PDF Actions Horizontal Scroll -->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <!-- Combine PDFs Action -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="8dp"
+                                android:gravity="center">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_combine_pdfs"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:icon="@drawable/baseline_merge_24"
+                                    app:iconSize="28dp"
+                                    app:iconGravity="textStart"
+                                    app:iconPadding="2dp"
+                                    android:gravity="center"
+                                    android:contentDescription="@string/combine_pdf"
+                                    android:backgroundTint="@color/fragment2Background"
+                                    app:cornerRadius="16dp"
+                                    app:rippleColor="@color/rippleEffect" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/combine_pdfs_button"
+                                    android:layout_marginTop="4dp"
+                                    style="@style/TextStyle.Body" />
+                            </LinearLayout>
+
+                            <!-- Convert to PDF Action -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="8dp"
+                                android:gravity="center">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_convert_to_pdf"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:icon="@drawable/baseline_image_24"
+                                    app:iconSize="28dp"
+                                    app:iconGravity="textStart"
+                                    app:iconPadding="2dp"
+                                    android:gravity="center"
+                                    android:contentDescription="@string/convert_to_pdf"
+                                    android:backgroundTint="@color/fragment2Background"
+                                    app:cornerRadius="16dp"
+                                    app:rippleColor="@color/rippleEffect" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/convert_to_pdf_button"
+                                    android:textAlignment="center"
+                                    android:layout_marginTop="4dp"
+                                    style="@style/TextStyle.Body" />
+                            </LinearLayout>
+
+                            <!-- Split PDFs Action -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="8dp"
+                                android:gravity="center">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_split_pdf"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:icon="@drawable/baseline_vertical_split_24"
+                                    app:iconSize="28dp"
+                                    app:iconGravity="textStart"
+                                    app:iconPadding="2dp"
+                                    android:gravity="center"
+                                    android:backgroundTint="@color/fragment2Background"
+                                    android:contentDescription="@string/split_pdf"
+                                    app:cornerRadius="16dp"
+                                    app:rippleColor="@color/rippleEffect" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/split_pdf_button"
+                                    android:layout_marginTop="4dp"
+                                    style="@style/TextStyle.Body"
+                                    android:gravity="center"
+                                    android:ellipsize="marquee"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:singleLine="true"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true" />
+                            </LinearLayout>
+
+                            <!-- Compress PDFs Action -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="8dp"
+                                android:gravity="center">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_compress_pdf"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    app:icon="@drawable/baseline_compress_24"
+                                    app:iconSize="28dp"
+                                    app:iconGravity="textStart"
+                                    app:iconPadding="2dp"
+                                    android:gravity="center"
+                                    android:backgroundTint="@color/fragment2Background"
+                                    android:contentDescription="@string/compress_pdf"
+                                    app:cornerRadius="16dp"
+                                    app:rippleColor="@color/rippleEffect" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/compress_pdf_button"
+                                    android:layout_marginTop="4dp"
+                                    style="@style/TextStyle.Body"
+                                    android:gravity="center"
+                                    android:ellipsize="marquee"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:singleLine="true"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorSecondary"
+                app:cardCornerRadius="16dp"
+                android:layout_marginTop="40dp"
+                app:cardElevation="8dp">
+
+                <!-- Favourites Container -->
+                <LinearLayout
+                    android:id="@+id/favourite_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/pdf_button_container"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <!-- PDF Actions Label with Dividers -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="start">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/favourites"
+                            android:padding="5dp"
+                            android:layout_gravity="center_vertical"
+                            style="@style/TextStyle.SubTitle"/>
+
+                        <ImageView
+                            android:id="@+id/add_favourite_icon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/baseline_add_circle_24"
+                            android:backgroundTint="@color/grey"
+                            android:padding="5dp"
+                            android:layout_gravity="center_vertical"
+                            android:contentDescription="@string/favourites" />
+                    </LinearLayout>
+
+
+                    <!-- Recent Files Horizontal RecyclerView -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/favourites_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_margin="8dp"
+                        android:scrollbars="none"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@id/pdf_button_container"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorSecondary"
+                app:cardCornerRadius="16dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                app:cardElevation="8dp">
 
                 <!-- Prompt Container -->
                 <TextView
-                    android:id="@+id/tv_prompt"
+                    android:id="@+id/review_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_action"
-                    android:paddingBottom="40dp"
-                    android:letterSpacing="0.08"
-                    style="@style/TextStyle.SubTitle"/>
-
-                <GridLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:rowCount="1"
-                    android:columnCount="2"
-                    android:alignmentMode="alignMargins"
-                    android:useDefaultMargins="true">
-
-                    <!-- Add Watermark Button -->
-                    <Button
-                        android:id="@+id/btn_add_watermark"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:maxHeight="120dp"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:text="@string/smart_share_button"
-                        style="@style/TextStyle.Body"
-                        android:paddingTop="15dp"
-                        app:icon="@drawable/baseline_secure_add_24"
-                        app:iconGravity="top"
-                        app:iconPadding="15dp"
-                        app:iconSize="28dp"
-                        android:elevation="6dp"
-                        app:cornerRadius="16dp"
-                        android:layout_marginEnd="8dp"
-                        app:rippleColor="@color/rippleEffect" />
-
-                    <!-- Convert Images to PDF Button -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_convert_to_pdf"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:maxHeight="120dp"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:text="@string/convert_to_pdf"
-                        style="@style/TextStyle.Body"
-                        android:paddingTop="15dp"
-                        app:icon="@drawable/baseline_document_scanner_24"
-                        app:iconGravity="top"
-                        app:iconPadding="20dp"
-                        app:iconSize="28dp"
-                        android:elevation="6dp"
-                        app:cornerRadius="16dp"
-                        android:layout_marginStart="8dp"
-                        app:rippleColor="@color/rippleEffect" />
-                </GridLayout>
-            </LinearLayout>
-
-            <!-- PDF buttons Container -->
-            <LinearLayout
-                android:id="@+id/pdf_button_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginTop="20dp">
-
-                <!-- PDF Actions Label with Dividers -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/shadow" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pdf_actions"
-                        android:paddingHorizontal="8dp"
-                        style="@style/TextStyle.SectionHeadings"/>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/shadow" />
-                </LinearLayout>
-
-                <!-- PDF Actions Horizontal Scroll -->
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fillViewport="true"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="10dp">
-
-                        <!-- PDF Action Buttons -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_combine_pdfs"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="100dp"
-                            android:layout_columnWeight="1"
-                            android:layout_rowWeight="1"
-                            android:text="@string/combine_pdfs_button"
-                            style="@style/TextStyle.Body"
-                            android:paddingTop="15dp"
-                            app:icon="@drawable/baseline_merge_24"
-                            app:iconGravity="top"
-                            app:iconPadding="20dp"
-                            app:iconSize="28dp"
-                            android:elevation="6dp"
-                            app:cornerRadius="16dp"
-                            android:layout_margin="8dp"
-                            app:rippleColor="@color/rippleEffect" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_split_pdf"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="100dp"
-                            android:maxHeight="120dp"
-                            android:layout_columnWeight="1"
-                            android:layout_rowWeight="1"
-                            android:text="@string/split_pdf_button"
-                            style="@style/TextStyle.Body"
-                            android:paddingTop="15dp"
-                            app:icon="@drawable/baseline_vertical_split_24"
-                            app:iconGravity="top"
-                            app:iconPadding="20dp"
-                            app:iconSize="28dp"
-                            android:elevation="6dp"
-                            app:cornerRadius="16dp"
-                            android:layout_margin="8dp"
-                            app:rippleColor="@color/rippleEffect" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_compress_pdf"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="100dp"
-                            android:maxHeight="120dp"
-                            android:layout_columnWeight="1"
-                            android:layout_rowWeight="1"
-                            android:text="@string/compress_pdf_button"
-                            style="@style/TextStyle.Body"
-                            android:paddingTop="15dp"
-                            app:icon="@drawable/baseline_compress_24"
-                            app:iconGravity="top"
-                            app:iconPadding="20dp"
-                            app:iconSize="28dp"
-                            android:elevation="6dp"
-                            app:cornerRadius="16dp"
-                            android:layout_margin="8dp"
-                            app:rippleColor="@color/rippleEffect" />
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
-
-            <!-- Favourites Container -->
-            <LinearLayout
-                android:id="@+id/favourite_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_marginTop="50dp"
-                app:layout_constraintTop_toBottomOf="@id/pdf_button_container"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
-
-                <!-- PDF Actions Label with Dividers -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/favourites"
-                        android:paddingHorizontal="8dp"
-                        style="@style/TextStyle.SubTitle"/>
-
-                    <ImageView
-                        android:id="@+id/add_favourite_icon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/baseline_add_circle_24"
-                        android:backgroundTint="@color/grey"
-                        android:padding="5dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="@string/favourites" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/shadow" />
-                </LinearLayout>
-
-
-                <!-- Recent Files Horizontal RecyclerView -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/favourites_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_margin="8dp"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@id/pdf_button_container"/>
-            </LinearLayout>
+                    android:text="@string/review_text"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="10dp"
+                    android:layout_gravity="center"
+                    style="@style/TextStyle.SectionHeadings"/>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </ScrollView>
-
-    <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:background="@drawable/gradient_secondary"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:itemIconSize="30dp"
-        android:visibility="invisible"
-        app:labelVisibilityMode="unlabeled"
-        app:itemBackground="@drawable/bottom_nav_item_background"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

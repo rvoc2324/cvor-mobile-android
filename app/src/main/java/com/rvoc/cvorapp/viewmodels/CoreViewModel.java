@@ -31,14 +31,15 @@ public class CoreViewModel extends AndroidViewModel {
         CAMERA,
         PDF_PICKER,
         IMAGE_PICKER,
-        DIRECT_ACTION
+        DIRECT_ACTION,
+        NONE
     }
-
     private final MutableLiveData<SourceType> sourceType = new MutableLiveData<>(null);
     private final MutableLiveData<Map<Uri, String>> selectedFiles = new MutableLiveData<>(new HashMap<>());
     private final MutableLiveData<List<File>> processedFiles = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<String> actionType = new MutableLiveData<>("");
     private final MutableLiveData<String> customFileName = new MutableLiveData<>("");
+    private final MutableLiveData<Boolean> favouriteAdded = new MutableLiveData<>();
 
     // Navigation events (SingleLiveEvent recommended for one-time events)
     private final MutableLiveData<String> navigationEvent = new MutableLiveData<>(null);
@@ -48,6 +49,10 @@ public class CoreViewModel extends AndroidViewModel {
 
         super(application);
 
+    }
+
+    public LiveData<Boolean> getFavouriteAdded() {
+        return favouriteAdded;
     }
 
     // Action Type

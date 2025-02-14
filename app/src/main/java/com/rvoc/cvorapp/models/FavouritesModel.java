@@ -65,7 +65,8 @@ public class FavouritesModel {
     public void setAddedTimestamp(long addedTimestamp) {
         this.addedTimestamp = addedTimestamp;
     }
-    // Fix: Implement equals() and hashCode()
+
+    // Implement equals() and hashCode()
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

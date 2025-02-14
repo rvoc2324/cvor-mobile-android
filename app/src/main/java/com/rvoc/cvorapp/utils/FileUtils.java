@@ -51,7 +51,7 @@ public class FileUtils {
             }
 
             // Define the destination file to app cache
-            File cacheDir = new File(context.getCacheDir(), "favourites_thumbnail");
+            File cacheDir = new File(context.getCacheDir(), "favourites_files");
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }

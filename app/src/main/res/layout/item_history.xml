@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="12dp"
-    android:background="@color/fragment1Background">
+    android:background="@color/fragment2Background">
 
     <!-- File Name (Larger Font) -->
     <TextView

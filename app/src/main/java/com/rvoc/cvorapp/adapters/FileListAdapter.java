@@ -12,10 +12,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ItemFileBinding;
+import com.rvoc.cvorapp.utils.DiffCallBack;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import java.util.concurrent.Executors;
 
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
 
-    private List<Map.Entry<Uri, String>> fileEntries = new ArrayList<>();
+    private final List<Map.Entry<Uri, String>> fileEntries = new ArrayList<>();
     private final FileActionListener fileActionListener;
     private final ExecutorService executorService; // Thread pool for asynchronous tasks
     private final LruCache<String, Bitmap> thumbnailCache; // In-memory cache for thumbnails
@@ -47,13 +49,29 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         };
     }
 
-    public void submitList(List<Map.Entry<Uri, String>> entries) {
-        if (entries != null) {
-            this.fileEntries = new ArrayList<>(entries); // Create a new list to avoid modifying external references
-        } else {
-            this.fileEntries.clear(); // Clear the list if entries is null
+    public void submitList(List<Map.Entry<Uri, String>> newEntries) {
+        if (newEntries == null) {
+            fileEntries.clear();
+            return;
         }
-        notifyDataSetChanged();
+
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                new DiffCallBack<>(fileEntries, newEntries, new DiffCallBack.DiffUtilComparer<>() {
+                    @Override
+                    public boolean areItemsTheSame(Map.Entry<Uri, String> oldItem, Map.Entry<Uri, String> newItem) {
+                        return oldItem.getKey().equals(newItem.getKey()); // Compare URIs (unique file identifiers)
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(Map.Entry<Uri, String> oldItem, Map.Entry<Uri, String> newItem) {
+                        return oldItem.getValue().equals(newItem.getValue()); // Compare associated metadata (filename, label, etc.)
+                    }
+                })
+        );
+
+        fileEntries.clear();
+        fileEntries.addAll(newEntries);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -116,7 +134,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         try {
             // Use MediaStore to load the image thumbnail
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
-            Bitmap scaledBitmap = scaleBitmap(bitmap, 128); // Scale to thumbnail size
+            Bitmap scaledBitmap = scaleBitmap(bitmap); // Scale to thumbnail size
             thumbnailCache.put(fileName, scaledBitmap); // Cache the thumbnail
 
             holder.binding.getRoot().post(() -> holder.binding.fileTypeImageView.setImageBitmap(scaledBitmap));
@@ -173,10 +191,10 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         return null;
     }
 
-    private Bitmap scaleBitmap(Bitmap bitmap, int maxSize) {
+    private Bitmap scaleBitmap(Bitmap bitmap) {
         float aspectRatio = (float) bitmap.getWidth() / bitmap.getHeight();
-        int width = aspectRatio >= 1 ? maxSize : Math.round(maxSize * aspectRatio);
-        int height = aspectRatio < 1 ? maxSize : Math.round(maxSize / aspectRatio);
+        int width = aspectRatio >= 1 ? 128 : Math.round(128 * aspectRatio);
+        int height = aspectRatio < 1 ? 128 : Math.round(128 / aspectRatio);
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 

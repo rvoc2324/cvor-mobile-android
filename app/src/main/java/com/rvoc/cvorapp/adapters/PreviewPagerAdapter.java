@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -13,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.ItemImagePreviewBinding;
 import com.rvoc.cvorapp.databinding.ItemPdfPreviewBinding;
+import com.rvoc.cvorapp.utils.DiffCallBack;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 import com.tom_roush.pdfbox.rendering.PDFRenderer;
 import java.io.File;
@@ -24,11 +26,31 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_PDF = 2;
     private static final String TAG = "Preview Adapter";
     private final List<File> fileList = new ArrayList<>();
-    public void submitList(List<File> files) {
+    public void submitList(List<File> newFiles) {
+        if (newFiles == null) {
+            fileList.clear();
+            return;
+        }
+
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                new DiffCallBack<>(fileList, newFiles, new DiffCallBack.DiffUtilComparer<>() {
+                    @Override
+                    public boolean areItemsTheSame(File oldItem, File newItem) {
+                        return oldItem.getAbsolutePath().equals(newItem.getAbsolutePath()); // Compare by file path
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(File oldItem, File newItem) {
+                        return oldItem.equals(newItem); // Compare file contents
+                    }
+                })
+        );
+
         fileList.clear();
-        fileList.addAll(files);
-        notifyDataSetChanged();
+        fileList.addAll(newFiles);
+        diffResult.dispatchUpdatesTo(this);
     }
+
     @Override
     public int getItemViewType(int position) {
         File file = fileList.get(position);
@@ -39,6 +61,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         throw new IllegalArgumentException("Unsupported file type: " + file.getName());
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,6 +75,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         throw new IllegalArgumentException("Invalid view type");
     }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         File file = fileList.get(position);
@@ -61,6 +85,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((PdfViewHolder) holder).bind(file);
         }
     }
+
     @Override
     public int getItemCount() {
         return fileList.size();
@@ -83,6 +108,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             // Optional: Add click listener or additional logic
         }
     }
+
     static class PdfViewHolder extends RecyclerView.ViewHolder {
         private final ItemPdfPreviewBinding binding;
         public PdfViewHolder(@NonNull ItemPdfPreviewBinding binding) {

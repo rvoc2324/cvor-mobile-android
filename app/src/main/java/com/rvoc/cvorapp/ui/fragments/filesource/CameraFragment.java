@@ -479,11 +479,8 @@ public class CameraFragment extends Fragment {
 
         binding.negativeButton.setOnClickListener(v -> {
             dialog.dismiss();
-            if (Objects.equals(actionType, "addFavourite")) {
-                requireActivity().finish();
-            }
             coreViewModel.setNavigationEvent("navigate_to_action");
-            Log.e(TAG, "navigate to watermark");
+            Log.e(TAG, "navigate to action");
         });
 
         // Show the dialog

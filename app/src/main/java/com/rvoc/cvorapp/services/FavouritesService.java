@@ -1,13 +1,12 @@
 package com.rvoc.cvorapp.services;
 
 import android.content.Context;
-import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 
 import com.rvoc.cvorapp.models.FavouritesModel;
 import com.rvoc.cvorapp.repositories.FavouritesRepository;
-import com.rvoc.cvorapp.utils.FileUtils;
+import com.rvoc.cvorapp.utils.CleanupCache;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -62,8 +61,11 @@ public class FavouritesService {
     /**
      * Removes a file from favourites.
      */
-    public void removeFromFavourites(String filePath) {
-        executor.execute(() -> favouritesRepository.removeFavourite(filePath));
+    public void removeFromFavourites(String filePath, String thumbnailPath) {
+        executor.execute(() -> {
+            favouritesRepository.removeFavourite(filePath);
+            CleanupCache.deleteFavourite(filePath, thumbnailPath);
+        });
     }
 
     private String extractFileName(String filePath) {

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:background="@color/fragment1Background">
+    android:background="@color/fragment2Background">
 
     <ImageView
         android:id="@+id/file_type_image_view"

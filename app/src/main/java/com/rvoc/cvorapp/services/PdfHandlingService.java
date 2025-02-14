@@ -309,7 +309,6 @@ public class PdfHandlingService {
         });
     }
 
-
     // Helper to show a toast
     private void showToast(@NonNull Activity activity) {
         Log.d(TAG, "PDF Decryption 16.");

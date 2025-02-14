@@ -72,7 +72,9 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
                         binding.optionImagePicker.setVisibility(View.VISIBLE);
                         binding.optionPDFPicker.setVisibility(View.VISIBLE);
                         break;
-                    case "combinepdf":
+                    /* case "combinepdf":
+                    case "splitpdf":
+                    case "compresspdf":
                         Log.d(TAG, "File source 12.");
                         binding.optionCamera.setVisibility(View.GONE);
                         binding.optionImagePicker.setVisibility(View.GONE);
@@ -80,7 +82,7 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
                         break;
                     case "convertpdf":
                         Log.d(TAG, "File source 13.");
-                        binding.optionCamera.setVisibility(View.VISIBLE);
+                        binding.optionCamera.setVisibility(View.GONE);
                         binding.optionImagePicker.setVisibility(View.VISIBLE);
                         binding.optionPDFPicker.setVisibility(View.GONE);
                         break;
@@ -89,7 +91,7 @@ public class FileSourceFragment extends BottomSheetDialogFragment {
                         binding.optionCamera.setVisibility(View.VISIBLE);
                         binding.optionImagePicker.setVisibility(View.VISIBLE);
                         binding.optionPDFPicker.setVisibility(View.VISIBLE);
-                        break;
+                        break;*/
                 }
             }
         });

@@ -42,10 +42,11 @@ public class ReferFragment extends Fragment {
     private void openNativeShareModal() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out CVOR - Watermarking, PDF & Sharing capabilities: https://www.google.com");
+        String referText = getString(R.string.refer_message);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, referText);
 
         // Show share chooser
-        shareLauncher.launch(Intent.createChooser(shareIntent, "Share via"));
+        shareLauncher.launch(Intent.createChooser(shareIntent, getString(R.string.share_via)));
     }
 
     private void navigateToHome() {

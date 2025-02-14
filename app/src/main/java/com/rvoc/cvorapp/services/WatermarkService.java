@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.Log;
 
@@ -123,6 +124,21 @@ public class WatermarkService {
                 canvas.drawText(watermarkText, centerX, centerY, paint);
             }
 
+            // **Add static watermark at the bottom of the image**
+            Paint staticPaint = new Paint();
+            staticPaint.setColor(Color.DKGRAY);
+            staticPaint.setAlpha(180); // Slightly darker opacity
+            staticPaint.setTextSize(20); // Fixed font size
+            staticPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            staticPaint.setAntiAlias(true);
+
+            String staticWatermark = "Smart share by CVOR";
+            float staticTextWidth = staticPaint.measureText(staticWatermark);
+            float staticX = (watermarkedBitmap.getWidth() - staticTextWidth) / 2;
+            float staticY = watermarkedBitmap.getHeight() - 30; // Margin from the bottom
+
+            canvas.drawText(staticWatermark, staticX, staticY, staticPaint);
+
             // Save the watermarked bitmap to file
             try (FileOutputStream out = new FileOutputStream(outputFile)) {
                 watermarkedBitmap.compress(Bitmap.CompressFormat.JPEG, 70, out);
@@ -161,12 +177,14 @@ public class WatermarkService {
              PDDocument document = PDDocument.load(inputStream)) {
 
             PDType1Font font = PDType1Font.HELVETICA;
+            PDType1Font staticFont = PDType1Font.HELVETICA_BOLD;
             Log.d(TAG, "Watermark service 6.");
 
             for (PDPage page : document.getPages()) {
                 float pageWidth = page.getMediaBox().getWidth();
                 float pageHeight = page.getMediaBox().getHeight();
                 float textWidth = font.getStringWidth(watermarkText) / 1000 * fontSize;
+                float staticTextWidth = staticFont.getStringWidth("Smart share by CVOR") / 1000 * 12; // Fixed size
 
                 try (PDPageContentStream contentStream = new PDPageContentStream(
                         document, page, PDPageContentStream.AppendMode.APPEND, true, true)) {
@@ -208,6 +226,16 @@ public class WatermarkService {
                         contentStream.showText(watermarkText);
                         contentStream.endText();
                     }
+                    // **Add static watermark at the bottom of the page**
+                    contentStream.setFont(staticFont, 12); // Set smaller font size for static watermark
+                    contentStream.setNonStrokingColor(0.5f); // Slightly lighter color
+
+                    float staticX = (pageWidth - staticTextWidth) / 2;
+                    float staticY = 20; // Fixed margin from bottom
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(staticX, staticY);
+                    contentStream.showText("Smart share by CVOR");
+                    contentStream.endText();
                 }
             }
 

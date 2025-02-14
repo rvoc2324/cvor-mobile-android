@@ -87,7 +87,7 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
             binding = FragmentShareBinding.inflate(inflater, container, false);
         }
 
-        if ("addwatermark".equals(actionType)) {
+        if ("addwatermark".equals(actionType)  || "directWatermark".equals(actionType)) {
             binding.actionButton.setText(R.string.log_share_button);
         } else {
             binding.actionButton.setText(R.string.done_button);
@@ -104,7 +104,7 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         });*/
 
         binding.actionButton.setOnClickListener(v -> {
-            if (actionType.equals("addwatermark")) {
+            if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
                 logShareDetails();
                 navigateToShareHistory();
             } else {
@@ -112,6 +112,10 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
             }
         });
         binding.cancelButton.setOnClickListener(v -> requireActivity().finish());
+
+        watermarkViewModel.getShareApp().observe(getViewLifecycleOwner(), shareApp -> {
+            logShareDetails();
+        });
 
         openNativeShareModal();
         return binding.getRoot();
@@ -128,14 +132,17 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         if (processedFiles == null || processedFiles.isEmpty()) return;
 
         String sharedWith = watermarkViewModel.getShareWith().getValue();
+        Log.d(TAG, "Shared With: " + sharedWith);
         if (sharedWith == null || sharedWith.isEmpty()) {
             sharedWith = "Unknown";
         }
         String purpose = watermarkViewModel.getPurpose().getValue();
+        Log.d(TAG, "Purpose " + purpose);
         if (purpose == null || purpose.isEmpty()) {
             purpose = "General purpose";
         }
         String shareApp = watermarkViewModel.getShareApp().getValue();
+        Log.d(TAG, "App " + shareApp);
         Log.d(TAG, "Logging Share Details - App: " + shareApp);
         if (shareApp == null || shareApp.isEmpty()) {
             shareApp = "Not available";

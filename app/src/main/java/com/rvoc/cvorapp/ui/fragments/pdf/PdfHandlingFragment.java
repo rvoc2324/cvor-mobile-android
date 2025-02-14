@@ -92,7 +92,7 @@ public class PdfHandlingFragment extends Fragment {
         coreViewModel.getActionType().observe(getViewLifecycleOwner(), actionType -> {
             if ("combinepdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.combine_pdfs_button);
-            } else if ("convertpdf".equals(actionType)) {
+            } else if ("convertpdf".equals(actionType) || "scanpdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.convert_to_pdf_button);
             } else if ("splitpdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.split_pdf_button);
@@ -103,9 +103,7 @@ public class PdfHandlingFragment extends Fragment {
         });
 
         // Handle action button click
-        binding.actionButton.setOnClickListener(v -> {
-            processFiles(currentActionType);
-        });
+        binding.actionButton.setOnClickListener(v -> processFiles(currentActionType));
 
         // Handle back button click
         binding.backButton.setOnClickListener(v -> {
@@ -190,6 +188,10 @@ public class PdfHandlingFragment extends Fragment {
                     outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
                 } else if ("convertpdf".equals(actionType)) {
+                    String fileName = "CVOR_convert_" + System.currentTimeMillis() + ".pdf";
+                    outputFile = new File(requireContext().getCacheDir(), fileName);
+                    processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
+                } else if ("scanpdf".equals(actionType)) {
                     String fileName = "CVOR_scan_" + System.currentTimeMillis() + ".pdf";
                     outputFile = new File(requireContext().getCacheDir(), fileName);
                     processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);

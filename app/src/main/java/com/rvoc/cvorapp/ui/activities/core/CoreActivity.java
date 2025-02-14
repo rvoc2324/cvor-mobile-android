@@ -68,6 +68,8 @@ public class CoreActivity extends AppCompatActivity {
 
             initialiseNavController(actionType, filePath);
 
+            observeViewModel();
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
                 // Use OnBackInvokedCallback
                 getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
@@ -100,66 +102,6 @@ public class CoreActivity extends AppCompatActivity {
                     }
                 });
             }
-
-            // Observe source type for navigation
-            coreViewModel.getSourceType().observe(this, sourceType -> {
-                if (sourceType == null) {
-                    if ("directWatermark".equals(actionType) || "directShare".equals(actionType)) {
-                        Log.d("CoreActivity", "Source type is null but proceeding due to action type: " + actionType);
-                    } else {
-                        Log.e("CoreActivity", "sourceType is null! Navigation aborted.");
-                    }
-                    return;
-                }
-                switch (sourceType) {
-                    case CAMERA:
-                        navToCamera();
-                        break;
-
-                    case PDF_PICKER:
-                    case IMAGE_PICKER:
-                        navToFileManager();
-                        break;
-
-                    case DIRECT_ACTION:
-                        // No action needed, already handled in handleFavouriteActions()
-                        break;
-                }
-            });
-
-            // Observe navigation events for managing flow
-            coreViewModel.getNavigationEvent().observe(this, event -> {
-                if (event == null) {
-                    Log.e("CoreActivity", "Navigation event is null. Skipping navigation.");
-                    return;
-                }
-                switch (event) {
-                    case "navigate_to_action":
-                        navToAction();
-                        break;
-
-                    case "navigate_to_preview":
-                        navToPreview();
-                        break;
-
-                    case "navigate_to_share":
-                        Log.d(TAG, "Navigating to share");
-                        navToShare();
-                        break;
-
-                    case "navigate_to_sharehistory":
-                        navToShareHistory();
-                        break;
-
-                    default:
-                        Log.e("CoreActivity", "Unknown navigation event: " + event);
-                        break;
-                }
-
-                // Reset navigation event after handling
-                coreViewModel.setNavigationEvent(null);
-            });
-
         } catch (Exception e) {
             // Catch any unexpected errors during onCreate
             Log.e("CoreActivity", "Error during onCreate: " + e.getMessage(), e);
@@ -179,8 +121,8 @@ public class CoreActivity extends AppCompatActivity {
             navController = navHostFragment.getNavController();
 
             // If actionType is set, modify the start destination dynamically
-            if (actionType != null && filePath != null) {
-                handleFavouriteActions(actionType, filePath);
+            if (actionType != null || filePath != null) {
+                handleNavActions(actionType, filePath);
             }
 
             Log.d(TAG, "NavController initialized successfully.");
@@ -189,22 +131,91 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    private void handleFavouriteActions(String actionType, String filePath){
+    private void handleNavActions(String actionType, String filePath){
         NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph_core);
-
-        File file = new File(filePath);
-        Uri fileUri = FileUtils.getUriFromFile(this, file);
+        Log.d(TAG, "Nav Actions 1.");
 
         // Modify the start destination dynamically
         if ("directWatermark".equals(actionType)) {
-            addFileUriToViewModel(fileUri);
-            navGraph.setStartDestination(R.id.watermarkFragment);
+            addFileUriToViewModel(FileUtils.getUriFromFile(this, new File(filePath)));
             coreViewModel.setSourceType(CoreViewModel.SourceType.DIRECT_ACTION);
+            navGraph.setStartDestination(R.id.watermarkFragment);
         } else if ("directShare".equals(actionType)) {
-            addFileToViewModel(file);
+            coreViewModel.addProcessedFile(new File(filePath));
+            coreViewModel.setSourceType(CoreViewModel.SourceType.DIRECT_ACTION);
             navGraph.setStartDestination(R.id.previewFragment);
+        } else if ("scanpdf".equals(actionType)) {
+            coreViewModel.setSourceType(CoreViewModel.SourceType.CAMERA);
+            navGraph.setStartDestination(R.id.cameraFragment);
+        } else if ("convertpdf".equals(actionType)) {
+            coreViewModel.setSourceType(CoreViewModel.SourceType.IMAGE_PICKER);
+            navGraph.setStartDestination(R.id.fileManagerFragment);
+        } else if ("combinepdf".equals(actionType) || "compresspdf".equals(actionType) || "splitpdf".equals(actionType)) {
+            Log.d(TAG, "Nav Actions 2.");
+            coreViewModel.setSourceType(CoreViewModel.SourceType.PDF_PICKER);
+            Log.d(TAG, "Nav Actions 3.");
+            navGraph.setStartDestination(R.id.fileManagerFragment);
+            Log.d(TAG, "Nav Actions 4.");
         }
         navController.setGraph(navGraph);
+    }
+
+    private void observeViewModel() {
+        Log.d(TAG, "View model observer 1.");
+        // Observe source type for navigation
+        coreViewModel.getSourceType().observe(this, sourceType -> {
+            if (sourceType == null) {
+                Log.e("CoreActivity", "sourceType is null! Navigation aborted.");
+                return;
+            }
+            switch (sourceType) {
+                case CAMERA:
+                    navToCamera();
+                    break;
+
+                case PDF_PICKER:
+                case IMAGE_PICKER:
+                    navToFileManager();
+                    break;
+
+                case DIRECT_ACTION:
+                    // No action needed, already handled in handleNavActions()
+                    break;
+            }
+        });
+
+        // Observe navigation events for managing flow
+        coreViewModel.getNavigationEvent().observe(this, event -> {
+            if (event == null) {
+                Log.e("CoreActivity", "Navigation event is null. Skipping navigation.");
+                return;
+            }
+            switch (event) {
+                case "navigate_to_action":
+                    navToAction();
+                    break;
+
+                case "navigate_to_preview":
+                    navToPreview();
+                    break;
+
+                case "navigate_to_share":
+                    Log.d(TAG, "Navigating to share");
+                    navToShare();
+                    break;
+
+                case "navigate_to_sharehistory":
+                    navToShareHistory();
+                    break;
+
+                default:
+                    Log.e("CoreActivity", "Unknown navigation event: " + event);
+                    break;
+            }
+
+            // Reset navigation event after handling
+            coreViewModel.setNavigationEvent(null);
+        });
     }
 
     /**
@@ -269,11 +280,16 @@ public class CoreActivity extends AppCompatActivity {
                     Log.d(TAG, "CoreActivity 16.");
                     break;
 
-                case "combinepdf":
-                case "convertpdf":
-                case "splitpdf":
-                case "compresspdf":
+                case "scanpdf":
                     navController.navigate(R.id.action_cameraFragment_to_PdfHandlingFragment);
+                    break;
+
+                case "addFavourite":
+                    coreViewModel.getFavouriteAdded().observe(this, success -> {
+                        if (success != null && success) {
+                            finish(); // Finish the activity only after successful addition
+                        }
+                    });
                     break;
 
                 default:
@@ -298,6 +314,10 @@ public class CoreActivity extends AppCompatActivity {
                     navController.navigate(R.id.action_fileManagerFragment_to_PdfHandlingFragment);
                     break;
 
+                case "addFavourite":
+                    finish();
+                    break;
+
                 default:
                     Log.e("CoreActivity", "Unknown actionType: " + actionType);
             }
@@ -320,10 +340,12 @@ public class CoreActivity extends AppCompatActivity {
 
             switch (actionType) {
                 case "addwatermark":
+                case "directWatermark":
                     Log.d(TAG, "CoreActivity 17.");
                     navController.navigate(R.id.action_watermarkFragment_to_previewFragment);
                     break;
 
+                case "scanpdf":
                 case "combinepdf":
                 case "convertpdf":
                 case "splitpdf":
@@ -378,10 +400,6 @@ public class CoreActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Unable to determine file name", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void addFileToViewModel(@NonNull File file) {
-        coreViewModel.addProcessedFile(file);
     }
 
     @Override
