@@ -35,7 +35,7 @@
 
     <!-- CardView containing RecyclerView -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_container"
+        android:id="@+id/recycler_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="10dp"
@@ -43,7 +43,7 @@
         app:cardElevation="6dp"
         app:cardBackgroundColor="@color/colorSecondary"
         app:layout_constraintTop_toBottomOf="@id/title_container"
-        app:layout_constraintBottom_toTopOf="@id/button_container"
+        app:layout_constraintBottom_toTopOf="@id/compression_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -54,6 +54,66 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp" />
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- Compression Options Container -->
+    <LinearLayout
+        android:id="@+id/compression_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/recycler_container"
+        app:layout_constraintBottom_toTopOf="@id/button_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- File Size Information -->
+        <TextView
+            android:id="@+id/text_current_file_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pre_compress_file_size"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/text" />
+
+        <TextView
+            android:id="@+id/compression_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/compress_quality"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp"
+            android:textColor="@color/text" />
+
+        <!-- Compression Quality Selector -->
+        <RadioGroup
+            android:id="@+id/compression_quality_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text"/>
+
+            <RadioButton
+                android:id="@+id/radio_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text"/>
+
+            <RadioButton
+                android:id="@+id/radio_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text"/>
+        </RadioGroup>
+    </LinearLayout>
+
 
     <!-- Buttons -->
     <LinearLayout
@@ -77,6 +137,7 @@
             app:cornerRadius="12dp"
             android:text="@string/back_button"
             android:gravity="center"
+            android:filterTouchesWhenObscured="true"
             android:drawableLeft="@drawable/baseline_keyboard_arrow_left_24"/>
 
         <com.google.android.material.button.MaterialButton
@@ -88,6 +149,7 @@
             style="@style/PrimaryButtonStyle"
             app:cornerRadius="12dp"
             android:gravity="center"
+            android:filterTouchesWhenObscured="true"
             android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"/>
     </LinearLayout>
 

@@ -71,7 +71,8 @@
                     android:layout_marginBottom="10dp"
                     android:drawableTop="@drawable/baseline_check_circle_24"
                     android:layout_gravity="fill"
-                    app:rippleColor="@color/rippleEffect"/>
+                    app:rippleColor="@color/rippleEffect"
+                    android:filterTouchesWhenObscured="true"/>
 
                 <!-- Back Button -->
                 <com.google.android.material.button.MaterialButton
@@ -88,7 +89,8 @@
                     android:elevation="6dp"
                     app:cornerRadius="12dp"
                     android:layout_margin="5dp"
-                    app:rippleColor="@color/rippleEffect" />
+                    app:rippleColor="@color/rippleEffect"
+                    android:filterTouchesWhenObscured="true"/>
 
                 <!-- Share again button -->
                 <com.google.android.material.button.MaterialButton
@@ -106,7 +108,8 @@
                     android:elevation="6dp"
                     app:cornerRadius="12dp"
                     android:layout_margin="5dp"
-                    app:rippleColor="@color/rippleEffect" />
+                    app:rippleColor="@color/rippleEffect"
+                    android:filterTouchesWhenObscured="true"/>
             </GridLayout>
         </androidx.cardview.widget.CardView>
 
@@ -125,7 +128,8 @@
             app:rippleColor="@color/rippleEffect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:filterTouchesWhenObscured="true"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

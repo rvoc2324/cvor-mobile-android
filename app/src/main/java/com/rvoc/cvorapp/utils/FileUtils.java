@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 
 public class FileUtils {
     private static final String TAG = "FileUtils";
@@ -104,4 +105,64 @@ public class FileUtils {
         return FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", file);
     }
 
+    // Utility to extract file name from file path
+    public static String extractFileName(String filePath) {
+        if (filePath == null || filePath.isEmpty()) return "";
+        int lastSlashIndex = filePath.lastIndexOf('/');
+        return lastSlashIndex == -1 ? filePath : filePath.substring(lastSlashIndex + 1);
+    }
+
+    /**
+     * Method to calculate the size of a file from a URI and return it in MB.
+     *
+     * @param context The context (needed to access the content resolver).
+     * @param uri     The URI of the file.
+     * @return The file size as a formatted string (e.g., "5.4 MB").
+     */
+    public static String getFileSize(Context context, Uri uri) {
+        long fileSizeInBytes = 0;
+
+        // Step 1: Try to retrieve the file size using ContentResolver
+        if (uri.getScheme() != null && uri.getScheme().equals("content")) {
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                if (sizeIndex != -1 && cursor.moveToFirst()) {
+                    fileSizeInBytes = cursor.getLong(sizeIndex);
+                }
+                cursor.close();
+            }
+        }
+
+        // Step 2: If ContentResolver doesn't work, try reading file directly
+        if (fileSizeInBytes == 0) {
+            try {
+                InputStream inputStream = context.getContentResolver().openInputStream(uri);
+                if (inputStream != null) {
+                    fileSizeInBytes = inputStream.available();
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "File not readable");
+            }
+        }
+
+        // Step 3: Format the file size to MB
+        return formatFileSizeToMB(fileSizeInBytes);
+    }
+
+    /**
+     * Formats the file size to MB with two decimal places.
+     *
+     * @param sizeInBytes The size of the file in bytes.
+     * @return A formatted file size string (e.g., "5.40 MB").
+     */
+    public static String formatFileSizeToMB(long sizeInBytes) {
+        if (sizeInBytes <= 0) {
+            return "0.0MB";
+        }
+
+        double sizeInMB = sizeInBytes / (1024.0 * 1024.0);
+        return String.format(Locale.ENGLISH, "%.1fMB", sizeInMB);
+    }
 }

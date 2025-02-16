@@ -66,9 +66,18 @@ public class CoreActivity extends AppCompatActivity {
             // Handle fileUri for favourites from intent extras
             String filePath = getIntent().getStringExtra("filePath");
 
-            initialiseNavController(actionType, filePath);
+            if (filePath != null) {
+                File file = new File(filePath);
+                if (actionType != null && actionType.equals("directWatermark")) {
+                    addFileUriToViewModel(FileUtils.getUriFromFile(this, file));
+                } else if (actionType != null && actionType.equals("directShare")) {
+                    coreViewModel.addProcessedFile(file);
+                }
+            }
 
-            observeViewModel();
+            initialiseNavController(actionType);
+
+            observeViewModel(actionType);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
                 // Use OnBackInvokedCallback
@@ -109,7 +118,7 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    private void initialiseNavController(String actionType, String filePath ) {
+    private void initialiseNavController(String actionType) {
         try {
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.nav_host_fragment_core);
@@ -121,8 +130,8 @@ public class CoreActivity extends AppCompatActivity {
             navController = navHostFragment.getNavController();
 
             // If actionType is set, modify the start destination dynamically
-            if (actionType != null || filePath != null) {
-                handleNavActions(actionType, filePath);
+            if (actionType != null) {
+                handleNavActions(actionType);
             }
 
             Log.d(TAG, "NavController initialized successfully.");
@@ -131,56 +140,77 @@ public class CoreActivity extends AppCompatActivity {
         }
     }
 
-    private void handleNavActions(String actionType, String filePath){
-        NavGraph navGraph = navController.getNavInflater().inflate(R.navigation.nav_graph_core);
+    private void handleNavActions(String actionType) {
         Log.d(TAG, "Nav Actions 1.");
 
-        // Modify the start destination dynamically
-        if ("directWatermark".equals(actionType)) {
-            addFileUriToViewModel(FileUtils.getUriFromFile(this, new File(filePath)));
-            coreViewModel.setSourceType(CoreViewModel.SourceType.DIRECT_ACTION);
-            navGraph.setStartDestination(R.id.watermarkFragment);
-        } else if ("directShare".equals(actionType)) {
-            coreViewModel.addProcessedFile(new File(filePath));
-            coreViewModel.setSourceType(CoreViewModel.SourceType.DIRECT_ACTION);
-            navGraph.setStartDestination(R.id.previewFragment);
-        } else if ("scanpdf".equals(actionType)) {
-            coreViewModel.setSourceType(CoreViewModel.SourceType.CAMERA);
-            navGraph.setStartDestination(R.id.cameraFragment);
-        } else if ("convertpdf".equals(actionType)) {
-            coreViewModel.setSourceType(CoreViewModel.SourceType.IMAGE_PICKER);
-            navGraph.setStartDestination(R.id.fileManagerFragment);
-        } else if ("combinepdf".equals(actionType) || "compresspdf".equals(actionType) || "splitpdf".equals(actionType)) {
-            Log.d(TAG, "Nav Actions 2.");
-            coreViewModel.setSourceType(CoreViewModel.SourceType.PDF_PICKER);
-            Log.d(TAG, "Nav Actions 3.");
-            navGraph.setStartDestination(R.id.fileManagerFragment);
-            Log.d(TAG, "Nav Actions 4.");
+        // Always set the default navigation graph
+        navController.setGraph(R.navigation.nav_graph_core);
+
+        switch (actionType) {
+            case "directWatermark":
+                coreViewModel.setSourceType(CoreViewModel.SourceType.DIRECT_ACTION);
+                navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_watermark"));
+                break;
+
+            case "directShare":
+                coreViewModel.setSourceType(CoreViewModel.SourceType.DIRECT_ACTION);
+                navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_preview"));
+                break;
+
+            /*case "addwatermark":
+            case "addFavourite":
+                navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_file_source"));
+                break;*/
+
+            case "scanpdf":
+                coreViewModel.setSourceType(CoreViewModel.SourceType.CAMERA);
+                navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_camera"));
+                break;
+
+            case "convertpdf":
+                coreViewModel.setSourceType(CoreViewModel.SourceType.IMAGE_PICKER);
+                navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_file_manager"));
+                break;
+
+            case "combinepdf":
+            case "compresspdf":
+            case "splitpdf":
+                coreViewModel.setSourceType(CoreViewModel.SourceType.PDF_PICKER);
+                navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_file_manager"));
+                break;
+
+            default:
+                Log.e(TAG, "Unknown actionType: " + actionType);
+                break;
         }
-        navController.setGraph(navGraph);
     }
 
-    private void observeViewModel() {
+
+    private void observeViewModel(String actionType) {
         Log.d(TAG, "View model observer 1.");
         // Observe source type for navigation
+
         coreViewModel.getSourceType().observe(this, sourceType -> {
             if (sourceType == null) {
                 Log.e("CoreActivity", "sourceType is null! Navigation aborted.");
                 return;
             }
-            switch (sourceType) {
-                case CAMERA:
-                    navToCamera();
-                    break;
 
-                case PDF_PICKER:
-                case IMAGE_PICKER:
-                    navToFileManager();
-                    break;
+            if (actionType.equals("addwatermark") || actionType.equals("addFavourite")){
+                switch (sourceType) {
+                    case CAMERA:
+                        navToCamera();
+                        break;
 
-                case DIRECT_ACTION:
-                    // No action needed, already handled in handleNavActions()
-                    break;
+                    case PDF_PICKER:
+                    case IMAGE_PICKER:
+                        navToFileManager();
+                        break;
+
+                    case DIRECT_ACTION:
+                        // No action needed, already handled in handleNavActions()
+                        break;
+                }
             }
         });
 
@@ -223,7 +253,7 @@ public class CoreActivity extends AppCompatActivity {
      */
     private void navToCamera() {
         try {
-            navController.navigate(R.id.action_fileSourceFragment_to_cameraFragment);
+            navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_camera"));
             Log.d(TAG, "CoreActivity 13.");
         } catch (Exception e) {
             Log.e("CoreActivity", "Navigation to CameraFragment failed: " + e.getMessage(), e);
@@ -235,7 +265,7 @@ public class CoreActivity extends AppCompatActivity {
      */
     private void navToFileManager() {
         try {
-            navController.navigate(R.id.action_fileSourceFragment_to_fileManagerFragment);
+            navController.navigate(Uri.parse("app://com.rvoc.cvorapp/nav_to_file_manager"));
             Log.d(TAG, "CoreActivity 20.");
         } catch (Exception e) {
             Log.e("CoreActivity", "Navigation to FileManagerFragment failed: " + e.getMessage(), e);

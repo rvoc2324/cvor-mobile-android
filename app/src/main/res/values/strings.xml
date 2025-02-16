@@ -7,13 +7,13 @@
     <string name="smart_share_button">Smart share</string>
     <string name="share_file_button">Share file</string>
     <string name="combine_pdfs_button">Combine</string>
-    <string name="convert_to_pdf_button">Convert images</string>
+    <string name="convert_to_pdf_button">Convert</string>
     <string name="scan_to_pdf_button">Scan to PDF</string>
     <string name="split_pdf_button">Split</string>
     <string name="compress_pdf_button">Compress</string>
     <string name="pdf_tools">PDF tools</string>
     <string name="remove">Remove</string>
-    <string name="filename_change_prompt">Provide the new file name</string>
+    <string name="filename_change_prompt">Enter new file name</string>
     <string name="filename_change_check">File name required!</string>
     <string name="custom_file_name">Change file name</string>
     <string name="change">Change</string>
@@ -56,9 +56,9 @@
     <string name="purpose">Purpose? (optional)</string>
     <string name="text_watermark">Shared with %1$s for %2$s on %3$s</string>
     <string name="text_general_purposes">General purposes</string>
-    <string name="watermark_preview">Watermark preview</string>
-    <string name="grid_watermark_check">Grid watermark</string>
-    <string name="single_watermark_check">Single watermark</string>
+    <string name="smart_text_preview">Smart text preview</string>
+    <string name="grid_watermark_check">Grid style</string>
+    <string name="single_watermark_check">Single</string>
     <string name="opacity_text">Transparency: %d</string>
     <string name="fontsize_text">Font size: %d</string>
     <string name="preview_button">Preview</string>
@@ -68,6 +68,8 @@
     <string name="convert_to_pdf">Convert images to PDF</string>
     <string name="split_pdf">Split PDF</string>
     <string name="compress_pdf">Compress PDF</string>
+    <string name="compress_quality">Post compression file size (select one): </string>
+    <string name="pre_compress_file_size">Current file size: %1s</string>
     <string name="delete_icon">Delete icon</string>
     <string name="pdf_icon">PDF icon</string>
     <string name="image_icon">Image icon</string>
@@ -93,11 +95,10 @@
     <string name="watermark_help_text">
     - <b>Sharing With:</b> Organisation/individual you are sharing the document with.\n
     - <b>Purpose:</b> Briefly add a purpose of the share.\n
-    - <b>Transparency:</b> Adjust lightness of the watermark.\n
-    - <b>Font Size:</b> Adjust size of watermark.\n
-    - <b>Grid Watermark:</b> Repeats across the document.\n
-    - <b>Single Watermark:</b> Places one central watermark.\n
-    - <b>Position: </b> Adjust the position of a single watermark.\n
-    - <b>Watermark Preview:</b> Shows a preview of the watermark to be applied.
+    - <b>Transparency:</b> Adjust lightness of the smart text.\n
+    - <b>Font Size:</b> Adjust size of smart text.\n
+    - <b>Grid style:</b> Repeats across the document.\n
+    - <b>Position: </b> Adjust the position of the smart text.\n
+    - <b>Smart text Preview:</b> Shows a preview of the text to be applied to the file.
     </string>
 </resources>

@@ -19,6 +19,8 @@
         <action
             android:id="@+id/action_fileSourceFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <!--<deepLink
+            app:uri="app://com.rvoc.cvorapp/nav_to_file_source" /> -->
     </dialog>
 
     <!-- File Manager Fragment -->
@@ -36,6 +38,8 @@
         <action
             android:id="@+id/action_fileManagerFragment_to_shareFragment"
             app:destination="@id/shareFragment" />
+        <deepLink
+            app:uri="app://com.rvoc.cvorapp/nav_to_file_manager" />
     </fragment>
 
     <!-- Camera Fragment -->
@@ -53,6 +57,8 @@
         <action
             android:id="@+id/action_cameraFragment_to_shareFragment"
             app:destination="@id/shareFragment" />
+        <deepLink
+            app:uri="app://com.rvoc.cvorapp/nav_to_camera" />
     </fragment>
 
     <!-- Watermark Fragment -->
@@ -64,6 +70,8 @@
         <action
             android:id="@+id/action_watermarkFragment_to_previewFragment"
             app:destination="@id/previewFragment" />
+        <deepLink
+            app:uri="app://com.rvoc.cvorapp/nav_to_watermark" />
     </fragment>
 
     <!-- PDF Handling Fragment -->
@@ -86,6 +94,8 @@
         <action
             android:id="@+id/action_previewFragment_to_shareFragment"
             app:destination="@id/shareFragment" />
+        <deepLink
+            app:uri="app://com.rvoc.cvorapp/nav_to_preview" />
     </fragment>
 
     <!-- Share Fragment -->

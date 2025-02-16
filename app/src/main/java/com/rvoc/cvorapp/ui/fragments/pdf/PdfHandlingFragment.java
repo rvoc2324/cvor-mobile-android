@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,13 +27,17 @@ import com.rvoc.cvorapp.databinding.FragmentPdfHandlingBinding;
 import com.rvoc.cvorapp.services.PdfHandlingService;
 import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
+import com.tom_roush.pdfbox.pdmodel.PDDocument;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -69,7 +74,7 @@ public class PdfHandlingFragment extends Fragment {
         Log.d(TAG, "PDF Handling Initialized.");
 
         // Initialize executor service in the fragment
-        executorService = Executors.newSingleThreadExecutor(); // Adjust pool size as needed
+        executorService = Executors.newFixedThreadPool(3); // Adjust pool size as needed
 
         // Initialize the CoreViewModel
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
@@ -98,6 +103,7 @@ public class PdfHandlingFragment extends Fragment {
                 binding.actionButton.setText(R.string.split_pdf_button);
             } else if ("compresspdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.compress_pdf_button);
+                triggerImmediateCompression(); // Trigger the compression process immediately
             }
             currentActionType = actionType;
         });
@@ -105,13 +111,14 @@ public class PdfHandlingFragment extends Fragment {
         // Handle action button click
         binding.actionButton.setOnClickListener(v -> processFiles(currentActionType));
 
-        // Handle back button click
         binding.backButton.setOnClickListener(v -> {
             if (coreViewModel != null) {
-                coreViewModel.resetSelectedFiles(); // Reset the files
+                coreViewModel.resetSelectedFiles();
             }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
+
+        setupRadioButtonListeners(); // Set up radio button listeners
     }
 
     private void setupRecyclerView() {
@@ -128,6 +135,73 @@ public class PdfHandlingFragment extends Fragment {
 
         // Enable drag-and-drop and swipe-to-remove using ItemTouchHelper
         setupItemTouchHelper();
+    }
+
+    private void triggerImmediateCompression() {
+        binding.progressIndicator.setVisibility(View.VISIBLE);
+        binding.compressionContainer.setVisibility(View.VISIBLE);
+        binding.compressionContainer.setEnabled(false);
+        binding.actionButton.setEnabled(false);
+
+        Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
+        if (selectedFiles == null || selectedFiles.isEmpty()) {
+            Toast.makeText(requireContext(), "No files selected for compression.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Uri fileUri = selectedFiles.keySet().iterator().next();
+        File cacheDir = requireContext().getCacheDir();
+        AtomicInteger completedTasks = new AtomicInteger(0);
+
+        executorService.execute(() -> {
+            String preCompressionSize = FileUtils.getFileSize(requireContext(), fileUri);
+            requireActivity().runOnUiThread(() -> binding.textCurrentFileSize.setText(getString(R.string.pre_compress_file_size, preCompressionSize)));
+            compressAndSave(fileUri, new File(cacheDir, "compressed_H.pdf"), "High", binding.radioHigh);
+            checkAndHideProgress(completedTasks);
+        });
+
+        executorService.execute(() -> {
+            compressAndSave(fileUri, new File(cacheDir, "compressed_M.pdf"), "Medium", binding.radioMedium);
+            checkAndHideProgress(completedTasks);
+        });
+
+        executorService.execute(() -> {
+            compressAndSave(fileUri, new File(cacheDir, "compressed_L.pdf"), "Low", binding.radioLow);
+            checkAndHideProgress(completedTasks);
+        });
+    }
+
+    private void compressAndSave(Uri inputFileUri, File outputFile, String quality, TextView label) {
+        try {
+            File compressedFile = pdfHandlingService.compressPDF(inputFileUri, outputFile, quality);
+            coreViewModel.addProcessedFile(compressedFile);
+
+            String postCompressionSize = FileUtils.formatFileSizeToMB(compressedFile.length());
+            requireActivity().runOnUiThread(() -> label.setText(quality + ": " + postCompressionSize));
+        } catch (Exception e) {
+            Log.e("CompressAndSave", "Error compressing PDF", e);
+            // requireActivity().runOnUiThread(() -> label.setText("Error: Compression failed"));
+        }
+    }
+
+    private void checkAndHideProgress(AtomicInteger completedTasks) {
+        if (completedTasks.incrementAndGet() == 3) {
+            requireActivity().runOnUiThread(() -> {
+                binding.progressIndicator.setVisibility(View.GONE);
+                binding.compressionContainer.setEnabled(true);
+                Toast.makeText(requireContext(), "Select compression quality", Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    private void setupRadioButtonListeners() {
+        binding.radioHigh.setOnCheckedChangeListener((buttonView, isChecked) -> checkIfEnableActionButton());
+        binding.radioMedium.setOnCheckedChangeListener((buttonView, isChecked) -> checkIfEnableActionButton());
+        binding.radioLow.setOnCheckedChangeListener((buttonView, isChecked) -> checkIfEnableActionButton());
+    }
+
+    private void checkIfEnableActionButton() {
+        binding.actionButton.setEnabled(binding.radioHigh.isChecked() || binding.radioMedium.isChecked() || binding.radioLow.isChecked());
     }
 
     private void setupItemTouchHelper() {
@@ -178,7 +252,6 @@ public class PdfHandlingFragment extends Fragment {
             }
 
             List<Uri> urisList = new ArrayList<>(selectedFiles.keySet());
-            File processedFile;
             File outputFile;
             List<File> outputFiles;
 
@@ -186,36 +259,38 @@ public class PdfHandlingFragment extends Fragment {
                 if ("combinepdf".equals(actionType)) {
                     String fileName = "CVOR_combined_" + System.currentTimeMillis() + ".pdf";
                     outputFile = new File(requireContext().getCacheDir(), fileName);
-                    processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
+                    File processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
+                    postProcessSuccess(Collections.singletonList(processedFile));
                 } else if ("convertpdf".equals(actionType)) {
                     String fileName = "CVOR_convert_" + System.currentTimeMillis() + ".pdf";
                     outputFile = new File(requireContext().getCacheDir(), fileName);
-                    processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
+                    File processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
+                    postProcessSuccess(Collections.singletonList(processedFile));
                 } else if ("scanpdf".equals(actionType)) {
                     String fileName = "CVOR_scan_" + System.currentTimeMillis() + ".pdf";
                     outputFile = new File(requireContext().getCacheDir(), fileName);
-                    processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
-                } /*else if ("splitpdf".equals(actionType)) {
-                    String fileName = "CVOR_split_" + System.currentTimeMillis() + ".pdf";
-                    outputFiles = new File(requireContext().getCacheDir());
-                    processedFile = pdfHandlingService.splitPDF(uri, outputFiles);
-                } else if ("compresspdf".equals(actionType)) { // Need to add a way to capture dpi as user input and show pre and post compression file size in the file fragment
-                    String fileName = "CVOR_compressed_" + System.currentTimeMillis() + ".pdf";
-                    outputFile = new File(requireContext().getCacheDir(), fileName);
-                    processedFile = pdfHandlingService.compressPDF(uri, outputFile, dpi);
-                }*/ else {
+                    File processedFile = pdfHandlingService.convertImagesToPDF(urisList, outputFile);
+                    postProcessSuccess(Collections.singletonList(processedFile));
+                } else if ("splitpdf".equals(actionType)) {
+                    Uri inputFileUri = urisList.get(0); // Only handle the first file for split
+                    File outputDir = new File(requireContext().getCacheDir(), "split_output_" + System.currentTimeMillis());
+                    PDDocument document = pdfHandlingService.checkPDFValidForSplit(inputFileUri);
+                    if (document == null) {
+                        requireActivity().runOnUiThread(() -> {
+                            binding.progressIndicator.setVisibility(View.GONE); // Stop progress
+                            Toast.makeText(requireContext(), "PDF exceeds the 25-page limit.", Toast.LENGTH_SHORT).show();
+
+                            requireActivity().finish();
+                        });
+                    } else{
+                        outputFiles = pdfHandlingService.splitPDF(document, outputDir);
+                        postProcessSuccess(outputFiles);
+                    }
+                } else if ("compresspdf".equals(actionType)) {
+                    deleteCompressFile();
+                } else {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
-
-                File finalProcessedFile = processedFile;
-                requireActivity().runOnUiThread(() -> {
-                    binding.progressIndicator.setVisibility(View.GONE);
-                    binding.actionButton.setEnabled(true);
-                    coreViewModel.addProcessedFile(finalProcessedFile);
-                    Toast.makeText(requireContext(), "PDF Action completed.", Toast.LENGTH_SHORT).show();
-                    coreViewModel.setNavigationEvent("navigate_to_preview");
-
-                });
             } catch (Exception e) {
                 Log.e(TAG, "Error processing files", e);
                 requireActivity().runOnUiThread(() -> {
@@ -225,6 +300,46 @@ public class PdfHandlingFragment extends Fragment {
                 });
             }
         });
+    }
+
+    private void postProcessSuccess(List<File> processedFiles) {
+        requireActivity().runOnUiThread(() -> {
+            for (File file : processedFiles) {
+                coreViewModel.addProcessedFile(file); // Add files one by one
+            }
+
+            binding.progressIndicator.setVisibility(View.GONE);
+            binding.actionButton.setEnabled(true);
+
+            Toast.makeText(requireContext(), "PDF Action completed.", Toast.LENGTH_SHORT).show();
+            coreViewModel.setNavigationEvent("navigate_to_preview");
+        });
+    }
+
+    private void deleteCompressFile() {
+        // Determine the selected quality
+        String selectedQuality = binding.radioHigh.isChecked() ? "High" :
+                binding.radioMedium.isChecked() ? "Medium" :
+                        binding.radioLow.isChecked() ? "Low" : null;
+
+        if (selectedQuality == null) {
+            Toast.makeText(requireContext(), "No compression quality selected.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Define file paths for all compression levels
+        File cacheDir = requireContext().getCacheDir();
+        Map<String, File> qualityToFileMap = new HashMap<>();
+        qualityToFileMap.put("High", new File(cacheDir, "compressed_H.pdf"));
+        qualityToFileMap.put("Medium", new File(cacheDir, "compressed_M.pdf"));
+        qualityToFileMap.put("Low", new File(cacheDir, "compressed_L.pdf"));
+
+        // Remove files not associated with the selected quality
+        for (Map.Entry<String, File> entry : qualityToFileMap.entrySet()) {
+            if (!entry.getKey().equals(selectedQuality)) {
+                coreViewModel.removeProcessedFile(entry.getValue());
+            }
+        }
     }
 
     private Uri getUriFromPosition(int position, Map<Uri, String> uris) {

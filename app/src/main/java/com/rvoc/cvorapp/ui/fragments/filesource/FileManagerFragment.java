@@ -165,13 +165,27 @@ public class FileManagerFragment extends Fragment {
     }
 
     private void pickPdfFiles() {
-        Toast.makeText(requireContext(), "Long press to select multiple files.", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "File Manager fragment 4.");
+
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("application/pdf");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         Log.d(TAG, "File Manager fragment 5.");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+
+        // Check actionType in core view model to determine if multiple files are allowed
+        String actionType = String.valueOf(coreViewModel.getActionType());
+
+        if ("splitpdf".equals(actionType)) {
+            Toast.makeText(requireContext(), "Files with less than 25 pages currently supported.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(requireContext(), "Long press to select multiple files.", Toast.LENGTH_SHORT).show();
+
+            // Allow multiple file selection only for actions other than "compresspdf" and "splitpdf"
+            if (!"compresspdf".equals(actionType)) {
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            }
+        }
+
         Log.d(TAG, "File Manager fragment 6.");
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
@@ -183,6 +197,7 @@ public class FileManagerFragment extends Fragment {
 
         filePickerLauncher.launch(intent);
     }
+
 
     private void pickImageFiles() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

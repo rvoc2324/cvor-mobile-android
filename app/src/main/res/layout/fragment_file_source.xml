@@ -17,7 +17,8 @@
         android:foreground="?attr/selectableItemBackground"
         android:visibility="gone"
         app:cardBackgroundColor="@color/colorPrimary"
-        app:cardElevation="2dp">
+        app:cardElevation="2dp"
+        android:filterTouchesWhenObscured="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,7 +55,8 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardBackgroundColor="@color/colorPrimary"
-        app:cardElevation="2dp">
+        app:cardElevation="2dp"
+        android:filterTouchesWhenObscured="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,7 +92,8 @@
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         app:cardBackgroundColor="@color/colorPrimary"
-        app:cardElevation="2dp">
+        app:cardElevation="2dp"
+        android:filterTouchesWhenObscured="true">
 
         <LinearLayout
             android:layout_width="match_parent"

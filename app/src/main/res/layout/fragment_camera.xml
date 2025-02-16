@@ -73,7 +73,8 @@
         android:contentDescription="@string/back_button"
         app:tint="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/topPadding"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:filterTouchesWhenObscured="true"/>
 
     <!-- Bottom Control Area -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,7 +112,8 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/topPadding"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/white"
+                android:filterTouchesWhenObscured="true"/>
 
             <ImageButton
                 android:id="@+id/buttonRetake"
@@ -122,7 +124,8 @@
                 android:contentDescription="@string/retake_image"
                 android:src="@drawable/baseline_retake_24"
                 android:visibility="gone"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/white"
+                android:filterTouchesWhenObscured="true"/>
         </LinearLayout>
 
         <!-- Center Layout (Capture or Confirm Button) -->
@@ -145,7 +148,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/baseline_circle_24"
                 android:contentDescription="@string/capture_image"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/white"
+                android:filterTouchesWhenObscured="true"/>
 
             <ImageButton
                 android:id="@+id/buttonConfirm"
@@ -156,7 +160,8 @@
                 android:contentDescription="@string/confirm_image"
                 android:src="@drawable/baseline_check_24"
                 android:visibility="gone"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/white"
+                android:filterTouchesWhenObscured="true"/>
         </LinearLayout>
 
         <!-- Right Layout (Switch Camera Button) -->
@@ -179,7 +184,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/switch_camera"
                 android:src="@drawable/baseline_switch_camera_24"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/white"
+                android:filterTouchesWhenObscured="true"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

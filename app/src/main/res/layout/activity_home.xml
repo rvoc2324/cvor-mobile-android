@@ -32,5 +32,6 @@
         app:itemBackground="@drawable/bottom_nav_item_background"
         app:itemRippleColor="@null"
         style="@style/BottomNavigationViewStyle"
-        app:labelVisibilityMode= "unlabeled"/>
+        app:labelVisibilityMode= "unlabeled"
+        android:filterTouchesWhenObscured="true"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

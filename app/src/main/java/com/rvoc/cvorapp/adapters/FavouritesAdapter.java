@@ -195,7 +195,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 popupWindow.dismiss();
             });
 
-            popupView.findViewById(R.id.option_custom_file_name).setOnClickListener(v -> {
+            popupView.findViewById(R.id.option_change_file_name).setOnClickListener(v -> {
                 listener.onFavouriteLongPressed("changeFileName", filePath, null);
                 popupWindow.dismiss();
             });
@@ -213,8 +213,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
         int screenWidth = displayMetrics.widthPixels;
 
-        // Set popup width as 40% of the screen width
-        int popupWidth = (int) (screenWidth * 0.4);
+        // Set popup width as 50% of the screen width
+        int popupWidth = (int) (screenWidth * 0.5);
 
         // Create PopupWindow
         final PopupWindow popupWindow = new PopupWindow(popupView,

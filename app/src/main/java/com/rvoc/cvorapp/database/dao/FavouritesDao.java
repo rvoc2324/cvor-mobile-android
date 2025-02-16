@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.rvoc.cvorapp.models.FavouritesModel;
 
@@ -25,4 +26,6 @@ public interface FavouritesDao {
     @Query("SELECT * FROM favourites WHERE filePath = :filePath LIMIT 1")
     FavouritesModel getFavouriteByPath(String filePath);
 
+    @Query("UPDATE favourites SET filePath = :newFilePath, fileName = :newFileName WHERE filePath = :oldFilePath")
+    void updateFile(String oldFilePath, String newFilePath, String newFileName);
 }

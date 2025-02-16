@@ -54,7 +54,7 @@ public class WatermarkService {
      */
     public File applyWatermarkImage(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
         String originalFileName = FileUtils.getFileNameFromUri(context, inputUri);
-        String fileName = "CVOR_watermarked_" + originalFileName;
+        String fileName = "CVOR_" + originalFileName;
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service started.");
 
@@ -161,7 +161,7 @@ public class WatermarkService {
      */
     public File applyWatermarkPDF(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
         String originalFileName = FileUtils.getFileNameFromUri(context, inputUri);
-        String fileName = "CVOR_watermarked_" + originalFileName;
+        String fileName = "CVOR_" + originalFileName;
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service 4.");
 

@@ -14,7 +14,7 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/option_custom_file_name"
+        android:id="@+id/option_change_file_name"
         android:title="@string/custom_file_name"
         app:showAsAction="ifRoom"/>
 

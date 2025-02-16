@@ -6,6 +6,7 @@ import com.rvoc.cvorapp.database.dao.FavouritesDao;
 import com.rvoc.cvorapp.models.FavouritesModel;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,4 +36,11 @@ public class FavouritesRepository {
     public boolean isFileFavourite(String filePath) {
         return favouritesDao.getFavouriteByPath(filePath) != null;
     }
+
+    public void renameFile(String oldFilePath, String newFilePath, String newFileName) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            favouritesDao.updateFile(oldFilePath, newFilePath, newFileName);
+        });
+    }
+
 }

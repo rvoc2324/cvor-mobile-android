@@ -29,7 +29,8 @@
         android:inputType="textPassword"
         android:padding="8dp"
         android:background="@color/inputBox"
-        android:textColor="@color/text" />
+        android:textColor="@color/text"
+        android:filterTouchesWhenObscured="true"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,7 +47,8 @@
             android:backgroundTint="@color/buttonHighlightSecondary"
             android:visibility="visible"
             android:text="@string/no"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:filterTouchesWhenObscured="true"/>
 
 
         <Button
@@ -58,6 +60,7 @@
             android:backgroundTint="@color/buttonHighlightSecondary"
             android:visibility="visible"
             android:text="@string/yes"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:filterTouchesWhenObscured="true"/>
     </LinearLayout>
 </LinearLayout>

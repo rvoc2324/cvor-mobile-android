@@ -3,6 +3,9 @@ package com.rvoc.cvorapp.ui.fragments.home;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,10 +28,13 @@ import com.rvoc.cvorapp.adapters.FavouritesAdapter;
 import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.databinding.FragmentHomeBinding;
 import com.rvoc.cvorapp.models.FavouritesModel;
+import com.rvoc.cvorapp.repositories.FavouritesRepository;
 import com.rvoc.cvorapp.services.FavouritesService;
 import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
 import com.rvoc.cvorapp.utils.CleanupCache;
+import com.rvoc.cvorapp.utils.FileUtils;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,6 +50,8 @@ public class HomeFragment extends Fragment {
     private FavouritesAdapter favouritesAdapter;
     @Inject
     FavouritesService favouritesService; // Injected via Hilt
+    @Inject
+    FavouritesRepository favouritesRepository;
 
     @Nullable
     @Override
@@ -50,15 +59,24 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         // Set background resources
-        binding.btnAddWatermark.setBackgroundResource(R.drawable.gradient_deepblue);
-        binding.btnScanToPdf.setBackgroundResource(R.drawable.gradient_orange);
+        // Create a RippleDrawable programmatically
+        ColorStateList rippleColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.rippleEffect));
+
+        Drawable backgroundDrawableWatermark = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_deepblue);
+        RippleDrawable rippleDrawableWatermark = new RippleDrawable(rippleColor, backgroundDrawableWatermark, null);
+        binding.btnAddWatermark.setBackground(rippleDrawableWatermark);
+        binding.btnAddWatermark.setBackgroundTintList(null);
+
+        Drawable backgroundDrawableScan = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_orange);
+        RippleDrawable rippleDrawableScan = new RippleDrawable(rippleColor, backgroundDrawableScan, null);
+        binding.btnScanToPdf.setBackground(rippleDrawableScan);
+        binding.btnScanToPdf.setBackgroundTintList(null);
+
         /*binding.btnCombinePdfs.setBackgroundResource(R.drawable.gradient_purple);
         binding.btnConvertToPdf.setBackgroundResource(R.drawable.gradient_orange);
         binding.btnSplitPdf.setBackgroundResource(R.drawable.gradient_lightblue);
         binding.btnCompressPdf.setBackgroundResource(R.drawable.gradient_green); */
 
-        binding.btnAddWatermark.setBackgroundTintList(null);
-        binding.btnScanToPdf.setBackgroundTintList(null);
         /*binding.btnCombinePdfs.setBackgroundTintList(null);
         binding.btnConvertToPdf.setBackgroundTintList(null);
         binding.btnSplitPdf.setBackgroundTintList(null);
@@ -93,13 +111,13 @@ public class HomeFragment extends Fragment {
             public void onFavouriteLongPressed(String actionType, String filePath, String thumbnailPath) {
                 switch (actionType) {
                     case "directWatermark":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directWatermark", filePath);
+                        ((HomeActivity) requireActivity()).navigateToCoreActivity("directWatermark", filePath);
                         break;
                     case "directShare":
-                        ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directShare", filePath);
+                        ((HomeActivity) requireActivity()).navigateToCoreActivity("directShare", filePath);
                         break;
                     case "changeFileName":
-                        changeFileName(this, filePath );
+                        changeFileName(requireActivity(), filePath);
                         break;
                     case "remove":
                         favouritesService.removeFromFavourites(filePath, thumbnailPath);
@@ -116,6 +134,9 @@ public class HomeFragment extends Fragment {
                         break;
                     case "directShare":
                         showInterstitialAd(() -> ((HomeActivity) requireActivity()).navigateToCoreActivity_direct("directShare", filePath);
+                        break;
+                    case "changeFileName":
+                        HomeFragment.this.changeFileName(requireActivity(), filePath, null);
                         break;
                     case "remove":
                         favouritesService.removeFromFavourites(filePath, thumbnailPath);
@@ -159,20 +180,19 @@ public class HomeFragment extends Fragment {
     private void setupListeners() {
 
         // Without ad flow
-        binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark"));
-        binding.btnScanToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("scanpdf"));
-        binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf"));
-        binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf"));
-        binding.addFavouriteIcon.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addFavourite"));
+        binding.btnAddWatermark.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addwatermark", null));
+        binding.btnScanToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("scanpdf", null));
+        binding.btnCombinePdfs.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("combinepdf", null));
+        binding.btnConvertToPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("convertpdf", null));
+        binding.addFavouriteIcon.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("addFavourite", null));
+        binding.btnSplitPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("splitpdf", null));
+        binding.btnCompressPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("compresspdf", null));
 
         binding.reviewContainer.setOnClickListener(v -> {
             String url = "https://www.google.com"; // Replace with your actual URL
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             v.getContext().startActivity(intent);
         });
-
-        // binding.btnSplitPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("splitpdf"));
-        // binding.btnCompressPdf.setOnClickListener(v -> ((HomeActivity) requireActivity()).navigateToCoreActivity("compresspdf"));
 
         /*
         // With ad flow
@@ -210,7 +230,7 @@ public class HomeFragment extends Fragment {
         }
     }*/
 
-    private void changeFileName(@NonNull Activity activity, @NonNull String currentFileName, @NonNull Consumer<String> renameConsumer) {
+    private void changeFileNameDialog(@NonNull Activity activity, @NonNull String currentFileName, @NonNull Consumer<String> renameConsumer) {
         activity.runOnUiThread(() -> {
             LayoutInflater inflater = LayoutInflater.from(activity);
             DialogLayoutBinding binding = DialogLayoutBinding.inflate(inflater);
@@ -220,10 +240,17 @@ public class HomeFragment extends Fragment {
                     .setCancelable(false);
 
             // Customize message
-            binding.dialogMessage.setText(activity.getString(R.string.filename_change_prompt, currentFileName));
+            binding.dialogMessage.setText(activity.getString(R.string.filename_change_prompt));
             binding.inputField.setVisibility(View.VISIBLE);
             binding.inputField.setInputType(InputType.TYPE_CLASS_TEXT);
-            binding.inputField.setSelection(0, currentFileName.lastIndexOf(".")); // Select name (without extension)
+            binding.inputField.setText(FileUtils.extractFileName(currentFileName));
+
+            // Ensure there is a valid position to set the selection
+            int selectionEnd = currentFileName.lastIndexOf(".");
+            if (selectionEnd > 0) {  // Ensure it’s greater than 0 to avoid index out of bounds
+                binding.inputField.setSelection(0, selectionEnd);  // Select name (without extension)
+            }
+
             binding.positiveButton.setText(R.string.change);
             binding.negativeButton.setText(R.string.cancel);
 
@@ -246,6 +273,22 @@ public class HomeFragment extends Fragment {
             });
 
             dialog.show();
+        });
+    }
+
+    private void changeFileName(@NonNull Activity activity, @NonNull String filePath) {
+        changeFileNameDialog(activity, filePath, newFileName -> {
+            if (newFileName != null) { // Only proceed if user didn't cancel
+
+                File originalFile = new File(filePath);
+                File newFile = new File(originalFile.getParent(), newFileName);
+
+                if (originalFile.renameTo(newFile)) {
+                    favouritesRepository.renameFile(filePath, newFile.getAbsolutePath(), newFileName);
+                } else {
+                    Toast.makeText(activity, "Failed to rename file. Please try again.", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 

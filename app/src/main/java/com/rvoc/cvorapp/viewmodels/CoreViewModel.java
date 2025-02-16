@@ -137,7 +137,18 @@ public class CoreViewModel extends AndroidViewModel {
 
         List<File> files = getValueOrEmpty(processedFiles);
         files.add(file);
-        processedFiles.setValue(files);
+        processedFiles.postValue(files);
+    }
+
+    public void removeProcessedFile(File fileToRemove) {
+        List<File> currentFiles = processedFiles.getValue();
+
+        if (currentFiles != null && fileToRemove != null) {
+            if (currentFiles.remove(fileToRemove)) {
+                // Post the updated list to LiveData
+                processedFiles.postValue(currentFiles);
+            }
+        }
     }
 
     public void resetProcessedFiles() {
@@ -165,6 +176,7 @@ public class CoreViewModel extends AndroidViewModel {
 
     // Clear State
     public void clearState() {
+        actionType.setValue(null);
         sourceType.setValue(null);
         selectedFiles.setValue(new HashMap<>());
         processedFiles.setValue(new ArrayList<>());

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
@@ -129,24 +130,11 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    public void navigateToCoreActivity(String actionType) {
+    public void navigateToCoreActivity(String actionType, @Nullable String filePath) {
         try {
             Intent intent = new Intent(this, CoreActivity.class);
             intent.putExtra("actionType", actionType);
-            startActivity(intent);
-
-            Log.d(TAG, "Navigating to CoreActivity with actionType: " + actionType);
-        } catch (Exception e) {
-            Log.e(TAG, "Navigation error: " + e.getMessage(), e);
-            Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void navigateToCoreActivity_direct(String actionType, String filePath) {
-        try {
-            Intent intent = new Intent(this, CoreActivity.class);
-            intent.putExtra("actionType", actionType); // Add actionType
-            intent.putExtra("filePath", filePath); // Add filePath
+            intent.putExtra("filePath", filePath);
             startActivity(intent);
 
             Log.d(TAG, "Navigating to CoreActivity with actionType: " + actionType);

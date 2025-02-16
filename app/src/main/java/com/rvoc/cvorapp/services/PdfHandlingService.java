@@ -132,8 +132,8 @@ public class PdfHandlingService {
         return outputFile;
     }
 
-    // Split a pdf file
-    public List<File> splitPDF(@NonNull Uri inputFileUri, @NonNull File outputDir) throws Exception {
+    // Split a PDF file
+    public List<File> splitPDF(@NonNull PDDocument document, @NonNull File outputDir) throws Exception {
         List<File> splitFiles = new ArrayList<>();
 
         // Ensure output directory exists
@@ -141,40 +141,38 @@ public class PdfHandlingService {
             throw new IOException("Failed to create output directory: " + outputDir.getAbsolutePath());
         }
 
-        try (InputStream inputStream = context.getContentResolver().openInputStream(inputFileUri)) {
-            if (inputStream == null) {
-                throw new IOException("Unable to open input stream for URI: " + inputFileUri);
-            }
+        int totalPages = document.getNumberOfPages();
+        Log.d(TAG, "Total pages in PDF: " + totalPages);
 
-            try (PDDocument document = PDDocument.load(inputStream)) {
-                int totalPages = document.getNumberOfPages();
-                Log.d(TAG, "Total pages in PDF: " + totalPages);
+        // Split the PDF into individual pages
+        for (int i = 0; i < totalPages; i++) {
+            try (PDDocument singlePageDoc = new PDDocument()) {
+                singlePageDoc.addPage(document.getPage(i));
 
-                for (int i = 0; i < totalPages; i++) {
-                    try (PDDocument singlePageDoc = new PDDocument()) {
-                        singlePageDoc.addPage(document.getPage(i));
-
-                        File outputFile = new File(outputDir, "page_" + (i + 1) + ".pdf");
-                        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                            singlePageDoc.save(fos);
-                        }
-
-                        splitFiles.add(outputFile);
-                        Log.d(TAG, "Created split PDF: " + outputFile.getAbsolutePath());
-                    }
+                File outputFile = new File(outputDir, "CVOR_split_" + (i + 1) + ".pdf");
+                try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                    singlePageDoc.save(fos);
                 }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error splitting PDF file: " + inputFileUri, e);
-            throw e;
-        }
 
+                splitFiles.add(outputFile);
+                Log.d(TAG, "Created split PDF: " + outputFile.getAbsolutePath());
+            }
+        }
         return splitFiles;
     }
 
+
     // Compress a PDF file
-    public File compressPDF(@NonNull Uri inputFileUri, @NonNull File outputFile, Integer dpi) throws Exception {
+    public File compressPDF(@NonNull Uri inputFileUri, @NonNull File outputFile, String quality) throws Exception {
         Log.d(TAG, "Starting PDF compression...");
+
+        // Map quality to DPI
+        int dpi = switch (quality.toLowerCase()) {
+            case "high" -> 300;
+            case "medium" -> 150;
+            case "low" -> 70;
+            default -> 100; // Default DPI if quality is not recognized
+        };
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputFileUri);
              PDDocument document = PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly())) {
@@ -184,10 +182,9 @@ public class PdfHandlingService {
 
             for (int i = 0; i < document.getNumberOfPages(); i++) {
                 PDPage page = document.getPage(i);
-                dpi = (dpi != null) ? dpi : 100; // Adjust DPI for compression (Lower DPI = more compression); (70 to 300)
-                float imageQuality;
 
-                imageQuality = (dpi < 100) ? 0.4f : (dpi < 150) ? 0.7f : 0.8f;
+                // Set image quality based on DPI
+                float imageQuality = (dpi < 100) ? 0.4f : (dpi < 150) ? 0.7f : 0.8f;
 
                 // Render page to Bitmap
                 Bitmap renderedImage = pdfRenderer.renderImage(i, dpi / 72.0f);
@@ -247,31 +244,6 @@ public class PdfHandlingService {
             }
         });
     }
-
-
-    /*private void requestPassword(@NonNull Activity activity, @NonNull Uri fileUri, @NonNull Consumer<String> passwordConsumer) {
-
-        String fileName = FileUtils.getFileNameFromUri(context, fileUri);
-        Log.d(TAG, "PDF Decryption 4.");
-        activity.runOnUiThread(() -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.CustomAlertDialogTheme);
-            builder.setTitle("Enter Password for: " + fileName);
-
-            final EditText input = new EditText(activity);
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            builder.setView(input);
-            Log.d(TAG, "PDF Decryption 5.");
-
-            builder.setPositiveButton("OK", (dialog, which) -> passwordConsumer.accept(input.getText().toString()));
-            builder.setNegativeButton("Cancel", (dialog, which) -> passwordConsumer.accept(null));
-            Log.d(TAG, "PDF Decryption 6.");
-
-            builder.setCancelable(false);
-            builder.show();
-            Log.d(TAG, "PDF Decryption 8.");
-        });
-    }*/
-
     private void requestPassword(@NonNull Activity activity, @NonNull Uri fileUri, @NonNull Consumer<String> passwordConsumer) {
         String fileName = FileUtils.getFileNameFromUri(context, fileUri);
         Log.d(TAG, "PDF Decryption 4.");
@@ -309,12 +281,23 @@ public class PdfHandlingService {
         });
     }
 
-    // Helper to show a toast
-    private void showToast(@NonNull Activity activity) {
-        Log.d(TAG, "PDF Decryption 16.");
-        activity.runOnUiThread(() ->
-                Toast.makeText(context, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
-        );
+    public PDDocument checkPDFValidForSplit(@NonNull Uri inputFileUri) throws IOException {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(inputFileUri)) {
+            if (inputStream == null) {
+                throw new IOException("Unable to open input stream for URI: " + inputFileUri);
+            }
+
+            PDDocument document = PDDocument.load(inputStream);
+            if (document.getNumberOfPages() > 25) {
+                document.close(); // Ensure it's closed if invalid
+                return null;
+            }
+
+            return document; // Return only if valid
+        } catch (Exception e) {
+            Log.e(TAG, "Error loading PDF for URI: " + inputFileUri, e);
+            throw e;
+        }
     }
 
     // Helper to read InputStream into a byte array

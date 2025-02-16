@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/fragment2Background"
+    android:background="@color/fragment1Background"
     android:padding="8dp">
 
     <TextView
@@ -15,7 +15,8 @@
         android:textColor="@color/text"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        android:background="?attr/selectableItemBackground"
+        android:filterTouchesWhenObscured="true"/>
 
     <View
         android:layout_width="match_parent"
@@ -31,7 +32,8 @@
         android:text="@string/share_file_button"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        android:background="?attr/selectableItemBackground"
+        android:filterTouchesWhenObscured="true"/>
 
     <View
         android:layout_width="match_parent"
@@ -39,7 +41,7 @@
         android:background="@color/borderColor" />
 
     <TextView
-        android:id="@+id/option_custom_file_name"
+        android:id="@+id/option_change_file_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
@@ -47,7 +49,8 @@
         android:text="@string/custom_file_name"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        android:background="?attr/selectableItemBackground"
+        android:filterTouchesWhenObscured="true"/>
 
     <View
         android:layout_width="match_parent"
@@ -63,5 +66,6 @@
         android:textColor="@color/text"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        android:background="?attr/selectableItemBackground"
+        android:filterTouchesWhenObscured="true"/>
 </LinearLayout>

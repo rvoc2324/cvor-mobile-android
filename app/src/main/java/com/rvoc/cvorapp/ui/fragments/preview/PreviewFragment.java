@@ -1,5 +1,7 @@
 package com.rvoc.cvorapp.ui.fragments.preview;
 
+import android.animation.ObjectAnimator;
+import android.animation.AnimatorSet;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import android.widget.Toast;
+
 
 import com.rvoc.cvorapp.adapters.PreviewPagerAdapter;
 import com.rvoc.cvorapp.databinding.FragmentPreviewBinding;
@@ -54,6 +57,17 @@ public class PreviewFragment extends Fragment {
         Log.d(TAG, "Preview fragment 2.");
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+
+        // Adding pulsing animation to download icon
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleX", 1.0f, 1.2f, 1.0f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleY", 1.0f, 1.2f, 1.0f);
+
+        scaleX.setDuration(500);
+        scaleY.setDuration(500);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY);
+        animatorSet.start();
 
         setupViewPager();
         observeProcessedFiles();

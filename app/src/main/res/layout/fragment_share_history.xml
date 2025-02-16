@@ -71,7 +71,8 @@
             android:drawablePadding="8dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:filterTouchesWhenObscured="true"/>
 
         <!-- Collapsible Filter Container (Initially Gone) -->
         <LinearLayout
@@ -89,14 +90,16 @@
                 android:hint="@string/sharehistory_hint"
                 app:boxStrokeColor="@color/inputBox"
                 app:hintTextAppearance="@style/TextInputHintStyle"
-                app:hintTextColor="@color/textSecondary">
+                app:hintTextColor="@color/textSecondary"
+                android:filterTouchesWhenObscured="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/search_box"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="@color/text" />
+                    android:textColor="@color/text"
+                    android:filterTouchesWhenObscured="true"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- From & To Date Pickers (Stacked) -->
@@ -123,7 +126,8 @@
                         android:gravity="center"
                         android:padding="10dp"
                         android:text="@string/from_date_picker"
-                        android:textColor="@color/text" />
+                        android:textColor="@color/text"
+                        android:filterTouchesWhenObscured="true"/>
                 </LinearLayout>
 
                 <!-- Spacer Between From & To -->
@@ -147,7 +151,8 @@
                         android:gravity="center"
                         android:padding="10dp"
                         android:text="@string/to_date_picker"
-                        android:textColor="@color/text" />
+                        android:textColor="@color/text"
+                        android:filterTouchesWhenObscured="true"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
