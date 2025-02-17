@@ -190,17 +190,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!--<com.google.android.material.button.MaterialButton
-            android:id="@+id/home_button"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            style="@style/PrimaryButtonStyle"
-            android:text="@string/home"
-            app:cornerRadius="12dp"
-            android:gravity="center"/> -->
-
         <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"

@@ -27,6 +27,7 @@ import com.tom_roush.pdfbox.pdmodel.common.PDRectangle;
 import com.tom_roush.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import com.tom_roush.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import com.tom_roush.pdfbox.rendering.ImageType;
 import com.tom_roush.pdfbox.rendering.PDFRenderer;
 
 import java.io.ByteArrayInputStream;
@@ -166,13 +167,22 @@ public class PdfHandlingService {
     public File compressPDF(@NonNull Uri inputFileUri, @NonNull File outputFile, String quality) throws Exception {
         Log.d(TAG, "Starting PDF compression...");
 
-        // Map quality to DPI
-        int dpi = switch (quality.toLowerCase()) {
-            case "high" -> 300;
-            case "medium" -> 150;
-            case "low" -> 70;
-            default -> 100; // Default DPI if quality is not recognized
-        };
+        // Map quality to downscale factor
+        float imageQuality;
+        float downscaleFactor = switch (quality.toLowerCase()) {
+            case "high" -> {
+                imageQuality = 0.8f;
+                yield 1.0f;
+            }
+            case "low" -> {
+                imageQuality = 0.4f;
+                yield 0.5f;
+            }
+            default -> {
+                imageQuality = 0.6f;
+                yield 0.75f;
+            }
+        };  // Used to adjust the DPI relative to original
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputFileUri);
              PDDocument document = PDDocument.load(inputStream, MemoryUsageSetting.setupTempFileOnly())) {
@@ -183,20 +193,28 @@ public class PdfHandlingService {
             for (int i = 0; i < document.getNumberOfPages(); i++) {
                 PDPage page = document.getPage(i);
 
-                // Set image quality based on DPI
-                float imageQuality = (dpi < 100) ? 0.4f : (dpi < 150) ? 0.7f : 0.8f;
+                // Calculate original DPI (based on the MediaBox size and standard 8.5x11 inches for Letter size)
+                float pageWidthInPoints = page.getMediaBox().getWidth();  // Points (1/72 inch)
+                float pageHeightInPoints = page.getMediaBox().getHeight();
+                float assumedPageWidthInInches = 8.5f;  // Assuming Letter size
+                float originalDpi = pageWidthInPoints / assumedPageWidthInInches;
+
+                // Downscale the DPI based on quality
+                int effectiveDpi = Math.round(originalDpi * downscaleFactor);
+                effectiveDpi = Math.min(effectiveDpi, 150);  // Cap to 150 DPI to prevent excessive quality
 
                 // Render page to Bitmap
-                Bitmap renderedImage = pdfRenderer.renderImage(i, dpi / 72.0f);
+                Bitmap renderedImage = pdfRenderer.renderImage(i, effectiveDpi / 72.0f, ImageType.RGB);
+
 
                 // Create new compressed page
-                PDPage newPage = new PDPage(page.getMediaBox());
+                PDPage newPage = new PDPage(page.getCropBox());  // Use crop box for better fit
                 compressedDoc.addPage(newPage);
 
-                // Convert Bitmap to compressed JPEG and add it to new document
-                PDPageContentStream contentStream = new PDPageContentStream(compressedDoc, newPage);
-                contentStream.drawImage(JPEGFactory.createFromImage(compressedDoc, renderedImage, imageQuality), 0, 0);
-                contentStream.close();
+                // Convert Bitmap to compressed JPEG and add it to the new document
+                try (PDPageContentStream contentStream = new PDPageContentStream(compressedDoc, newPage)) {
+                    contentStream.drawImage(JPEGFactory.createFromImage(compressedDoc, renderedImage, imageQuality), 0, 0);
+                }
             }
 
             // Optimize PDF & remove metadata
@@ -208,6 +226,7 @@ public class PdfHandlingService {
             return outputFile;
         }
     }
+
 
     // Decrypt a PDF document if it's password-protected
     public void decryptPDF(@NonNull Uri fileUri, @NonNull Activity activity, @NonNull PasswordCallback callback) {

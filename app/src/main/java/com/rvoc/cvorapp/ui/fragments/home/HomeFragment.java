@@ -243,12 +243,13 @@ public class HomeFragment extends Fragment {
             binding.dialogMessage.setText(activity.getString(R.string.filename_change_prompt));
             binding.inputField.setVisibility(View.VISIBLE);
             binding.inputField.setInputType(InputType.TYPE_CLASS_TEXT);
-            binding.inputField.setText(FileUtils.extractFileName(currentFileName));
+            String fileNameWithoutPath = FileUtils.extractFileName(currentFileName);
+            binding.inputField.setText(fileNameWithoutPath);
 
-            // Ensure there is a valid position to set the selection
-            int selectionEnd = currentFileName.lastIndexOf(".");
-            if (selectionEnd > 0) {  // Ensure it’s greater than 0 to avoid index out of bounds
-                binding.inputField.setSelection(0, selectionEnd);  // Select name (without extension)
+            // Ensure selectionEnd is calculated from the actual text in the input field
+            int selectionEnd = fileNameWithoutPath.lastIndexOf(".");
+            if (selectionEnd > 0) {
+                binding.inputField.setSelection(0, selectionEnd);  // Select name without extension
             }
 
             binding.positiveButton.setText(R.string.change);

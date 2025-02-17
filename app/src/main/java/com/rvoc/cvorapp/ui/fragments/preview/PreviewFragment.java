@@ -62,8 +62,8 @@ public class PreviewFragment extends Fragment {
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleX", 1.0f, 1.2f, 1.0f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleY", 1.0f, 1.2f, 1.0f);
 
-        scaleX.setDuration(500);
-        scaleY.setDuration(500);
+        scaleX.setDuration(800);
+        scaleY.setDuration(800);
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(scaleX, scaleY);

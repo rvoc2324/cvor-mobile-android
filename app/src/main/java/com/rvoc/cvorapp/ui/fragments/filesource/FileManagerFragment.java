@@ -173,17 +173,23 @@ public class FileManagerFragment extends Fragment {
         Log.d(TAG, "File Manager fragment 5.");
 
         // Check actionType in core view model to determine if multiple files are allowed
-        String actionType = String.valueOf(coreViewModel.getActionType());
+        String actionType = coreViewModel.getActionType().getValue();
+        Log.d(TAG, "Action type:" + actionType);
 
         if ("splitpdf".equals(actionType)) {
-            Toast.makeText(requireContext(), "Files with less than 25 pages currently supported.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Split PDF action selected: " + actionType);
+            Toast.makeText(requireContext(), "Only files with less than 25 pages currently supported.", Toast.LENGTH_SHORT).show();
+            // Disable multi-file selection
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+        } else if ("compresspdf".equals(actionType)) {
+            Log.d(TAG, "Compress PDF action selected: " + actionType);
+            // Disable multi-file selection
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         } else {
+            Log.d(TAG, "Other action type selected, allowing multi-file selection: " + actionType);
             Toast.makeText(requireContext(), "Long press to select multiple files.", Toast.LENGTH_SHORT).show();
-
-            // Allow multiple file selection only for actions other than "compresspdf" and "splitpdf"
-            if (!"compresspdf".equals(actionType)) {
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            }
+            // Enable multi-file selection
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
 
         Log.d(TAG, "File Manager fragment 6.");

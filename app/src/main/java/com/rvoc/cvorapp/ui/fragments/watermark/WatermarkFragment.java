@@ -1,5 +1,7 @@
 package com.rvoc.cvorapp.ui.fragments.watermark;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -79,10 +81,22 @@ public class WatermarkFragment extends Fragment {
 
         // Bind UI components through ViewBinding
         binding.gridCheck.setChecked(true);
-        binding.singleCheck.setChecked(false);
+        // binding.singleCheck.setChecked(false);
         binding.previewButton.setEnabled(false);
         binding.textOpacity.setText(getString(R.string.opacity_text, 40));
         binding.textFontSize.setText(getString(R.string.fontsize_text,18));
+
+        // Adding pulsing animation to help icon
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(binding.helpIcon, "scaleX", 1.0f, 1.2f, 1.0f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(binding.helpIcon, "scaleY", 1.0f, 1.2f, 1.0f);
+
+        scaleX.setDuration(800);
+        scaleY.setDuration(800);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY);
+        animatorSet.start();
+
 
         binding.helpIcon.setOnClickListener(v -> showHelpDialog());
 
@@ -129,21 +143,21 @@ public class WatermarkFragment extends Fragment {
 
         binding.gridCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // If gridCheck is checked, uncheck singleCheck
-            if (isChecked) {
+            /*if (isChecked) {
                 binding.singleCheck.setChecked(false);
-            }
+            }*/
             // Call your method to update watermark model
             updateWatermarkViewModel();
         });
 
-        binding.singleCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        /*binding.singleCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // If singleCheck is checked, uncheck gridCheck
             if (isChecked) {
                 binding.gridCheck.setChecked(false);
             }
             // Call your method to update watermark model
             updateWatermarkViewModel();
-        });
+        });*/
 
         binding.seekBarOpacity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

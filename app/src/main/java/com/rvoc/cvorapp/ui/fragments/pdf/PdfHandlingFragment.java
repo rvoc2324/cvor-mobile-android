@@ -85,14 +85,6 @@ public class PdfHandlingFragment extends Fragment {
         // Setup RecyclerView
         setupRecyclerView();
 
-        // Observe selected files uris and update adapter
-        coreViewModel.getSelectedFiles().observe(getViewLifecycleOwner(), uris -> {
-            if (uris != null) {
-                List<Map.Entry<Uri, String>> entries = new ArrayList<>(uris.entrySet());
-                fileListAdapter.submitList(entries);
-            }
-        });
-
         // Observe action type and update button label
         coreViewModel.getActionType().observe(getViewLifecycleOwner(), actionType -> {
             if ("combinepdf".equals(actionType)) {
@@ -103,9 +95,21 @@ public class PdfHandlingFragment extends Fragment {
                 binding.actionButton.setText(R.string.split_pdf_button);
             } else if ("compresspdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.compress_pdf_button);
-                triggerImmediateCompression(); // Trigger the compression process immediately
             }
             currentActionType = actionType;
+        });
+
+        // Observe selected files uris and update adapter
+        coreViewModel.getSelectedFiles().observe(getViewLifecycleOwner(), uris -> {
+            if (uris != null && !uris.isEmpty()) {
+                List<Map.Entry<Uri, String>> entries = new ArrayList<>(uris.entrySet());
+                fileListAdapter.submitList(entries);
+
+                // Check if the current action is "compresspdf" and trigger compression
+                if ("compresspdf".equals(currentActionType)) {
+                    triggerImmediateCompression();
+                }
+            }
         });
 
         // Handle action button click
@@ -139,8 +143,12 @@ public class PdfHandlingFragment extends Fragment {
 
     private void triggerImmediateCompression() {
         binding.progressIndicator.setVisibility(View.VISIBLE);
+        binding.radioHigh.setChecked(false);
+        binding.radioMedium.setChecked(false);
+        binding.radioLow.setChecked(false);
         binding.compressionContainer.setVisibility(View.VISIBLE);
-        binding.compressionContainer.setEnabled(false);
+        binding.compressionContainer.setClickable(false);
+        binding.compressionContainer.setFocusable(false);
         binding.actionButton.setEnabled(false);
 
         Map<Uri, String> selectedFiles = coreViewModel.getSelectedFiles().getValue();
@@ -188,7 +196,8 @@ public class PdfHandlingFragment extends Fragment {
         if (completedTasks.incrementAndGet() == 3) {
             requireActivity().runOnUiThread(() -> {
                 binding.progressIndicator.setVisibility(View.GONE);
-                binding.compressionContainer.setEnabled(true);
+                binding.compressionContainer.setClickable(true);
+                binding.compressionContainer.setFocusable(true);
                 Toast.makeText(requireContext(), "Select compression quality", Toast.LENGTH_SHORT).show();
             });
         }
@@ -317,29 +326,33 @@ public class PdfHandlingFragment extends Fragment {
     }
 
     private void deleteCompressFile() {
-        // Determine the selected quality
-        String selectedQuality = binding.radioHigh.isChecked() ? "High" :
-                binding.radioMedium.isChecked() ? "Medium" :
-                        binding.radioLow.isChecked() ? "Low" : null;
+        requireActivity().runOnUiThread(() -> {
+            // Determine the selected quality
+            String selectedQuality = binding.radioHigh.isChecked() ? "High" :
+                    binding.radioMedium.isChecked() ? "Medium" :
+                            binding.radioLow.isChecked() ? "Low" : null;
 
-        if (selectedQuality == null) {
-            Toast.makeText(requireContext(), "No compression quality selected.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Define file paths for all compression levels
-        File cacheDir = requireContext().getCacheDir();
-        Map<String, File> qualityToFileMap = new HashMap<>();
-        qualityToFileMap.put("High", new File(cacheDir, "compressed_H.pdf"));
-        qualityToFileMap.put("Medium", new File(cacheDir, "compressed_M.pdf"));
-        qualityToFileMap.put("Low", new File(cacheDir, "compressed_L.pdf"));
-
-        // Remove files not associated with the selected quality
-        for (Map.Entry<String, File> entry : qualityToFileMap.entrySet()) {
-            if (!entry.getKey().equals(selectedQuality)) {
-                coreViewModel.removeProcessedFile(entry.getValue());
+            if (selectedQuality == null) {
+                Toast.makeText(requireContext(), "No compression quality selected.", Toast.LENGTH_SHORT).show();
+                return;
             }
-        }
+
+            // Define file paths for all compression levels
+            File cacheDir = requireContext().getCacheDir();
+            Map<String, File> qualityToFileMap = new HashMap<>();
+            qualityToFileMap.put("High", new File(cacheDir, "compressed_H.pdf"));
+            qualityToFileMap.put("Medium", new File(cacheDir, "compressed_M.pdf"));
+            qualityToFileMap.put("Low", new File(cacheDir, "compressed_L.pdf"));
+
+            // Remove files not associated with the selected quality
+            for (Map.Entry<String, File> entry : qualityToFileMap.entrySet()) {
+                if (!entry.getKey().equals(selectedQuality)) {
+                    coreViewModel.removeProcessedFile(entry.getValue());
+                }
+            }
+            Toast.makeText(requireContext(), "PDF Action completed.", Toast.LENGTH_SHORT).show();
+            coreViewModel.setNavigationEvent("navigate_to_preview");
+        });
     }
 
     private Uri getUriFromPosition(int position, Map<Uri, String> uris) {

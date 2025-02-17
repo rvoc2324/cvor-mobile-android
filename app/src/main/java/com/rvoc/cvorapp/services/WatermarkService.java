@@ -161,12 +161,12 @@ public class WatermarkService {
      */
     public File applyWatermarkPDF(Uri inputUri, String watermarkText, Integer opacity, Integer fontSize, Boolean repeat) throws Exception {
         String originalFileName = FileUtils.getFileNameFromUri(context, inputUri);
-        String fileName = "CVOR_" + originalFileName;
+        String fileName = "CVOR_" + opacity + "_" + originalFileName;
         File outputFile = new File(context.getCacheDir(), fileName);
         Log.d(TAG, "Watermark service 4.");
 
         // Set defaults for nullable parameters
-        opacity = (opacity != null) ? opacity : 40; // Default opacity to 40
+        opacity = (opacity != null) ? opacity : 100; // Default opacity to 40
         fontSize = (fontSize != null) ? fontSize : 18; // Default font size to 18
         boolean repeatWatermark = (repeat != null) ? repeat : true; // Default to repeating watermark
         Log.d(TAG, "Watermark service 5.");

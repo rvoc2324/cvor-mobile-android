@@ -48,8 +48,6 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 camerax-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraxVersion" }
 camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraxVersion" }
-
-
 camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraxVersion" }
 camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraxVersion" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
