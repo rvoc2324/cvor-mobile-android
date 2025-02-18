@@ -1,9 +1,13 @@
 package com.rvoc.cvorapp.adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,10 +26,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final Context context;
     private static final int TYPE_IMAGE = 1;
     private static final int TYPE_PDF = 2;
     private static final String TAG = "Preview Adapter";
     private final List<File> fileList = new ArrayList<>();
+
+    public PreviewPagerAdapter(Context context) {
+        this.context = context; // Initialize context
+    }
     public void submitList(List<File> newFiles) {
         if (newFiles == null) {
             fileList.clear();
@@ -71,7 +80,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return new ImageViewHolder(binding);
         } else if (viewType == TYPE_PDF) {
             ItemPdfPreviewBinding binding = ItemPdfPreviewBinding.inflate(inflater, parent, false);
-            return new PdfViewHolder(binding);
+            return new PdfViewHolder(binding,context);
         }
         throw new IllegalArgumentException("Invalid view type");
     }
@@ -111,33 +120,42 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     static class PdfViewHolder extends RecyclerView.ViewHolder {
         private final ItemPdfPreviewBinding binding;
-        public PdfViewHolder(@NonNull ItemPdfPreviewBinding binding) {
+        private final Context context;
+        public PdfViewHolder(@NonNull ItemPdfPreviewBinding binding, Context context) {
             super(binding.getRoot());
             this.binding = binding;
+            this.context = context;
         }
 
         public void bind(File pdfFile) {
             binding.pdfPagesRecyclerView.setAdapter(null);
+
             try {
                 PDDocument document = PDDocument.load(pdfFile);
                 PDFRenderer renderer = new PDFRenderer(document);
 
-                List<Bitmap> bitmaps = new ArrayList<>();
-                for (int i = 0; i < document.getNumberOfPages(); i++) {
-                    Bitmap bitmap = renderer.renderImageWithDPI(i, 300);
-                    bitmaps.add(bitmap);
-                }
-                document.close();
-
-                // Set up RecyclerView inside the ViewHolder
-                PdfPagesAdapter pdfPagesAdapter = new PdfPagesAdapter(bitmaps);
+                // Pass the document and renderer to the adapter for lazy loading
+                PdfPagesAdapter pdfPagesAdapter = new PdfPagesAdapter(document, renderer);
                 binding.pdfPagesRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
                 binding.pdfPagesRecyclerView.setAdapter(pdfPagesAdapter);
 
+            } catch (OutOfMemoryError e) {
+                Log.e(TAG, "Memory error while rendering PDF pages", e);
+                showToastAndExit("The file is too large to preview. Please try again with a smaller or simpler file.");
             } catch (IOException e) {
                 Log.e(TAG, "Error rendering PDF pages", e);
+                showToastAndExit("Failed to load the PDF. Please try again.");
+            }
+        }
+
+        /**
+         * Shows a toast message and exits the current fragment gracefully.
+         */
+        private void showToastAndExit(String message) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            if (context instanceof Activity) {
+                ((Activity) context).finish();
             }
         }
     }
-
 }

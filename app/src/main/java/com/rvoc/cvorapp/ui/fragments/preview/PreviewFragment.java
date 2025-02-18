@@ -76,7 +76,7 @@ public class PreviewFragment extends Fragment {
 
     private void setupViewPager() {
         Log.d(TAG, "Preview fragment 3.");
-        previewPagerAdapter = new PreviewPagerAdapter();
+        previewPagerAdapter = new PreviewPagerAdapter(requireContext());
         binding.filePreviewPager.setAdapter(previewPagerAdapter);
     }
 

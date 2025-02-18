@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -330,6 +331,7 @@ public class WatermarkFragment extends Fragment {
         binding.dialogMessage.setText(getString(R.string.watermark_help_text));
         binding.dialogMessage.setGravity(Gravity.START);
         binding.dialogMessage.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        binding.dialogMessage.setLetterSpacing(0.05f);
 
         // Create the dialog
         AlertDialog dialog = builder.setView(binding.getRoot()).create();

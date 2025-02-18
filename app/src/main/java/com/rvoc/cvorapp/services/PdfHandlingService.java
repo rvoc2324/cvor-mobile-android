@@ -18,6 +18,7 @@ import androidx.core.util.Consumer;
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.utils.FileUtils;
+import com.rvoc.cvorapp.utils.ImageUtils;
 import com.tom_roush.pdfbox.io.MemoryUsageSetting;
 import com.tom_roush.pdfbox.multipdf.PDFMergerUtility;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
@@ -82,6 +83,8 @@ public class PdfHandlingService {
     public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {
         Log.d(TAG, "PDF Service - Converting Images to PDF");
 
+        byte[] enhancedImageData;
+
         try (PDDocument document = new PDDocument()) {
             for (Uri uri : imageUris) {
                 try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
@@ -89,10 +92,22 @@ public class PdfHandlingService {
                         throw new IOException("Unable to open input stream for URI: " + uri);
                     }
 
+                    try {
+                        Bitmap enhancedBitmap = ImageUtils.enhanceImageQuality(readStream(inputStream));
+
+                        // Convert enhanced Bitmap back to byte array
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        enhancedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                        enhancedImageData = byteArrayOutputStream.toByteArray();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error enhancing image: " + uri, e);
+                        throw new IOException("Failed to enhance image: " + uri, e);
+                    }
+
                     // Create PDImageXObject directly from input stream
                     PDImageXObject pdImage = PDImageXObject.createFromByteArray(
                             document,
-                            readStream(inputStream),
+                            enhancedImageData,
                             "image"
                     );
 

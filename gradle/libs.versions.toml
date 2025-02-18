@@ -76,6 +76,6 @@ guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.0" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version = "2.1.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version = "2.1.0" }

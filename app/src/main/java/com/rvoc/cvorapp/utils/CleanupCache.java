@@ -26,10 +26,30 @@ public class CleanupCache {
                         boolean deleted = file.delete();
                         Log.d(TAG, "🗑 Deleted cache file: " + file.getAbsolutePath() + " - Success: " + deleted);
                     }
+                } else if (file.isDirectory() && file.getName().startsWith("split")) {
+                    boolean deleted = deleteDirectoryRecursively(file);
+                    Log.d(TAG, "🗑 Deleted directory: " + file.getAbsolutePath() + " - Success: " + deleted);
                 }
             }
         }
     }
+
+    private static boolean deleteDirectoryRecursively(File dir) {
+        if (dir == null || !dir.exists()) {
+            return false; // Prevents NullPointerException
+        }
+        if (dir.isDirectory()) {
+            File[] children = dir.listFiles();
+            if (children != null) { // Prevents NullPointerException
+                for (File child : children) {
+                    deleteDirectoryRecursively(child);
+                }
+            }
+        }
+        return dir.delete();
+    }
+
+
 
     // cleaning up removed favourites
     public static void deleteFavourite(String filePath, String thumbnailPath) {

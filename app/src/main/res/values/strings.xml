@@ -91,41 +91,36 @@
     <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
     <string name="refer_message">Check out CVOR - A smarter way to share your data: https://www.google.com</string>
     <string name="share_via">Share via</string>
-    <string name="app_review_text_button">Leave us a review ❤️</string>
+    <string name="app_review_text_button">Review</string>
     <string name="message_us_button">Message us</string>
 
 
     <string name="watermark_help_text">
-    • <b>Sharing With:</b> Organisation/individual you are sharing the document with.\n
-    • <b>Purpose:</b> Briefly add a purpose of the share.\n
-    • <b>Transparency:</b> Adjust lightness of the smart text.\n
-    • <b>Font Size:</b> Adjust size of smart text.\n
-    • <b>Grid style:</b> Smart text repeats across the document. Uncheck to show once.\n
-    • <b>Position: </b> Adjust the position of the smart text.\n
-    • <b>Smart text Preview:</b> Shows a preview of the text to be applied to the file.
+    • <b> Sharing With:</b> Organisation/individual you are sharing the document with.\n
+    • <b> Purpose:</b> Briefly add a purpose of the share.\n
+    • <b> Transparency:</b> Adjust lightness of the smart text.\n
+    • <b> Font Size:</b> Adjust size of smart text.\n
+    • <b> Grid style:</b> Smart text repeats across the document. Uncheck to show once.\n
+    • <b> Position: </b> Adjust the position of the smart text.\n
+    • <b> Smart text Preview:</b> Shows a preview of the text to be applied to the file.
     </string>
 
-    <string name="whats_new_body">
-     • Smart share - Add smart text to images and PDFs when sharing your important documents.\n
-     • Scan documents to PDF with enhanced preview and sharing options.\n
-     • Compress, combine, split, and convert images to PDFs effortlessly.\n
-     • Mark frequently used files as favourites for quick access.\n
-     • Improved direct sharing and watermarking workflows.\n
-     • Keep track of your shares via the Smart Share history.\n
+    <string name="features_body">
+     &#8226;  Smart share - Add smart text to images and PDFs when sharing your important files to prevent misuse.\n
+     &#8226;  Scan documents to PDF with enhanced preview and sharing options.\n
+     &#8226;  Compress, combine, split, and convert images to PDFs effortlessly.\n
+     &#8226;  Mark frequently used files as favourites for quick usage.\n
+     &#8226;  Keep track of your important shared files via the Smart share history.\n
+     &#8226;  Add smart text in your preferred language; 12 languages currently supported.\n
     </string>
 
-    <string name="features_heading">Features</string>
-    <string name="faq_heading">Frequently Asked Questions</string>
-    <string name="message_us_prompt">Have more questions or suggestions?</string>
-    <string name="review_prompt">Enjoying the app? Your review helps us improve!</string>
-    <string name="leave_review">Leave a Review</string>
+    <string name="features_heading">App features</string>
+    <string name="faq_heading">FAQs</string>
+    <string name="faq_collapse">Expands and collapses the FAQ section</string>
+    <string name="message_us_prompt">Have more questions or suggestions or want to report a bug?</string>
+    <string name="review_prompt">Enjoying the app? Your review helps us improve! ❤️</string>
 
-    <string name="faq_q1">How do I add a watermark?</string>
-    <string name="faq_a1">Choose Smart Share.</string>
-
-    <string name="faq_q2">How can I scan a PDF?</string>
-    <string name="faq_a2">Use the camera feature to scan documents and convert them into a PDF.</string>
-
-
-
+    <string name="terms_of_use_message">By using this app, you agree to our Terms of Use and Privacy Policy.</string>
+    <string name="agree_button">Agree</string>
+    <string name="disagree_button">Disagree</string>
 </resources>

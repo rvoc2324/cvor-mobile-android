@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -56,6 +56,10 @@ android {
     kapt {
         correctErrorTypes = true
     }*/
+}
+
+ksp {
+    arg("android.databinding.incremental", "true")
 }
 
 dependencies {

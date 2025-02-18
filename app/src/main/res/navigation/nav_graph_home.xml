@@ -61,16 +61,16 @@
             app:destination="@id/nav_home" />
     </fragment>
 
-    <!-- Whats New Fragment -->
+    <!-- Help Fragment -->
     <fragment
-        android:id="@+id/nav_whats_new"
-        android:name="com.rvoc.cvorapp.ui.fragments.whatsnew.WhatsNewFragment"
-        android:label="Refer Fragment"
-        tools:layout="@layout/fragment_whatsnew">
+        android:id="@+id/nav_help"
+        android:name="com.rvoc.cvorapp.ui.fragments.help.HelpFragment"
+        android:label="Help Fragment"
+        tools:layout="@layout/fragment_help">
         <deepLink
-            app:uri="app://cvorapp/whatsnew" />
+            app:uri="app://cvorapp/help" />
         <action
-            android:id="@+id/action_whatsnewFragment_to_homeFragment"
+            android:id="@+id/action_helpFragment_to_homeFragment"
             app:destination="@id/nav_home" />
     </fragment>
 

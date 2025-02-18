@@ -89,7 +89,7 @@ public class WatermarkService {
             // Set up paint for watermark text
             Paint paint = new Paint();
             // paint.setColor(watermarkColour);
-            paint.setColor(Color.BLACK);
+            paint.setColor(Color.GRAY);
             paint.setAlpha((opacity * 255) / 100); // Opacity from 0 to 255
             paint.setTextSize(fontSize);
             paint.setAntiAlias(true);
@@ -201,7 +201,7 @@ public class WatermarkService {
 
                     if (repeatWatermark) {
                         // Render watermark repeatedly across the page
-                        float ySpacing = 75; // Adjust vertical spacing
+                        float ySpacing = pageHeight / 10; // Adjust vertical spacing
                         float xSpacing = textWidth + 20; // Adjust horizontal spacing
                         boolean shiftRow = false; // Toggle shifting every row
 

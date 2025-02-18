@@ -15,8 +15,8 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/nav_whats_new"
-        android:title="@string/whatsnew"
+        android:id="@+id/nav_help"
+        android:title="@string/help_section"
         android:icon="@drawable/baseline_help_24"
         app:showAsAction="ifRoom"/>
 
