@@ -28,7 +28,7 @@ public class FAQAdapter extends RecyclerView.Adapter<FAQAdapter.FAQViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull FAQViewHolder holder, int position) {
         FAQItem faqItem = faqList.get(position);
-        holder.bind(faqItem);
+        holder.bind(faqItem, position, this);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FAQAdapter extends RecyclerView.Adapter<FAQAdapter.FAQViewHolder> {
             this.binding = binding;
         }
 
-        void bind(FAQItem faqItem) {
+        void bind(FAQItem faqItem, int position, FAQAdapter adapter) {
             binding.faqQuestion.setText(faqItem.getQuestion());
             binding.faqAnswer.setText(faqItem.getAnswer());
 
@@ -55,7 +55,7 @@ public class FAQAdapter extends RecyclerView.Adapter<FAQAdapter.FAQViewHolder> {
             binding.faqContainer.setOnClickListener(v -> {
                 boolean newExpandedState = !faqItem.isExpanded();
                 faqItem.setExpanded(newExpandedState);
-                updateUI(newExpandedState);
+                adapter.notifyItemChanged(position);
             });
         }
 

@@ -212,10 +212,11 @@ public class ImageUtils {
         //Bitmap grayscaleBitmap = toGrayscale(bitmap);
 
         // Apply contrast enhancement (adjust factor as needed)
-        Bitmap contrastEnhancedBitmap = adjustContrast(bitmap); // 1.5x contrast adjustment
+        // Bitmap contrastEnhancedBitmap = adjustContrast(bitmap); // 1.5x contrast adjustment
 
         // Apply sharpening filter
-        return applySharpening(contrastEnhancedBitmap);
+        // return applySharpening(contrastEnhancedBitmap);
+        return applySharpening(bitmap);
     }
 
     private static Bitmap toGrayscale(Bitmap original) {

@@ -40,6 +40,7 @@ public class CoreViewModel extends AndroidViewModel {
     private final MutableLiveData<String> actionType = new MutableLiveData<>("");
     private final MutableLiveData<String> customFileName = new MutableLiveData<>("");
     private final MutableLiveData<Boolean> favouriteAdded = new MutableLiveData<>();
+    private final MutableLiveData<String> compressType = new MutableLiveData<>(null);
 
     // Navigation events (SingleLiveEvent recommended for one-time events)
     private final MutableLiveData<String> navigationEvent = new MutableLiveData<>(null);
@@ -76,6 +77,13 @@ public class CoreViewModel extends AndroidViewModel {
 
     public LiveData<SourceType> getSourceType() {
         return sourceType;
+    }
+
+    // Compression type
+    public void setCompressType(String type) { compressType.setValue(type); }
+
+    public LiveData<String> getCompressType() {
+        return compressType;
     }
 
     public LiveData<Map<Uri, String>> getSelectedFiles() {
@@ -141,18 +149,15 @@ public class CoreViewModel extends AndroidViewModel {
     }
 
     public void removeProcessedFile(File fileToRemove) {
-        List<File> currentFiles = processedFiles.getValue();
+        List<File> currentFiles = getValueOrEmpty(processedFiles);
 
-        if (currentFiles != null && fileToRemove != null) {
-            if (currentFiles.remove(fileToRemove)) {
-                // Post the updated list to LiveData
-                processedFiles.postValue(currentFiles);
-            }
+        if (fileToRemove != null && currentFiles.remove(fileToRemove)) {
+            processedFiles.postValue(new ArrayList<>(currentFiles));
         }
     }
 
     public void resetProcessedFiles() {
-        processedFiles.setValue(new ArrayList<>());
+        processedFiles.postValue(new ArrayList<>());
     }
 
     // Navigation Events
@@ -192,6 +197,7 @@ public class CoreViewModel extends AndroidViewModel {
     // Helper to get a non-null map from LiveData
     private Map<Uri, String> getValueOrEmptyMaps(MutableLiveData<Map<Uri, String>> liveData) {
         Map<Uri, String> value = liveData.getValue();
-        return value != null ? value : new LinkedHashMap<>();
+        return value != null ? new LinkedHashMap<>(value) : new LinkedHashMap<>();
     }
+
 }

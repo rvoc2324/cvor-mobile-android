@@ -16,6 +16,7 @@ import com.tom_roush.pdfbox.pdmodel.PDPage;
 import com.tom_roush.pdfbox.pdmodel.PDPageContentStream;
 import com.tom_roush.pdfbox.pdmodel.font.PDType1Font;
 import com.tom_roush.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
+import com.tom_roush.pdfbox.util.Matrix;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -118,11 +119,22 @@ public class WatermarkService {
                     shiftRow = !shiftRow;
                 }
             } else {
-                // Draw watermark text in the center of the image
-                float centerX = (watermarkedBitmap.getWidth() - textWidth) / 2;
-                float centerY = (watermarkedBitmap.getHeight() + textHeight) / 2;
-                canvas.drawText(watermarkText, centerX, centerY, paint);
+                // Get center of the image
+                float centerX = watermarkedBitmap.getWidth() / 2f;
+                float centerY = watermarkedBitmap.getHeight() / 2f;
+                float angle = 135f; // Rotation angle in degrees
+
+                canvas.save(); // Save current state of the canvas
+
+                // Rotate around the center of the image
+                canvas.rotate(angle, centerX, centerY);
+
+                // Draw the watermark text at the rotated position
+                canvas.drawText(watermarkText, centerX - (textWidth / 2), centerY + (textHeight / 2), paint);
+
+                canvas.restore(); // Restore canvas to avoid affecting other drawings
             }
+
 
             // **Add static watermark at the bottom of the image**
             Paint staticPaint = new Paint();
@@ -218,14 +230,25 @@ public class WatermarkService {
                             shiftRow = !shiftRow;
                         }
                     } else {
-                        // Render watermark in the center of the page
-                        float centerX = (pageWidth - textWidth) / 2;
+                        // Render watermark in the center of the page with rotation
+                        float centerX = pageWidth / 2;
                         float centerY = pageHeight / 2;
+                        float angle = (float) Math.toRadians(135); // Rotate 135 degrees
+
+                        contentStream.saveGraphicsState(); // Save current graphics state
+
+                        // Apply rotation transformation
+                        contentStream.transform(Matrix.getTranslateInstance(centerX, centerY));
+                        contentStream.transform(Matrix.getRotateInstance(angle, 0, 0));
+
                         contentStream.beginText();
-                        contentStream.newLineAtOffset(centerX, centerY);
+                        contentStream.newLineAtOffset(-textWidth / 2, 0);
                         contentStream.showText(watermarkText);
                         contentStream.endText();
+
+                        contentStream.restoreGraphicsState(); // Restore previous state
                     }
+
                     // **Add static watermark at the bottom of the page**
                     contentStream.setFont(staticFont, 12); // Set smaller font size for static watermark
                     contentStream.setNonStrokingColor(0.5f); // Slightly lighter color

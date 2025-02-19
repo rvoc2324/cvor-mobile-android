@@ -24,6 +24,7 @@ import com.tom_roush.pdfbox.rendering.PDFRenderer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final Context context;
@@ -31,14 +32,14 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_PDF = 2;
     private static final String TAG = "Preview Adapter";
     private final List<File> fileList = new ArrayList<>();
+    private final List<PdfPagesAdapter> pdfAdapters = new ArrayList<>(); // Track all instances
 
     public PreviewPagerAdapter(Context context) {
         this.context = context; // Initialize context
     }
     public void submitList(List<File> newFiles) {
         if (newFiles == null) {
-            fileList.clear();
-            return;
+            newFiles = Collections.emptyList();
         }
 
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
@@ -50,7 +51,8 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     @Override
                     public boolean areContentsTheSame(File oldItem, File newItem) {
-                        return oldItem.equals(newItem); // Compare file contents
+                        return oldItem.getAbsolutePath().equals(newItem.getAbsolutePath()) &&
+                                oldItem.lastModified() == newItem.lastModified();
                     }
                 })
         );

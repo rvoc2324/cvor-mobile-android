@@ -57,7 +57,6 @@ public class PdfHandlingFragment extends Fragment {
     private String currentActionType;
     FileActionListener fileActionListener;
     private ExecutorService executorService;
-
     private String customFileName;
 
     @Nullable
@@ -106,7 +105,7 @@ public class PdfHandlingFragment extends Fragment {
                 fileListAdapter.submitList(entries);
 
                 // Check if the current action is "compresspdf" and trigger compression
-                if ("compresspdf".equals(currentActionType)) {
+                if ("compresspdf".equals(currentActionType) && shouldTriggerCompression()) {
                     triggerImmediateCompression();
                 }
             }
@@ -123,6 +122,12 @@ public class PdfHandlingFragment extends Fragment {
         });
 
         setupRadioButtonListeners(); // Set up radio button listeners
+    }
+
+    // Helper method to check if compression should be triggered
+    private boolean shouldTriggerCompression() {
+        List<File> processedFiles = coreViewModel.getProcessedFiles().getValue();
+        return processedFiles == null || processedFiles.isEmpty(); // Trigger only if no processed files exist
     }
 
     private void setupRecyclerView() {
@@ -296,7 +301,8 @@ public class PdfHandlingFragment extends Fragment {
                         postProcessSuccess(outputFiles);
                     }
                 } else if ("compresspdf".equals(actionType)) {
-                    deleteCompressFile();
+                    setCompressFile();
+                    //deleteCompressFile();
                 } else {
                     throw new IllegalArgumentException("Unsupported action type: " + actionType);
                 }
@@ -325,7 +331,24 @@ public class PdfHandlingFragment extends Fragment {
         });
     }
 
-    private void deleteCompressFile() {
+    private void setCompressFile() {
+        requireActivity().runOnUiThread(() -> {
+            // Determine the selected quality
+            String selectedQuality = binding.radioHigh.isChecked() ? "High" :
+                    binding.radioMedium.isChecked() ? "Medium" :
+                            binding.radioLow.isChecked() ? "Low" : null;
+
+            if (selectedQuality == null) {
+                Toast.makeText(requireContext(), "No compression quality selected.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            coreViewModel.setCompressType(selectedQuality);
+            Toast.makeText(requireContext(), "Compression type set: " + selectedQuality, Toast.LENGTH_SHORT).show();
+            coreViewModel.setNavigationEvent("navigate_to_preview");
+        });
+    }
+
+    /*private void deleteCompressFile() {
         requireActivity().runOnUiThread(() -> {
             // Determine the selected quality
             String selectedQuality = binding.radioHigh.isChecked() ? "High" :
@@ -353,7 +376,7 @@ public class PdfHandlingFragment extends Fragment {
             Toast.makeText(requireContext(), "PDF Action completed.", Toast.LENGTH_SHORT).show();
             coreViewModel.setNavigationEvent("navigate_to_preview");
         });
-    }
+    }*/
 
     private Uri getUriFromPosition(int position, Map<Uri, String> uris) {
         if (uris == null || position < 0 || position >= uris.size()) {

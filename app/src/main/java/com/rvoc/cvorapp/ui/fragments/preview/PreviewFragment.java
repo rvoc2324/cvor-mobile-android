@@ -69,31 +69,63 @@ public class PreviewFragment extends Fragment {
         animatorSet.playTogether(scaleX, scaleY);
         animatorSet.start();
 
-        setupViewPager();
+        // setupViewPager();
         observeProcessedFiles();
         setupButtons();
     }
 
-    private void setupViewPager() {
+    /*private void setupViewPager() {
         Log.d(TAG, "Preview fragment 3.");
         previewPagerAdapter = new PreviewPagerAdapter(requireContext());
         binding.filePreviewPager.setAdapter(previewPagerAdapter);
-    }
+    }*/
 
     private void observeProcessedFiles() {
         coreViewModel.getProcessedFiles().observe(getViewLifecycleOwner(), files -> {
-            if (files != null && !files.isEmpty()) {
-                binding.noFilesSelected.setVisibility(View.GONE);
-                binding.filePreviewPager.setVisibility(View.VISIBLE);
-                previewPagerAdapter.submitList(files);
-                binding.filePreviewPager.setCurrentItem(0, false);
-                Log.d(TAG, "Preview fragment 4.");
-            } else {
+            if (files == null || files.isEmpty()) {
                 binding.noFilesSelected.setVisibility(View.VISIBLE);
                 binding.filePreviewPager.setVisibility(View.GONE);
-                previewPagerAdapter.submitList(Collections.emptyList());
+                if (previewPagerAdapter != null) {
+                    previewPagerAdapter.submitList(Collections.emptyList());
+                }
+                return;
             }
+
+            List<File> filesToShow = files; // Default to all processed files
+            Log.d(TAG, "Preview fragment 3.");
+
+            // Check if the action type is "compresspdf" (established by compressType being non-null)
+            String compressType = coreViewModel.getCompressType().getValue();
+            Log.d(TAG, "compressType: " + compressType);
+            if (compressType != null) {
+                filesToShow = filterFilesByCompressionType(files, compressType);
+                Log.d(TAG, "Preview fragment 4.");
+            }
+
+            if (previewPagerAdapter == null) {
+                Log.d(TAG, "Preview fragment 5.");
+                previewPagerAdapter = new PreviewPagerAdapter(requireContext());
+                binding.filePreviewPager.setAdapter(previewPagerAdapter);
+            }
+
+            binding.noFilesSelected.setVisibility(View.GONE);
+            binding.filePreviewPager.setVisibility(View.VISIBLE);
+            previewPagerAdapter.submitList(filesToShow);
+            Log.d(TAG, "Preview fragment 6.");
+            binding.filePreviewPager.setCurrentItem(0, false);
+
+            Log.d(TAG, "Preview fragment updated with " + filesToShow.size() + " file(s).");
         });
+    }
+
+    // Helper method to filter files based on the selected compression type
+    private List<File> filterFilesByCompressionType(List<File> files, String compressType) {
+        for (File file : files) {
+            if (file.getName().contains("compressed_" + compressType.charAt(0))) {
+                return Collections.singletonList(file); // Return only the matching compressed file
+            }
+        }
+        return Collections.emptyList(); // Return empty list if no match found
     }
 
     private void setupButtons() {
@@ -102,7 +134,7 @@ public class PreviewFragment extends Fragment {
                 coreViewModel.resetProcessedFiles(); // Reset the files
             }
             binding.filePreviewPager.setAdapter(null); // Detach adapter to clear state
-            binding.filePreviewPager.setAdapter(previewPagerAdapter); // Reattach
+            previewPagerAdapter.submitList(Collections.emptyList());
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
 

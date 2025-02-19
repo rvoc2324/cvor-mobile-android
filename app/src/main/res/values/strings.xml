@@ -1,8 +1,19 @@
 <resources>
+    <!-- App Info -->
     <string name="app_name" translatable="false">CVOR</string>
     <string name="app_action">What would you like to do?</string>
     <string name="suggested_actions">Suggested Actions</string>
+
+    <!-- Home and Navigation -->
     <string name="home">Home</string>
+    <string name="favourites">Favourites</string>
+    <string name="settings">Settings</string>
+    <string name="help_section">Help section</string>
+    <string name="whatsnew">Whats New</string>
+    <string name="share_history">Smart Share history</string>
+    <string name="share_history_body">Below is the history of all the files you have shared via CVOR. You can filter the history below.</string>
+
+    <!-- Buttons -->
     <string name="add_watermark_button">Add Watermark</string>
     <string name="smart_share_button">Smart share</string>
     <string name="share_file_button">Share file</string>
@@ -11,116 +22,148 @@
     <string name="scan_to_pdf_button">Scan to PDF</string>
     <string name="split_pdf_button">Split</string>
     <string name="compress_pdf_button">Compress</string>
-    <string name="pdf_tools">PDF tools</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="done_button">Done</string>
+    <string name="log_share_button">Log share</string>
+    <string name="back_button">Back</string>
+    <string name="preview_button">Preview</string>
+    <string name="share_button">Share</string>
+    <string name="share_again_button">Share again</string>
+    <string name="app_review_text_button">Review</string>
+    <string name="message_us_button">Message us</string>
     <string name="remove">Remove</string>
-    <string name="filename_change_prompt">Enter new file name</string>
-    <string name="filename_change_check">File name required!</string>
-    <string name="custom_file_name">Change file name</string>
-    <string name="change">Change</string>
-    <string name="favourites">Favourites</string>
+
+    <!-- Camera -->
+    <string name="camera_source">Camera</string>
     <string name="flash_toggle">Flash ON</string>
     <string name="capture_image">Take Photo</string>
     <string name="retake_image">Retake the photo</string>
     <string name="confirm_image">Confirm photo</string>
     <string name="camera_preview">Camera preview</string>
     <string name="switch_camera">Switch Camera</string>
-    <string name="camera_source">Camera</string>
     <string name="camera_init_failed">Camera initialisation failed</string>
     <string name="image_capture_failed">Image capture failed</string>
     <string name="no_image_to_confirm">No image to confirm</string>
     <string name="image_save_failed">Image failed to save</string>
     <string name="camera_not_ready">Camera not ready</string>
-    <string name="select_pdfs">Upload PDF documents</string>
-    <string name="select_images">Upload images</string>
-    <string name="camera_icon_desc">Camera icon</string>
     <string name="capture_more_images">Capture more images?</string>
     <string name="captured_image">Captured image</string>
-    <string name="permission_required_message">Applicable permission is required to use the feature.</string>
-    <string name="image_picker_icon_desc">Image picker icon</string>
-    <string name="pdf_picker_icon_desc">PDF picker icon</string>
+
+    <!-- File Selection -->
+    <string name="select_pdfs">Upload PDF documents</string>
+    <string name="select_images">Upload images</string>
     <string name="file_manager_fragment_title">Review files</string>
     <string name="file_name">File Name</string>
-    <string name="refer">Refer</string>
-    <string name="share_history">Smart Share history</string>
-    <string name="share_history_body">Below is the history of all the files you have shared via CVOR. You can filter the history below.</string>
-    <string name="sharehistory_hint">Search by file name, shared with or purpose</string>
-    <string name="from_date_picker">From</string>
-    <string name="to_date_picker">To</string>
-    <string name="filter_dropdown">Filters ▼</string>
-    <string name="whatsnew">Whats New</string>
-    <string name="help_section">Help section</string>
-    <string name="settings">Settings</string>
-    <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
-    <string name="password_prompt">Enter password for: %s</string>
+
+    <!-- Share -->
     <string name="sharing_with">Sharing the document with?</string>
     <string name="purpose">Purpose? (optional)</string>
+    <string name="share_title">Share</string>
+    <string name="share_app_text">Select the app to share</string>
+    <string name="share_app_icon_desc">App available to share the files</string>
+    <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
+    <string name="sharehistory_hint">Search by file name, shared with or purpose</string>
+    <string name="refer_message">Check out CVOR - A smarter way to share your data: https://www.google.com</string>
+    <string name="refer">Refer</string>
+    <string name="share_via">Share via</string>
     <string name="text_watermark">Shared with %1$s for %2$s on %3$s</string>
     <string name="text_general_purposes">General purposes</string>
-    <string name="smart_text_preview">Smart text preview</string>
-    <string name="grid_watermark_check">Grid style layout</string>
-    <string name="single_watermark_check">Single</string>
-    <string name="opacity_text">Transparency: %d</string>
-    <string name="fontsize_text">Font size: %d</string>
-    <string name="preview_button">Preview</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+
+    <!-- PDF Tools -->
+    <string name="pdf_tools">PDF tools</string>
     <string name="combine_pdf">Combine PDF</string>
     <string name="convert_to_pdf">Convert images to PDF</string>
     <string name="split_pdf">Split PDF</string>
     <string name="compress_pdf">Compress PDF</string>
     <string name="compress_quality">Post compression file size (select one): </string>
     <string name="pre_compress_file_size">Current file size: %1s</string>
+
+    <!-- Dialogs and Prompts -->
+    <string name="filename_change_prompt">Enter new file name</string>
+    <string name="filename_change_check">File name required!</string>
+    <string name="custom_file_name">Change file name</string>
+    <string name="change">Change</string>
+    <string name="password_prompt">Enter password for: %s</string>
+    <string name="permission_required_message">Applicable permission is required to use the feature.</string>
+    <string name="from_date_picker">From</string>
+    <string name="to_date_picker">To</string>
+    <string name="filter_dropdown">Filters ▼</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
     <string name="loading">Loading, please wait!</string>
+
+    <!-- Icons -->
+    <string name="camera_icon_desc">Camera icon</string>
+    <string name="image_picker_icon_desc">Image picker icon</string>
+    <string name="pdf_picker_icon_desc">PDF picker icon</string>
     <string name="delete_icon">Delete icon</string>
     <string name="pdf_icon">PDF icon</string>
     <string name="image_icon">Image icon</string>
+    <string name="download_icon">Download files</string>
+
+    <!-- Preview -->
     <string name="preview_desc">Preview of processed file</string>
     <string name="preview_fragment_title">Preview</string>
-    <string name="download_icon">Download files</string>
     <string name="no_files_selected">No files available to preview. Go back to choose a file.</string>
-    <string name="back_button">Back</string>
-    <string name="share_button">Share</string>
-    <string name="share_again_button">Share again</string>
-    <string name="done_button">Done</string>
-    <string name="log_share_button">Log share</string>
-    <string name="cancel_button">Cancel</string>
-    <string name="share_title">Share</string>
-    <string name="share_app_text">Select the app to share</string>
-    <string name="share_app_icon_desc">App available to share the files</string>
-    <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
-    <string name="refer_message">Check out CVOR - A smarter way to share your data: https://www.google.com</string>
-    <string name="share_via">Share via</string>
-    <string name="app_review_text_button">Review</string>
-    <string name="message_us_button">Message us</string>
 
-
+    <!-- Watermark -->
+    <string name="grid_watermark_check">Grid style layout</string>
+    <string name="single_watermark_check">Single</string>
+    <string name="opacity_text">Transparency: %d</string>
+    <string name="fontsize_text">Font size: %d</string>
+    <string name="smart_text_preview">Smart text preview</string>
     <string name="watermark_help_text">
-    • <b> Sharing With:</b> Organisation/individual you are sharing the document with.\n
-    • <b> Purpose:</b> Briefly add a purpose of the share.\n
-    • <b> Transparency:</b> Adjust lightness of the smart text.\n
-    • <b> Font Size:</b> Adjust size of smart text.\n
-    • <b> Grid style:</b> Smart text repeats across the document. Uncheck to show once.\n
-    • <b> Position: </b> Adjust the position of the smart text.\n
-    • <b> Smart text Preview:</b> Shows a preview of the text to be applied to the file.
+        • <b> Sharing With:</b> Organisation/individual you are sharing the document with.\n
+        • <b> Purpose:</b> Briefly add a purpose of the share.\n
+        • <b> Transparency:</b> Adjust lightness of the smart text.\n
+        • <b> Font Size:</b> Adjust size of smart text.\n
+        • <b> Grid style:</b> Smart text repeats across the document. Uncheck to show once.\n
+        • <b> Position: </b> Adjust the position of the smart text.\n
+        • <b> Smart text Preview:</b> Shows a preview of the text to be applied to the file.
     </string>
 
-    <string name="features_body">
-     &#8226;  Smart share - Add smart text to images and PDFs when sharing your important files to prevent misuse.\n
-     &#8226;  Scan documents to PDF with enhanced preview and sharing options.\n
-     &#8226;  Compress, combine, split, and convert images to PDFs effortlessly.\n
-     &#8226;  Mark frequently used files as favourites for quick usage.\n
-     &#8226;  Keep track of your important shared files via the Smart share history.\n
-     &#8226;  Add smart text in your preferred language; 12 languages currently supported.\n
-    </string>
-
+    <!-- Features -->
     <string name="features_heading">App features</string>
+    <string name="features_body">
+        &#8226;  Smart share - Add smart text to images and PDFs when sharing your important files to prevent misuse.\n
+        &#8226;  Scan documents to PDF with enhanced preview and sharing options.\n
+        &#8226;  Compress, combine, split, and convert images to PDFs effortlessly.\n
+        &#8226;  Mark frequently used files as favourites for quick usage.\n
+        &#8226;  Keep track of your important shared files via the Smart share history.\n
+        &#8226;  Add smart text in your preferred language; 12 languages currently supported.\n
+    </string>
+
+    <!-- FAQ and Messaging -->
     <string name="faq_heading">FAQs</string>
     <string name="faq_collapse">Expands and collapses the FAQ section</string>
     <string name="message_us_prompt">Have more questions or suggestions or want to report a bug?</string>
     <string name="review_prompt">Enjoying the app? Your review helps us improve! ❤️</string>
 
+    <!-- Legal -->
     <string name="terms_of_use_message">By using this app, you agree to our Terms of Use and Privacy Policy.</string>
     <string name="agree_button">Agree</string>
     <string name="disagree_button">Disagree</string>
+
 </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

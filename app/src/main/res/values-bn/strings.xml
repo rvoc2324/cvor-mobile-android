@@ -1,0 +1,148 @@
+<resources>
+    <!-- App Info -->
+    <string name="app_name" translatable="false">CVOR</string>
+    <string name="app_action">আপনি কী করতে চান?</string>
+    <string name="suggested_actions">সাজেস্টেড অ্যাকশন</string>
+
+    <!-- Home and Navigation -->
+    <string name="home">হোম</string>
+    <string name="favourites">পছন্দের তালিকা</string>
+    <string name="settings">সেটিংস</string>
+    <string name="help_section">সাহায্য বিভাগ</string>
+    <string name="whatsnew">নতুন কী</string>
+    <string name="share_history">স্মার্ট শেয়ার ইতিহাস</string>
+    <string name="share_history_body">নীচে CVOR-এর মাধ্যমে শেয়ার করা ফাইলগুলোর ইতিহাস দেখানো হয়েছে। আপনি এখানে ফিল্টার করতে পারেন।</string>
+
+    <!-- Buttons -->
+    <string name="add_watermark_button">ওয়াটারমার্ক যোগ করুন</string>
+    <string name="smart_share_button">স্মার্ট শেয়ার</string>
+    <string name="share_file_button">ফাইল শেয়ার করুন</string>
+    <string name="combine_pdfs_button">একত্র করুন</string>
+    <string name="convert_to_pdf_button">রূপান্তর করুন</string>
+    <string name="scan_to_pdf_button">পিডিএফ-এ স্ক্যান করুন</string>
+    <string name="split_pdf_button">ভাগ করুন</string>
+    <string name="compress_pdf_button">সংকুচিত করুন</string>
+    <string name="cancel_button">বাতিল</string>
+    <string name="done_button">সম্পন্ন</string>
+    <string name="log_share_button">শেয়ার লগ করুন</string>
+    <string name="back_button">ফিরুন</string>
+    <string name="preview_button">প্রিভিউ</string>
+    <string name="share_button">শেয়ার করুন</string>
+    <string name="share_again_button">আবার শেয়ার করুন</string>
+    <string name="app_review_text_button">রিভিউ দিন</string>
+    <string name="message_us_button">আমাদের বার্তা দিন</string>
+    <string name="remove">অপসারণ করুন</string>
+
+    <!-- Camera -->
+    <string name="camera_source">ক্যামেরা</string>
+    <string name="flash_toggle">ফ্ল্যাশ চালু</string>
+    <string name="capture_image">ছবি তুলুন</string>
+    <string name="retake_image">আবার ছবি তুলুন</string>
+    <string name="confirm_image">ছবি নিশ্চিত করুন</string>
+    <string name="camera_preview">ক্যামেরা প্রিভিউ</string>
+    <string name="switch_camera">ক্যামেরা পরিবর্তন করুন</string>
+    <string name="camera_init_failed">ক্যামেরা ইনিশিয়ালাইজ করতে ব্যর্থ</string>
+    <string name="image_capture_failed">ছবি তোলা ব্যর্থ হয়েছে</string>
+    <string name="no_image_to_confirm">নিশ্চিত করার জন্য কোনো ছবি নেই</string>
+    <string name="image_save_failed">ছবি সংরক্ষণ ব্যর্থ হয়েছে</string>
+    <string name="camera_not_ready">ক্যামেরা প্রস্তুত নয়</string>
+    <string name="capture_more_images">আরও ছবি তুলবেন?</string>
+    <string name="captured_image">তোলা ছবি</string>
+
+    <!-- File Selection -->
+    <string name="select_pdfs">পিডিএফ ডকুমেন্ট আপলোড করুন</string>
+    <string name="select_images">ছবি আপলোড করুন</string>
+    <string name="file_manager_fragment_title">ফাইল রিভিউ করুন</string>
+    <string name="file_name">ফাইলের নাম</string>
+
+    <!-- Share -->
+    <string name="sharing_with">ফাইলটি কার সাথে শেয়ার করছেন?</string>
+    <string name="purpose">উদ্দেশ্য? (ঐচ্ছিক)</string>
+    <string name="share_title">শেয়ার করুন</string>
+    <string name="share_app_text">শেয়ার করার জন্য অ্যাপ নির্বাচন করুন</string>
+    <string name="share_app_icon_desc">শেয়ার করার জন্য উপলব্ধ অ্যাপ</string>
+    <string name="share_text">হাই! এখানে আপনার অনুরোধ করা ফাইল রয়েছে। এটি CVOR-এর মাধ্যমে নিরাপদে শেয়ার করা হয়েছে!</string>
+    <string name="sharehistory_hint">ফাইলের নাম, শেয়ার কার সাথে হয়েছে বা উদ্দেশ্য দ্বারা অনুসন্ধান করুন</string>
+    <string name="refer_message">CVOR দেখুন - আপনার ডেটা শেয়ারের স্মার্ট উপায়: https://www.google.com</string>
+    <string name="refer">রেফার করুন</string>
+    <string name="share_via">শেয়ার করুন</string>
+    <string name="text_watermark">%1$s-এর সাথে %2$s-এর জন্য %3$s তারিখে শেয়ার করা হয়েছে</string>
+    <string name="text_general_purposes">সাধারণ উদ্দেশ্য</string>
+
+    <!-- PDF Tools -->
+    <string name="pdf_tools">পিডিএফ সরঞ্জাম</string>
+    <string name="combine_pdf">পিডিএফ একত্র করুন</string>
+    <string name="convert_to_pdf">ছবিকে পিডিএফ-এ রূপান্তর করুন</string>
+    <string name="split_pdf">পিডিএফ ভাগ করুন</string>
+    <string name="compress_pdf">পিডিএফ সংকুচিত করুন</string>
+    <string name="compress_quality">সংকোচনের পরে ফাইলের আকার (একটি বেছে নিন):</string>
+    <string name="pre_compress_file_size">বর্তমান ফাইলের আকার: %1s</string>
+
+    <!-- Dialogs and Prompts -->
+    <string name="filename_change_prompt">নতুন ফাইল নাম লিখুন</string>
+    <string name="filename_change_check">ফাইল নাম প্রয়োজন!</string>
+    <string name="custom_file_name">ফাইল নাম পরিবর্তন করুন</string>
+    <string name="change">পরিবর্তন করুন</string>
+    <string name="password_prompt">পাসওয়ার্ড লিখুন: %s</string>
+    <string name="permission_required_message">এই বৈশিষ্ট্যটি ব্যবহার করতে অনুমতি প্রয়োজন।</string>
+    <string name="from_date_picker">থেকে</string>
+    <string name="to_date_picker">পর্যন্ত</string>
+    <string name="filter_dropdown">ফিল্টার ▼</string>
+    <string name="yes">হ্যাঁ</string>
+    <string name="no">না</string>
+    <string name="cancel">বাতিল</string>
+    <string name="ok">ঠিক আছে</string>
+    <string name="loading">লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন!</string>
+
+    <!-- Icons -->
+    <string name="camera_icon_desc">ক্যামেরা আইকন</string>
+    <string name="image_picker_icon_desc">ইমেজ পিকার আইকন</string>
+    <string name="pdf_picker_icon_desc">পিডিএফ পিকার আইকন</string>
+    <string name="delete_icon">মুছে ফেলার আইকন</string>
+    <string name="pdf_icon">পিডিএফ আইকন</string>
+    <string name="image_icon">ছবির আইকন</string>
+    <string name="download_icon">ফাইল ডাউনলোড করুন</string>
+
+    <!-- Preview -->
+    <string name="preview_desc">প্রসেস করা ফাইলের প্রিভিউ</string>
+    <string name="preview_fragment_title">প্রিভিউ</string>
+    <string name="no_files_selected">প্রিভিউ দেখানোর জন্য কোনো ফাইল নেই। ফাইল বাছাই করতে ফিরে যান।</string>
+
+    <!-- Watermark -->
+    <string name="grid_watermark_check">গ্রিড স্টাইল লেআউট</string>
+    <string name="single_watermark_check">একক</string>
+    <string name="opacity_text">অস্বচ্ছতা: %d</string>
+    <string name="fontsize_text">ফন্ট আকার: %d</string>
+    <string name="smart_text_preview">স্মার্ট টেক্সট প্রিভিউ</string>
+    <string name="watermark_help_text">
+        • <b> শেয়ার করা হচ্ছে:</b> যে ব্যক্তি বা সংস্থার সাথে আপনি ডকুমেন্ট শেয়ার করছেন।\n
+        • <b> উদ্দেশ্য:</b> শেয়ারের সংক্ষিপ্ত উদ্দেশ্য যোগ করুন।\n
+        • <b> অস্বচ্ছতা:</b> স্মার্ট টেক্সটের উজ্জ্বলতা সামঞ্জস্য করুন।\n
+        • <b> ফন্ট আকার:</b> স্মার্ট টেক্সটের আকার সামঞ্জস্য করুন।\n
+        • <b> গ্রিড স্টাইল:</b> স্মার্ট টেক্সট পুরো ডকুমেন্টে পুনরাবৃত্তি করবে। একবার দেখানোর জন্য আনচেক করুন।\n
+        • <b> অবস্থান:</b> স্মার্ট টেক্সটের অবস্থান সামঞ্জস্য করুন।\n
+        • <b> স্মার্ট টেক্সট প্রিভিউ:</b> ফাইলে প্রয়োগ করা টেক্সটের প্রিভিউ দেখায়।
+    </string>
+
+    <!-- Features -->
+    <string name="features_heading">অ্যাপের বৈশিষ্ট্য</string>
+    <string name="features_body">
+        &#8226; স্মার্ট শেয়ার - আপনার গুরুত্বপূর্ণ ফাইল শেয়ার করার সময় ছবিতে বা পিডিএফ-এ স্মার্ট টেক্সট যোগ করুন যাতে সেগুলোর অপব্যবহার না হয়।\n
+        &#8226; উন্নত প্রিভিউ এবং শেয়ার বিকল্প সহ ডকুমেন্ট পিডিএফ-এ স্ক্যান করুন।\n
+        &#8226; সহজেই ছবি পিডিএফ-এ রূপান্তর, একত্রিত, ভাগ, এবং সংকুচিত করুন।\n
+        &#8226; প্রায়শই ব্যবহৃত ফাইলগুলিকে দ্রুত অ্যাক্সেসের জন্য পছন্দের তালিকায় যোগ করুন।\n
+        &#8226; স্মার্ট শেয়ার ইতিহাসের মাধ্যমে আপনার গুরুত্বপূর্ণ শেয়ার করা ফাইলগুলির ট্র্যাক রাখুন।\n
+        &#8226; আপনার পছন্দের ভাষায় স্মার্ট টেক্সট যোগ করুন; বর্তমানে ১২টি ভাষা সমর্থিত।\n
+    </string>
+
+    <!-- FAQ and Messaging -->
+    <string name="faq_heading">সাধারণ প্রশ্নাবলী</string>
+    <string name="faq_collapse">সাধারণ প্রশ্নাবলী বিভাগের সম্প্রসারণ এবং সংকোচন</string>
+    <string name="message_us_prompt">আপনার কি আরও প্রশ্ন আছে, কোনো প্রস্তাব দিতে চান, বা কোনো বাগ রিপোর্ট করতে চান?</string>
+    <string name="review_prompt">আপনি কি অ্যাপটি পছন্দ করছেন? আপনার রিভিউ আমাদের উন্নত করতে সাহায্য করবে! ❤️</string>
+
+    <!-- Legal -->
+    <string name="terms_of_use_message">এই অ্যাপটি ব্যবহার করে, আপনি আমাদের ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতিতে সম্মত হচ্ছেন।</string>
+    <string name="agree_button">সম্মত</string>
+    <string name="disagree_button">অসম্মত</string>
+</resources>

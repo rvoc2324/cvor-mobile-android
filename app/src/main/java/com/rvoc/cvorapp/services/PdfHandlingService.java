@@ -3,8 +3,10 @@ package com.rvoc.cvorapp.services;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,8 @@ import com.tom_roush.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import com.tom_roush.pdfbox.rendering.ImageType;
 import com.tom_roush.pdfbox.rendering.PDFRenderer;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,25 +69,86 @@ public class PdfHandlingService {
 
     // Combine multiple PDFs into one
     public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile) throws Exception {
-        PDFMergerUtility mergerUtility = new PDFMergerUtility();
+        Log.d(TAG, "PDF Service - Combining PDFs with optimized memory usage");
 
-        for (Uri uri : inputFiles) {
-            byte[] pdfBytes = readUriToByteArray(uri);
-            mergerUtility.addSource(new ByteArrayInputStream(pdfBytes));
+        // Threshold for switching between memory optimization strategies
+        final long LARGE_FILE_THRESHOLD_BYTES = 20 * 1024 * 1024; // 20MB
+
+        // Create the merged PDF document
+        try (PDDocument mergedDocument = new PDDocument()) {
+            for (Uri uri : inputFiles) {
+                try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+                    if (inputStream == null) {
+                        throw new IOException("Unable to open input stream for URI: " + uri);
+                    }
+
+                    // Check the file size
+                    long fileSize = getFileSize(uri);
+
+                    // Load the document
+                    try (PDDocument document = PDDocument.load(inputStream)) {
+                        if (fileSize > LARGE_FILE_THRESHOLD_BYTES) {
+                            Log.d(TAG, "Processing large file: " + uri);
+                            // For large files, add pages one-by-one
+                            addPagesIndividually(document, mergedDocument);
+                        } else {
+                            Log.d(TAG, "Processing small file: " + uri);
+                            // For small files, add pages more efficiently
+                            addAllPagesToMergedDocument(document, mergedDocument);
+                        }
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Error reading or merging PDF from URI: " + uri, e);
+                    throw new IOException("Failed to read or merge PDF file: " + uri, e);
+                }
+            }
+
+            // Save the merged document
+            mergedDocument.save(outputFile);
         }
-
-        // Set the destination file and merge the documents
-        mergerUtility.setDestinationFileName(outputFile.getPath());
-        mergerUtility.mergeDocuments(null);
 
         Log.d(TAG, "PDF merge completed successfully.");
         return outputFile;
     }
 
+    /**
+     * Adds all pages from the source document to the merged document (small file optimization).
+     */
+    private void addAllPagesToMergedDocument(PDDocument sourceDocument, PDDocument mergedDocument) throws IOException {
+        for (PDPage page : sourceDocument.getPages()) {
+            mergedDocument.addPage(new PDPage(page.getCOSObject())); // Clone the page to avoid closure issues
+        }
+    }
+
+    /**
+     * Adds pages one-by-one to optimize memory usage for large files.
+     */
+    private void addPagesIndividually(PDDocument sourceDocument, PDDocument mergedDocument) throws IOException {
+        for (int i = 0; i < sourceDocument.getNumberOfPages(); i++) {
+            mergedDocument.addPage(new PDPage(sourceDocument.getPage(i).getCOSObject())); // Clone page for safety
+        }
+    }
+
+    /**
+     * Utility method to get the file size from a URI.
+     */
+    private long getFileSize(Uri uri) throws IOException {
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+            if (sizeIndex != -1 && cursor.moveToFirst()) {
+                long size = cursor.getLong(sizeIndex);
+                cursor.close();
+                return size;
+            }
+            cursor.close();
+        }
+        throw new IOException("Unable to determine file size for URI: " + uri);
+    }
+
+    //Converting images to a PDF
     public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {
         Log.d(TAG, "PDF Service - Converting Images to PDF");
-
-        byte[] enhancedImageData;
 
         try (PDDocument document = new PDDocument()) {
             for (Uri uri : imageUris) {
@@ -92,26 +157,24 @@ public class PdfHandlingService {
                         throw new IOException("Unable to open input stream for URI: " + uri);
                     }
 
-                    try {
-                        Bitmap enhancedBitmap = ImageUtils.enhanceImageQuality(readStream(inputStream));
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-                        // Convert enhanced Bitmap back to byte array
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        enhancedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                        enhancedImageData = byteArrayOutputStream.toByteArray();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error enhancing image: " + uri, e);
-                        throw new IOException("Failed to enhance image: " + uri, e);
+                    /*// Enhance image quality and decode it as a bitmap
+                    Bitmap enhancedBitmap = ImageUtils.enhanceImageQuality(readStream(inputStream));
+                    enhancedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);*/
+
+
+                    byte[] buffer = new byte[8192]; // 8KB buffer size
+                    int bytesRead;
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
+                        byteArrayOutputStream.write(buffer, 0, bytesRead);
                     }
+                    byte[] imageData = byteArrayOutputStream.toByteArray();
 
-                    // Create PDImageXObject directly from input stream
-                    PDImageXObject pdImage = PDImageXObject.createFromByteArray(
-                            document,
-                            enhancedImageData,
-                            "image"
-                    );
+                    // Create PDImageXObject from the byte array
+                    PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, imageData, "image");
 
-                    // Get original image dimensions
+                    // Get the dimensions of the image
                     float imageWidth = pdImage.getWidth();
                     float imageHeight = pdImage.getHeight();
 
@@ -119,34 +182,40 @@ public class PdfHandlingService {
                     float pageWidth = PDRectangle.A4.getWidth();
                     float pageHeight = PDRectangle.A4.getHeight();
 
-                    // Scale image to fit within the PDF page while maintaining aspect ratio
+                    // Scale the image to fit within the PDF page while maintaining the aspect ratio
                     float scale = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
                     float scaledWidth = imageWidth * scale;
                     float scaledHeight = imageHeight * scale;
 
-                    // Create a new page with A4 dimensions
+                    // Create a new PDF page with A4 dimensions
                     PDPage page = new PDPage(new PDRectangle(pageWidth, pageHeight));
                     document.addPage(page);
 
-                    // Add image to the center of the page
-                    try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                    // Add the image to the page
+                    try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, true, true)) {
+                        // Center the image on the page
                         float xOffset = (pageWidth - scaledWidth) / 2;
                         float yOffset = (pageHeight - scaledHeight) / 2;
                         contentStream.drawImage(pdImage, xOffset, yOffset, scaledWidth, scaledHeight);
                     }
+
+                    // Explicitly clear memory for large images to reduce memory pressure
+                    // enhancedBitmap.recycle();
+                    // byteArrayOutputStream.close();
                 } catch (Exception e) {
                     Log.e(TAG, "Error processing image: " + uri, e);
                     throw new IOException("Failed to process image: " + uri.toString(), e);
                 }
             }
 
-            // Save the document
+            // Save the document incrementally to minimize memory usage
             document.save(outputFile);
         }
 
         Log.d(TAG, "PDF Service - Conversion Completed");
         return outputFile;
     }
+
 
     // Split a PDF file
     public List<File> splitPDF(@NonNull PDDocument document, @NonNull File outputDir) throws Exception {
