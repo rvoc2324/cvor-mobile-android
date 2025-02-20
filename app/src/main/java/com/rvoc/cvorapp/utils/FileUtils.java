@@ -12,12 +12,30 @@ import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 
 public class FileUtils {
     private static final String TAG = "FileUtils";
+
+    /**
+     * Utility method to get the file size from a URI.
+
+    private long getFileSize(Context context, Uri uri) throws IOException {
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+            if (sizeIndex != -1 && cursor.moveToFirst()) {
+                long size = cursor.getLong(sizeIndex);
+                cursor.close();
+                return size;
+            }
+            cursor.close();
+        }
+        throw new IOException("Unable to determine file size for URI: " + uri);
+    }*/
 
     /**
      * Copies a file from a Uri and adds it to the CoreViewModel's processedFiles list.

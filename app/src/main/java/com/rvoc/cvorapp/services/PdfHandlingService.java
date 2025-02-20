@@ -68,83 +68,38 @@ public class PdfHandlingService {
     }
 
     // Combine multiple PDFs into one
-    public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile) throws Exception {
-        Log.d(TAG, "PDF Service - Combining PDFs with optimized memory usage");
+    public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile, @NonNull Context context) throws Exception {
+        PDFMergerUtility mergerUtility = new PDFMergerUtility();
+        List<InputStream> inputStreams = new ArrayList<>();
 
-        // Threshold for switching between memory optimization strategies
-        final long LARGE_FILE_THRESHOLD_BYTES = 20 * 1024 * 1024; // 20MB
-
-        // Create the merged PDF document
-        try (PDDocument mergedDocument = new PDDocument()) {
+        try {
             for (Uri uri : inputFiles) {
-                try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-                    if (inputStream == null) {
-                        throw new IOException("Unable to open input stream for URI: " + uri);
-                    }
-
-                    // Check the file size
-                    long fileSize = getFileSize(uri);
-
-                    // Load the document
-                    try (PDDocument document = PDDocument.load(inputStream)) {
-                        if (fileSize > LARGE_FILE_THRESHOLD_BYTES) {
-                            Log.d(TAG, "Processing large file: " + uri);
-                            // For large files, add pages one-by-one
-                            addPagesIndividually(document, mergedDocument);
-                        } else {
-                            Log.d(TAG, "Processing small file: " + uri);
-                            // For small files, add pages more efficiently
-                            addAllPagesToMergedDocument(document, mergedDocument);
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "Error reading or merging PDF from URI: " + uri, e);
-                    throw new IOException("Failed to read or merge PDF file: " + uri, e);
+                InputStream inputStream = context.getContentResolver().openInputStream(uri);
+                if (inputStream != null) {
+                    mergerUtility.addSource(inputStream);
+                    inputStreams.add(inputStream); // Store open streams
+                } else {
+                    Log.e(TAG, "Failed to open InputStream for: " + uri);
                 }
             }
 
-            // Save the merged document
-            mergedDocument.save(outputFile);
-        }
-
-        Log.d(TAG, "PDF merge completed successfully.");
-        return outputFile;
-    }
-
-    /**
-     * Adds all pages from the source document to the merged document (small file optimization).
-     */
-    private void addAllPagesToMergedDocument(PDDocument sourceDocument, PDDocument mergedDocument) throws IOException {
-        for (PDPage page : sourceDocument.getPages()) {
-            mergedDocument.addPage(new PDPage(page.getCOSObject())); // Clone the page to avoid closure issues
-        }
-    }
-
-    /**
-     * Adds pages one-by-one to optimize memory usage for large files.
-     */
-    private void addPagesIndividually(PDDocument sourceDocument, PDDocument mergedDocument) throws IOException {
-        for (int i = 0; i < sourceDocument.getNumberOfPages(); i++) {
-            mergedDocument.addPage(new PDPage(sourceDocument.getPage(i).getCOSObject())); // Clone page for safety
-        }
-    }
-
-    /**
-     * Utility method to get the file size from a URI.
-     */
-    private long getFileSize(Uri uri) throws IOException {
-        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-        if (cursor != null) {
-            int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
-            if (sizeIndex != -1 && cursor.moveToFirst()) {
-                long size = cursor.getLong(sizeIndex);
-                cursor.close();
-                return size;
+            // Set the destination file and merge the documents
+            mergerUtility.setDestinationFileName(outputFile.getPath());
+            mergerUtility.mergeDocuments(null);
+            Log.d(TAG, "PDF merge completed successfully.");
+            return outputFile;
+        } finally {
+            // Close all input streams after merging is completed
+            for (InputStream stream : inputStreams) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "Error closing InputStream", e);
+                }
             }
-            cursor.close();
         }
-        throw new IOException("Unable to determine file size for URI: " + uri);
     }
+
 
     //Converting images to a PDF
     public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {

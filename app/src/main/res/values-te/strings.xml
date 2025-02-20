@@ -1,0 +1,179 @@
+<!-- Telugu -->
+
+<resources>
+    <!-- App Info -->
+    <string name="app_name" translatable="false">CVOR</string>
+    <string name="app_action">మీరు ఏం చేయాలనుకుంటున్నారు?</string>
+    <string name="suggested_actions">మా సూచించబడిన చర్యలు</string>
+
+    <!-- Home and Navigation -->
+    <string name="home">హోమ్</string>
+    <string name="favourites">ప్రియమైనవి</string>
+    <string name="settings">సెట్టింగ్స్</string>
+    <string name="help_section">సహాయ విభాగం</string>
+    <string name="whatsnew">కొత్తది ఏమిటి</string>
+    <string name="share_history">స్మార్ట్ షేర్ చరిత్ర</string>
+    <string name="share_history_body">ఇది మీరు CVOR ద్వారా పంచుకున్న అన్ని ఫైళ్ల చరిత్ర. మీరు క్రింది చరిత్రను ఫిల్టర్ చేయవచ్చు.</string>
+
+    <!-- Buttons -->
+    <string name="add_watermark_button">వాటర్మార్క్ జోడించు</string>
+    <string name="smart_share_button">స్మార్ట్ షేర్</string>
+    <string name="share_file_button">ఫైల్ పంచుకోండి</string>
+    <string name="combine_pdfs_button">కాంబైన్ చేయండి</string>
+    <string name="convert_to_pdf_button">పిడిఎఫ్‌గా మార్చండి</string>
+    <string name="scan_to_pdf_button">పిడిఎఫ్‌గా స్కాన్ చేయండి</string>
+    <string name="split_pdf_button">విభజించండి</string>
+    <string name="compress_pdf_button">సంకోచించండి</string>
+    <string name="cancel_button">రద్దు చేయండి</string>
+    <string name="done_button">మూసవేయండి</string>
+    <string name="log_share_button">షేర్ లాగ్</string>
+    <string name="back_button">తిరిగి</string>
+    <string name="preview_button">పరిశీలించండి</string>
+    <string name="share_button">షేర్ చేయండి</string>
+    <string name="share_again_button">మళ్ళీ షేర్ చేయండి</string>
+    <string name="app_review_text_button">సమీక్ష</string>
+    <string name="message_us_button">మాకు సందేశం పంపండి</string>
+    <string name="remove">తీయండి</string>
+
+    <!-- Camera -->
+    <string name="camera_source">క్యామెరా</string>
+    <string name="flash_toggle">ఫ్లాష్ ఆన్</string>
+    <string name="capture_image">ఫోటో తీసుకోండి</string>
+    <string name="retake_image">మరింత ఫోటో తీసుకోండి</string>
+    <string name="confirm_image">ఫోటో నిర్ధారించండి</string>
+    <string name="camera_preview">క్యామెరా ప్రివ్యూ</string>
+    <string name="switch_camera">క్యామెరా మార్చండి</string>
+    <string name="camera_init_failed">క్యామెరా ప్రారంభం విఫలమైంది</string>
+    <string name="image_capture_failed">ఫోటో తీయడంలో విఫలమైంది</string>
+    <string name="no_image_to_confirm">నిర్ధారించేందుకు ఫోటో లేదు</string>
+    <string name="image_save_failed">ఫోటో సేవ్ చేయడంలో విఫలమైంది</string>
+    <string name="camera_not_ready">క్యామెరా సిద్ధంగా లేదు</string>
+    <string name="capture_more_images">మరిన్ని ఫోటోలు తీసుకోవాలా?</string>
+    <string name="captured_image">తీయబడిన ఫోటో</string>
+
+    <!-- File Selection -->
+    <string name="select_pdfs">PDF డాక్యుమెంట్లను ఎంచుకోండి</string>
+    <string name="select_images">చిత్రాలను ఎంచుకోండి</string>
+    <string name="file_manager_fragment_title">ఫైళ్లను సమీక్షించండి</string>
+    <string name="file_name">ఫైల్ పేరు</string>
+
+    <!-- Share -->
+    <string name="sharing_with">ఎవరి తో పంచుకుంటున్నారు?</string>
+    <string name="purpose">ఉద్దేశం? (ఆప్షనల్)</string>
+    <string name="share_title">షేర్ చేయండి</string>
+    <string name="share_app_text">షేర్ చేయడానికి యాప్ ఎంచుకోండి</string>
+    <string name="share_app_icon_desc">ఫైళ్లు పంచుకోవడానికి అందుబాటులో ఉన్న యాప్</string>
+    <string name="share_text">హాయ్! మీరు కోరిన ఫైల్ ఇది. CVOR ద్వారా సురక్షితంగా పంచబడింది!</string>
+    <string name="sharehistory_hint">ఫైల్ పేరు, పంచుకున్నవారి లేదా ఉద్దేశం ద్వారా శోధించండి</string>
+    <string name="refer_message">CVOR ని చూడండి - మీ డేటాను పంచుకోవడాని మేరు మార్గం: https://www.google.com</string>
+    <string name="refer">సూచించండి</string>
+    <string name="share_via">ద్వారా పంచుకోండి</string>
+    <string name="text_watermark">%1$s తో %2$s కోసం %3$s పంచించబడింది</string>
+    <string name="text_general_purposes">సాధారణ ప్రయోజనాలు</string>
+
+    <!-- PDF Tools -->
+    <string name="pdf_tools">PDF టూల్స్</string>
+    <string name="combine_pdf">PDF ను కాంబైన్ చేయండి</string>
+    <string name="convert_to_pdf">చిత్రాలను PDF గా మార్చండి</string>
+    <string name="split_pdf">PDF ను విభజించండి</string>
+    <string name="compress_pdf">PDF ను సంకోచించండి</string>
+    <string name="compress_quality">సంకోచిత ఫైల్ పరిమాణం (ఒకదాన్ని ఎంచుకోండి): </string>
+    <string name="pre_compress_file_size">ప్రస్తుత ఫైల్ పరిమాణం: %1s</string>
+
+    <!-- Dialogs and Prompts -->
+    <string name="filename_change_prompt">కొత్త ఫైల్ పేరు ఎంటర్ చేయండి</string>
+    <string name="filename_change_check">ఫైల్ పేరు అవసరం!</string>
+    <string name="custom_file_name">ఫైల్ పేరు మార్చండి</string>
+    <string name="change">మార్చండి</string>
+    <string name="password_prompt">ప్రవేశపెట్టండి: %s కోసం పాస్‌వర్డ్</string>
+    <string name="permission_required_message">ఈ ఫీచర్‌ను ఉపయోగించడానికి అవసరమైన అనుమతి అవసరం.</string>
+    <string name="from_date_picker">నుండి</string>
+    <string name="to_date_picker">వరకు</string>
+    <string name="filter_dropdown">ఫిల్టర్స్ ▼</string>
+    <string name="yes">అవును</string>
+    <string name="no">కాదు</string>
+    <string name="cancel">రద్దు చేయండి</string>
+    <string name="ok">ఓకే</string>
+    <string name="loading">లోడింగ్, దయచేసి వేచి ఉండండి!</string>
+
+    <!-- Icons -->
+    <string name="camera_icon_desc">క్యామెరా చిహ్నం</string>
+    <string name="image_picker_icon_desc">చిత్ర ఎంపిక చిహ్నం</string>
+    <string name="pdf_picker_icon_desc">PDF ఎంపిక చిహ్నం</string>
+    <string name="delete_icon">మొత్తం చిహ్నం</string>
+    <string name="pdf_icon">PDF చిహ్నం</string>
+    <string name="image_icon">చిత్ర చిహ్నం</string>
+    <string name="download_icon">ఫైళ్లను డౌన్లోడ్ చేయండి</string>
+
+    <!-- Preview -->
+    <string name="preview_desc">ప్రాసెస్ చేసిన ఫైల్ యొక్క ప్రివ్యూ</string>
+    <string name="preview_fragment_title">పరిశీలన</string>
+    <string name="no_files_selected">పరిశీలించడానికి ఫైళ్లు లేవు. ఫైల్ ఎంచుకోవడానికి తిరిగి వెళ్ళండి.</string>
+
+    <!-- Watermark -->
+    <string name="grid_watermark_check">గ్రిడ్ శైలి అమరిక</string>
+    <string name="single_watermark_check">ఒకటి</string>
+    <string name="opacity_text">ట్రాన్స్‌పరెన్సీ: %d</string>
+    <string name="fontsize_text">ఫాంట్ సైజు: %d</string>
+    <string name="smart_text_preview">స్మార్ట్ టెక్స్ట్ ప్రివ్యూ</string>
+    <string name="watermark_help_text">
+        • <b> పంచుకోలేదీ:</b> మీరు పంచుకుంటున్న సంస్థ/వ్యక్తి.\n
+        • <b> ఉద్దేశం:</b> పంచుకోవడానికై ఉద్దేశాన్ని సంక్షిప్తంగా జోడించండి.\n
+        • <b> Transparency:</b> స్మార్ట్ టెక్స్ట్ యొక్క ప్రకాశతను సర్దుబాటు చేయండి.\n
+        • <b> ఫాంట్ సైజు:</b> స్మార్ట్ టెక్స్ట్ యొక్క పరిమాణాన్ని సర్దుబాటు చేయండి.\n
+        • <b> Grid Style:</b> స్మార్ట్ టెక్స్ట్ పత్రంపై పునరావృతమవుతుంది. ఒకసారి చూపించడానికి అనుమతించండి.\n
+        • <b> స్థానం: </b> స్మార్ట్ టెక్స్ట్ యొక్క స్థానం సర్దుబాటు చేయండి.\n
+        • <b> స్మార్ట్ టెక్స్ట్ ప్రివ్యూ:</b> మీరు పత్రంపై అమర్చే టెక్స్ట్ ప్రివ్యూ చూపిస్తుంది.
+    </string>
+
+    <!-- Features -->
+    <string name="features_heading">యాప్ లక్షణాలు</string>
+    <string name="features_body">
+        &#8226;  స్మార్ట్ షేర్ - మీ ముఖ్యమైన ఫైళ్లను పంచుకోవడంలో దుర్వినియోగం నివారించడానికి స్మార్ట్ టెక్స్ట్ జోడించండి.\n
+        &#8226;  డాక్యుమెంట్లను PDF గా స్కాన్ చేసి, పెరిగిన ప్రివ్యూ మరియు పంచుకునే ఆప్షన్లను అందిస్తుంది.\n
+        &#8226;  ఫైళ్లను సంకోచించండి, కాంబైన్ చేయండి, విభజించండి మరియు చిత్రాలను PDF గా మార్పిడి చేయండి.\n
+        &#8226;  తరచూ ఉపయోగించే ఫైళ్లను ప్రియమైనవి గా గుర్తించండి.\n
+        &#8226;  స్మార్ట్ షేర్ చరిత్ర ద్వారా మీ ముఖ్యమైన పంచుకున్న ఫైళ్లను ట్రాక్ చేయండి.\n
+        &#8226;  మీరు ఇష్టపడే భాషలో స్మార్ట్ టెక్స్ట్ జోడించండి; ప్రస్తుతం 12 భాషలు మద్దతు అందిస్తాయి.\n
+    </string>
+
+    <!-- FAQ and Messaging -->
+    <string name="faq_heading">సహాయాలు (FAQ)</string>
+    <string name="faq_collapse">FAQ విభాగాన్ని విస్తరించు మరియు ముడిపెట్టు</string>
+    <string name="message_us_prompt">మీకు మరిన్ని ప్రశ్నలు లేదా సూచనలు ఉన్నా లేదా బగ్ నివేదిక ఇవ్వాలనుకుంటున్నారా?</string>
+    <string name="email_body">దయచేసి మీ సమస్య లేదా సూచనలను ఇక్కడ వ్రాయండి.</string>
+    <string name="no_email_app_found">ఇమెయిల్ యాప్ ప్రారంభించలేము. మీరు దాన్ని స్వయంగా ప్రారంభించి నివేదిక ఇవ్వాలి.</string>
+    <string name="review_prompt">యాప్ ని ఆస్వాదిస్తున్నారా? మీ సమీక్ష మాకు సహాయపడుతుంది! ❤️</string>
+
+    <string name="faq_1">నా డేటా సురక్షితమా?</string>
+    <string name="faq_ans_1">మీ అన్ని ఫైళ్లు మీ పరికరంలోనే ప్రాసెస్ చేయబడతాయి. మీరు దాన్ని బయట యాప్ ద్వారా పంచుకున్నప్పుడు మాత్రమే డేటా బయటకి వెళ్ళిపోతుంది. CVOR ఏదైనా డేటాను నిల్వచేయదు, నిర్వహించదు లేదా ప్రాసెస్ చేయదు. ఈ రీతిలో మార్పులు వచ్చినా, అప్పుడు మీరు తెలియజేయబడతారు.</string>
+
+    <string name="faq_2">స్మార్ట్ షేర్ ఏమిటి?</string>
+    <string name="faq_ans_2">స్మార్ట్ షేర్ మీ సంభావ్యమైన డేటా దుర్వినియోగం నివారించడానికి రూపొందించబడింది. పంచుకున్న ఫైలు recipient యొక్క ఐడెంటిటీ ఉన్నప్పుడు, అది దుర్వినియోగం కంటే బాధ్యతగా ఉంటుంది. దీనితో పాటు, సంస్థలు ఇతరుల పత్రాలు అంగీకరించడానికి అంగీకరించకపోవచ్చు లేదా దానిని భిన్న ఉద్దేశ్యంతో ఉపయోగించవచ్చు.</string>
+
+    <string name="faq_3">స్మార్ట్ షేర్ చరిత్ర ఏమిటి?</string>
+    <string name="faq_ans_3">మీరు సంభావ్యమైన డేటా పంచుకోవాల్సిన అనేక పరిస్థితులు ఉన్నాయి. స్మార్ట్ షేర్ చరిత్ర ద్వారా మీరు ఎప్పుడు, ఎక్కడ డేటా పంచుకున్నారో ట్రాక్ చేయగలుగుతారు.</string>
+
+    <string name="faq_4">స్మార్ట్ టెక్స్ట్ ను ఎలా అనుకూలీకరించాలి?</string>
+    <string name="faq_ans_4">స्मార్ట్ టెక్స్ట్ వేగంగా మరియు పత్రం అక్షునంతో నిర్వహించబడేలా అనుకూలీకరించబడింది. యూజర్ ఫీడ్‌బ్యాక్ ఆధారంగా, తదుపరి అప్‌డేట్లలో మరింత అనుకూలీకరణ ఆప్షన్లు ప్రవేశపెట్టబడవచ్చు.</string>
+
+    <string name="faq_5">ఎక్కువ ఫైల్ పరిమాణం ఎంత?</string>
+    <string name="faq_ans_5">యాప్ పెద్ద ఫైళ్లను మద్దతు ఇస్తుంది, కానీ ప్రాసెసింగ్ సమయాలు మారవచ్చు. ఉత్తమ పనితీరుకు, 50MB కంటే తక్కువ పరిమాణం ఉన్న ఫైళ్లను ఉపయోగించడం సిఫార్సు చేయబడుతుంది. ఒకే సమయములో పెద్ద ఫైళ్లను నిర్వహించడానికి, వాటిని చిన్న బాచులలో ప్రాసెస్ చేయాలని ఆలోచించండి.</string>
+
+    <string name="faq_6">ఎలా బహుళ ఫైళ్ళను ఎంచుకోవాలి?</string>
+    <string name="faq_ans_6">ఫైల్ పై దీర్ఘ కాలం నొక్కండి, మల్టీ-సెలెక్ట్ మోడ్‌లోకి వెళ్లండి.</string>
+
+    <string name="faq_7">PDF సంకోచన అంటే ఏమిటి?</string>
+    <string name="faq_ans_7">PDF సంకోచన ఫైల్ పరిమాణాన్ని తగ్గిస్తుంది, ఫైళ్లను పరిమాణం పరిమితులు ఉన్న చోట పంచుకోవడానికి సులభం చేస్తుంది. మీరు సంకోచన స్థాయిని ఎంచుకోవచ్చు: హై సంకోచన మరింత గుణాత్మకతను పోగొట్టకుండా చిన్న పరిమాణంతో ఉంచుతుంది, కానీ లో సంకోచన పరిమాణం గణనీయంగా తగ్గిస్తుంది కానీ మరొక తక్కువ qualidade</string>
+
+    <string name="faq_8">ఫైళ్లను సమీక్షించేటప్పుడు థంబ్నెయిల్ గుణాత్మకత ఎందుకు తక్కువ?</string>
+    <string name="faq_ans_8">థంబ్నెయిల్స్ వేగంగా ముందరి దృశ్యాలను అందించడానికి యోచించి కంప్రెస్ చేయబడ్డాయి. ఒరిజినల్ ఫైల్ ప్రభావితం కాలేదు మరియు పూర్వ-దృశ్య దశలో పూర్తి గుణాత్మకతలో చూడవచ్చు.</string>
+
+    <string name="faq_9">ఎందుకు కొన్ని యాప్స్, WhatsApp వంటి, ఫైల్ ప్రివ్యూ‌ను వేరుగా చూపిస్తాయి?</string>
+    <string name="faq_ans_9">WhatsApp వంటి యాప్స్ ఫైళ్లను ప్రివ్యూ‌లు సృష్టించే సమయంలో కంప్రెస్ లేదా సైజు మార్చవచ్చు, కానీ ఒరిజినల్ ఫైల్ యొక్క గుణాత్మకత మారదు.</string>
+
+    <!-- Legal -->
+    <string name="terms_of_use_message">ఈ యాప్‌ను ఉపయోగించడం ద్వారా, మీరు మా ఉపయోగం నిబంధనలు మరియు గోప్యతా విధానాన్ని అంగీకరిస్తున్నారు.</string>
+    <string name="agree_button">అంగీకరించు</string>
+    <string name="disagree_button">అంగీకరించరు</string>
+</resources>

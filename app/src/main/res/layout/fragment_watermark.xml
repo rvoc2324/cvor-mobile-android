@@ -82,8 +82,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/sharing_with"
                         app:boxStrokeColor="@color/inputBox"
-                        app:hintTextAppearance="@style/TextInputHintStyle"
-                        app:hintTextColor="@color/textSecondary">
+                        app:hintTextAppearance="@style/TextInputHintStyle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_sharing_with"
@@ -101,8 +100,7 @@
                         android:layout_marginTop="16dp"
                         android:hint="@string/purpose"
                         app:boxStrokeColor="@color/inputBox"
-                        app:hintTextAppearance="@style/TextInputHintStyle"
-                        app:hintTextColor="@color/textSecondary">
+                        app:hintTextAppearance="@style/TextInputHintStyle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_purpose"

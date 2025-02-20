@@ -75,6 +75,15 @@ public class HomeFragment extends Fragment {
         binding.btnScanToPdf.setBackground(rippleDrawableScan);
         binding.btnScanToPdf.setBackgroundTintList(null);
 
+        binding.combineLabel.setSelected(false);
+        binding.combineLabel.setSelected(true);
+        binding.convertLabel.setSelected(false);
+        binding.convertLabel.setSelected(true);
+        binding.splitLabel.setSelected(false);
+        binding.splitLabel.setSelected(true);
+        binding.compressLabel.setSelected(false);
+        binding.compressLabel.setSelected(true);
+
         /*binding.btnCombinePdfs.setBackgroundResource(R.drawable.gradient_purple);
         binding.btnConvertToPdf.setBackgroundResource(R.drawable.gradient_orange);
         binding.btnSplitPdf.setBackgroundResource(R.drawable.gradient_lightblue);

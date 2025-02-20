@@ -19,12 +19,10 @@ import java.util.concurrent.TimeUnit;
 public class PdfPagesAdapter extends RecyclerView.Adapter<PdfPagesAdapter.PdfPageViewHolder> {
     private final PDDocument document;
     private final PDFRenderer renderer;
-
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
     private final SparseArray<Bitmap> bitmapCache = new SparseArray<>();
 
     public PdfPagesAdapter(PDDocument document, PDFRenderer renderer) {
-
         this.document = document;
         this.renderer = renderer;
     }
@@ -33,7 +31,7 @@ public class PdfPagesAdapter extends RecyclerView.Adapter<PdfPagesAdapter.PdfPag
     @Override
     public PdfPageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemPdfPageBinding binding = ItemPdfPageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new PdfPageViewHolder(binding, renderer);
+        return new PdfPageViewHolder(binding, renderer, executorService, bitmapCache);
     }
 
     @Override
@@ -46,40 +44,67 @@ public class PdfPagesAdapter extends RecyclerView.Adapter<PdfPagesAdapter.PdfPag
         return document.getNumberOfPages();
     }
 
-    public void clearCache() { bitmapCache.clear(); }
+    public void clearCache() {
+        for (int i = 0; i < bitmapCache.size(); i++) {
+            Bitmap bitmap = bitmapCache.valueAt(i);
+            if (bitmap != null) bitmap.recycle();
+        }
+        bitmapCache.clear();
+    }
+
+    public void shutdown() {
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(2, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+        }
+    }
 
     public static class PdfPageViewHolder extends RecyclerView.ViewHolder {
         private final ItemPdfPageBinding binding;
         private final PDFRenderer renderer;
+        private final ExecutorService executorService;
+        private final SparseArray<Bitmap> bitmapCache;
+        private int currentPosition = -1; // Helps prevent stale images
 
-        public PdfPageViewHolder(@NonNull ItemPdfPageBinding binding, PDFRenderer renderer) {
+        public PdfPageViewHolder(@NonNull ItemPdfPageBinding binding, PDFRenderer renderer, ExecutorService executorService, SparseArray<Bitmap> bitmapCache) {
             super(binding.getRoot());
             this.binding = binding;
             this.renderer = renderer;
+            this.executorService = executorService;
+            this.bitmapCache = bitmapCache;
         }
-        private final ExecutorService executorService = Executors.newFixedThreadPool(2); // Optimized for concurrency
 
         public void bind(int position) {
-            binding.pdfPageImageView.setImageBitmap(null); // Ensure old bitmap is removed
+            currentPosition = position;
+            binding.pdfPageImageView.setImageBitmap(null);
+
+            // Check cache first
+            Bitmap cachedBitmap = bitmapCache.get(position);
+            if (cachedBitmap != null) {
+                binding.pdfPageImageView.setImageBitmap(cachedBitmap);
+                return;
+            }
 
             executorService.execute(() -> {
                 try {
                     Bitmap bitmap = renderer.renderImageWithDPI(position, 150);
-                    binding.pdfPageImageView.post(() -> binding.pdfPageImageView.setImageBitmap(bitmap));
+                    bitmapCache.put(position, bitmap);
+
+                    binding.pdfPageImageView.post(() -> {
+                        // Ensure the ViewHolder is still representing the same page
+                        if (currentPosition == position) {
+                            binding.pdfPageImageView.setImageBitmap(bitmap);
+                        }
+                    });
+
                 } catch (IOException e) {
                     Log.e("PdfPagesAdapter", "Error rendering page " + position, e);
                 }
             });
-        }
-        public void shutdown() {
-            executorService.shutdown();
-            try {
-                if (!executorService.awaitTermination(2, TimeUnit.SECONDS)) {
-                    executorService.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                executorService.shutdownNow();
-            }
         }
     }
 }

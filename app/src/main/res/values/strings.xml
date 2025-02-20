@@ -1,3 +1,5 @@
+<!-- English -->
+
 <resources>
     <!-- App Info -->
     <string name="app_name" translatable="false">CVOR</string>
@@ -139,7 +141,37 @@
     <string name="faq_heading">FAQs</string>
     <string name="faq_collapse">Expands and collapses the FAQ section</string>
     <string name="message_us_prompt">Have more questions or suggestions or want to report a bug?</string>
+    <string name="email_body">Please describe your issue or suggestions here.</string>
+    <string name="no_email_app_found">Unable to launch email app. You will have to launch it on your end and report.</string>
     <string name="review_prompt">Enjoying the app? Your review helps us improve! ❤️</string>
+
+
+    <string name="faq_1">Is my data safe?</string>
+    <string name="faq_ans_1">All your files are processed and stored locally on your device. The only data that leaves the app is when you choose to share it via an external app. CVOR does not store, manage, or process any data remotely. If this changes in the future as part of a new feature, you will be informed accordingly.</string>
+
+    <string name="faq_2">What is Smart Share?</string>
+    <string name="faq_ans_2">Smart Share is designed to prevent misuse of your sensitive data. When a shared file contains the recipient’s identity, it acts as a psychological deterrent against misuse. Additionally, institutions may be reluctant to accept documents shared with someone else or used for a different purpose.</string>
+
+    <string name="faq_3">What is Smart Share history?</string>
+    <string name="faq_ans_3">There are multiple situations where you may need to share sensitive data. Smart Share history helps you keep track of when and where you have shared your data.</string>
+
+    <string name="faq_4">How do I customize Smart Text?</string>
+    <string name="faq_ans_4">Smart Text is optimized for speed and maintaining document integrity. Based on user feedback, we may introduce further customization options in future updates.</string>
+
+    <string name="faq_5">What is the maximum file size supported?</string>
+    <string name="faq_ans_5">The app supports large files, but processing times may vary. For optimal performance, it is recommended to use files under 50MB. If dealing with multiple large files, consider processing them in smaller batches.</string>
+
+    <string name="faq_6">How do I select multiple files?</string>
+    <string name="faq_ans_6">Long-press a file to enter multi-select mode.</string>
+
+    <string name="faq_7">What is PDF compression?</string>
+    <string name="faq_ans_7">PDF compression reduces file size, making it easier to share files with size restrictions. You can choose the compression level: High compression retains better quality with a smaller reduction in size, while Low compression significantly reduces file size but at the cost of quality.</string>
+
+    <string name="faq_8">Why is thumbnail quality low when reviewing files?</string>
+    <string name="faq_ans_8">Thumbnails are intentionally compressed to provide fast previews. The original file remains unaffected and can be viewed in full quality in the Preview stage.</string>
+
+    <string name="faq_9">Why do some apps, like WhatsApp, show file previews differently?</string>
+    <string name="faq_ans_9">Apps like WhatsApp may compress or resize files when generating previews, but the original file quality remains unchanged.</string>
 
     <!-- Legal -->
     <string name="terms_of_use_message">By using this app, you agree to our Terms of Use and Privacy Policy.</string>

@@ -1,0 +1,179 @@
+<!-- Tamil -->
+
+<resources>
+    <!-- App Info -->
+    <string name="app_name" translatable="false">CVOR</string>
+    <string name="app_action">நீங்கள் என்ன செய்ய விரும்புகிறீர்கள்?</string>
+    <string name="suggested_actions"> பரிந்துரைக்கப்பட்ட செயல்கள் </string>
+
+    <!-- Home and Navigation -->
+    <string name="home">முகப்பு</string>
+    <string name="favourites">விருப்பங்கள்</string>
+    <string name="settings">அமைப்புகள்</string>
+    <string name="help_section">உதவி பகுதி</string>
+    <string name="whatsnew">புதியது என்ன</string>
+    <string name="share_history">ஸ்மார்ட் ஷேர் வரலாறு</string>
+    <string name="share_history_body">கீழே, நீங்கள் CVOR மூலம் பகிர்ந்த அனைத்து கோப்புகளின் வரலாறு உள்ளது. நீங்கள் கீழே வரலாற்றை வடிகட்டலாம்.</string>
+
+    <!-- Buttons -->
+    <string name="add_watermark_button">Watermark சேர்க்கவும்</string>
+    <string name="smart_share_button">ஸ்மார்ட் ஷேர்</string>
+    <string name="share_file_button">கோப்பை பகிரவும்</string>
+    <string name="combine_pdfs_button">கொம்பைன்</string>
+    <string name="convert_to_pdf_button">PDF ஆக மாறிக்கொள்</string>
+    <string name="scan_to_pdf_button">PDF க்கு ஸ்கேன் செய்</string>
+    <string name="split_pdf_button">பிரிக்கும்</string>
+    <string name="compress_pdf_button">சுருக்கவும்</string>
+    <string name="cancel_button">இல்லை</string>
+    <string name="done_button">முடிந்தது</string>
+    <string name="log_share_button">பகிர்வு பதிவு செய்</string>
+    <string name="back_button">திரும்ப</string>
+    <string name="preview_button">பரிசீலனை</string>
+    <string name="share_button">பகிரவும்</string>
+    <string name="share_again_button">மீண்டும் பகிரவும்</string>
+    <string name="app_review_text_button">மதிப்புரை</string>
+    <string name="message_us_button">எங்களை தொடர்புகொள்</string>
+    <string name="remove">நீக்கவும்</string>
+
+    <!-- Camera -->
+    <string name="camera_source">கேமரா</string>
+    <string name="flash_toggle">பிளாஷ் ON</string>
+    <string name="capture_image">படம் எடுக்கவும்</string>
+    <string name="retake_image">படத்தை மீண்டும் எடுக்கவும்</string>
+    <string name="confirm_image">படத்தை உறுதிப்படுத்தவும்</string>
+    <string name="camera_preview">கேமரா முன்வைத்தல்</string>
+    <string name="switch_camera">கேமரா மாற்றவும்</string>
+    <string name="camera_init_failed">கேமரா துவக்கம் தோல்வி</string>
+    <string name="image_capture_failed">படம் எடுப்பதில் தோல்வி</string>
+    <string name="no_image_to_confirm">உறுதிப்படுத்த வேண்டிய படமில்லை</string>
+    <string name="image_save_failed">படத்தை சேமிக்க தோல்வி</string>
+    <string name="camera_not_ready">கேமரா தயார் இல்லை</string>
+    <string name="capture_more_images">மேலும் படங்கள் எடுக்கவா?</string>
+    <string name="captured_image">பிடிக்கப்பட்ட படம்</string>
+
+    <!-- File Selection -->
+    <string name="select_pdfs">PDF ஆவணங்களை ஏற்றவும்</string>
+    <string name="select_images">படங்களை ஏற்றவும்</string>
+    <string name="file_manager_fragment_title">கோப்புகளை மறுஅதிபயன் செய்யவும்</string>
+    <string name="file_name">கோப்பு பெயர்</string>
+
+    <!-- Share -->
+    <string name="sharing_with">எண்ணத்தில் பகிருகிறீர்கள்?</string>
+    <string name="purpose">பொருள்? (பிரத்தியேக)</string>
+    <string name="share_title">பகிரவும்</string>
+    <string name="share_app_text">பகிர அந்த பயன்பாட்டை தேர்ந்தெடுக்கவும்</string>
+    <string name="share_app_icon_desc">பயன்பாடு பகிர்வதற்கான குறிச்சொல்</string>
+    <string name="share_text">வணக்கம்! இது நீங்கள் கோரிய கோப்பு. CVOR மூலம் பாதுகாப்பாக பகிரப்பட்டுள்ளது!</string>
+    <string name="sharehistory_hint">கோப்பு பெயர், பகிரப்பட்டவருடன் அல்லது பொருளுக்காக தேடவும்</string>
+    <string name="refer_message">CVOR ஐ பரிந்துரைக்கவும் - உங்கள் தரவை பகிர்வதற்கான சிறந்த வழி: https://www.google.com</string>
+    <string name="refer">பரிந்துரை செய்யவும்</string>
+    <string name="share_via">பகிரவும் மூலம்</string>
+    <string name="text_watermark">%1$s உடன் %2$s க்கு %3$s அன்று பகிர்ந்தது</string>
+    <string name="text_general_purposes">பொதுவான பயன்பாடுகள்</string>
+
+    <!-- PDF Tools -->
+    <string name="pdf_tools">PDF கருவிகள்</string>
+    <string name="combine_pdf">PDF ஐ இணைக்கவும்</string>
+    <string name="convert_to_pdf">படங்களை PDF ஆக மாற்றவும்</string>
+    <string name="split_pdf">PDF ஐ பிரிக்கவும்</string>
+    <string name="compress_pdf">PDF ஐ சுருக்கவும்</string>
+    <string name="compress_quality">சுருக்கப்பட்ட கோப்பின் அளவு (ஒரை தேர்ந்தெடுக்கவும்): </string>
+    <string name="pre_compress_file_size">தற்போதைய கோப்பின் அளவு: %1s</string>
+
+    <!-- Dialogs and Prompts -->
+    <string name="filename_change_prompt">புதிய கோப்பு பெயரை உள்ளிடவும்</string>
+    <string name="filename_change_check">கோப்பு பெயர் தேவை!</string>
+    <string name="custom_file_name">கோப்பு பெயரை மாற்றவும்</string>
+    <string name="change">மாற்று</string>
+    <string name="password_prompt">பாஸ்வேர்டை உள்ளிடவும்: %s</string>
+    <string name="permission_required_message">இந்த அம்சத்தை பயன்படுத்த உரிய அனுமதி தேவை.</string>
+    <string name="from_date_picker">இருந்து</string>
+    <string name="to_date_picker">வரை</string>
+    <string name="filter_dropdown">வடிகட்டிகள் ▼</string>
+    <string name="yes">ஆம்</string>
+    <string name="no">இல்லை</string>
+    <string name="cancel">இல்லை</string>
+    <string name="ok">சரி</string>
+    <string name="loading">பதிவேற்றம் செய்யப்படுகிறது, தயவுசெய்து காத்திருங்கள்!</string>
+
+    <!-- Icons -->
+    <string name="camera_icon_desc">கேமரா ஐகான்</string>
+    <string name="image_picker_icon_desc">படத் தேர்வாளர் ஐகான்</string>
+    <string name="pdf_picker_icon_desc">PDF தேர்வாளர் ஐகான்</string>
+    <string name="delete_icon">நீக்கி ஐகான்</string>
+    <string name="pdf_icon">PDF ஐகான்</string>
+    <string name="image_icon">பட ஐகான்</string>
+    <string name="download_icon">கோப்புகளை பதிவிறக்கம் செய்யவும்</string>
+
+    <!-- Preview -->
+    <string name="preview_desc">செயலாக்கப்பட்ட கோப்பின் முன் பார்வை</string>
+    <string name="preview_fragment_title">முன் பார்வை</string>
+    <string name="no_files_selected">முன் பார்வைக்கான கோப்புகள் இல்லை. கோப்பை தேர்ந்தெடுக்க திரும்பவும்.</string>
+
+    <!-- Watermark -->
+    <string name="grid_watermark_check">கிரிட் முறை அமைப்பு</string>
+    <string name="single_watermark_check">ஒன்றை மட்டும்</string>
+    <string name="opacity_text">பாரபட்சம்: %d</string>
+    <string name="fontsize_text">எழுத்துப் பளபளப்பு அளவு: %d</string>
+    <string name="smart_text_preview">ஸ்மார்ட் எழுத்து முன் பார்வை</string>
+    <string name="watermark_help_text">
+        • <b>பகிர்வது:</b> நீங்கள் பகிரும் ஆவணத்துடன் உள்ள அமைப்போ அல்லது தனிப்பட்டவர்களோ.\n
+        • <b>பொருள்:</b> பகிர்தலைச் சுருக்கமாகப் பதிவிடுங்கள்.\n
+        • <b>பாரபட்சம்:</b> ஸ்மார்ட் எழுத்தின் வெளிப்பாட்டை அமைக்கவும்.\n
+        • <b>எழுத்து பளபளப்பு:</b> ஸ்மார்ட் எழுத்தின் பளபளப்பை ஒழுங்குபடுத்தவும்.\n
+        • <b>கிரிட் பாணி:</b> ஸ்மார்ட் எழுத்து ஆவணத்தைத் தொடர்ந்து மீண்டும் தோன்றும். ஒரே முறையாகக் காட்டாமல் அமைக்கவும்.\n
+        • <b>நிலைப்படுத்தல்: </b> ஸ்மார்ட் எழுத்தின் நிலையை சீரமைக்கவும்.\n
+        • <b>ஸ்மார்ட் எழுத்து முன் பார்வை:</b> இந்த ஆவணத்திற்கு ஸ்மார்ட் எழுத்து தேவை என்பதை காண்பிக்கும் முன் பார்வை.
+    </string>
+
+    <!-- Features -->
+    <string name="features_heading">பயன்பாட்டு அம்சங்கள்</string>
+    <string name="features_body">
+        &#8226;  ஸ்மார்ட் ஷேர் - முக்கிய கோப்புகளை பகிரும்போது அவற்றுக்கு ஸ்மார்ட் எழுத்தைச் சேர்க்கவும், தவறான பயன்பாட்டைத் தடுக்கும்.\n
+        &#8226;  ஆவணங்களை PDF ஆக ஸ்கேன் செய்தல் முன்னேற்றப்பட்ட முன் பார்வை மற்றும் பகிர்வு விருப்பங்களுடன்.\n
+        &#8226;  படங்களை PDF ஆக மாற்றுவதில் எளிதான செருக்கி, இணைத்தல், பிரித்தல் மற்றும் சுருக்குதல்.\n
+        &#8226;  அதிகமாக பயன்படுத்தப்படும் கோப்புகளை விருப்பமாக மதிப்பிடல் மற்றும் விரைவான பயன்பாட்டுக்காக.\n
+        &#8226;  உங்கள் முக்கியமான பகிர்ந்த கோப்புகளைக் கண்காணிக்க ஸ்மார்ட் ஷேர் வரலாற்றைத் தொடர்புகொள்.\n
+        &#8226;  உங்கள் விருப்ப மொழியில் ஸ்மார்ட் எழுத்து சேர்க்கவும்; தற்போது 12 மொழிகள் ஆதரிக்கின்றன.\n
+    </string>
+
+    <!-- FAQ and Messaging -->
+    <string name="faq_heading">எதிர்பார்க்கப்பட்ட கேள்விகள்</string>
+    <string name="faq_collapse">FAQ பிரிவை விரிவாக்கம் மற்றும் சுருக்கம் செய்க</string>
+    <string name="message_us_prompt">மேலும் கேள்விகள் அல்லது பரிந்துரைகள் உள்ளனவா அல்லது பிழையைப் பதிவு செய்ய விரும்புகிறீர்களா?</string>
+    <string name="email_body">உங்கள் பிரச்சினை அல்லது பரிந்துரைகளை இங்கு விளக்கவும்.</string>
+    <string name="no_email_app_found">ஈமெயில் பயன்பாட்டை துவக்க முடியவில்லை. நீங்கள் அதை உங்கள் பகுதியில் துவக்கி பதிவுகொள்ள வேண்டும்.</string>
+    <string name="review_prompt">பயன்பாட்டை ரசிக்கிறீர்களா? உங்கள் மதிப்புரை எங்களை மேம்படுத்த உதவுகிறது! ❤️</string>
+
+    <string name="faq_1">என் தரவு பாதுகாப்பாக இருக்கிறதா?</string>
+    <string name="faq_ans_1">உங்கள் அனைத்து கோப்புகளும் உங்கள் சாதனத்தில் உள்ளே செயலாக்கப்படுகின்றன மற்றும் சேமிக்கப்படுகின்றன. நீங்கள் பகிர்ந்தால் மட்டுமே இந்த தரவு வெளியே செல்லும். CVOR எந்தவொரு தரவை தொலைவிலிருந்து சேமிக்கவோ, நிர்வகிக்கவோ செய்யவில்லை. எதிர்காலத்தில் புதிய அம்சம் வரும் போது, அதை பற்றி உங்களுக்கு அறிவிக்கப்படும்.</string>
+
+    <string name="faq_2">ஸ்மார்ட் ஷேர் என்பது என்ன?</string>
+    <string name="faq_ans_2">ஸ்மார்ட் ஷேர் உங்கள் தரவை தவறான பயன்பாட்டிலிருந்து பாதுகாப்பதற்காக வடிவமைக்கப்பட்டுள்ளது. பகிரப்பட்ட கோப்பில் பெற்றவரின் அடையாளம் இருந்தால், இது தவறான பயன்பாட்டிற்கு எதிராக உளவியல் தடையாக அமைகின்றது. கூடுதல், நிறுவனங்கள் எவருடன் பகிரப்பட்ட ஆவணங்களை ஏற்றுக்கொள்ள விரும்பாது அல்லது வேறு ஒரு நோக்கத்திற்காக பயன்படுத்தப்படக்கூடும்.</string>
+
+    <string name="faq_3">ஸ்மார்ட் ஷேர் வரலாறு என்பது என்ன?</string>
+    <string name="faq_ans_3">உங்களுக்கு முக்கிய தரவை பகிரவேண்டிய பல சூழ்நிலைகள் இருக்கலாம். ஸ்மார்ட் ஷேர் வரலாறு உங்கள் தரவை எப்போது மற்றும் எங்கு பகிர்ந்துள்ளீர்கள் என்பதை எளிதில் கண்காணிக்க உதவுகிறது.</string>
+
+    <string name="faq_4">நான் ஸ்மார்ட் எழுத்தை எவ்வாறு தனிப்பயனாக்க முடியும்?</string>
+    <string name="faq_ans_4">ஸ்மார்ட் எழுத்து வேகத்தை மற்றும் ஆவணத்தின் உறுதிப்படுத்தலை மேம்படுத்துகிறது. பயனர் கருத்துக்களைப் பொறுத்து, எதிர்கால அப்டேட்களில் கூடுதல் தனிப்பயனாக்கி விருப்பங்களை அறிமுகப்படுத்துவோம்.</string>
+
+    <string name="faq_5">சிறந்த கோப்பு அளவு எது?</string>
+    <string name="faq_ans_5">இந்த செயலி பெரிய கோப்புகளை ஆதரிக்கின்றது, ஆனால் செயலாக்க நேரங்கள் மாறலாம். சிறந்த செயல்திறன் கிடைக்கும் என்பது 50MB இற்குட்பட்ட கோப்புகளை பயன்படுத்துவதை பரிந்துரைக்கின்றோம். பல பெரிய கோப்புகளை கையாளும் போது, அவற்றை சிறிய தொகுதிகளில் செயலாக்குவது சிறந்தது.</string>
+
+    <string name="faq_6">பல கோப்புகளை நான் எப்படி தேர்ந்தெடுக்க முடியும்?</string>
+    <string name="faq_ans_6">ஒரு கோப்பை நீண்ட நேரம் அழுத்தி (long-press) பல கோப்புகளை தேர்வு செய்யும் முறை.</string>
+
+    <string name="faq_7">PDF சுருக்கம் என்பது என்ன?</string>
+    <string name="faq_ans_7">PDF சுருக்கம் கோப்பின் அளவை குறைக்கின்றது, மேலும் அளவு மட்டுப்படுத்தப்பட்ட கோப்புகளை பகிர்வது எளிமையாக இருக்கும். நீங்கள் சுருக்கத்தின் நிலையை தேர்வு செய்ய முடியும்: அதிக சுருக்கம் சிறந்த தரத்துடன் சிறிய அளவு குறைப்பு மற்றும் குறைந்த சுருக்கம் கோப்பின் அளவை குறைக்கின்றது, ஆனால் தரத்தின் சேதம் ஏற்படும்.</string>
+
+    <string name="faq_8">கோப்புகளை பார்வையிடும்போது தும்ப்னெயிலின் தரம் குறைவாக இருக்கின்றது ஏன்?</string>
+    <string name="faq_ans_8">தும்ப்னெயில்கள் விரைவான முன்னோட்டத்தை வழங்குவதற்காக சுருக்கப்பட்டுள்ளன. அசல் கோப்பு பாதிக்கப்படவில்லை மற்றும் முழுமையான தரத்தில் பார்வை செய்ய முடியும்.</string>
+
+    <string name="faq_9">ஏன் சில பயன்பாடுகள், வாட்ஸ் ஆப் போன்றவை, கோப்புகளின் முன்னோட்டங்களை வே differentlyலாக காட்டுகின்றன?</string>
+    <string name="faq_ans_9">வாட்ஸ் ஆப் போன்ற செயலிகள் கோப்புகளின் முன்னோட்டங்களை உருவாக்கும் போது, அவை சுருக்கம் அல்லது அளவு மாற்றங்களை செய்யலாம், ஆனால் அசல் கோப்பு தரம் மாற்றமில்லாமல் இருக்கும்.</string>
+
+    <!-- Legal -->
+    <string name="terms_of_use_message">இந்த செயலியைப் பயன்படுத்துவதன் மூலம், நீங்கள் எங்கள் பயன்பாட்டு நிபந்தனைகளையும் தனியுரிமை கொள்கையை ஒப்புக்கொள்கிறீர்கள்.</string>
+    <string name="agree_button">ஒப்புக்கொள்</string>
+    <string name="disagree_button">ஒப்புக்கொள்ளவில்லை</string>
+</resources>

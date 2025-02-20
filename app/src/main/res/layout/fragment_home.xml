@@ -211,11 +211,17 @@
                                     android:filterTouchesWhenObscured="true"/>
 
                                 <TextView
+                                    android:id="@+id/combine_label"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/combine_pdfs_button"
                                     android:layout_marginTop="4dp"
-                                    style="@style/TextStyle.Body" />
+                                    style="@style/TextStyle.Body"
+                                    android:ellipsize="marquee"
+                                    android:singleLine="true"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"/>
                             </LinearLayout>
 
                             <!-- Convert to PDF Action -->
@@ -245,12 +251,18 @@
                                     android:filterTouchesWhenObscured="true"/>
 
                                 <TextView
+                                    android:id="@+id/convert_label"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/convert_to_pdf_button"
                                     android:textAlignment="center"
                                     android:layout_marginTop="4dp"
-                                    style="@style/TextStyle.Body" />
+                                    style="@style/TextStyle.Body"
+                                    android:ellipsize="marquee"
+                                    android:singleLine="true"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"/>
                             </LinearLayout>
 
                             <!-- Split PDFs Action -->
@@ -280,6 +292,7 @@
                                     android:filterTouchesWhenObscured="true"/>
 
                                 <TextView
+                                    android:id="@+id/split_label"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/split_pdf_button"
@@ -320,6 +333,7 @@
                                     android:filterTouchesWhenObscured="true"/>
 
                                 <TextView
+                                    android:id="@+id/compress_label"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/compress_pdf_button"

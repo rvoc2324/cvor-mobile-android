@@ -47,100 +47,70 @@ public class PreviewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPreviewBinding.inflate(inflater, container, false);
-        Log.d(TAG, "Preview fragment 1.");
+        Log.d(TAG, "Preview fragment initialized.");
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "Preview fragment 2.");
+        Log.d(TAG, "Preview fragment view created.");
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
 
-        // Adding pulsing animation to download icon
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleX", 1.0f, 1.2f, 1.0f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleY", 1.0f, 1.2f, 1.0f);
-
-        scaleX.setDuration(800);
-        scaleY.setDuration(800);
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(scaleX, scaleY);
-        animatorSet.start();
-
-        // setupViewPager();
-        observeProcessedFiles();
-        setupButtons();
-    }
-
-    /*private void setupViewPager() {
-        Log.d(TAG, "Preview fragment 3.");
+        // Initialize adapter once to avoid multiple instances
         previewPagerAdapter = new PreviewPagerAdapter(requireContext());
         binding.filePreviewPager.setAdapter(previewPagerAdapter);
-    }*/
+
+        observeProcessedFiles();
+        setupButtons();
+        setupDownloadAnimation();
+    }
 
     private void observeProcessedFiles() {
         coreViewModel.getProcessedFiles().observe(getViewLifecycleOwner(), files -> {
             if (files == null || files.isEmpty()) {
+                Log.d(TAG, "No files to preview.");
                 binding.noFilesSelected.setVisibility(View.VISIBLE);
                 binding.filePreviewPager.setVisibility(View.GONE);
-                if (previewPagerAdapter != null) {
-                    previewPagerAdapter.submitList(Collections.emptyList());
-                }
+                previewPagerAdapter.submitList(Collections.emptyList()); // Ensure no stale previews
                 return;
             }
 
-            List<File> filesToShow = files; // Default to all processed files
-            Log.d(TAG, "Preview fragment 3.");
-
-            // Check if the action type is "compresspdf" (established by compressType being non-null)
-            String compressType = coreViewModel.getCompressType().getValue();
-            Log.d(TAG, "compressType: " + compressType);
-            if (compressType != null) {
-                filesToShow = filterFilesByCompressionType(files, compressType);
-                Log.d(TAG, "Preview fragment 4.");
-            }
-
-            if (previewPagerAdapter == null) {
-                Log.d(TAG, "Preview fragment 5.");
-                previewPagerAdapter = new PreviewPagerAdapter(requireContext());
-                binding.filePreviewPager.setAdapter(previewPagerAdapter);
-            }
+            List<File> filesToShow = filterFilesByCompressionType(files, coreViewModel.getCompressType().getValue());
+            Log.d(TAG, "Previewing " + filesToShow.size() + " file(s).");
 
             binding.noFilesSelected.setVisibility(View.GONE);
             binding.filePreviewPager.setVisibility(View.VISIBLE);
             previewPagerAdapter.submitList(filesToShow);
-            Log.d(TAG, "Preview fragment 6.");
             binding.filePreviewPager.setCurrentItem(0, false);
-
-            Log.d(TAG, "Preview fragment updated with " + filesToShow.size() + " file(s).");
         });
     }
 
-    // Helper method to filter files based on the selected compression type
     private List<File> filterFilesByCompressionType(List<File> files, String compressType) {
+        if (compressType == null) return files; // If no filter, show all
         for (File file : files) {
             if (file.getName().contains("compressed_" + compressType.charAt(0))) {
-                return Collections.singletonList(file); // Return only the matching compressed file
+                return Collections.singletonList(file);
             }
         }
-        return Collections.emptyList(); // Return empty list if no match found
+        return Collections.emptyList(); // No match
     }
 
     private void setupButtons() {
         binding.backButton.setOnClickListener(v -> {
-            if (coreViewModel != null) {
-                coreViewModel.resetProcessedFiles(); // Reset the files
+            if (previewPagerAdapter != null) {
+                previewPagerAdapter.cleanupAll(); // Ensure no stale previews before going back
             }
-            binding.filePreviewPager.setAdapter(null); // Detach adapter to clear state
-            previewPagerAdapter.submitList(Collections.emptyList());
+            binding.filePreviewPager.setAdapter(null); // Clears ViewPager state
+            if (coreViewModel != null) {
+                coreViewModel.resetProcessedFiles();
+            }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
 
-        // Without ad flow
         binding.shareButton.setOnClickListener(v -> {
-            Log.d(TAG, "Navigate to share logged");
+            Log.d(TAG, "Navigate to share triggered.");
             coreViewModel.setNavigationEvent("navigate_to_share");
         });
 
@@ -151,7 +121,6 @@ public class PreviewFragment extends Fragment {
         });
 
         binding.cancelIcon.setOnClickListener(v -> requireActivity().finish());
-
 
         /* // With ad flow
         binding.shareButton.setOnClickListener(v -> {
@@ -165,6 +134,18 @@ public class PreviewFragment extends Fragment {
         });*/
     }
 
+    private void setupDownloadAnimation() {
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleX", 1.0f, 1.2f, 1.0f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(binding.downloadIcon, "scaleY", 1.0f, 1.2f, 1.0f);
+
+        scaleX.setDuration(800);
+        scaleY.setDuration(800);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY);
+        animatorSet.start();
+    }
+
     private void downloadFiles() {
         List<File> files = coreViewModel.getProcessedFiles().getValue();
         if (files == null || files.isEmpty()) {
@@ -173,40 +154,36 @@ public class PreviewFragment extends Fragment {
         }
 
         Toast.makeText(getContext(), "Downloading files...", Toast.LENGTH_SHORT).show();
-        for (File fileToDownload : files) {
+        for (File file : files) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    // Use MediaStore for Android 10 and above
                     ContentValues values = new ContentValues();
-                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileToDownload.getName()); // File name
-                    values.put(MediaStore.MediaColumns.MIME_TYPE, "application/octet-stream"); // MIME type (adjust if needed)
-                    values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS); // Save to Downloads
+                    values.put(MediaStore.MediaColumns.DISPLAY_NAME, file.getName());
+                    values.put(MediaStore.MediaColumns.MIME_TYPE, "application/octet-stream");
+                    values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
 
                     ContentResolver resolver = requireContext().getContentResolver();
                     Uri uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
 
-                    // Copy the file to the URI
                     if (uri != null) {
                         try (OutputStream outputStream = resolver.openOutputStream(uri)) {
-                            Files.copy(fileToDownload.toPath(), outputStream);
+                            Files.copy(file.toPath(), outputStream);
                         }
                     }
-
                 } else {
-                    // For Android 9 (API level 28) and below, use the old method
-                    File downloadsDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileToDownload.getName());
-                    copyFile(fileToDownload, downloadsDir);
+                    File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file.getName());
+                    copyFile(file, destination);
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, "Error while copying file: " + fileToDownload.getName(), e);
-                Toast.makeText(getContext(), "Failed to download file: " + fileToDownload.getName(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error downloading file: " + file.getName(), e);
+                Toast.makeText(getContext(), "Failed to download: " + file.getName(), Toast.LENGTH_SHORT).show();
             }
         }
-        Toast.makeText(getContext(), "Download completed successfully. Check your Downloads folder.", Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(getContext(), "Download completed. Check your Downloads folder.", Toast.LENGTH_SHORT).show();
     }
 
-    // Utility method to copy file
     private void copyFile(File src, File dest) throws IOException {
         try (InputStream in = new FileInputStream(src);
              OutputStream out = new FileOutputStream(dest)) {
@@ -221,6 +198,9 @@ public class PreviewFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (previewPagerAdapter != null) {
+            previewPagerAdapter.cleanupAll(); // Prevent stale previews & memory leaks
+        }
         binding = null;
     }
 }

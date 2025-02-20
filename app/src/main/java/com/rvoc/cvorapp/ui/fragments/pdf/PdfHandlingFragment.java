@@ -273,7 +273,7 @@ public class PdfHandlingFragment extends Fragment {
                 if ("combinepdf".equals(actionType)) {
                     String fileName = "CVOR_combined_" + System.currentTimeMillis() + ".pdf";
                     outputFile = new File(requireContext().getCacheDir(), fileName);
-                    File processedFile = pdfHandlingService.combinePDF(urisList, outputFile);
+                    File processedFile = pdfHandlingService.combinePDF(urisList, outputFile, requireContext());
                     postProcessSuccess(Collections.singletonList(processedFile));
                 } else if ("convertpdf".equals(actionType)) {
                     String fileName = "CVOR_convert_" + System.currentTimeMillis() + ".pdf";
@@ -319,9 +319,7 @@ public class PdfHandlingFragment extends Fragment {
 
     private void postProcessSuccess(List<File> processedFiles) {
         requireActivity().runOnUiThread(() -> {
-            for (File file : processedFiles) {
-                coreViewModel.addProcessedFile(file); // Add files one by one
-            }
+            coreViewModel.setProcessedFiles(processedFiles);
 
             binding.progressIndicator.setVisibility(View.GONE);
             binding.actionButton.setEnabled(true);

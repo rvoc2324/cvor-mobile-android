@@ -133,7 +133,12 @@ public class CoreViewModel extends AndroidViewModel {
 
     // Processed Files
     public void setProcessedFiles(List<File> files) {
-        processedFiles.setValue(files != null ? new ArrayList<>(files) : new ArrayList<>());
+        if (files == null || files.isEmpty()) {
+            processedFiles.setValue(new ArrayList<>());
+        } else {
+            // Reset first before adding new files (prevents duplication)
+            processedFiles.setValue(new ArrayList<>(files));
+        }
     }
 
     public LiveData<List<File>> getProcessedFiles() {

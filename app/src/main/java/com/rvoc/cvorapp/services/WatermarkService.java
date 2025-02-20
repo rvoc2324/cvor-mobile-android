@@ -122,7 +122,7 @@ public class WatermarkService {
                 // Get center of the image
                 float centerX = watermarkedBitmap.getWidth() / 2f;
                 float centerY = watermarkedBitmap.getHeight() / 2f;
-                float angle = 135f; // Rotation angle in degrees
+                float angle = 315f; // Rotation angle in degrees
 
                 canvas.save(); // Save current state of the canvas
 
@@ -233,7 +233,7 @@ public class WatermarkService {
                         // Render watermark in the center of the page with rotation
                         float centerX = pageWidth / 2;
                         float centerY = pageHeight / 2;
-                        float angle = (float) Math.toRadians(135); // Rotate 135 degrees
+                        float angle = (float) Math.toRadians(45); // Rotate 45 degrees
 
                         contentStream.saveGraphicsState(); // Save current graphics state
 

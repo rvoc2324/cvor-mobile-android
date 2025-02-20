@@ -1,0 +1,180 @@
+<!-- Urdu -->
+
+<resources>
+    <!-- App Info -->
+    <string name="app_name" translatable="false">CVOR</string>
+    <string name="app_action">آپ کیا کرنا چاہیں گے؟</string>
+    <string name="suggested_actions">تجویز کردہ اعمال</string>
+
+    <!-- Home and Navigation -->
+    <string name="home">ہوم</string>
+    <string name="favourites">پسندیدہ</string>
+    <string name="settings">ترتیبات</string>
+    <string name="help_section">مدد سیکشن</string>
+    <string name="whatsnew">نیا کیا ہے</string>
+    <string name="share_history">اسمارٹ شیئر تاریخ</string>
+    <string name="share_history_body">نیچے وہ تمام فائلز کی تاریخ ہے جو آپ نے CVOR کے ذریعے شیئر کی ہیں۔ آپ نیچے تاریخ کو فلٹر کر سکتے ہیں۔</string>
+
+    <!-- Buttons -->
+    <string name="add_watermark_button">واٹر مارک شامل کریں</string>
+    <string name="smart_share_button">اسمارٹ شیئر</string>
+    <string name="share_file_button">فائل شیئر کریں</string>
+    <string name="combine_pdfs_button">جوڑیں</string>
+    <string name="convert_to_pdf_button">مربوط کریں</string>
+    <string name="scan_to_pdf_button">پی ڈی ایف میں اسکین کریں</string>
+    <string name="split_pdf_button">تقسیم کریں</string>
+    <string name="compress_pdf_button">کمپریس کریں</string>
+    <string name="cancel_button">منسوخ کریں</string>
+    <string name="done_button">مکمل</string>
+    <string name="log_share_button">شیئر کا لاگ</string>
+    <string name="back_button">پیچھے</string>
+    <string name="preview_button">پریویو</string>
+    <string name="share_button">شیئر کریں</string>
+    <string name="share_again_button">دوبارہ شیئر کریں</string>
+    <string name="app_review_text_button">جائزہ</string>
+    <string name="message_us_button">ہم سے پیغام بھیجیں</string>
+    <string name="remove">ہٹائیں</string>
+
+    <!-- Camera -->
+    <string name="camera_source">کیمرا</string>
+    <string name="flash_toggle">فلیش آن</string>
+    <string name="capture_image">تصویر لیں</string>
+    <string name="retake_image">تصویر دوبارہ لیں</string>
+    <string name="confirm_image">تصویر کی تصدیق کریں</string>
+    <string name="camera_preview">کیمرا پریویو</string>
+    <string name="switch_camera">کیمرا تبدیل کریں</string>
+    <string name="camera_init_failed">کیمرا کی ابتدائی ترتیب میں ناکامی</string>
+    <string name="image_capture_failed">تصویر کی گرفتاری ناکام</string>
+    <string name="no_image_to_confirm">تصویر کی تصدیق کے لئے کوئی تصویر نہیں ہے</string>
+    <string name="image_save_failed">تصویر محفوظ کرنے میں ناکامی</string>
+    <string name="camera_not_ready">کیمرا تیار نہیں ہے</string>
+    <string name="capture_more_images">مزید تصاویر لیں؟</string>
+    <string name="captured_image">گرفتاری کی گئی تصویر</string>
+
+    <!-- File Selection -->
+    <string name="select_pdfs">PDF دستاویزات اپ لوڈ کریں</string>
+    <string name="select_images">تصاویر اپ لوڈ کریں</string>
+    <string name="file_manager_fragment_title">فائلز کا جائزہ لیں</string>
+    <string name="file_name">فائل کا نام</string>
+
+    <!-- Share -->
+    <string name="sharing_with">دستاویز کس کے ساتھ شیئر کی جارہی ہے؟</string>
+    <string name="purpose">مقصد؟ (اختیاری)</string>
+    <string name="share_title">شیئر کریں</string>
+    <string name="share_app_text">شیئر کرنے کے لئے ایپ منتخب کریں</string>
+    <string name="share_app_icon_desc">فائلز شیئر کرنے کے لئے دستیاب ایپ</string>
+    <string name="share_text">ہیلو! یہ وہ فائل ہے جو آپ نے درخواست کی تھی۔ CVOR کے ذریعے محفوظ طریقے سے شیئر کی گئی!</string>
+    <string name="sharehistory_hint">فائل کے نام، شیئر کرنے والے یا مقصد کے مطابق تلاش کریں</string>
+    <string name="refer_message">CVOR کو دیکھیں - آپ کے ڈیٹا کو شیئر کرنے کا ایک سمارٹ طریقہ: https://www.google.com</string>
+    <string name="refer">حوالہ دیں</string>
+    <string name="share_via">کے ذریعے شیئر کریں</string>
+    <string name="text_watermark">%1$s کے ساتھ %2$s کے لئے %3$s پر شیئر کیا گیا</string>
+    <string name="text_general_purposes">عام مقاصد</string>
+
+    <!-- PDF Tools -->
+    <string name="pdf_tools">PDF ٹولز</string>
+    <string name="combine_pdf">PDF جوڑیں</string>
+    <string name="convert_to_pdf">تصاویر کو PDF میں تبدیل کریں</string>
+    <string name="split_pdf">PDF تقسیم کریں</string>
+    <string name="compress_pdf">PDF کمپریس کریں</string>
+    <string name="compress_quality">کمپریس کرنے کے بعد فائل کا سائز (ایک منتخب کریں): </string>
+    <string name="pre_compress_file_size">موجودہ فائل کا سائز: %1s</string>
+
+    <!-- Dialogs and Prompts -->
+    <string name="filename_change_prompt">نیا فائل کا نام درج کریں</string>
+    <string name="filename_change_check">فائل کا نام ضروری ہے!</string>
+    <string name="custom_file_name">فائل کا نام تبدیل کریں</string>
+    <string name="change">تبدیل کریں</string>
+    <string name="password_prompt">درج کریں پاس ورڈ: %s</string>
+    <string name="permission_required_message">فیچر استعمال کرنے کے لئے ضروری اجازت درکار ہے۔</string>
+    <string name="from_date_picker">سے</string>
+    <string name="to_date_picker">تک</string>
+    <string name="filter_dropdown">فلٹرز ▼</string>
+    <string name="yes">ہاں</string>
+    <string name="no">نہیں</string>
+    <string name="cancel">منسوخ کریں</string>
+    <string name="ok">ٹھیک ہے</string>
+    <string name="loading">لوڈ ہو رہا ہے، براہ کرم انتظار کریں!</string>
+
+    <!-- Icons -->
+    <string name="camera_icon_desc">کیمرا آئیکن</string>
+    <string name="image_picker_icon_desc">تصویر پکر آئیکن</string>
+    <string name="pdf_picker_icon_desc">PDF پکر آئیکن</string>
+    <string name="delete_icon">مٹانے کا آئیکن</string>
+    <string name="pdf_icon">PDF آئیکن</string>
+    <string name="image_icon">تصویر آئیکن</string>
+    <string name="download_icon">فائلز ڈاؤن لوڈ کریں</string>
+
+    <!-- Preview -->
+    <string name="preview_desc">پروسیس شدہ فائل کا پریویو</string>
+    <string name="preview_fragment_title">پریویو</string>
+    <string name="no_files_selected">کوئی فائلز پریویو کے لیے دستیاب نہیں ہیں۔ فائل منتخب کرنے کے لئے واپس جائیں۔</string>
+
+    <!-- Watermark -->
+    <string name="grid_watermark_check">گرڈ اسٹائل لے آؤٹ</string>
+    <string name="single_watermark_check">سنگل</string>
+    <string name="opacity_text">شفافیت: %d</string>
+    <string name="fontsize_text">فونٹ سائز: %d</string>
+    <string name="smart_text_preview">اسمارٹ ٹیکسٹ کا پیش نظارہ</string>
+    <string name="watermark_help_text">
+        • <b> شیئرنگ کے ساتھ:</b> وہ تنظیم/شخص جس کے ساتھ آپ دستاویز شیئر کر رہے ہیں۔\n
+        • <b> مقصد:</b> شیئر کرنے کا مقصد مختصراً لکھیں۔\n
+        • <b> شفافیت:</b> اسمارٹ ٹیکسٹ کی ہلکائی کو ایڈجسٹ کریں۔\n
+        • <b> فونٹ سائز:</b> اسمارٹ ٹیکسٹ کا سائز ایڈجسٹ کریں۔\n
+        • <b> گرڈ اسٹائل:</b> اسمارٹ ٹیکسٹ دستاویز میں دہرایا جاتا ہے۔ ایک بار دکھانے کے لئے انچیک کریں۔\n
+        • <b> پوزیشن: </b> اسمارٹ ٹیکسٹ کی پوزیشن ایڈجسٹ کریں۔\n
+        • <b> اسمارٹ ٹیکسٹ پریویو:</b> اس ٹیکسٹ کا پیش نظارہ جو فائل پر لگایا جائے گا۔
+    </string>
+
+    <!-- Features -->
+    <string name="features_heading">ایپ کی خصوصیات</string>
+    <string name="features_body">
+        &#8226;  اسمارٹ شیئر - جب آپ اپنی اہم فائلز شیئر کرتے ہیں تو اس میں اسمارٹ ٹیکسٹ شامل کریں تاکہ بدسلوکی کو روکا جا سکے۔\n
+        &#8226;  دستاویزات کو پی ڈی ایف میں اسکین کریں اور بہتر پریویو اور شیئرنگ آپشنز کے ساتھ شیئر کریں۔\n
+        &#8226;  تصاویر کو پی ڈی ایف میں تبدیل کریں، کمپریس کریں، جوڑیں، اور تقسیم کریں بے حد آسانی سے۔\n
+        &#8226;  جلدی سے استعمال کے لیے اکثر استعمال ہونے والی فائلز کو پسندیدہ میں شامل کریں۔\n
+        &#8226;  اسمارٹ شیئر ہسٹری کے ذریعے اپنی اہم شیئر کی گئی فائلز کا حساب رکھیں۔\n
+        &#8226;  اپنے پسندیدہ زبان میں اسمارٹ ٹیکسٹ شامل کریں؛ اس وقت 12 زبانیں معاون ہیں۔\n
+    </string>
+
+    <!-- FAQ and Messaging -->
+    <string name="faq_heading">اکثر پوچھے جانے والے سوالات</string>
+    <string name="faq_collapse">FAQ سیکشن کو بڑھاتا ہے اور کم کرتا ہے</string>
+    <string name="message_us_prompt">کیا آپ کے مزید سوالات ہیں یا تجاویز ہیں یا کوئی بگ رپورٹ کرنا چاہتے ہیں؟</string>
+    <string name="email_body">براہ کرم یہاں اپنے مسئلے یا تجاویز کی وضاحت کریں۔</string>
+    <string name="no_email_app_found">ای میل ایپ کو شروع کرنے میں ناکامی۔ آپ کو خود ای میل ایپ شروع کرنی ہوگی اور رپورٹ کرنا ہوگا۔</string>
+    <string name="review_prompt">ایپ سے لطف اندوز ہو رہے ہیں؟ آپ کا جائزہ ہمیں بہتر بنانے میں مدد کرتا ہے! ❤️</string>
+
+    <string name="faq_1">کیا میرا ڈیٹا محفوظ ہے؟</string>
+    <string name="faq_ans_1">آپ کی تمام فائلیں آپ کے آلے پر مقامی طور پر پروسیس اور ذخیرہ کی جاتی ہیں۔ وہ واحد ڈیٹا جو ایپ سے باہر جاتا ہے وہ ہے جب آپ اسے کسی بیرونی ایپ کے ذریعے شیئر کرنے کا انتخاب کرتے ہیں۔ CVOR کوئی ڈیٹا دور سے ذخیرہ، منظم یا پروسیس نہیں کرتا۔ اگر مستقبل میں کسی نئے فیچر کے حصے کے طور پر ایسا ہوتا ہے تو آپ کو آگاہ کیا جائے گا۔</string>
+
+    <string name="faq_2">اسمارٹ شیئر کیا ہے؟</string>
+    <string name="faq_ans_2">اسمارٹ شیئر آپ کے حساس ڈیٹا کے غلط استعمال کو روکنے کے لیے ڈیزائن کیا گیا ہے۔ جب شیئر کی گئی فائل میں وصول کنندہ کی شناخت ہوتی ہے، تو یہ غلط استعمال کے خلاف ایک نفسیاتی رکاوٹ کے طور پر کام کرتی ہے۔ اس کے علاوہ، ادارے کسی اور کو شیئر کی گئی دستاویزات کو قبول کرنے یا دوسرے مقصد کے لیے استعمال کرنے سے ہچکچاتے ہیں۔</string>
+
+    <string name="faq_3">اسمارٹ شیئر تاریخ کیا ہے؟</string>
+    <string name="faq_ans_3">ایسی متعدد صورتیں ہیں جب آپ کو حساس ڈیٹا شیئر کرنے کی ضرورت پڑ سکتی ہے۔ اسمارٹ شیئر تاریخ آپ کو بتاتی ہے کہ آپ نے اپنے ڈیٹا کو کب اور کہاں شیئر کیا تھا۔</string>
+
+    <string name="faq_4">میں اسمارٹ ٹیکسٹ کو کس طرح اپنی مرضی کے مطابق بنا سکتا ہوں؟</string>
+    <string name="faq_ans_4">اسمارٹ ٹیکسٹ کو تیز رفتاری اور دستاویز کی سالمیت کو برقرار رکھنے کے لیے بہتر بنایا گیا ہے۔ صارف کی آراء کی بنیاد پر، ہم مستقبل کے اپ ڈیٹس میں مزید حسب ضرورت اختیارات متعارف کروا سکتے ہیں۔</string>
+
+    <string name="faq_5">زیادہ سے زیادہ فائل کا سائز کیا ہے جو معاون ہے؟</string>
+    <string name="faq_ans_5">ایپ بڑی فائلوں کو سپورٹ کرتی ہے، لیکن پروسیسنگ کے اوقات مختلف ہو سکتے ہیں۔ بہترین کارکردگی کے لیے 50MB سے کم فائلوں کا استعمال کرنے کی سفارش کی جاتی ہے۔ اگر متعدد بڑی فائلوں کے ساتھ کام کر رہے ہیں تو انہیں چھوٹے بیچوں میں پروسیس کرنے پر غور کریں۔</string>
+
+    <string name="faq_6">میں متعدد فائلوں کو کیسے منتخب کروں؟</string>
+    <string name="faq_ans_6">ایک فائل پر طویل دباؤ ڈالیں تاکہ ملٹی سیلیکٹ موڈ میں داخل ہو سکیں۔</string>
+
+    <string name="faq_7">PDF کمپریس کیا ہے؟</string>
+    <string name="faq_ans_7">PDF کمپریس فائل کے سائز کو کم کرتا ہے، جس سے فائلوں کو شیئر کرنا آسان ہو جاتا ہے جن پر سائز کی حدود ہوتی ہیں۔ آپ کمپریس کرنے کی سطح منتخب کر سکتے ہیں: ہائی کمپریس کوالٹی کے ساتھ بہتر معیار برقرار رکھتا ہے اور سائز میں کم کمی آتی ہے، جبکہ لو کمپریس فائل کے سائز کو نمایاں طور پر کم کر دیتا ہے لیکن معیار کے نقصان کی قیمت پر۔</string>
+
+    <string name="faq_8">جب فائلوں کا جائزہ لیتے وقت تھمب نیل کا معیار کم کیوں ہوتا ہے؟</string>
+    <string name="faq_ans_8">تھمب نیل جان بوجھ کر کمپریس کیے جاتے ہیں تاکہ تیز پریویو فراہم کیا جا سکے۔ اصل فائل متاثر نہیں ہوتی اور اسے پریویو اسٹیج میں مکمل معیار میں دیکھا جا سکتا ہے۔</string>
+
+    <string name="faq_9">کچھ ایپس جیسے WhatsApp فائل کے پریویو مختلف کیوں دکھاتی ہیں؟</string>
+    <string name="faq_ans_9">ایپس جیسے WhatsApp فائل کے پریویو بنانے کے دوران فائل کو کمپریس یا ری سائز کر سکتی ہیں، لیکن اصل فائل کا معیار بدلے گا نہیں۔</string>
+
+    <!-- Legal -->
+    <string name="terms_of_use_message">اس ایپ کو استعمال کر کے آپ ہماری استعمال کی شرائط اور پرائیویسی پالیسی سے اتفاق کرتے ہیں۔</string>
+    <string name="agree_button">اتفاق کریں</string>
+    <string name="disagree_button">اتفاق نہیں کرتے</string>
+
+</resources>

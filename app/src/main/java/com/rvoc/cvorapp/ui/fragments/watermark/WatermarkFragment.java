@@ -292,9 +292,7 @@ public class WatermarkFragment extends Fragment {
                     binding.progressIndicator.setVisibility(View.GONE);
                     if (!watermarkedFiles.isEmpty()) {
                         // Add processed files to the ViewModel
-                        for (File file : watermarkedFiles) {
-                            coreViewModel.addProcessedFile(file);
-                        }
+                        coreViewModel.setProcessedFiles(watermarkedFiles);
                         Toast.makeText(requireContext(), "Watermarking completed.", Toast.LENGTH_SHORT).show();
                         coreViewModel.setNavigationEvent("navigate_to_preview");
                     } else {
