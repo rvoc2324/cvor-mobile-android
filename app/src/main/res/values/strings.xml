@@ -66,6 +66,7 @@
     <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
     <string name="sharehistory_hint">Search by file name, shared with or purpose</string>
     <string name="refer_message">Check out CVOR - A smarter way to share your data: https://www.google.com</string>
+    <string name="refer_prompt">Help us spread the word! Refer CVOR to your friends and family ❤️</string>
     <string name="refer">Refer</string>
     <string name="share_via">Share via</string>
     <string name="text_watermark">Shared with %1$s for %2$s on %3$s</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">Compress PDF</string>
     <string name="compress_quality">Post compression file size (select one): </string>
     <string name="pre_compress_file_size">Current file size: %1s</string>
+    <string name="compress_high">High: %s</string>
+    <string name="compress_medium">Medium: %s</string>
+    <string name="compress_low">Low: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">Enter new file name</string>
@@ -108,7 +112,7 @@
     <!-- Preview -->
     <string name="preview_desc">Preview of processed file</string>
     <string name="preview_fragment_title">Preview</string>
-    <string name="no_files_selected">No files available to preview. Go back to choose a file.</string>
+    <string name="no_files_selected">No files selected.</string>
 
     <!-- Watermark -->
     <string name="grid_watermark_check">Grid style layout</string>
@@ -125,6 +129,45 @@
         • <b> Position: </b> Adjust the position of the smart text.\n
         • <b> Smart text Preview:</b> Shows a preview of the text to be applied to the file.
     </string>
+
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">File could not be processed. Try compressing it to reduce size and try again.</string>
+    <string name="compression_failed">Error: Compression failed</string>
+    <string name="compression_quality_error">Select compression quality</string>
+    <string name="navigation_failed">Navigation failed</string>
+    <string name="unable_to_determine_file_name">Unable to determine file name</string>
+    <string name="failed_to_crop_image">Failed to crop image</string>
+    <string name="failed_to_process_cropped_image">Failed to process cropped image</string>
+    <string name="multi_files_selected"> files selected</string>
+    <string name="one_file_selected">1 file selected</string>
+    <string name="file_selection_cancelled">File selection cancelled</string>
+    <string name="no_images_selected">No images selected</string>
+    <string name="invalid_file_source_type">Invalid file source type</string>
+    <string name="source_type_not_set">Source type not set</string>
+    <string name="split_file_limit_warning">Only files with less than 25 pages currently supported.</string>
+    <string name="multi_file_selection">Long press to select multiple files.</string>
+    <string name="failed_to_process_selected_file">Failed to process the selected file</string>
+    <string name="failed_to_open_file">Failed to open file</string>
+    <string name="password_protected_files_not_supported">Password protected files are not supported for favourites.</string>
+    <string name="password_entry_cancelled">Password entry cancelled.</string>
+    <string name="failed_to_open_document">Failed to open document. It may be corrupted or unsupported.</string>
+    <string name="opening">Opening: </string>
+    <string name="failed_to_rename_file">Failed to rename file. Please try again.</string>
+    <string name="no_files_selected_go_back">No files selected. Go back to select a file.</string>
+    <string name="split_file_limit_error">PDF exceeds the 25-page limit.</string>
+    <string name="incorrect_password_error"> "Incorrect password. Please try again."</string>
+    <string name="error_processing_files">Error processing files: </string>
+    <string name="pdf_action_completed">PDF Action completed.</string>
+    <string name="no_compression_quality_selected">No compression quality selected.</string>
+    <string name="compression_type_set">Compression type set: </string>
+    <string name="no_files_available_to_download">No files available to download</string>
+    <string name="downloading_files">Downloading files…</string>
+    <string name="failed_to_download">Failed to download: </string>
+    <string name="download_completed">Download completed. Check your Downloads folder.</string>
+    <string name="watermarking_completed">Watermarking completed.</string>
+    <string name="no_files_watermarked">No files were watermarked.</string>
+    <string name="error_during_watermarking">An error occurred during watermarking. Try again.</string>
+
 
     <!-- Features -->
     <string name="features_heading">App features</string>
@@ -144,6 +187,9 @@
     <string name="email_body">Please describe your issue or suggestions here.</string>
     <string name="no_email_app_found">Unable to launch email app. You will have to launch it on your end and report.</string>
     <string name="review_prompt">Enjoying the app? Your review helps us improve! ❤️</string>
+    <string name="review_button">Review</string>
+    <string name="later_button">Later</string>
+    <string name="cancel_reminder_button">Stop reminder</string>
 
 
     <string name="faq_1">Is my data safe?</string>
@@ -172,6 +218,12 @@
 
     <string name="faq_9">Why do some apps, like WhatsApp, show file previews differently?</string>
     <string name="faq_ans_9">Apps like WhatsApp may compress or resize files when generating previews, but the original file quality remains unchanged.</string>
+
+    <string name="faq_11">How can I change my language settings?</string>
+    <string name="faq_ans_11">The app automatically uses your phone’s default language. To change the language, simply update your phone’s default language settings.</string>
+
+    <string name="faq_10">Why are some language translations incorrect or unclear?</string>
+    <string name="faq_ans_10">While we strive to provide accurate translations, there can be instances where translations may be incorrect or unclear. Please message us and we will aim to fix it at the earliest.</string>
 
     <!-- Legal -->
     <string name="terms_of_use_message">By using this app, you agree to our Terms of Use and Privacy Policy.</string>

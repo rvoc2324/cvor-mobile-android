@@ -40,16 +40,48 @@ public class CoreViewModel extends AndroidViewModel {
     private final MutableLiveData<String> actionType = new MutableLiveData<>("");
     private final MutableLiveData<String> customFileName = new MutableLiveData<>("");
     private final MutableLiveData<Boolean> favouriteAdded = new MutableLiveData<>();
-    private final MutableLiveData<String> compressType = new MutableLiveData<>(null);
-
     // Navigation events (SingleLiveEvent recommended for one-time events)
     private final MutableLiveData<String> navigationEvent = new MutableLiveData<>(null);
+
+    // Compress UI states
+    private final MutableLiveData<Map<String, String>> compressedFileSizes = new MutableLiveData<>(new HashMap<>());
+    private final MutableLiveData<Boolean> isCompressionComplete = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> isActionButtonEnabled = new MutableLiveData<>(false);
+    private final MutableLiveData<String> compressType = new MutableLiveData<>(null);
 
     @Inject
     public CoreViewModel(@NonNull Application application) {
 
         super(application);
 
+    }
+
+    public LiveData<Map<String, String>> getCompressedFileSizes() {
+        return compressedFileSizes;
+    }
+
+    public void setCompressedFileSize(String quality, String size) {
+        Map<String, String> currentSizes = compressedFileSizes.getValue();
+        if (currentSizes != null) {
+            currentSizes.put(quality, size);
+            compressedFileSizes.postValue(currentSizes);
+        }
+    }
+
+    public LiveData<Boolean> getIsCompressionComplete() {
+        return isCompressionComplete;
+    }
+
+    public void setCompressionComplete(boolean isComplete) {
+        isCompressionComplete.postValue(isComplete);
+    }
+
+    public LiveData<Boolean> getIsActionButtonEnabled() {
+        return isActionButtonEnabled;
+    }
+
+    public void setIsActionButtonEnabled(boolean isEnabled) {
+        isActionButtonEnabled.postValue(isEnabled);
     }
 
     public LiveData<Boolean> getFavouriteAdded() {

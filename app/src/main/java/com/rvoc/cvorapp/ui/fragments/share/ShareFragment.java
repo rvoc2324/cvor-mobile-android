@@ -1,17 +1,22 @@
 package com.rvoc.cvorapp.ui.fragments.share;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
@@ -23,8 +28,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.models.ShareHistory;
 import com.rvoc.cvorapp.repositories.ShareHistoryRepository;
+import com.rvoc.cvorapp.utils.FileUtils;
 import com.rvoc.cvorapp.utils.ShareResultReceiver;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
@@ -51,6 +58,14 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
     private FragmentShareBinding binding;
     private ShareResultReceiver shareResultReceiver;
     private String actionType;
+
+    private static final String PREFS_NAME = "app_preferences";
+    private static final String KEY_SHOW_DIALOG = "show_dialog";
+    private static final String KEY_DIALOG_TYPE = "dialog_type";
+    private static final String KEY_CANCEL_REMINDER = "cancel_reminder";
+    private static final String KEY_INSTALL_DATE = "install_date";
+    private static final String KEY_ACTION_COUNT = "action_count";
+    private static final String KEY_HAS_REVIEWED = "has_reviewed";
 
     private final ActivityResultLauncher<Intent> shareLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -106,16 +121,14 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         binding.actionButton.setOnClickListener(v -> {
             if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
                 logShareDetails();
-                navigateToShareHistory();
+                checkDialog();
             } else {
-                requireActivity().finish();
+                checkDialog();
             }
         });
         binding.cancelButton.setOnClickListener(v -> requireActivity().finish());
 
-        watermarkViewModel.getShareApp().observe(getViewLifecycleOwner(), shareApp -> {
-            logShareDetails();
-        });
+        watermarkViewModel.getShareApp().observe(getViewLifecycleOwner(), shareApp -> logShareDetails());
 
         openNativeShareModal();
         return binding.getRoot();
@@ -162,11 +175,15 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
 
     private void openNativeShareModal() {
         List<File> processedFiles = coreViewModel.getProcessedFiles().getValue();
+        String compressType = coreViewModel.getCompressType().getValue();
+
         if (processedFiles == null || processedFiles.isEmpty()) {
-            Toast.makeText(requireContext(), "No files to share", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.no_files_selected), Toast.LENGTH_SHORT).show();
             requireActivity().getSupportFragmentManager().popBackStack();
             return;
         }
+
+        processedFiles = FileUtils.filterFilesByCompressionType(processedFiles, compressType);
 
         Intent shareIntent;
         if (processedFiles.size() == 1) {
@@ -204,8 +221,115 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         shareLauncher.launch(chooser);
     }
 
-    private void navigateToShareHistory() {
-        coreViewModel.setNavigationEvent("navigate_to_sharehistory");
+    private void checkDialog() {
+        SharedPreferences prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // Check if the user has cancelled the reminder
+        if (prefs.getBoolean(KEY_CANCEL_REMINDER, false)) return;
+
+        // Get install date
+        long installDate = prefs.getLong(KEY_INSTALL_DATE, 0);
+        if (installDate == 0) {
+            installDate = System.currentTimeMillis();
+            editor.putLong(KEY_INSTALL_DATE, installDate);
+            editor.apply();
+        }
+
+        // Check if 3 months have passed
+        long threeMonthsInMillis = 3L * 30 * 24 * 60 * 60 * 1000; // Approx. 3 months
+        if (System.currentTimeMillis() - installDate > threeMonthsInMillis) return;
+
+        // Track user actions
+        int actionCount = prefs.getInt(KEY_ACTION_COUNT, 0) + 1;
+        editor.putInt(KEY_ACTION_COUNT, actionCount);
+        editor.apply();
+
+        // Show dialog only every 3 actions
+        if (actionCount % 3 != 0) {
+            handleNavigation();
+        }
+
+        // Determine dialog type (Review or Refer)
+        boolean hasReviewed = prefs.getBoolean(KEY_HAS_REVIEWED, false);
+        int dialogType = prefs.getInt(KEY_DIALOG_TYPE, 0); // 0 = Review, 1 = Refer
+
+        // If user has reviewed, always show "Refer"
+        boolean isReview = (!hasReviewed && dialogType == 0);
+        String message = isReview ? getString(R.string.review_prompt) : getString(R.string.refer_prompt);
+        String positiveButtonLabel = isReview ? getString(R.string.review_button) : getString(R.string.refer);
+
+        // Update next dialog type for alternation
+        editor.putInt(KEY_DIALOG_TYPE, isReview ? 1 : 0);
+        editor.apply();
+
+        // Show the dialog
+        showDialog(message, positiveButtonLabel, isReview);
+    }
+
+    private void showDialog(String message, String positiveButtonLabel, boolean isReview) {
+        DialogLayoutBinding dialogBinding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme);
+        builder.setView(dialogBinding.getRoot());
+
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+
+        // Set up UI elements dynamically
+        dialogBinding.animationView.setVisibility(View.VISIBLE);
+        dialogBinding.animationView.playAnimation();
+        dialogBinding.dialogMessage.setText(message);
+        dialogBinding.positiveButton.setText(positiveButtonLabel);
+        dialogBinding.negativeButton.setText(R.string.later_button);
+        dialogBinding.optionalButton.setVisibility(View.VISIBLE);
+        dialogBinding.optionalButton.setText(R.string.cancel_reminder_button);
+
+        SharedPreferences prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        dialogBinding.positiveButton.setOnClickListener(v -> {
+            if (isReview) {
+                editor.putBoolean(KEY_HAS_REVIEWED, true);
+                editor.apply();
+                submitReview();
+            } else {
+                coreViewModel.setNavigationEvent("navigate_to_refer");
+            }
+            dialog.dismiss();
+        });
+
+        dialogBinding.negativeButton.setOnClickListener(v -> {
+            handleNavigation();
+            dialog.dismiss();
+        });
+
+        dialogBinding.optionalButton.setOnClickListener(v -> {
+            editor.putBoolean(KEY_CANCEL_REMINDER, true);
+            editor.apply();
+            handleNavigation();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void handleNavigation() {
+        if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
+            coreViewModel.setNavigationEvent("navigate_to_refer");
+        } else {
+            requireActivity().finish();
+        }
+    }
+
+    private void submitReview() {
+        // Actual logic to be implemented later
+
+        if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
+            coreViewModel.setNavigationEvent("navigate_to_refer");
+        } else {
+            requireActivity().finish();
+        }
     }
 
     private String getMimeType(String fileName) {

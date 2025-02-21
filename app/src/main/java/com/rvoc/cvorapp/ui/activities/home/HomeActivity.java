@@ -150,15 +150,6 @@ public class HomeActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
         Log.d(TAG, "NavController initialized and linked with BottomNavigationView.");
-
-        /*// Listen for destination changes
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.nav_share_history) {
-                binding.bottomNavigation.setVisibility(View.GONE); // Hide for Share History
-            } else {
-                binding.bottomNavigation.setVisibility(View.VISIBLE); // Show for other fragments
-            }
-        });*/
     }
 
     private void setupBottomNavigationView() {
@@ -191,7 +182,7 @@ public class HomeActivity extends AppCompatActivity {
             Log.d(TAG, "Navigating to CoreActivity with actionType: " + actionType);
         } catch (Exception e) {
             Log.e(TAG, "Navigation error: " + e.getMessage(), e);
-            Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.navigation_failed), Toast.LENGTH_SHORT).show();
         }
     }
 }

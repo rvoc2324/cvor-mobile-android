@@ -101,6 +101,9 @@ dependencies {
     implementation(libs.photoView)
     ksp(libs.glide.compiler)
 
+    //Animation libraries
+    implementation(libs.lottie)
+
     // Ad libraries
     // implementation(libs.adMob)
 
@@ -132,6 +135,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+
 }
 
 hilt {

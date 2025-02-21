@@ -15,6 +15,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 public class FileUtils {
@@ -52,6 +54,32 @@ public class FileUtils {
         } else {
             Log.e(TAG, "Failed to copy file for sharing.");
         }
+    }
+
+    // Filters files by compression type when actionType is set to compresspdf
+    public static List<File> filterFilesByCompressionType(List<File> files, String compressType) {
+        if (compressType == null || compressType.isEmpty()) return files; // If no filter, show all
+        char typeChar;
+        switch (compressType) {
+            case "High":
+                typeChar = 'H';
+                break;
+            case "Medium":
+                typeChar = 'M';
+                break;
+            case "Low":
+                typeChar = 'L';
+                break;
+            default:
+                return files; // If invalid type, return all
+        }
+
+        for (File file : files) {
+            if (file.getName().contains("compressed_" + typeChar)) {
+                return Collections.singletonList(file);
+            }
+        }
+        return Collections.emptyList(); // No match
     }
 
     /**

@@ -251,7 +251,7 @@ public class WatermarkFragment extends Fragment {
                 // Show message if no files are selected
                 requireActivity().runOnUiThread(() -> {
                     binding.progressIndicator.setVisibility(View.GONE);
-                    Toast.makeText(requireContext(), "No files selected. Go back to select a file.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.no_files_selected_go_back), Toast.LENGTH_SHORT).show();
                 });
                 return;
             }
@@ -293,10 +293,10 @@ public class WatermarkFragment extends Fragment {
                     if (!watermarkedFiles.isEmpty()) {
                         // Add processed files to the ViewModel
                         coreViewModel.setProcessedFiles(watermarkedFiles);
-                        Toast.makeText(requireContext(), "Watermarking completed.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.watermarking_completed), Toast.LENGTH_SHORT).show();
                         coreViewModel.setNavigationEvent("navigate_to_preview");
                     } else {
-                        Toast.makeText(requireContext(), "No files were watermarked.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.no_files_watermarked), Toast.LENGTH_SHORT).show();
                     }
                     binding.previewButton.setEnabled(true);
                 });
@@ -306,7 +306,7 @@ public class WatermarkFragment extends Fragment {
                 Log.e(TAG, "Error during watermarking process: " + e.getMessage(), e);
                 requireActivity().runOnUiThread(() -> {
                     binding.progressIndicator.setVisibility(View.GONE);
-                    Toast.makeText(requireContext(), "An error occurred during watermarking. Try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.error_during_watermarking), Toast.LENGTH_SHORT).show();
                     binding.previewButton.setEnabled(true);
                 });
             }

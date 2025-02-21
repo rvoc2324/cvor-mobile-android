@@ -164,7 +164,7 @@
     <string name="faq_ans_6">Długie naciśnięcie pliku przechodzi do trybu wyboru wielu plików.</string>
 
     <string name="faq_7">Czym jest kompresja PDF?</string>
-    <string name="faq_ans_7">Kompresja PDF zmniejsza rozmiar pliku, ułatwiając udostępnianie plików z ograniczeniami rozmiaru. Możesz wybrać poziom kompresji: Wysoka kompresja zachowuje lepszą jakość przy mniejszym zmniejszeniu rozmiaru, natomiast Niska kompresja znacznie redukuje rozmiar pliku, ale kosztem jakości.</string>
+    <string name="faq_ans_7">Kompresja PDF zmniejsza rozmiar pliku, ułatwiając udostępnianie plików z ograniczeniami rozmiaru. Możesz wybrać poziom kompresji: Wysoka kompresja zachowuje lepszą jakość przy zmniejszeniu rozmiaru, natomiast Niska kompresja znacznie redukuje rozmiar pliku, ale kosztem jakości.</string>
 
     <string name="faq_8">Dlaczego jakość miniatury jest niska podczas przeglądania plików?</string>
     <string name="faq_ans_8">Miniatury są celowo kompresowane, aby zapewnić szybkie podglądy. Oryginalny plik pozostaje niezmieniony i może być wyświetlany w pełnej jakości w etapie podglądu.</string>

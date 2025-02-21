@@ -20,9 +20,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.widget.Toast;
 
 
+import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.adapters.PreviewPagerAdapter;
 import com.rvoc.cvorapp.databinding.FragmentPreviewBinding;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
+import com.rvoc.cvorapp.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,6 +45,7 @@ public class PreviewFragment extends Fragment {
     private FragmentPreviewBinding binding;
     private CoreViewModel coreViewModel;
     private PreviewPagerAdapter previewPagerAdapter;
+    private List<File> filesToShow;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,7 +80,7 @@ public class PreviewFragment extends Fragment {
                 return;
             }
 
-            List<File> filesToShow = filterFilesByCompressionType(files, coreViewModel.getCompressType().getValue());
+            filesToShow = FileUtils.filterFilesByCompressionType(files, coreViewModel.getCompressType().getValue());
             Log.d(TAG, "Previewing " + filesToShow.size() + " file(s).");
 
             binding.noFilesSelected.setVisibility(View.GONE);
@@ -85,16 +88,6 @@ public class PreviewFragment extends Fragment {
             previewPagerAdapter.submitList(filesToShow);
             binding.filePreviewPager.setCurrentItem(0, false);
         });
-    }
-
-    private List<File> filterFilesByCompressionType(List<File> files, String compressType) {
-        if (compressType == null) return files; // If no filter, show all
-        for (File file : files) {
-            if (file.getName().contains("compressed_" + compressType.charAt(0))) {
-                return Collections.singletonList(file);
-            }
-        }
-        return Collections.emptyList(); // No match
     }
 
     private void setupButtons() {
@@ -147,14 +140,13 @@ public class PreviewFragment extends Fragment {
     }
 
     private void downloadFiles() {
-        List<File> files = coreViewModel.getProcessedFiles().getValue();
-        if (files == null || files.isEmpty()) {
-            Toast.makeText(getContext(), "No files available to download", Toast.LENGTH_SHORT).show();
+        if (filesToShow == null || filesToShow.isEmpty()) {
+            Toast.makeText(getContext(), getString(R.string.no_files_available_to_download), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(getContext(), "Downloading files...", Toast.LENGTH_SHORT).show();
-        for (File file : files) {
+        Toast.makeText(getContext(), getString(R.string.downloading_files), Toast.LENGTH_SHORT).show();
+        for (File file : filesToShow) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     ContentValues values = new ContentValues();
@@ -177,11 +169,11 @@ public class PreviewFragment extends Fragment {
 
             } catch (Exception e) {
                 Log.e(TAG, "Error downloading file: " + file.getName(), e);
-                Toast.makeText(getContext(), "Failed to download: " + file.getName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.failed_to_download)+ file.getName(), Toast.LENGTH_SHORT).show();
             }
         }
 
-        Toast.makeText(getContext(), "Download completed. Check your Downloads folder.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.download_completed), Toast.LENGTH_SHORT).show();
     }
 
     private void copyFile(File src, File dest) throws IOException {

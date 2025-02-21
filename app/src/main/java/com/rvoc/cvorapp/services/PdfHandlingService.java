@@ -68,7 +68,7 @@ public class PdfHandlingService {
     }
 
     // Combine multiple PDFs into one
-    public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile, @NonNull Context context) throws Exception {
+    public File combinePDF(@NonNull List<Uri> inputFiles, @NonNull File outputFile, @NonNull Context context, @NonNull Activity activity) throws Exception {
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
         List<InputStream> inputStreams = new ArrayList<>();
 
@@ -88,6 +88,15 @@ public class PdfHandlingService {
             mergerUtility.mergeDocuments(null);
             Log.d(TAG, "PDF merge completed successfully.");
             return outputFile;
+        } catch (OutOfMemoryError e) {
+            Log.e(TAG, "Out of memory while merging PDFs", e);
+
+            // Show toast message on UI thread using MainExecutor
+            activity.runOnUiThread(() ->
+                    Toast.makeText(context, context.getString(R.string.pdf_combine_error), Toast.LENGTH_LONG).show()
+            );
+
+            throw new Exception("PDF merge failed due to insufficient memory", e);
         } finally {
             // Close all input streams after merging is completed
             for (InputStream stream : inputStreams) {
@@ -99,6 +108,7 @@ public class PdfHandlingService {
             }
         }
     }
+
 
 
     //Converting images to a PDF
@@ -294,7 +304,7 @@ public class PdfHandlingService {
 
             } catch (InvalidPasswordException e) {
                 Log.e(TAG, "PDF decryption failed: Incorrect password.");
-                Toast.makeText(context, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getString(R.string.incorrect_password_error), Toast.LENGTH_SHORT).show();
                 decryptPDF(fileUri, activity, callback);  // **Retry password entry**
             } catch (IOException e) {
                 Log.e(TAG, "Error decrypting PDF", e);

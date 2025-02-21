@@ -109,7 +109,7 @@ public class CameraFragment extends Fragment {
                         error = UCrop.getError(result.getData());
                     }
                     Log.e(TAG, "uCrop error: ", error);
-                    Toast.makeText(requireContext(), "Failed to crop image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.failed_to_crop_image), Toast.LENGTH_SHORT).show();
                 }
             }
     );
@@ -414,7 +414,7 @@ public class CameraFragment extends Fragment {
             requireActivity().runOnUiThread(() -> showImageConfirmation(rotatedBitmap));
         } catch (IOException e) {
             Log.e(TAG, "Error processing cropped image", e);
-            Toast.makeText(requireContext(), "Failed to process cropped image", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.failed_to_process_cropped_image), Toast.LENGTH_SHORT).show();
         }
     }
 

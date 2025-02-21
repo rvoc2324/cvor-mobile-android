@@ -299,7 +299,7 @@ public class HomeFragment extends Fragment {
                 if (originalFile.renameTo(newFile)) {
                     favouritesRepository.renameFile(filePath, newFile.getAbsolutePath(), newFileName);
                 } else {
-                    Toast.makeText(activity, "Failed to rename file. Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.failed_to_rename_file), Toast.LENGTH_SHORT).show();
                 }
             }
         });

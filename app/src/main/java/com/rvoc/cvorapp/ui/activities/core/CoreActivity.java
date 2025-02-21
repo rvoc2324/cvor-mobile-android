@@ -238,6 +238,10 @@ public class CoreActivity extends AppCompatActivity {
                     navToShareHistory();
                     break;
 
+                case "navigate_to_refer":
+                    navToRefer();
+                    break;
+
                 default:
                     Log.e("CoreActivity", "Unknown navigation event: " + event);
                     break;
@@ -406,9 +410,8 @@ public class CoreActivity extends AppCompatActivity {
     }
 
     /**
-     * Navigate to Whats New Fragment from ShareFragment.
+     * Navigate to Share History in Home Activity from ShareFragment.
      */
-
     private void navToShareHistory() {
         try {
             Intent intent = new Intent(this, HomeActivity.class);
@@ -418,7 +421,23 @@ public class CoreActivity extends AppCompatActivity {
             finish();
         } catch (Exception e) {
             Log.e(TAG, "Navigation error: " + e.getMessage(), e);
-            Toast.makeText(this, "Navigation failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.navigation_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Navigate to Refer in Home Activity from ShareFragment.
+     */
+    private void navToRefer() {
+        try {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("app://cvorapp/refer"));
+            startActivity(intent);
+            finish();
+        } catch (Exception e) {
+            Log.e(TAG, "Navigation error: " + e.getMessage(), e);
+            Toast.makeText(this, getString(R.string.navigation_failed), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -428,7 +447,7 @@ public class CoreActivity extends AppCompatActivity {
             coreViewModel.addSelectedFile(uri, fileName);
             Log.d(TAG, "File selected: " + fileName);
         } else {
-            Toast.makeText(this, "Unable to determine file name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.unable_to_determine_file_name), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -83,16 +83,16 @@ public class FileManagerFragment extends Fragment {
                                         handleSelectedPDFFile(fileUri);
                                         Log.d(TAG, "FileManagerFragment: File processed: " + fileUri);
                                     }
-                                    Toast.makeText(requireContext(), itemCount + " files selected", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), itemCount + getString(R.string.multi_files_selected), Toast.LENGTH_SHORT).show();
                                 } else if (data.getData() != null) {
                                     Log.d(TAG, "FileManagerFragment: Single file selected.");
                                     handleSelectedPDFFile(data.getData());
-                                    Toast.makeText(requireContext(), "1 file selected", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), getString(R.string.one_file_selected), Toast.LENGTH_SHORT).show();
                                 }
                                 coreViewModel.setNavigationEvent("navigate_to_action");
                             } else {
                                 Log.w(TAG, "FileManagerFragment: File selection cancelled.");
-                                Toast.makeText(requireContext(), "File selection cancelled", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), getString(R.string.file_selection_cancelled), Toast.LENGTH_SHORT).show();
                                 requireActivity().finish();
                             }
                         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class FileManagerFragment extends Fragment {
                                 coreViewModel.setNavigationEvent("navigate_to_action");
                             } else {
                                 Log.w(TAG, "FileManagerFragment: No photos selected.");
-                                Toast.makeText(requireContext(), "No images selected", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(), getString(R.string.no_images_selected), Toast.LENGTH_SHORT).show();
                                 requireActivity().finish();
                             }
                         } catch (Exception e) {
@@ -154,11 +154,11 @@ public class FileManagerFragment extends Fragment {
                         pickImageFiles();
                         break;
                     default:
-                        Toast.makeText(requireContext(), "Invalid file source type", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.invalid_file_source_type), Toast.LENGTH_SHORT).show();
                         coreViewModel.setNavigationEvent("navigate_back");
                 }
             } else {
-                Toast.makeText(requireContext(), "Source type not set", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.source_type_not_set), Toast.LENGTH_SHORT).show();
                 coreViewModel.setNavigationEvent("navigate_back");
             }
         });
@@ -178,7 +178,7 @@ public class FileManagerFragment extends Fragment {
 
         if ("splitpdf".equals(actionType)) {
             Log.d(TAG, "Split PDF action selected: " + actionType);
-            Toast.makeText(requireContext(), "Only files with less than 25 pages currently supported.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.split_file_limit_warning), Toast.LENGTH_SHORT).show();
             // Disable multi-file selection
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         } else if ("compresspdf".equals(actionType)) {
@@ -187,7 +187,7 @@ public class FileManagerFragment extends Fragment {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         } else {
             Log.d(TAG, "Other action type selected, allowing multi-file selection: " + actionType);
-            Toast.makeText(requireContext(), "Long press to select multiple files.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.multi_file_selection), Toast.LENGTH_SHORT).show();
             // Enable multi-file selection
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
@@ -236,10 +236,10 @@ public class FileManagerFragment extends Fragment {
                     coreViewModel.addSelectedFile(fileUri, fileName);
                     Log.d(TAG, "File selected: " + fileName);
                 } else {
-                    Toast.makeText(requireContext(), "Unable to determine file name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.unable_to_determine_file_name), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
-                Toast.makeText(requireContext(), "Failed to process the selected file", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.failed_to_process_selected_file), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Error processing file: ", e);
             }
         }
@@ -255,7 +255,7 @@ public class FileManagerFragment extends Fragment {
 
         try (InputStream inputStream = requireContext().getContentResolver().openInputStream(fileUri)) {
             if (inputStream == null) {
-                Toast.makeText(requireContext(), "Failed to open file", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.failed_to_open_file), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -280,19 +280,19 @@ public class FileManagerFragment extends Fragment {
                         Log.d(TAG, "Decrypted PDF saved at: " + decryptedUri);
                         addFileToViewModel(decryptedUri); // Use decrypted file
                         if (Objects.equals(actionType, "addFavourite")) {
-                            Toast.makeText(requireContext(), "Password protected files are not supported for favourites.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), getString(R.string.password_protected_files_not_supported), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onPasswordCancelled() {
-                        Toast.makeText(requireContext(), "Password entry cancelled.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.password_entry_cancelled), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         } catch (IOException e) {
             Log.e(TAG, "Error loading PDF, possibly corrupted", e);
-            Toast.makeText(requireContext(), "Failed to open document. It may be corrupted or unsupported.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.failed_to_open_document), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -302,7 +302,7 @@ public class FileManagerFragment extends Fragment {
             coreViewModel.addSelectedFile(fileUri, fileName);
             Log.d(TAG, "File selected: " + fileName);
         } else {
-            Toast.makeText(requireContext(), "Unable to determine file name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.unable_to_determine_file_name), Toast.LENGTH_SHORT).show();
         }
     }
 

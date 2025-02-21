@@ -30,6 +30,7 @@ adMob = "23.6.0"
 concurrent-futures = "1.2.0"
 guava = "33.4.0-android"
 serialization-json = "1.7.3"
+lottie = "6.6.2"
 
 
 [libraries]
@@ -72,6 +73,7 @@ ucrop = { group = "com.github.yalantis", name = "ucrop", version.ref = "ucrop"}
 photoView = { group = "com.github.chrisbanes", name = "PhotoView", version.ref = "photoView" }
 adMob = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "adMob" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
