@@ -172,6 +172,12 @@
     <string name="faq_9">Bazı uygulamalar (WhatsApp gibi) dosya önizlemelerini neden farklı gösteriyor?</string>
     <string name="faq_ans_9">WhatsApp gibi uygulamalar, önizlemeleri oluştururken dosyaları sıkıştırabilir veya yeniden boyutlandırabilir, ancak orijinal dosyanın kalitesi değişmez.</string>
 
+    <string name="faq_11">Dil ayarlarımı nasıl değiştirebilirim?</string>
+    <string name="faq_ans_11">Uygulama, telefonunuzun varsayılan dilini otomatik olarak kullanır. Dili değiştirmek için telefonunuzun varsayılan dil ayarlarını güncelleyin.</string>
+
+    <string name="faq_10">Bazı dil çevirileri neden yanlış veya belirsiz?</string>
+    <string name="faq_ans_10">Doğru çeviriler sağlamaya çalışıyoruz, ancak bazı durumlarda çeviriler yanlış veya belirsiz olabilir. Lütfen bize mesaj gönderin, en kısa sürede düzeltmeye çalışacağız.</string>
+
     <!-- Legal -->
     <string name="terms_of_use_message">Bu uygulamayı kullanarak, Kullanım Şartları ve Gizlilik Politikamızı kabul etmiş oluyorsunuz.</string>
     <string name="agree_button">Kabul Ediyorum</string>

@@ -173,6 +173,12 @@
     <string name="faq_9">Mengapa beberapa aplikasi, seperti WhatsApp, menampilkan pratinjau file dengan cara yang berbeda?</string>
     <string name="faq_ans_9">Aplikasi seperti WhatsApp mungkin mengompresi atau mengubah ukuran file saat menghasilkan pratinjau, tetapi kualitas file asli tetap tidak berubah.</string>
 
+    <string name="faq_11">Bagaimana saya bisa mengubah pengaturan bahasa saya?</string>
+    <string name="faq_ans_11">Aplikasi secara otomatis menggunakan bahasa default ponsel Anda. Untuk mengubah bahasa, cukup perbarui pengaturan bahasa default ponsel Anda.</string>
+
+    <string name="faq_10">Mengapa beberapa terjemahan bahasa tidak benar atau tidak jelas?</string>
+    <string name="faq_ans_10">Kami berusaha untuk memberikan terjemahan yang akurat, tetapi dalam beberapa kasus, terjemahan mungkin tidak benar atau tidak jelas. Silakan kirim pesan kepada kami, dan kami akan berusaha memperbaikinya secepat mungkin.</string>
+
     <!-- Legal -->
     <string name="terms_of_use_message">Dengan menggunakan aplikasi ini, Anda setuju dengan Syarat Penggunaan dan Kebijakan Privasi kami.</string>
     <string name="agree_button">Setuju</string>

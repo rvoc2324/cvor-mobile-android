@@ -172,6 +172,12 @@
     <string name="faq_9">¿Por qué algunas apps, como WhatsApp, muestran las vistas previas de los archivos de manera diferente?</string>
     <string name="faq_ans_9">Apps como WhatsApp pueden comprimir o redimensionar los archivos al generar las vistas previas, pero la calidad del archivo original permanece sin cambios.</string>
 
+    <string name="faq_11">¿Cómo puedo cambiar la configuración de idioma?</string>
+    <string name="faq_ans_11">La aplicación usa automáticamente el idioma predeterminado de tu teléfono. Para cambiar el idioma, simplemente actualiza la configuración de idioma predeterminada de tu teléfono.</string>
+
+    <string name="faq_10">¿Por qué algunas traducciones de idioma son incorrectas o poco claras?</string>
+    <string name="faq_ans_10">Si bien nos esforzamos por ofrecer traducciones precisas, pueden darse casos en los que las traducciones sean incorrectas o poco claras. Por favor, envíanos un mensaje y trataremos de corregirlo lo antes posible.</string>
+
     <!-- Legal -->
     <string name="terms_of_use_message">Al usar esta app, aceptas nuestros Términos de Uso y la Política de Privacidad.</string>
     <string name="agree_button">Aceptar</string>

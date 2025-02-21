@@ -1,4 +1,4 @@
-<!-- Portugese -->
+<!-- Portuguese -->
 
 <resources>
     <!-- App Info -->
@@ -171,6 +171,12 @@
 
     <string name="faq_9">Por que alguns aplicativos, como o WhatsApp, exibem as miniaturas de arquivos de forma diferente?</string>
     <string name="faq_ans_9">Aplicativos como o WhatsApp podem compactar ou redimensionar arquivos ao gerar miniaturas, mas a qualidade do arquivo original permanece inalterada.</string>
+
+    <string name="faq_11">Como posso alterar as configurações de idioma?</string>
+    <string name="faq_ans_11">O aplicativo usa automaticamente o idioma padrão do seu telefone. Para alterar o idioma, basta atualizar as configurações de idioma padrão do seu telefone.</string>
+
+    <string name="faq_10">Por que algumas traduções de idioma estão incorretas ou pouco claras?</string>
+    <string name="faq_ans_10">Embora nos esforcemos para fornecer traduções precisas, pode haver casos em que as traduções estejam incorretas ou pouco claras. Por favor, envie-nos uma mensagem e tentaremos corrigir isso o mais rápido possível.</string>
 
     <!-- Legal -->
     <string name="terms_of_use_message">Ao usar este aplicativo, você concorda com nossos Termos de Uso e Política de Privacidade.</string>

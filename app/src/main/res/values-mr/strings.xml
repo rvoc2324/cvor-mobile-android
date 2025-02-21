@@ -1,0 +1,231 @@
+<!-- Marathi -->
+
+<resources>
+    <!-- App Info -->
+    <string name="app_name" translatable="false">CVOR</string>
+    <string name="app_action">तुम्हाला काय करायचं आहे?</string>
+    <string name="suggested_actions">सूचित क्रिया</string>
+
+    <!-- Home and Navigation -->
+    <string name="home">मुख्यपृष्ठ</string>
+    <string name="favourites">आवडी</string>
+    <string name="settings">सेटिंग्ज</string>
+    <string name="help_section">सहाय्य विभाग</string>
+    <string name="whatsnew">नवीन काय आहे</string>
+    <string name="share_history">स्मार्ट शेअर इतिहास</string>
+    <string name="share_history_body">खाली तुम्ही CVOR द्वारे शेअर केलेली सर्व फाइल्सचा इतिहास आहे. तुम्ही इतिहास फिल्टर करू शकता.</string>
+
+    <!-- Buttons -->
+    <string name="add_watermark_button">वॉटरमार्क जोडा</string>
+    <string name="smart_share_button">स्मार्ट शेअर</string>
+    <string name="share_file_button">फाइल शेअर करा</string>
+    <string name="combine_pdfs_button">संयोजित करा</string>
+    <string name="convert_to_pdf_button">रूपांतर करा</string>
+    <string name="scan_to_pdf_button">PDF मध्ये स्कॅन करा</string>
+    <string name="split_pdf_button">विभाजित करा</string>
+    <string name="compress_pdf_button">संकुचित करा</string>
+    <string name="cancel_button">रद्द करा</string>
+    <string name="done_button">पूर्ण</string>
+    <string name="log_share_button">लॉग शेअर करा</string>
+    <string name="back_button">मागे</string>
+    <string name="preview_button">पूर्वावलोकन</string>
+    <string name="share_button">शेअर करा</string>
+    <string name="share_again_button">पुन्हा शेअर करा</string>
+    <string name="app_review_text_button">समीक्षा करा</string>
+    <string name="message_us_button">आमच्याशी संदेश पाठवा</string>
+    <string name="remove">काढा</string>
+
+    <!-- Camera -->
+    <string name="camera_source">कॅमेरा</string>
+    <string name="flash_toggle">फ्लॅश चालू</string>
+    <string name="capture_image">फोटो घ्या</string>
+    <string name="retake_image">फोटो पुन्हा घ्या</string>
+    <string name="confirm_image">फोटो पुष्टी करा</string>
+    <string name="camera_preview">कॅमेरा पूर्वावलोकन</string>
+    <string name="switch_camera">कॅमेरा बदला</string>
+    <string name="camera_init_failed">कॅमेरा प्रारंभ करण्यात अयशस्वी</string>
+    <string name="image_capture_failed">फोटो घेताना अयशस्वी</string>
+    <string name="no_image_to_confirm">पुष्टीसाठी कोणताही फोटो नाही</string>
+    <string name="image_save_failed">फोटो सेव्ह करण्यात अयशस्वी</string>
+    <string name="camera_not_ready">कॅमेरा तयार नाही</string>
+    <string name="capture_more_images">आणखी फोटो घ्यायचे का?</string>
+    <string name="captured_image">आकृत केलेला फोटो</string>
+
+    <!-- File Selection -->
+    <string name="select_pdfs">PDF दस्तऐवज अपलोड करा</string>
+    <string name="select_images">प्रतिमा अपलोड करा</string>
+    <string name="file_manager_fragment_title">फाइल्सची पुनरावलोकन करा</string>
+    <string name="file_name">फाइलचे नाव</string>
+
+    <!-- Share -->
+    <string name="sharing_with">कस कोणासोबत शेअर करायचं आहे?</string>
+    <string name="purpose">उद्दिष्ट? (ऐच्छिक)</string>
+    <string name="share_title">शेअर करा</string>
+    <string name="share_app_text">शेअर करण्यासाठी अॅप निवडा</string>
+    <string name="share_app_icon_desc">फाइल्स शेअर करण्यासाठी अॅप उपलब्ध आहे</string>
+    <string name="share_text">नमस्कार! हे आहे तुम्ही मागितलेली फाइल. CVOR द्वारे सुरक्षितपणे शेअर केली!</string>
+    <string name="sharehistory_hint">फाइलचे नाव, कोणासोबत शेअर केले किंवा उद्दिष्टाद्वारे शोधा</string>
+    <string name="refer_message">CVOR पहा - तुमचा डेटा शेअर करण्याचा स्मार्ट मार्ग: https://www.google.com</string>
+    <string name="refer_prompt">आम्हाला मदत करा! CVOR आपल्या मित्रांना आणि कुटुंबीयांना सल्ला द्या ❤️</string>
+    <string name="refer">सल्ला द्या</string>
+    <string name="share_via">द्वारे शेअर करा</string>
+    <string name="text_watermark">%1$s सोबत %2$s साठी %3$s वर शेअर केले</string>
+    <string name="text_general_purposes">सामान्य उद्दीष्टे</string>
+
+    <!-- PDF Tools -->
+    <string name="pdf_tools">PDF साधने</string>
+    <string name="combine_pdf">PDF संयोजित करा</string>
+    <string name="convert_to_pdf">प्रतिमा PDF मध्ये रूपांतरित करा</string>
+    <string name="split_pdf">PDF विभाजित करा</string>
+    <string name="compress_pdf">PDF संकुचित करा</string>
+    <string name="compress_quality">संकुचनानंतर फाइल आकार (एक निवडा): </string>
+    <string name="pre_compress_file_size">सद्य फाइल आकार: %1s</string>
+    <string name="compress_high">उच्च: %s</string>
+    <string name="compress_medium">मध्यम: %s</string>
+    <string name="compress_low">कमी: %s</string>
+
+    <!-- Dialogs and Prompts -->
+    <string name="filename_change_prompt">नवीन फाइल नाव प्रविष्ट करा</string>
+    <string name="filename_change_check">फाइल नाव आवश्यक आहे!</string>
+    <string name="custom_file_name">फाइल नाव बदला</string>
+    <string name="change">बदला</string>
+    <string name="password_prompt">प्रवेश करा पासवर्ड: %s</string>
+    <string name="permission_required_message">संबंधित परवानगी आवश्यक आहे.</string>
+    <string name="from_date_picker">पासून</string>
+    <string name="to_date_picker">पर्यंत</string>
+    <string name="filter_dropdown">फिल्टर ▼</string>
+    <string name="yes">होय</string>
+    <string name="no">नाही</string>
+    <string name="cancel">रद्द करा</string>
+    <string name="ok">ठीक आहे</string>
+    <string name="loading">लोड होत आहे, कृपया थांबा!</string>
+
+    <!-- Icons -->
+    <string name="camera_icon_desc">कॅमेरा चिन्ह</string>
+    <string name="image_picker_icon_desc">प्रतिमा निवडण्याचे चिन्ह</string>
+    <string name="pdf_picker_icon_desc">PDF निवडण्याचे चिन्ह</string>
+    <string name="delete_icon">मिटवण्याचे चिन्ह</string>
+    <string name="pdf_icon">PDF चिन्ह</string>
+    <string name="image_icon">प्रतिमा चिन्ह</string>
+    <string name="download_icon">फाइल्स डाउनलोड करा</string>
+
+    <!-- Preview -->
+    <string name="preview_desc">प्रक्रिया केलेल्या फाइलचे पूर्वावलोकन</string>
+    <string name="preview_fragment_title">पूर्वावलोकन</string>
+    <string name="no_files_selected">कोणतीही फाइल निवडली नाही.</string>
+
+    <!-- Watermark -->
+    <string name="grid_watermark_check">ग्रिड शैली लेआउट</string>
+    <string name="single_watermark_check">एकटा</string>
+    <string name="opacity_text">पारदर्शकता: %d</string>
+    <string name="fontsize_text">फॉन्ट आकार: %d</string>
+    <string name="smart_text_preview">स्मार्ट टेक्स्ट पूर्वावलोकन</string>
+    <string name="watermark_help_text">
+        • <b>शेअरिंग विद:</b> तुम्ही ज्या व्यक्तीस किंवा संस्थेला दस्तऐवज शेअर करत आहात.\n
+        • <b>उद्दिष्ट:</b> शेअर करण्याचे कारण सांगा.\n
+        • <b>पारदर्शकता:</b> स्मार्ट टेक्स्टची हलकीपणा समायोजित करा.\n
+        • <b>फॉन्ट आकार:</b> स्मार्ट टेक्स्टचा आकार समायोजित करा.\n
+        • <b>ग्रिड शैली:</b> स्मार्ट टेक्स्ट दस्तऐवजात पुन्हा पुन्हा दर्शवला जातो. एकदाच दाखवण्यासाठी अनचेक करा.\n
+        • <b>पद: </b> स्मार्ट टेक्स्टचे स्थान समायोजित करा.\n
+        • <b>स्मार्ट टेक्स्ट पूर्वावलोकन:</b> टेक्स्टचा पूर्वावलोकन दाखवते जे दस्तऐवजावर लागू होईल.
+    </string>
+
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">फाइल प्रक्रिया करण्यात अयशस्वी. आकार कमी करण्यासाठी संकुचित करा आणि पुन्हा प्रयत्न करा.</string>
+    <string name="compression_failed">चूक: संकुचनात अयशस्वी</string>
+    <string name="compression_quality_error">संकुचन गुणवत्ता निवडा</string>
+    <string name="navigation_failed">नेव्हिगेशन अयशस्वी</string>
+    <string name="unable_to_determine_file_name">फाइलचे नाव निश्चित करण्यात अयशस्वी</string>
+    <string name="failed_to_crop_image">प्रतिमा क्रॉप करण्यात अयशस्वी</string>
+    <string name="failed_to_process_cropped_image">क्रॉप केलेली प्रतिमा प्रक्रिया करण्यात अयशस्वी</string>
+    <string name="multi_files_selected"> फाइल्स निवडलेली</string>
+    <string name="one_file_selected">1 फाइल निवडलेली</string>
+    <string name="file_selection_cancelled">फाइल निवड रद्द करण्यात आली</string>
+    <string name="no_images_selected">कोणतीही प्रतिमा निवडलेली नाही</string>
+    <string name="invalid_file_source_type">अवैध फाइल स्रोत प्रकार</string>
+    <string name="source_type_not_set">स्रोत प्रकार सेट केलेला नाही</string>
+    <string name="split_file_limit_warning">सद्य फक्त 25 पानांपर्यंतच्या फाइल्सला समर्थन आहे.</string>
+    <string name="multi_file_selection">अनेक फाइल्स निवडण्यासाठी लांब दाबा.</string>
+    <string name="failed_to_process_selected_file">निवडलेल्या फाइलची प्रक्रिया करण्यात अयशस्वी</string>
+    <string name="failed_to_open_file">फाइल उघडण्यात अयशस्वी</string>
+    <string name="password_protected_files_not_supported">पासवर्ड संरक्षित फाइल्स आवडीसाठी समर्थित नाहीत.</string>
+    <string name="password_entry_cancelled">पासवर्ड प्रविष्टि रद्द केली.</string>
+    <string name="failed_to_open_document">दस्तऐवज उघडण्यात अयशस्वी. कदाचित ते भ्रष्ट झाले आहे किंवा समर्थित नाही.</string>
+    <string name="opening">उघडत आहे: </string>
+    <string name="failed_to_rename_file">फाइलचे नाव बदलण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा.</string>
+    <string name="no_files_selected_go_back">कोणतीही फाइल निवडलेली नाही. फाइल निवडण्यासाठी परत जा.</string>
+    <string name="split_file_limit_error">PDF 25 पानांच्या मर्यादेचे उल्लंघन करते.</string>
+    <string name="incorrect_password_error"> "चूक पासवर्ड. कृपया पुन्हा प्रयत्न करा."</string>
+    <string name="error_processing_files">फाइल्स प्रक्रिया करताना चूक: </string>
+    <string name="pdf_action_completed">PDF क्रिया पूर्ण झाली.</string>
+    <string name="no_compression_quality_selected">संकुचन गुणवत्ता निवडलेली नाही.</string>
+    <string name="compression_type_set">संकुचन प्रकार सेट केला: </string>
+    <string name="no_files_available_to_download">डाउनलोड करण्यासाठी कोणतीही फाइल्स उपलब्ध नाहीत</string>
+    <string name="downloading_files">फाइल्स डाउनलोड होत आहेत…</string>
+    <string name="failed_to_download">डाउनलोड करण्यात अयशस्वी: </string>
+    <string name="download_completed">डाउनलोड पूर्ण झाले. तुमच्या डाउनलोड फोल्डरला तपासा.</string>
+    <string name="watermarking_completed">वॉटरमार्किंग पूर्ण झाले.</string>
+    <string name="no_files_watermarked">कोणतीही फाइल वॉटरमार्क केली नाही.</string>
+    <string name="error_during_watermarking">वॉटरमार्किंग करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.</string>
+
+    <!-- Features -->
+    <string name="features_heading">अॅप वैशिष्ट्ये</string>
+    <string name="features_body">
+        &#8226;  स्मार्ट शेअर - तुमच्या महत्त्वाच्या फाइल्सला शेअर करताना त्यावर स्मार्ट टेक्स्ट जोडा जेणेकरून त्याचा गैरवापर होणार नाही.\n
+        &#8226;  दस्तऐवजांना PDF मध्ये स्कॅन करा आणि सुधारित पूर्वावलोकन आणि शेअरिंग पर्यायांसह.\n
+        &#8226;  प्रतिमा PDF मध्ये रूपांतरित करा, संकुचित करा, संयोजित करा आणि विभाजित करा सहजपणे.\n
+        &#8226;  वारंवार वापरल्या जाणार्या फाइल्सना आवडी म्हणून चिन्हांकित करा जेणेकरून ती लवकर वापरता येईल.\n
+        &#8226;  स्मार्ट शेअर इतिहासाद्वारे तुमच्या महत्त्वाच्या शेअर केलेल्या फाइल्सचे ट्रॅक ठेवा.\n
+        &#8226;  तुमच्या इच्छित भाषेत स्मार्ट टेक्स्ट जोडा; सध्या 12 भाषा समर्थित आहेत.\n
+    </string>
+
+    <!-- FAQ and Messaging -->
+    <string name="faq_heading">वारंवार विचारले जाणारे प्रश्न (FAQs)</string>
+    <string name="faq_collapse">FAQ विभाग विस्तार करा किंवा संकुचित करा</string>
+    <string name="message_us_prompt">अधिक प्रश्न आहेत का? किंवा सुचवायचे आहे का? किंवा एखाद्या बगचा अहवाल द्यायचा आहे का?</string>
+    <string name="email_body">कृपया आपला प्रश्न किंवा सुचना येथे स्पष्ट करा.</string>
+    <string name="no_email_app_found">ईमेल अॅप सुरू करण्यास अक्षम. आपल्याला ते आपल्या एंडवरून सुरू करावे लागेल आणि अहवाल द्यावा लागेल.</string>
+    <string name="review_prompt">अॅप आवडले का? आपले पुनरावलोकन आम्हाला सुधारण्यास मदत करते! ❤️</string>
+    <string name="review_button">पुनरावलोकन करा</string>
+    <string name="later_button">नंतर</string>
+    <string name="cancel_reminder_button">सूचनाएं थांबवा</string>
+
+    <string name="faq_1">माझा डेटा सुरक्षित आहे का?</string>
+    <string name="faq_ans_1">आपले सर्व फायली आपल्या डिव्हाइसवर स्थानिकपणे प्रक्रिया केली जातात आणि संग्रहित केली जातात. जेव्हा आपण फाइल एखाद्या बाह्य अॅपद्वारे शेअर करतो, तेव्हा फक्त त्या वेळीच डेटा अॅप बाहेर जातो. CVOR कोणताही डेटा दूरस्थपणे संग्रहित, व्यवस्थापित किंवा प्रक्रिया करत नाही. भविष्यात कोणत्याही नव्या फीचरच्या भाग म्हणून हे बदलल्यास, आपल्याला त्याची माहिती दिली जाईल.</string>
+
+    <string name="faq_2">स्मार्ट शेअर काय आहे?</string>
+    <string name="faq_ans_2">स्मार्ट शेअर आपल्या संवेदनशील डेटाचा दुरुपयोग रोखण्यासाठी डिझाइन केले आहे. जेव्हा एक शेअर केलेली फाइल प्राप्तकर्त्याची ओळख समाविष्ट करते, तेव्हा ती दुरुपयोगाच्या मानसिक प्रतिबंधक म्हणून काम करते. तसेच, संस्थांना कदाचित दुसऱ्या व्यक्तीस किंवा दुसऱ्या उद्देशासाठी शेअर केलेल्या कागदपत्रांना स्वीकारण्यात संकोच होऊ शकतो.</string>
+
+    <string name="faq_3">स्मार्ट शेअर इतिहास काय आहे?</string>
+    <string name="faq_ans_3">काही स्थिती असू शकतात जिथे आपल्याला संवेदनशील डेटा शेअर करण्याची आवश्यकता असू शकते. स्मार्ट शेअर इतिहास आपल्याला कधी आणि कुठे आपला डेटा शेअर केला हे ट्रॅक करण्यात मदत करते.</string>
+
+    <string name="faq_4">मी स्मार्ट टेक्स्ट कसे कस्टमाईझ करू शकतो?</string>
+    <string name="faq_ans_4">स्मार्ट टेक्स्ट वेग आणि दस्तऐवजाची अखंडता राखण्यासाठी ऑप्टिमाइझ केले आहे. वापरकर्त्यांच्या अभिप्रायावर आधारित, आम्ही भविष्यात अधिक कस्टमाईझेशन पर्याय जोडू शकतो.</string>
+
+    <string name="faq_5">कमाल फाइल आकार काय आहे?</string>
+    <string name="faq_ans_5">अॅप मोठ्या फाइल्सला सपोर्ट करते, परंतु कारण प्रक्रिया डिव्हाइसवर केली जाते, आपल्याला काही अडचणी येऊ शकतात. सर्वोत्तम कार्यप्रदर्शनासाठी, ५० एमबीपेक्षा कमी फाइल्स वापरण्याचा सल्ला दिला जातो. जर आपल्याला अनेक मोठ्या फाइल्सची हाताळणी करायची असेल, तर त्यांना छोट्या गटांमध्ये प्रक्रिया करण्याचा विचार करा.</string>
+
+    <string name="faq_6">मी अनेक फाइल्स कशा निवडू शकतो?</string>
+    <string name="faq_ans_6">एका फाइलवर दीर्घ दाबा आणि मल्टी-सेलेक्ट मोडमध्ये प्रवेश करा.</string>
+
+    <string name="faq_7">PDF संकुचन काय आहे?</string>
+    <string name="faq_ans_7">PDF संकुचन फाइलचा आकार कमी करते, ज्यामुळे आकाराच्या मर्यादांसह फाइल्स शेअर करणे सोपे होते. आपण संकुचनाची पातळी निवडू शकता: उच्च संकुचन चांगली गुणवत्ता राखते आणि आकार कमी करते, तर कमी संकुचन गुणवत्ता गमावून आकार खूपच कमी करते.</string>
+
+    <string name="faq_8">फाइल्स पुनरावलोकन करतांना थंबनेल गुणवत्ता का कमी आहे?</string>
+    <string name="faq_ans_8">थंबनेल्स जलद पूर्वावलोकन देण्यासाठी तात्पुरत्या स्वरूपात संकुचित केले जातात. मूळ फाइल अप्रभावित राहते आणि प्रिव्ह्यू टप्प्यात संपूर्ण गुणवत्तेत पाहिली जाऊ शकते.</string>
+
+    <string name="faq_9">व्हॉट्सअॅप सारख्या काही अॅप्स फाइल पूर्वावलोकन वेगळी का दर्शवतात?</string>
+    <string name="faq_ans_9">व्हॉट्सअॅप सारख्या अॅप्स फाइल्सचे पूर्वावलोकन तयार करतांना संकुचित किंवा आकार बदलू शकतात, परंतु मूळ फाइलची गुणवत्ता अपरिवर्तित राहते.</string>
+
+    <string name="faq_11">मी माझ्या भाषा सेटिंग्ज कशा बदलू शकतो?</string>
+    <string name="faq_ans_11">अॅप आपोआप आपल्या फोनची डीफॉल्ट भाषा वापरते. भाषा बदलण्यासाठी, आपल्या फोनच्या डीफॉल्ट भाषा सेटिंग्ज अपडेट करा.</string>
+
+    <string name="faq_10">काही भाषांतरांचा चुकीचा किंवा अस्पष्ट का आहे?</string>
+    <string name="faq_ans_10">आम्ही अचूक भाषांतर पुरवण्यासाठी प्रयत्न करत असलो तरी काही वेळा भाषांतर चुकीचे किंवा अस्पष्ट असू शकतात. कृपया आम्हाला संदेश द्या आणि आम्ही ते लवकरच सुधारण्याचा प्रयत्न करू.</string>
+
+    <!-- Legal -->
+    <string name="terms_of_use_message">या अॅपचा वापर करून, आपण आमच्या सेवा अटी आणि गोपनीयता धोरणाशी सहमत आहात.</string>
+    <string name="agree_button">सहमत</string>
+    <string name="disagree_button">असहमत</string>
+
+</resources>

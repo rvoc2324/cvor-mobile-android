@@ -84,6 +84,8 @@ public class HelpFragment extends Fragment {
         faqList.add(new FAQItem(getString(R.string.faq_7), getString(R.string.faq_ans_7)));
         faqList.add(new FAQItem(getString(R.string.faq_8), getString(R.string.faq_ans_8)));
         faqList.add(new FAQItem(getString(R.string.faq_9), getString(R.string.faq_ans_9)));
+        faqList.add(new FAQItem(getString(R.string.faq_10), getString(R.string.faq_ans_10)));
+        faqList.add(new FAQItem(getString(R.string.faq_11), getString(R.string.faq_ans_11)));
 
         faqAdapter = new FAQAdapter(faqList);
         binding.faqRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

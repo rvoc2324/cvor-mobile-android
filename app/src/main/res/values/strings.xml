@@ -1,5 +1,5 @@
-<!-- English -->
 
+<!-- English -->
 <resources>
     <!-- App Info -->
     <string name="app_name" translatable="false">CVOR</string>
@@ -168,7 +168,6 @@
     <string name="no_files_watermarked">No files were watermarked.</string>
     <string name="error_during_watermarking">An error occurred during watermarking. Try again.</string>
 
-
     <!-- Features -->
     <string name="features_heading">App features</string>
     <string name="features_body">
@@ -191,7 +190,6 @@
     <string name="later_button">Later</string>
     <string name="cancel_reminder_button">Stop reminder</string>
 
-
     <string name="faq_1">Is my data safe?</string>
     <string name="faq_ans_1">All your files are processed and stored locally on your device. The only data that leaves the app is when you choose to share it via an external app. CVOR does not store, manage, or process any data remotely. If this changes in the future as part of a new feature, you will be informed accordingly.</string>
 
@@ -205,7 +203,7 @@
     <string name="faq_ans_4">Smart Text is optimized for speed and maintaining document integrity. Based on user feedback, we may introduce further customization options in future updates.</string>
 
     <string name="faq_5">What is the maximum file size supported?</string>
-    <string name="faq_ans_5">The app supports large files, but processing times may vary. For optimal performance, it is recommended to use files under 50MB. If dealing with multiple large files, consider processing them in smaller batches.</string>
+    <string name="faq_ans_5">The app supports large files, but since the processing is done on the device, you may experience issues. For optimal performance, it is recommended to use files under 50MB. If dealing with multiple large files, consider processing them in smaller batches.</string>
 
     <string name="faq_6">How do I select multiple files?</string>
     <string name="faq_ans_6">Long-press a file to enter multi-select mode.</string>
@@ -226,28 +224,8 @@
     <string name="faq_ans_10">While we strive to provide accurate translations, there can be instances where translations may be incorrect or unclear. Please message us and we will aim to fix it at the earliest.</string>
 
     <!-- Legal -->
-    <string name="terms_of_use_message">By using this app, you agree to our Terms of Use and Privacy Policy.</string>
+    <string name="terms_of_use_message">By using this app, you agree to our Terms of Service and Privacy Policy.</string>
     <string name="agree_button">Agree</string>
     <string name="disagree_button">Disagree</string>
 
 </resources>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -172,6 +172,12 @@
     <string name="faq_9">Dlaczego niektóre aplikacje, takie jak WhatsApp, pokazują podglądy plików w inny sposób?</string>
     <string name="faq_ans_9">Aplikacje takie jak WhatsApp mogą kompresować lub zmieniać rozmiar plików podczas generowania podglądów, ale oryginalna jakość pliku pozostaje niezmieniona.</string>
 
+    <string name="faq_11">Jak mogę zmienić ustawienia języka?</string>
+    <string name="faq_ans_11">Aplikacja automatycznie używa domyślnego języka twojego telefonu. Aby zmienić język, po prostu zaktualizuj domyślne ustawienia języka w telefonie.</string>
+
+    <string name="faq_10">Dlaczego niektóre tłumaczenia językowe są niepoprawne lub niejasne?</string>
+    <string name="faq_ans_10">Dokładamy starań, aby zapewnić dokładne tłumaczenia, ale czasami mogą one być błędne lub niejasne. Prosimy o wiadomość, a postaramy się to jak najszybciej poprawić.</string>
+
     <!-- Legal -->
     <string name="terms_of_use_message">Korzystając z tej aplikacji, zgadzasz się na naszą Politykę prywatności i Warunki korzystania z usługi.</string>
     <string name="agree_button">Zgadzam się</string>

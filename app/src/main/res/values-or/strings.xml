@@ -1,0 +1,231 @@
+<!-- Odia -->
+
+<resources>
+    <!-- App Info -->
+    <string name="app_name" translatable="false">CVOR</string>
+    <string name="app_action">ଆପଣ କେଉଁ କାମ କରିବେ?</string>
+    <string name="suggested_actions">ସୁପାରିଶ କରାଯାଇଥିବା କାର୍ଯ୍ୟଗୁଡିକ</string>
+
+    <!-- Home and Navigation -->
+    <string name="home">ହୋମ୍</string>
+    <string name="favourites">ପସନ୍ଦଗୁଡିକ</string>
+    <string name="settings">ସେଟିଂସ୍</string>
+    <string name="help_section">ସହାୟତା ଅଂଶ</string>
+    <string name="whatsnew">ନୂତନ କଣ?</string>
+    <string name="share_history">ସ୍ମାର୍ଟ ସେୟାର ଇତିହାସ</string>
+    <string name="share_history_body">ନିମ୍ନରେ ସେୟାର କରାଯାଇଥିବା ସମସ୍ତ ଫାଇଲ୍ ଇତିହାସ ଦିଆଯାଇଛି। ଆପଣ ଇତିହାସକୁ ଫିଲ୍ଟର କରିପାରିବେ।</string>
+
+    <!-- Buttons -->
+    <string name="add_watermark_button">ଜଳଛାପ୍ ସଂଯୋଜନ କରନ୍ତୁ</string>
+    <string name="smart_share_button">ସ୍ମାର୍ଟ ସେୟାର</string>
+    <string name="share_file_button">ଫାଇଲ୍ ସେୟାର କରନ୍ତୁ</string>
+    <string name="combine_pdfs_button">ଏକତ୍ରିତ କରନ୍ତୁ</string>
+    <string name="convert_to_pdf_button">ପीडିଏଫ୍ ରେ ପରିଣତ କରନ୍ତୁ</string>
+    <string name="scan_to_pdf_button">ପीडିଏଫ୍ ରେ ସ୍କାନ୍ କରନ୍ତୁ</string>
+    <string name="split_pdf_button">ଭାଗ କରନ୍ତୁ</string>
+    <string name="compress_pdf_button">କମ୍ପ୍ରେସ୍ କରନ୍ତୁ</string>
+    <string name="cancel_button">ବାତିଲ୍ କରନ୍ତୁ</string>
+    <string name="done_button">ସମ୍ପୂର୍ଣ୍ଣ</string>
+    <string name="log_share_button">ଲଗ୍ ସେୟାର</string>
+    <string name="back_button">ପଛକୁ</string>
+    <string name="preview_button">ପ୍ରିଭ୍ୟୁ</string>
+    <string name="share_button">ସେୟାର</string>
+    <string name="share_again_button">ପୁନଃ ସେୟାର କରନ୍ତୁ</string>
+    <string name="app_review_text_button">ସମୀକ୍ଷା</string>
+    <string name="message_us_button">ଆମକୁ ମେସେଜ୍ କରନ୍ତୁ</string>
+    <string name="remove">ମିଟାନ୍ତୁ</string>
+
+    <!-- Camera -->
+    <string name="camera_source">କ୍ୟାମେରା</string>
+    <string name="flash_toggle">ଫ୍ଲାଶ୍ ଚାଲୁ</string>
+    <string name="capture_image">ଫଟୋ ତିଆରି କରନ୍ତୁ</string>
+    <string name="retake_image">ଫଟୋ ଆଉ ଏକଥର ତିଆରି କରନ୍ତୁ</string>
+    <string name="confirm_image">ଫଟୋ ପ୍ରମାଣିତ କରନ୍ତୁ</string>
+    <string name="camera_preview">କ୍ୟାମେରା ପ୍ରିଭ୍ୟୁ</string>
+    <string name="switch_camera">କ୍ୟାମେରା ସ୍ଵିଚ୍ କରନ୍ତୁ</string>
+    <string name="camera_init_failed">କ୍ୟାମେରା ଆରମ୍ଭ ଫେଲ୍</string>
+    <string name="image_capture_failed">ଫଟୋ ତିଆରି ଫେଲ୍</string>
+    <string name="no_image_to_confirm">ପ୍ରମାଣିତ କରିବାକୁ କୌଣସି ଫଟୋ ନାହିଁ</string>
+    <string name="image_save_failed">ଫଟୋ ସଂରକ୍ଷଣ ଫେଲ୍</string>
+    <string name="camera_not_ready">କ୍ୟାମେରା ପ୍ରସ୍ତୁତ ନୁହେଁ</string>
+    <string name="capture_more_images">ଅଧିକ ଫଟୋ ତିଆରି କରିବେ?</string>
+    <string name="captured_image">ତିଆରି ହୋଇଥିବା ଫଟୋ</string>
+
+    <!-- File Selection -->
+    <string name="select_pdfs">PDF ଡକ୍ୟୁମେଣ୍ଟ ଅପଲୋଡ୍ କରନ୍ତୁ</string>
+    <string name="select_images">ଚିତ୍ର ଅପଲୋଡ୍ କରନ୍ତୁ</string>
+    <string name="file_manager_fragment_title">ଫାଇଲ୍ ସମୀକ୍ଷା</string>
+    <string name="file_name">ଫାଇଲ୍ ନାମ</string>
+
+    <!-- Share -->
+    <string name="sharing_with">କାହା ସହିତ ଡକ୍ୟୁମେଣ୍ଟ ସେୟାର କରୁଛନ୍ତି?</string>
+    <string name="purpose">ଲକ୍ଷ୍ୟ? (ଇଚ୍ଛିକ)</string>
+    <string name="share_title">ସେୟାର</string>
+    <string name="share_app_text">ସେୟାର କରିବା ପାଇଁ ଆପ୍ ବାଛନ୍ତୁ</string>
+    <string name="share_app_icon_desc">ଫାଇଲ୍ ସେୟାର କରିବାକୁ ଉପଲବ୍ଧ ଆପ୍</string>
+    <string name="share_text">ନମସ୍କାର! ଏହା ହେଉଛି ଆପଣଙ୍କର ଅନୁରୋଧ କରାଯାଇଥିବା ଫାଇଲ୍। CVOR ଦ୍ୱାରା ସୁରକ୍ଷିତ ଭାବେ ସେୟାର କରାଯାଇଛି!</string>
+    <string name="sharehistory_hint">ଫାଇଲ୍ ନାମ, ସେୟାର କରାଯାଇଥିବା ବ୍ୟକ୍ତି କିମ୍ବା ଲକ୍ଷ୍ୟ ଦ୍ୱାରା ଖୋଜନ୍ତୁ</string>
+    <string name="refer_message">CVOR ଦେଖନ୍ତୁ - ଆପଣଙ୍କର ଡାଟା ସେୟାର କରିବାର ଏକ ସ୍ମାର୍ଟ ଉପାୟ: https://www.google.com</string>
+    <string name="refer_prompt">ଆମକୁ ସାହାଯ୍ୟ କରନ୍ତୁ! CVOR କୁ ଆପଣଙ୍କର ସ୍ନେହୀମାନେ ଓ ପରିବାରକୁ ସୁପାରିଶ କରନ୍ତୁ ❤️</string>
+    <string name="refer">ସୁପାରିଶ କରନ୍ତୁ</string>
+    <string name="share_via">ଦ୍ୱାରା ସେୟାର କରନ୍ତୁ</string>
+    <string name="text_watermark"> %1$s ସହିତ %2$s ପାଇଁ %3$s ତାରିଖରେ ସେୟାର କରାଯାଇଛି</string>
+    <string name="text_general_purposes">ସାଧାରଣ ଉଦ୍ଦେଶ୍ୟ</string>
+
+    <!-- PDF Tools -->
+    <string name="pdf_tools">PDF ଟୁଲ୍ସ</string>
+    <string name="combine_pdf">PDF ଏକତ୍ରିତ କରନ୍ତୁ</string>
+    <string name="convert_to_pdf">ଚିତ୍ରକୁ PDF ରେ ପରିଣତ କରନ୍ତୁ</string>
+    <string name="split_pdf">PDF ଭାଗ କରନ୍ତୁ</string>
+    <string name="compress_pdf">PDF କମ୍ପ୍ରେସ୍ କରନ୍ତୁ</string>
+    <string name="compress_quality">କମ୍ପ୍ରେସ୍ ଫାଇଲ୍ ଆକାର (ଏକ ବାଛନ୍ତୁ):</string>
+    <string name="pre_compress_file_size">ବର୍ତ୍ତମାନ ଫାଇଲ୍ ଆକାର: %1s</string>
+    <string name="compress_high">ଉଚ୍ଚ: %s</string>
+    <string name="compress_medium">ମଧ୍ୟମ: %s</string>
+    <string name="compress_low">ନିମ୍ନ: %s</string>
+
+    <!-- Dialogs and Prompts -->
+    <string name="filename_change_prompt">ନୂତନ ଫାଇଲ୍ ନାମ ପ୍ରବେଶ କରନ୍ତୁ</string>
+    <string name="filename_change_check">ଫାଇଲ୍ ନାମ ଆବଶ୍ୟକ!</string>
+    <string name="custom_file_name">ଫାଇଲ୍ ନାମ ବଦଳାନ୍ତୁ</string>
+    <string name="change">ବଦଳାନ୍ତୁ</string>
+    <string name="password_prompt">ପାସୱର୍ଡ ପ୍ରବେଶ କରନ୍ତୁ: %s</string>
+    <string name="permission_required_message">ଏହି ସୂଚନାକୁ ବ୍ୟବହାର କରିବା ପାଇଁ ଉପଯୋଗୀ ଅଧିକାର ଆବଶ୍ୟକ।</string>
+    <string name="from_date_picker">ଠାରୁ</string>
+    <string name="to_date_picker">କୁ</string>
+    <string name="filter_dropdown">ଫିଲ୍ଟରସ୍ ▼</string>
+    <string name="yes">ହଁ</string>
+    <string name="no">ନା</string>
+    <string name="cancel">ବାତିଲ୍</string>
+    <string name="ok">ଓକେ</string>
+    <string name="loading">ଲୋଡିଂ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ!</string>
+
+    <!-- Icons -->
+    <string name="camera_icon_desc">କ୍ୟାମେରା ଆଇକନ୍</string>
+    <string name="image_picker_icon_desc">ଚିତ୍ର ପିକର୍ ଆଇକନ୍</string>
+    <string name="pdf_picker_icon_desc">PDF ପିକର୍ ଆଇକନ୍</string>
+    <string name="delete_icon">ମିଟାଇବା ଆଇକନ୍</string>
+    <string name="pdf_icon">PDF ଆଇକନ୍</string>
+    <string name="image_icon">ଚିତ୍ର ଆଇକନ୍</string>
+    <string name="download_icon">ଫାଇଲ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ</string>
+
+    <!-- Preview -->
+    <string name="preview_desc">ପ୍ରକ୍ରିୟା ହୋଇଥିବା ଫାଇଲ୍ ର ପ୍ରିଭ୍ୟୁ</string>
+    <string name="preview_fragment_title">ପ୍ରିଭ୍ୟୁ</string>
+    <string name="no_files_selected">କୌଣସି ଫାଇଲ୍ ଚୟନ କରାଯାଇନି।</string>
+
+    <!-- Watermark -->
+    <string name="grid_watermark_check">ଗ୍ରିଡ୍ ଷ୍ଟାଇଲ୍ ଲେଆଉଟ୍</string>
+    <string name="single_watermark_check">ଏକକ</string>
+    <string name="opacity_text">ପारଦର୍ଶିତା: %d</string>
+    <string name="fontsize_text">ଫଣ୍ଟ ସାଇଜ୍: %d</string>
+    <string name="smart_text_preview">ସ୍ମାର୍ଟ ଟେକ୍ସଟ୍ ପ୍ରିଭ୍ୟୁ</string>
+    <string name="watermark_help_text">
+        • <b> Sharing With:</b> Organisation/individual you are sharing the document with.\n
+        • <b> Purpose:</b> Briefly add a purpose of the share.\n
+        • <b> Transparency:</b> Adjust lightness of the smart text.\n
+        • <b> Font Size:</b> Adjust size of smart text.\n
+        • <b> Grid style:</b> Smart text repeats across the document. Uncheck to show once.\n
+        • <b> Position: </b> Adjust the position of the smart text.\n
+        • <b> Smart text Preview:</b> Shows a preview of the text to be applied to the file.
+    </string>
+
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">File could not be processed. Try compressing it to reduce size and try again.</string>
+    <string name="compression_failed">Error: Compression failed</string>
+    <string name="compression_quality_error">Select compression quality</string>
+    <string name="navigation_failed">Navigation failed</string>
+    <string name="unable_to_determine_file_name">Unable to determine file name</string>
+    <string name="failed_to_crop_image">Failed to crop image</string>
+    <string name="failed_to_process_cropped_image">Failed to process cropped image</string>
+    <string name="multi_files_selected"> files selected</string>
+    <string name="one_file_selected">1 file selected</string>
+    <string name="file_selection_cancelled">File selection cancelled</string>
+    <string name="no_images_selected">No images selected</string>
+    <string name="invalid_file_source_type">Invalid file source type</string>
+    <string name="source_type_not_set">Source type not set</string>
+    <string name="split_file_limit_warning">Only files with less than 25 pages currently supported.</string>
+    <string name="multi_file_selection">Long press to select multiple files.</string>
+    <string name="failed_to_process_selected_file">Failed to process the selected file</string>
+    <string name="failed_to_open_file">Failed to open file</string>
+    <string name="password_protected_files_not_supported">Password protected files are not supported for favourites.</string>
+    <string name="password_entry_cancelled">Password entry cancelled.</string>
+    <string name="failed_to_open_document">Failed to open document. It may be corrupted or unsupported.</string>
+    <string name="opening">Opening: </string>
+    <string name="failed_to_rename_file">Failed to rename file. Please try again.</string>
+    <string name="no_files_selected_go_back">No files selected. Go back to select a file.</string>
+    <string name="split_file_limit_error">PDF exceeds the 25-page limit.</string>
+    <string name="incorrect_password_error"> "Incorrect password. Please try again."</string>
+    <string name="error_processing_files">Error processing files: </string>
+    <string name="pdf_action_completed">PDF Action completed.</string>
+    <string name="no_compression_quality_selected">No compression quality selected.</string>
+    <string name="compression_type_set">Compression type set: </string>
+    <string name="no_files_available_to_download">No files available to download</string>
+    <string name="downloading_files">Downloading files…</string>
+    <string name="failed_to_download">Failed to download: </string>
+    <string name="download_completed">Download completed. Check your Downloads folder.</string>
+    <string name="watermarking_completed">Watermarking completed.</string>
+    <string name="no_files_watermarked">No files were watermarked.</string>
+    <string name="error_during_watermarking">An error occurred during watermarking. Try again.</string>
+
+    <!-- Features -->
+    <string name="features_heading">App features</string>
+    <string name="features_body">
+        &#8226;  Smart share - Add smart text to images and PDFs when sharing your important files to prevent misuse.\n
+        &#8226;  Scan documents to PDF with enhanced preview and sharing options.\n
+        &#8226;  Compress, combine, split, and convert images to PDFs effortlessly.\n
+        &#8226;  Mark frequently used files as favourites for quick usage.\n
+        &#8226;  Keep track of your important shared files via the Smart share history.\n
+        &#8226;  Add smart text in your preferred language; 12 languages currently supported.\n
+    </string>
+
+    <!-- FAQ and Messaging -->
+    <string name="faq_heading">FAQs</string>
+    <string name="faq_collapse">Expands and collapses the FAQ section</string>
+    <string name="message_us_prompt">Have more questions or suggestions or want to report a bug?</string>
+    <string name="email_body">Please describe your issue or suggestions here.</string>
+    <string name="no_email_app_found">Unable to launch email app. You will have to launch it on your end and report.</string>
+    <string name="review_prompt">Enjoying the app? Your review helps us improve! ❤️</string>
+    <string name="review_button">Review</string>
+    <string name="later_button">Later</string>
+    <string name="cancel_reminder_button">Stop reminder</string>
+
+    <string name="faq_1">Is my data safe?</string>
+    <string name="faq_ans_1">All your files are processed and stored locally on your device. The only data that leaves the app is when you choose to share it via an external app. CVOR does not store, manage, or process any data remotely. If this changes in the future as part of a new feature, you will be informed accordingly.</string>
+
+    <string name="faq_2">What is Smart Share?</string>
+    <string name="faq_ans_2">Smart Share is designed to prevent misuse of your sensitive data. When a shared file contains the recipient’s identity, it acts as a psychological deterrent against misuse. Additionally, institutions may be reluctant to accept documents shared with someone else or used for a different purpose.</string>
+
+    <string name="faq_3">What is Smart Share history?</string>
+    <string name="faq_ans_3">There are multiple situations where you may need to share sensitive data. Smart Share history helps you keep track of when and where you have shared your data.</string>
+
+    <string name="faq_4">How do I customize Smart Text?</string>
+    <string name="faq_ans_4">Smart Text is optimized for speed and maintaining document integrity. Based on user feedback, we may introduce further customization options in future updates.</string>
+
+    <string name="faq_5">What is the maximum file size supported?</string>
+    <string name="faq_ans_5">The app supports large files, but since the processing is done on the device, you may experience issues. For optimal performance, it is recommended to use files under 50MB. If dealing with multiple large files, consider processing them in smaller batches.</string>
+
+    <string name="faq_6">How do I select multiple files?</string>
+    <string name="faq_ans_6">Long-press a file to enter multi-select mode.</string>
+
+    <string name="faq_7">What is PDF compression?</string>
+    <string name="faq_ans_7">PDF compression reduces file size, making it easier to share files with size restrictions. You can choose the compression level: High compression retains better quality with a smaller reduction in size, while Low compression significantly reduces file size but at the cost of quality.</string>
+
+    <string name="faq_8">Why is thumbnail quality low when reviewing files?</string>
+    <string name="faq_ans_8">Thumbnails are intentionally compressed to provide fast previews. The original file remains unaffected and can be viewed in full quality in the Preview stage.</string>
+
+    <string name="faq_9">Why do some apps, like WhatsApp, show file previews differently?</string>
+    <string name="faq_ans_9">Apps like WhatsApp may compress or resize files when generating previews, but the original file quality remains unchanged.</string>
+
+    <string name="faq_11">How can I change my language settings?</string>
+    <string name="faq_ans_11">The app automatically uses your phone’s default language. To change the language, simply update your phone’s default language settings.</string>
+
+    <string name="faq_10">Why are some language translations incorrect or unclear?</string>
+    <string name="faq_ans_10">While we strive to provide accurate translations, there can be instances where translations may be incorrect or unclear. Please message us and we will aim to fix it at the earliest.</string>
+
+    <!-- Legal -->
+    <string name="terms_of_use_message">By using this app, you agree to our Terms of Service and Privacy Policy.</string>
+    <string name="agree_button">Agree</string>
+    <string name="disagree_button">Disagree</string>
+
+</resources>
