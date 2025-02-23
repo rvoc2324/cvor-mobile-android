@@ -1,9 +1,11 @@
 package com.rvoc.cvorapp.ui.fragments.home;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.RippleDrawable;
@@ -12,10 +14,13 @@ import android.graphics.drawable.shapes.RectShape;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.text.SpannableString;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,6 +65,33 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Setting animation to logo
+        String text = "CVOR";
+        int logoColor = ContextCompat.getColor(requireContext(), R.color.logoO);
+
+        SpannableString spannableString = new SpannableString(text);
+        binding.titleText.setText(spannableString);
+
+        // Find the index of the letter "O" in the string
+        int start = text.indexOf("O");
+        int end = start + 1;
+
+        spannableString.setSpan(new ForegroundColorSpan(logoColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Create an animation for spinning the "O"
+        ObjectAnimator spinAnimator = ObjectAnimator.ofFloat(binding.titleText, "rotation", 0f, 360f);
+        spinAnimator.setDuration(3000); // Spin duration (3 seconds)
+        spinAnimator.setRepeatCount(ObjectAnimator.INFINITE); // Infinite repeat, or set a specific count
+
+        // Start the animation
+        spinAnimator.start();
 
         // Set background resources
         // Create a RippleDrawable programmatically
@@ -94,12 +126,7 @@ public class HomeFragment extends Fragment {
         binding.btnSplitPdf.setBackgroundTintList(null);
         binding.btnCompressPdf.setBackgroundTintList(null);*/
 
-        return binding.getRoot();
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
         cleanupCacheInBackground();
         setupListeners();
@@ -255,14 +282,17 @@ public class HomeFragment extends Fragment {
             binding.dialogMessage.setText(activity.getString(R.string.filename_change_prompt));
             binding.inputField.setVisibility(View.VISIBLE);
             binding.inputField.setInputType(InputType.TYPE_CLASS_TEXT);
+
             String fileNameWithoutPath = FileUtils.extractFileName(currentFileName);
-            binding.inputField.setText(fileNameWithoutPath);
+            String fileNameWithoutExtension = fileNameWithoutPath.contains(".")
+                    ? fileNameWithoutPath.substring(0, fileNameWithoutPath.lastIndexOf("."))
+                    : fileNameWithoutPath;  // Handle case when there's no extension
+
+            binding.inputField.setText(fileNameWithoutExtension);
 
             // Ensure selectionEnd is calculated from the actual text in the input field
-            int selectionEnd = fileNameWithoutPath.lastIndexOf(".");
-            if (selectionEnd > 0) {
-                binding.inputField.setSelection(0, selectionEnd);  // Select name without extension
-            }
+            int selectionEnd = fileNameWithoutExtension.length();
+            binding.inputField.setSelection(0, selectionEnd);  // Select entire file name
 
             binding.positiveButton.setText(R.string.change);
             binding.negativeButton.setText(R.string.cancel);
@@ -274,7 +304,8 @@ public class HomeFragment extends Fragment {
                 String newFileName = binding.inputField.getText().toString().trim();
                 if (!newFileName.isEmpty()) {
                     dialog.dismiss();
-                    renameConsumer.accept(newFileName);
+                    String fileExtension = currentFileName.substring(currentFileName.lastIndexOf("."));
+                    renameConsumer.accept(newFileName + fileExtension);
                 } else {
                     binding.inputField.setError(activity.getString(R.string.filename_change_check));
                 }

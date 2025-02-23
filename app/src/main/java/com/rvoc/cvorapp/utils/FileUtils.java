@@ -47,7 +47,7 @@ public class FileUtils {
      * @param coreViewModel The CoreViewModel instance.
      */
     public static void processFileForSharing(Context context, Uri uri, CoreViewModel coreViewModel) {
-        File copiedFile = copyFile(context, uri);
+        File copiedFile = copyFile(context, uri, "Sharing");
         if (copiedFile != null) {
             coreViewModel.addProcessedFile(copiedFile);
             Log.d(TAG, "File added to processedFiles: " + copiedFile.getAbsolutePath());
@@ -89,7 +89,8 @@ public class FileUtils {
      * @param uri     The Uri of the file.
      * @return The copied File object or null if failed.
      */
-    public static File copyFile(Context context, Uri uri) {
+    public static File copyFile(Context context, Uri uri, String folder) {
+        String directoryName;
         try {
             String fileName = getFileNameFromUri(context, uri);
             if (fileName == null) {
@@ -97,8 +98,18 @@ public class FileUtils {
                 return null;
             }
 
+            if ("Favourites".equals(folder)) {
+                directoryName = "favourites_files";
+            } else if ("ShareHistory".equals(folder)) {
+                directoryName = "share_history_files";
+            } else if ("Sharing".equals(folder)) {
+                directoryName = "sharing_files";
+            } else {
+                directoryName = "default_files"; // Fallback in case folder name doesn't match
+            }
+
             // Define the destination file to app cache
-            File cacheDir = new File(context.getCacheDir(), "favourites_files");
+            File cacheDir = new File(context.getCacheDir(), directoryName);
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }

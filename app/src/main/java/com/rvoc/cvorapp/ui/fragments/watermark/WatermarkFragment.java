@@ -67,7 +67,6 @@ public class WatermarkFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -125,6 +124,13 @@ public class WatermarkFragment extends Fragment {
             }
         });
 
+        // Ensure it scrolls into view when focused
+        binding.inputSharingWith.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                binding.scrollContainer.post(() -> binding.scrollContainer.smoothScrollTo(0, v.getBottom()));
+            }
+        });
+
         binding.inputPurpose.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,6 +145,13 @@ public class WatermarkFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 // No-op
+            }
+        });
+
+        // Ensure it scrolls into view when focused
+        binding.inputPurpose.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                binding.scrollContainer.post(() -> binding.scrollContainer.smoothScrollTo(0, v.getBottom()));
             }
         });
 
@@ -224,7 +237,7 @@ public class WatermarkFragment extends Fragment {
 
         // Format the watermark text using string resources and placeholders
         String watermarkText = getString(R.string.text_watermark, shareWith, purposeText,
-                new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
+                new SimpleDateFormat("yyyy-MMM-dd", Locale.getDefault()).format(new Date()));
 
         // Define repeat based on the logic
 

@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.yalantis.ucrop.UCropActivity;
 
 public class CustomUCropActivity extends UCropActivity {
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

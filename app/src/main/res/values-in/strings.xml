@@ -66,6 +66,7 @@
     <string name="share_text">Hai! Ini file yang Anda minta. Dibagikan dengan aman melalui CVOR!</string>
     <string name="sharehistory_hint">Cari berdasarkan nama file, dengan siapa dibagikan, atau tujuan</string>
     <string name="refer_message">Periksa CVOR - Cara yang lebih cerdas untuk berbagi data Anda: https://www.google.com</string>
+    <string name="refer_prompt">Bantu kami menyebarkan berita! Rekomendasikan CVOR ke teman dan keluarga Anda ❤️</string>
     <string name="refer">Referensikan</string>
     <string name="share_via">Bagikan melalui</string>
     <string name="text_watermark">Dibagikan dengan %1$s untuk %2$s pada %3$s</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">Kompresi PDF</string>
     <string name="compress_quality">Ukuran file setelah kompresi (pilih satu): </string>
     <string name="pre_compress_file_size">Ukuran file saat ini: %1s</string>
+    <string name="compress_high">Tinggi: %s</string>
+    <string name="compress_medium">Sedang: %s</string>
+    <string name="compress_low">Rendah: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">Masukkan nama file baru</string>
@@ -126,6 +130,44 @@
         • <b> Pratinjau Teks Pintar:</b> Menampilkan pratinjau teks yang akan diterapkan pada file.
     </string>
 
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">File tidak dapat diproses. Coba kompres untuk mengurangi ukuran dan coba lagi.</string>
+    <string name="compression_failed">Kesalahan: Kompresi gagal</string>
+    <string name="compression_quality_error">Pilih kualitas kompresi</string>
+    <string name="navigation_failed">Navigasi gagal</string>
+    <string name="unable_to_determine_file_name">Tidak dapat menentukan nama file</string>
+    <string name="failed_to_crop_image">Gagal memotong gambar</string>
+    <string name="failed_to_process_cropped_image">Gagal memproses gambar yang dipotong</string>
+    <string name="multi_files_selected"> file dipilih</string>
+    <string name="one_file_selected">1 file dipilih</string>
+    <string name="file_selection_cancelled">Pemilihan file dibatalkan</string>
+    <string name="no_images_selected">Tidak ada gambar yang dipilih</string>
+    <string name="invalid_file_source_type">Jenis sumber file tidak valid</string>
+    <string name="source_type_not_set">Jenis sumber belum diatur</string>
+    <string name="split_file_limit_warning">Saat ini hanya mendukung file dengan kurang dari 25 halaman.</string>
+    <string name="multi_file_selection">Tekan lama untuk memilih beberapa file.</string>
+    <string name="failed_to_process_selected_file">Gagal memproses file yang dipilih</string>
+    <string name="failed_to_open_file">Gagal membuka file</string>
+    <string name="password_protected_files_not_supported">File yang dilindungi kata sandi tidak didukung untuk favorit.</string>
+    <string name="password_entry_cancelled">Entri kata sandi dibatalkan.</string>
+    <string name="failed_to_open_document">Gagal membuka dokumen. Mungkin rusak atau tidak didukung.</string>
+    <string name="opening">Membuka: </string>
+    <string name="failed_to_rename_file">Gagal mengganti nama file. Silakan coba lagi.</string>
+    <string name="no_files_selected_go_back">Tidak ada file yang dipilih. Kembali untuk memilih file.</string>
+    <string name="split_file_limit_error">PDF melebihi batas 25 halaman.</string>
+    <string name="incorrect_password_error">"Kata sandi salah. Silakan coba lagi."</string>
+    <string name="error_processing_files">Kesalahan dalam memproses file: </string>
+    <string name="pdf_action_completed">Tindakan PDF selesai.</string>
+    <string name="no_compression_quality_selected">Tidak ada kualitas kompresi yang dipilih.</string>
+    <string name="compression_type_set">Jenis kompresi ditetapkan: </string>
+    <string name="no_files_available_to_download">Tidak ada file yang tersedia untuk diunduh</string>
+    <string name="downloading_files">Mengunduh file…</string>
+    <string name="failed_to_download">Gagal mengunduh: </string>
+    <string name="download_completed">Unduhan selesai. Periksa folder Unduhan Anda.</string>
+    <string name="watermarking_completed">Penyematan tanda air selesai.</string>
+    <string name="no_files_watermarked">Tidak ada file yang diberi tanda air.</string>
+    <string name="error_during_watermarking">Terjadi kesalahan saat menyematkan tanda air. Coba lagi.</string>
+
     <!-- Features -->
     <string name="features_heading">Fitur Aplikasi</string>
     <string name="features_body">
@@ -144,7 +186,9 @@
     <string name="email_body">Harap deskripsikan masalah atau saran Anda di sini.</string>
     <string name="no_email_app_found">Tidak dapat membuka aplikasi email. Anda harus membukanya di perangkat Anda dan melaporkan.</string>
     <string name="review_prompt">Menyukai aplikasi ini? Ulasan Anda membantu kami untuk lebih baik! ❤️</string>
-
+    <string name="review_button">Tinjau</string>
+    <string name="later_button">Nanti</string>
+    <string name="cancel_reminder_button">Hentikan pengingat</string>
 
     <string name="faq_1">Apakah data saya aman?</string>
     <string name="faq_ans_1">Semua file Anda diproses dan disimpan secara lokal di perangkat Anda. Satu-satunya data yang keluar dari aplikasi adalah saat Anda memilih untuk membagikannya melalui aplikasi eksternal. CVOR tidak menyimpan, mengelola, atau memproses data apa pun secara jarak jauh. Jika ini berubah di masa depan sebagai bagian dari fitur baru, Anda akan diberi informasi lebih lanjut.</string>
@@ -183,4 +227,5 @@
     <string name="terms_of_use_message">Dengan menggunakan aplikasi ini, Anda setuju dengan Syarat Penggunaan dan Kebijakan Privasi kami.</string>
     <string name="agree_button">Setuju</string>
     <string name="disagree_button">Tidak Setuju</string>
+
 </resources>

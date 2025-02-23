@@ -308,7 +308,7 @@ public class FileManagerFragment extends Fragment {
 
     private void addToFavourites(@NonNull Uri fileUri){
         String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), fileUri);
-        File filePath = FileUtils.copyFile(requireContext(), fileUri);
+        File filePath = FileUtils.copyFile(requireContext(), fileUri, "Favourites");
         favouritesService.addToFavourites(String.valueOf(filePath), thumbnailPath);
     }
 

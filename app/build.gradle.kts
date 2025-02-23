@@ -93,7 +93,7 @@ dependencies {
     implementation(libs.pdf.viewer)
 
     //OpenCV Libraries
-    implementation(libs.opencv)
+    // implementation(libs.opencv)
 
     // Image loading/caching libraries
     implementation(libs.glide)

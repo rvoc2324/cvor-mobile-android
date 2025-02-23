@@ -66,6 +66,7 @@
     <string name="share_text">ہیلو! یہ وہ فائل ہے جو آپ نے درخواست کی تھی۔ CVOR کے ذریعے محفوظ طریقے سے شیئر کی گئی!</string>
     <string name="sharehistory_hint">فائل کے نام، شیئر کرنے والے یا مقصد کے مطابق تلاش کریں</string>
     <string name="refer_message">CVOR کو دیکھیں - آپ کے ڈیٹا کو شیئر کرنے کا ایک سمارٹ طریقہ: https://www.google.com</string>
+    <string name="refer_prompt">ہماری مدد کریں یہ پیغام پھیلانے میں! CVOR کو اپنے دوستوں اور خاندان کے ساتھ شیئر کریں ❤️</string>
     <string name="refer">حوالہ دیں</string>
     <string name="share_via">کے ذریعے شیئر کریں</string>
     <string name="text_watermark">%1$s کے ساتھ %2$s کے لئے %3$s پر شیئر کیا گیا</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">PDF کمپریس کریں</string>
     <string name="compress_quality">کمپریس کرنے کے بعد فائل کا سائز (ایک منتخب کریں): </string>
     <string name="pre_compress_file_size">موجودہ فائل کا سائز: %1s</string>
+    <string name="compress_high">اعلیٰ: %s</string>
+    <string name="compress_medium">درمیانہ: %s</string>
+    <string name="compress_low">کم: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">نیا فائل کا نام درج کریں</string>
@@ -126,6 +130,44 @@
         • <b> اسمارٹ ٹیکسٹ پریویو:</b> اس ٹیکسٹ کا پیش نظارہ جو فائل پر لگایا جائے گا۔
     </string>
 
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">فائل کو پروسیس نہیں کیا جا سکا۔ سائز کم کرنے کے لیے اسے کمپریس کرنے کی کوشش کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="compression_failed">خرابی: کمپریشن ناکام ہو گئی</string>
+    <string name="compression_quality_error">کمپریشن کا معیار منتخب کریں</string>
+    <string name="navigation_failed">نیویگیشن ناکام ہو گئی</string>
+    <string name="unable_to_determine_file_name">فائل کا نام معلوم نہیں ہو سکا</string>
+    <string name="failed_to_crop_image">تصویر کو کاٹنے میں ناکامی</string>
+    <string name="failed_to_process_cropped_image">کٹے ہوئے تصویر کو پروسیس کرنے میں ناکامی</string>
+    <string name="multi_files_selected"> فائلیں منتخب کی گئیں</string>
+    <string name="one_file_selected">1 فائل منتخب کی گئی</string>
+    <string name="file_selection_cancelled">فائل کا انتخاب منسوخ کر دیا گیا</string>
+    <string name="no_images_selected">کوئی تصویر منتخب نہیں کی گئی</string>
+    <string name="invalid_file_source_type">غلط فائل سورس کی قسم</string>
+    <string name="source_type_not_set">سورس کی قسم سیٹ نہیں کی گئی</string>
+    <string name="split_file_limit_warning">فی الحال صرف 25 صفحات سے کم والی فائلیں معاون ہیں۔</string>
+    <string name="multi_file_selection">متعدد فائلیں منتخب کرنے کے لیے طویل دبائیں۔</string>
+    <string name="failed_to_process_selected_file">منتخب شدہ فائل کو پروسیس کرنے میں ناکامی</string>
+    <string name="failed_to_open_file">فائل کھولنے میں ناکامی</string>
+    <string name="password_protected_files_not_supported">پاس ورڈ سے محفوظ فائلیں پسندیدہ میں معاون نہیں ہیں۔</string>
+    <string name="password_entry_cancelled">پاس ورڈ کا اندراج منسوخ کر دیا گیا۔</string>
+    <string name="failed_to_open_document">دستاویز کھولنے میں ناکامی۔ یہ خراب ہو سکتی ہے یا معاون نہیں ہے۔</string>
+    <string name="opening">کھول رہا ہے: </string>
+    <string name="failed_to_rename_file">فائل کا نام تبدیل کرنے میں ناکامی۔ براہ کرم دوبارہ کوشش کریں۔</string>
+    <string name="no_files_selected_go_back">کوئی فائل منتخب نہیں کی گئی۔ فائل منتخب کرنے کے لیے واپس جائیں۔</string>
+    <string name="split_file_limit_error">PDF 25 صفحات کی حد سے تجاوز کر رہا ہے۔</string>
+    <string name="incorrect_password_error">"غلط پاس ورڈ۔ براہ کرم دوبارہ کوشش کریں۔"</string>
+    <string name="error_processing_files">فائلوں کو پروسیس کرنے میں خرابی: </string>
+    <string name="pdf_action_completed">PDF کارروائی مکمل ہو گئی۔</string>
+    <string name="no_compression_quality_selected">کوئی کمپریشن کا معیار منتخب نہیں کیا گیا۔</string>
+    <string name="compression_type_set">کمپریشن کی قسم مقرر کی گئی: </string>
+    <string name="no_files_available_to_download">ڈاؤن لوڈ کے لیے کوئی فائل دستیاب نہیں</string>
+    <string name="downloading_files">فائلیں ڈاؤن لوڈ ہو رہی ہیں…</string>
+    <string name="failed_to_download">ڈاؤن لوڈ ناکام ہو گیا: </string>
+    <string name="download_completed">ڈاؤن لوڈ مکمل ہو گیا۔ اپنے ڈاؤن لوڈز فولڈر کو چیک کریں۔</string>
+    <string name="watermarking_completed">واٹر مارکنگ مکمل ہو گئی۔</string>
+    <string name="no_files_watermarked">کسی فائل پر واٹر مارک نہیں لگایا گیا۔</string>
+    <string name="error_during_watermarking">واٹر مارکنگ کے دوران خرابی پیش آئی۔ دوبارہ کوشش کریں۔</string>
+
     <!-- Features -->
     <string name="features_heading">ایپ کی خصوصیات</string>
     <string name="features_body">
@@ -144,6 +186,9 @@
     <string name="email_body">براہ کرم یہاں اپنے مسئلے یا تجاویز کی وضاحت کریں۔</string>
     <string name="no_email_app_found">ای میل ایپ کو شروع کرنے میں ناکامی۔ آپ کو خود ای میل ایپ شروع کرنی ہوگی اور رپورٹ کرنا ہوگا۔</string>
     <string name="review_prompt">ایپ سے لطف اندوز ہو رہے ہیں؟ آپ کا جائزہ ہمیں بہتر بنانے میں مدد کرتا ہے! ❤️</string>
+    <string name="review_button">جائزہ لیں</string>
+    <string name="later_button">بعد میں</string>
+    <string name="cancel_reminder_button">یاد دہانی روکیں</string>
 
     <string name="faq_1">کیا میرا ڈیٹا محفوظ ہے؟</string>
     <string name="faq_ans_1">آپ کی تمام فائلیں آپ کے آلے پر مقامی طور پر پروسیس اور ذخیرہ کی جاتی ہیں۔ وہ واحد ڈیٹا جو ایپ سے باہر جاتا ہے وہ ہے جب آپ اسے کسی بیرونی ایپ کے ذریعے شیئر کرنے کا انتخاب کرتے ہیں۔ CVOR کوئی ڈیٹا دور سے ذخیرہ، منظم یا پروسیس نہیں کرتا۔ اگر مستقبل میں کسی نئے فیچر کے حصے کے طور پر ایسا ہوتا ہے تو آپ کو آگاہ کیا جائے گا۔</string>

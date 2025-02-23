@@ -44,6 +44,7 @@
     <color name="rippleEffect">#80FFFFFF</color> <!-- Light ripple for contrast -->
 
     <!-- Additional Common Colors -->
+    <color name="logoO">#007AFF</color> <!-- Standard white -->
     <color name="white">#FFFFFF</color> <!-- Standard white -->
     <color name="black">#000000</color> <!-- Standard black -->
     <color name="grey">#74828F</color> <!-- Neutral gray -->

@@ -46,13 +46,11 @@
             </intent-filter>
         </activity>
 
+        <!-- android:windowSoftInputMode="stateVisible|adjustResize" - to ensure the layout resizes when keyboard opens -->
         <activity
             android:name="com.rvoc.cvorapp.ui.activities.core.CoreActivity"
             android:exported="false"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.rvoc.cvorapp.ui.activities.managefiles.ManageFilesActivity"
-            android:exported="false"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:theme="@style/AppTheme" />
 
         <activity

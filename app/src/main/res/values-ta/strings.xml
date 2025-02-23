@@ -66,6 +66,7 @@
     <string name="share_text">வணக்கம்! இது நீங்கள் கோரிய கோப்பு. CVOR மூலம் பாதுகாப்பாக பகிரப்பட்டுள்ளது!</string>
     <string name="sharehistory_hint">கோப்பு பெயர், பகிரப்பட்டவருடன் அல்லது பொருளுக்காக தேடவும்</string>
     <string name="refer_message">CVOR ஐ பரிந்துரைக்கவும் - உங்கள் தரவை பகிர்வதற்கான சிறந்த வழி: https://www.google.com</string>
+    <string name="refer_prompt">எங்களை பற்றி பகிர்ந்து உதவுங்கள்! உங்கள் நண்பர்கள் மற்றும் குடும்பத்தினருக்கு CVOR பரிந்துரை செய்யுங்கள் ❤️</string>
     <string name="refer">பரிந்துரை செய்யவும்</string>
     <string name="share_via">பகிரவும் மூலம்</string>
     <string name="text_watermark">%1$s உடன் %2$s க்கு %3$s அன்று பகிர்ந்தது</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">PDF ஐ சுருக்கவும்</string>
     <string name="compress_quality">சுருக்கப்பட்ட கோப்பின் அளவு (ஒரை தேர்ந்தெடுக்கவும்): </string>
     <string name="pre_compress_file_size">தற்போதைய கோப்பின் அளவு: %1s</string>
+    <string name="compress_high">உயர்: %s</string>
+    <string name="compress_medium">மிதமான: %s</string>
+    <string name="compress_low">குறைந்த: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">புதிய கோப்பு பெயரை உள்ளிடவும்</string>
@@ -126,6 +130,44 @@
         • <b>ஸ்மார்ட் எழுத்து முன் பார்வை:</b> இந்த ஆவணத்திற்கு ஸ்மார்ட் எழுத்து தேவை என்பதை காண்பிக்கும் முன் பார்வை.
     </string>
 
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">கோப்பை செயலாக்க முடியவில்லை. அதனை சுருக்கி அளவை குறைத்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="compression_failed">பிழை: சுருக்குதல் தோல்வியடைந்தது</string>
+    <string name="compression_quality_error">சுருக்கம் தரத்தைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="navigation_failed">வழிசெலுத்தல் தோல்வியடைந்தது</string>
+    <string name="unable_to_determine_file_name">கோப்பு பெயரை கண்டறிய முடியவில்லை</string>
+    <string name="failed_to_crop_image">படத்தை வெட்ட முடியவில்லை</string>
+    <string name="failed_to_process_cropped_image">வெட்டிய படத்தை செயலாக்க முடியவில்லை</string>
+    <string name="multi_files_selected"> கோப்புகள் தேர்ந்தெடுக்கப்பட்டன</string>
+    <string name="one_file_selected">1 கோப்பு தேர்ந்தெடுக்கப்பட்டது</string>
+    <string name="file_selection_cancelled">கோப்பு தேர்வு ரத்து செய்யப்பட்டது</string>
+    <string name="no_images_selected">படங்கள் தேர்ந்தெடுக்கப்படவில்லை</string>
+    <string name="invalid_file_source_type">தவறான கோப்பு மூல வகை</string>
+    <string name="source_type_not_set">மூல வகை அமைக்கப்படவில்லை</string>
+    <string name="split_file_limit_warning">தற்காலிகமாக 25 பக்கத்திற்குக் குறைவான கோப்புகள் மட்டுமே ஆதரிக்கப்படுகிறது.</string>
+    <string name="multi_file_selection">பல கோப்புகளை தேர்வு செய்ய நீண்ட அழுத்தம் கொடுக்கவும்.</string>
+    <string name="failed_to_process_selected_file">தேர்ந்தெடுக்கப்பட்ட கோப்பை செயலாக்க முடியவில்லை</string>
+    <string name="failed_to_open_file">கோப்பைத் திறக்க முடியவில்லை</string>
+    <string name="password_protected_files_not_supported">கடவுச்சொல்லால் பாதுகாக்கப்பட்ட கோப்புகள் பிடித்தவற்றிற்கு ஆதரிக்கப்படவில்லை.</string>
+    <string name="password_entry_cancelled">கடவுச்சொல் உள்ளீடு ரத்து செய்யப்பட்டது.</string>
+    <string name="failed_to_open_document">ஆவணத்தை திறக்க முடியவில்லை. இது சேதமடைந்ததாக இருக்கலாம் அல்லது ஆதரிக்கப்படாததாக இருக்கலாம்.</string>
+    <string name="opening">திறக்கிறது: </string>
+    <string name="failed_to_rename_file">கோப்பின் பெயரை மாற்ற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="no_files_selected_go_back">கோப்புகள் தேர்வு செய்யப்படவில்லை. கோப்பைத் தேர்வு செய்ய பின்செல்க.</string>
+    <string name="split_file_limit_error">PDF 25 பக்க வரம்பை மீறுகிறது.</string>
+    <string name="incorrect_password_error">"தவறான கடவுச்சொல். மீண்டும் முயற்சிக்கவும்."</string>
+    <string name="error_processing_files">கோப்புகளை செயலாக்கும் போது பிழை: </string>
+    <string name="pdf_action_completed">PDF செயல் நிறைவு பெற்றது.</string>
+    <string name="no_compression_quality_selected">சுருக்க தரம் தேர்வு செய்யப்படவில்லை.</string>
+    <string name="compression_type_set">சுருக்க வகை அமைக்கப்பட்டது: </string>
+    <string name="no_files_available_to_download">பதிவிறக்கம் செய்ய கோப்புகள் இல்லை</string>
+    <string name="downloading_files">கோப்புகளை பதிவிறக்குகிறது…</string>
+    <string name="failed_to_download">பதிவிறக்கம் தோல்வியடைந்தது: </string>
+    <string name="download_completed">பதிவிறக்கம் முடிந்தது. உங்கள் Downloads அடைவில் பாருங்கள்.</string>
+    <string name="watermarking_completed">நீர்முறிப்படுத்தல் முடிந்தது.</string>
+    <string name="no_files_watermarked">எந்தக் கோப்புகளும் நீர்முறிப்படிக்கப்படவில்லை.</string>
+    <string name="error_during_watermarking">நீர்முறிப்படிக்கும்போது பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.</string>
+
     <!-- Features -->
     <string name="features_heading">பயன்பாட்டு அம்சங்கள்</string>
     <string name="features_body">
@@ -144,6 +186,9 @@
     <string name="email_body">உங்கள் பிரச்சினை அல்லது பரிந்துரைகளை இங்கு விளக்கவும்.</string>
     <string name="no_email_app_found">ஈமெயில் பயன்பாட்டை துவக்க முடியவில்லை. நீங்கள் அதை உங்கள் பகுதியில் துவக்கி பதிவுகொள்ள வேண்டும்.</string>
     <string name="review_prompt">பயன்பாட்டை ரசிக்கிறீர்களா? உங்கள் மதிப்புரை எங்களை மேம்படுத்த உதவுகிறது! ❤️</string>
+    <string name="review_button">மதிப்பீடு</string>
+    <string name="later_button">பின்னர்</string>
+    <string name="cancel_reminder_button">நினைவூட்டலை நிறுத்து</string>
 
     <string name="faq_1">என் தரவு பாதுகாப்பாக இருக்கிறதா?</string>
     <string name="faq_ans_1">உங்கள் அனைத்து கோப்புகளும் உங்கள் சாதனத்தில் உள்ளே செயலாக்கப்படுகின்றன மற்றும் சேமிக்கப்படுகின்றன. நீங்கள் பகிர்ந்தால் மட்டுமே இந்த தரவு வெளியே செல்லும். CVOR எந்தவொரு தரவை தொலைவிலிருந்து சேமிக்கவோ, நிர்வகிக்கவோ செய்யவில்லை. எதிர்காலத்தில் புதிய அம்சம் வரும் போது, அதை பற்றி உங்களுக்கு அறிவிக்கப்படும்.</string>
@@ -182,4 +227,5 @@
     <string name="terms_of_use_message">இந்த செயலியைப் பயன்படுத்துவதன் மூலம், நீங்கள் எங்கள் பயன்பாட்டு நிபந்தனைகளையும் தனியுரிமை கொள்கையை ஒப்புக்கொள்கிறீர்கள்.</string>
     <string name="agree_button">ஒப்புக்கொள்</string>
     <string name="disagree_button">ஒப்புக்கொள்ளவில்லை</string>
+
 </resources>

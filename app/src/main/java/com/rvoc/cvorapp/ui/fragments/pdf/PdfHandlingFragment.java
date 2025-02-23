@@ -121,6 +121,7 @@ public class PdfHandlingFragment extends Fragment {
         setupRadioButtonListeners(); // Set up radio button listeners
 
         coreViewModel.getCompressedFileSizes().observe(getViewLifecycleOwner(), sizes -> {
+            binding.textCurrentFileSize.setText(getString(R.string.pre_compress_file_size,sizes.getOrDefault("Current", "")));
             binding.radioHigh.setText(getString(R.string.compress_high, sizes.getOrDefault("High", "")));
             binding.radioMedium.setText(getString(R.string.compress_medium, sizes.getOrDefault("Medium", "")));
             binding.radioLow.setText(getString(R.string.compress_low, sizes.getOrDefault("Low", "")));
@@ -130,7 +131,6 @@ public class PdfHandlingFragment extends Fragment {
             binding.compressionContainer.setVisibility(isComplete ? View.VISIBLE : View.GONE);
             binding.compressionContainer.setClickable(isComplete);
             binding.compressionContainer.setFocusable(isComplete);
-            binding.actionButton.setEnabled(isComplete);
         });
     }
 
@@ -175,7 +175,7 @@ public class PdfHandlingFragment extends Fragment {
 
         executorService.execute(() -> {
             String preCompressionSize = FileUtils.getFileSize(requireContext(), fileUri);
-            requireActivity().runOnUiThread(() -> binding.textCurrentFileSize.setText(getString(R.string.pre_compress_file_size, preCompressionSize)));
+            coreViewModel.setCompressedFileSize("Current", preCompressionSize);
             compressAndSave(fileUri, new File(cacheDir, "compressed_H.pdf"), "High");
             checkAndHideProgress(completedTasks);
         });
@@ -207,6 +207,7 @@ public class PdfHandlingFragment extends Fragment {
     private void checkAndHideProgress(AtomicInteger completedTasks) {
         if (completedTasks.incrementAndGet() == 3) {
             requireActivity().runOnUiThread(() -> {
+                binding.progressIndicator.setVisibility(View.GONE);
                 coreViewModel.setCompressionComplete(true);
                 Toast.makeText(requireContext(), getString(R.string.compression_quality_error), Toast.LENGTH_SHORT).show();
             });
@@ -298,7 +299,6 @@ public class PdfHandlingFragment extends Fragment {
                         requireActivity().runOnUiThread(() -> {
                             binding.progressIndicator.setVisibility(View.GONE); // Stop progress
                             Toast.makeText(requireContext(), getString(R.string.split_file_limit_error), Toast.LENGTH_SHORT).show();
-
                             requireActivity().finish();
                         });
                     } else{
@@ -345,6 +345,8 @@ public class PdfHandlingFragment extends Fragment {
                 Toast.makeText(requireContext(), getString(R.string.no_compression_quality_selected), Toast.LENGTH_SHORT).show();
                 return;
             }
+            binding.progressIndicator.setVisibility(View.GONE);
+            binding.actionButton.setEnabled(true);
             coreViewModel.setCompressType(selectedQuality);
             Toast.makeText(requireContext(), getString(R.string.compression_type_set) + selectedQuality, Toast.LENGTH_SHORT).show();
             coreViewModel.setNavigationEvent("navigate_to_preview");

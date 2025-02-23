@@ -88,6 +88,7 @@
                     android:drawableLeft="@drawable/baseline_keyboard_arrow_left_24"
                     android:elevation="6dp"
                     app:cornerRadius="12dp"
+                    android:ellipsize="end"
                     android:layout_margin="5dp"
                     app:rippleColor="@color/rippleEffect"
                     android:filterTouchesWhenObscured="true"/>
@@ -106,6 +107,7 @@
                     android:drawableEnd="@drawable/baseline_share_24"
                     android:drawablePadding="50dp"
                     android:elevation="6dp"
+                    android:ellipsize="end"
                     app:cornerRadius="12dp"
                     android:layout_margin="5dp"
                     app:rippleColor="@color/rippleEffect"

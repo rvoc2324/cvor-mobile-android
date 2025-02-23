@@ -66,6 +66,7 @@
     <string name="share_text">హాయ్! మీరు కోరిన ఫైల్ ఇది. CVOR ద్వారా సురక్షితంగా పంచబడింది!</string>
     <string name="sharehistory_hint">ఫైల్ పేరు, పంచుకున్నవారి లేదా ఉద్దేశం ద్వారా శోధించండి</string>
     <string name="refer_message">CVOR ని చూడండి - మీ డేటాను పంచుకోవడాని మేరు మార్గం: https://www.google.com</string>
+    <string name="refer_prompt">మా గురించి ప్రచారం చేయడంలో మాకు సహాయం చేయండి! మీ స్నేహితులు మరియు కుటుంబ సభ్యులకు CVOR ను సూచించండి ❤️</string>
     <string name="refer">సూచించండి</string>
     <string name="share_via">ద్వారా పంచుకోండి</string>
     <string name="text_watermark">%1$s తో %2$s కోసం %3$s పంచించబడింది</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">PDF ను సంకోచించండి</string>
     <string name="compress_quality">సంకోచిత ఫైల్ పరిమాణం (ఒకదాన్ని ఎంచుకోండి): </string>
     <string name="pre_compress_file_size">ప్రస్తుత ఫైల్ పరిమాణం: %1s</string>
+    <string name="compress_high">అత్యధికం: %s</string>
+    <string name="compress_medium">మధ్యస్థం: %s</string>
+    <string name="compress_low">తక్కువ: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">కొత్త ఫైల్ పేరు ఎంటర్ చేయండి</string>
@@ -126,6 +130,44 @@
         • <b> స్మార్ట్ టెక్స్ట్ ప్రివ్యూ:</b> మీరు పత్రంపై అమర్చే టెక్స్ట్ ప్రివ్యూ చూపిస్తుంది.
     </string>
 
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">ఫైల్‌ను ప్రాసెస్ చేయలేకపోయాం. దయచేసి దాని పరిమాణాన్ని తగ్గించడానికి కుదింపు ప్రయత్నించి మళ్లీ ప్రయత్నించండి.</string>
+    <string name="compression_failed">లోపం: కుదింపు విఫలమైంది</string>
+    <string name="compression_quality_error">కుదింపు నాణ్యతను ఎంచుకోండి</string>
+    <string name="navigation_failed">నావిగేషన్ విఫలమైంది</string>
+    <string name="unable_to_determine_file_name">ఫైల్ పేరు నిర్ణయించలేకపోయాం</string>
+    <string name="failed_to_crop_image">చిత్రాన్ని క్రాప్ చేయడం విఫలమైంది</string>
+    <string name="failed_to_process_cropped_image">క్రాప్ చేసిన చిత్రాన్ని ప్రాసెస్ చేయడం విఫలమైంది</string>
+    <string name="multi_files_selected"> ఫైళ్లను ఎంపిక చేశారు</string>
+    <string name="one_file_selected">1 ఫైల్ ఎంపిక చేయబడింది</string>
+    <string name="file_selection_cancelled">ఫైల్ ఎంపిక రద్దు చేయబడింది</string>
+    <string name="no_images_selected">ఏ చిత్రాలు ఎంపిక చేయబడలేదు</string>
+    <string name="invalid_file_source_type">చెల్లని ఫైల్ మూలం రకం</string>
+    <string name="source_type_not_set">మూలం రకం సెట్ చేయలేదు</string>
+    <string name="split_file_limit_warning">ప్రస్తుతం 25 పేజీల కన్నా తక్కువ ఉన్న ఫైళ్లను మాత్రమే మద్దతు ఇస్తుంది.</string>
+    <string name="multi_file_selection">బహుళ ఫైళ్లను ఎంచుకోవడానికి దీర్ఘకాలంగా నొక్కండి.</string>
+    <string name="failed_to_process_selected_file">ఎంచుకున్న ఫైల్‌ను ప్రాసెస్ చేయడం విఫలమైంది</string>
+    <string name="failed_to_open_file">ఫైల్ తెరవడం విఫలమైంది</string>
+    <string name="password_protected_files_not_supported">పాస్‌వర్డ్ రక్షణ ఉన్న ఫైళ్లకు ఫేవరిట్స్ మద్దతు ఇవ్వదు.</string>
+    <string name="password_entry_cancelled">పాస్‌వర్డ్ ప్రవేశం రద్దు చేయబడింది.</string>
+    <string name="failed_to_open_document">పత్రాన్ని తెరవడం విఫలమైంది. అది చెడిపోయి ఉండవచ్చు లేదా మద్దతు లేని ఫార్మాట్‌లో ఉండవచ్చు.</string>
+    <string name="opening">తెరవడం: </string>
+    <string name="failed_to_rename_file">ఫైల్ పేరు మార్చడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.</string>
+    <string name="no_files_selected_go_back">ఏ ఫైళ్లు ఎంచుకోలేదు. ఫైల్ ఎంచుకోవడానికి వెనక్కి వెళ్లండి.</string>
+    <string name="split_file_limit_error">PDF 25-పేజీల పరిమితిని మించిపోయింది.</string>
+    <string name="incorrect_password_error">తప్పు పాస్‌వర్డ్. దయచేసి మళ్లీ ప్రయత్నించండి.</string>
+    <string name="error_processing_files">ఫైళ్లను ప్రాసెస్ చేస్తూ లోపం: </string>
+    <string name="pdf_action_completed">PDF చర్య పూర్తయింది.</string>
+    <string name="no_compression_quality_selected">ఏ కుదింపు నాణ్యతను ఎంచుకోలేదు.</string>
+    <string name="compression_type_set">కుదింపు రకం సెట్ చేయబడింది: </string>
+    <string name="no_files_available_to_download">డౌన్‌లోడ్‌కు ఎలాంటి ఫైళ్లు అందుబాటులో లేవు</string>
+    <string name="downloading_files">ఫైళ్లు డౌన్‌లోడ్ అవుతున్నాయి…</string>
+    <string name="failed_to_download">డౌన్‌లోడ్ విఫలమైంది: </string>
+    <string name="download_completed">డౌన్‌లోడ్ పూర్తయింది. మీ డౌన్‌లోడ్ ఫోల్డర్‌ను తనిఖీ చేయండి.</string>
+    <string name="watermarking_completed">వాటర్‌మార్కింగ్ పూర్తయింది.</string>
+    <string name="no_files_watermarked">ఏ ఫైళ్లూ వాటర్‌మార్క్ చేయబడలేదు.</string>
+    <string name="error_during_watermarking">వాటర్‌మార్కింగ్ సమయంలో లోపం సంభవించింది. మళ్లీ ప్రయత్నించండి.</string>
+
     <!-- Features -->
     <string name="features_heading">యాప్ లక్షణాలు</string>
     <string name="features_body">
@@ -144,6 +186,9 @@
     <string name="email_body">దయచేసి మీ సమస్య లేదా సూచనలను ఇక్కడ వ్రాయండి.</string>
     <string name="no_email_app_found">ఇమెయిల్ యాప్ ప్రారంభించలేము. మీరు దాన్ని స్వయంగా ప్రారంభించి నివేదిక ఇవ్వాలి.</string>
     <string name="review_prompt">యాప్ ని ఆస్వాదిస్తున్నారా? మీ సమీక్ష మాకు సహాయపడుతుంది! ❤️</string>
+    <string name="review_button">సమీక్ష</string>
+    <string name="later_button">తరువాత</string>
+    <string name="cancel_reminder_button">జ్ఞాపికను నిలిపివేయి</string>
 
     <string name="faq_1">నా డేటా సురక్షితమా?</string>
     <string name="faq_ans_1">మీ అన్ని ఫైళ్లు మీ పరికరంలోనే ప్రాసెస్ చేయబడతాయి. మీరు దాన్ని బయట యాప్ ద్వారా పంచుకున్నప్పుడు మాత్రమే డేటా బయటకి వెళ్ళిపోతుంది. CVOR ఏదైనా డేటాను నిల్వచేయదు, నిర్వహించదు లేదా ప్రాసెస్ చేయదు. ఈ రీతిలో మార్పులు వచ్చినా, అప్పుడు మీరు తెలియజేయబడతారు.</string>
@@ -182,4 +227,5 @@
     <string name="terms_of_use_message">ఈ యాప్‌ను ఉపయోగించడం ద్వారా, మీరు మా ఉపయోగం నిబంధనలు మరియు గోప్యతా విధానాన్ని అంగీకరిస్తున్నారు.</string>
     <string name="agree_button">అంగీకరించు</string>
     <string name="disagree_button">అంగీకరించరు</string>
+
 </resources>

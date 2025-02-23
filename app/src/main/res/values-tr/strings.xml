@@ -66,6 +66,7 @@
     <string name="share_text">Merhaba! İşte istediğiniz dosya. CVOR aracılığıyla güvenli bir şekilde paylaşıldı!</string>
     <string name="sharehistory_hint">Dosya adı, paylaşılan kişi veya amaç ile arama yapın</string>
     <string name="refer_message">CVOR\'u keşfedin - Verilerinizi paylaşmanın daha akıllıca bir yolu: https://www.google.com</string>
+    <string name="refer_prompt">Bize destek olun ve yayılmasına yardımcı olun! CVOR\'u arkadaşlarınıza ve ailenize önerin ❤️</string>
     <string name="refer">Referans Ver</string>
     <string name="share_via">Şu şekilde paylaş</string>
     <string name="text_watermark">%1$s ile %2$s için %3$s tarihinde paylaşıldı</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">PDF\'yi Sıkıştır</string>
     <string name="compress_quality">Sıkıştırılmış dosya boyutu (birini seçin):</string>
     <string name="pre_compress_file_size">Mevcut dosya boyutu: %1s</string>
+    <string name="compress_high">Yüksek: %s</string>
+    <string name="compress_medium">Orta: %s</string>
+    <string name="compress_low">Düşük: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">Yeni dosya adı girin</string>
@@ -126,6 +130,44 @@
         • <b>Akıllı Metin Önizlemesi:</b> Uygulanacak metnin önizlemesini gösterir.
     </string>
 
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">Dosya işlenemedi. Boyutunu küçültmek için sıkıştırmayı deneyin ve tekrar deneyin.</string>
+    <string name="compression_failed">Hata: Sıkıştırma başarısız oldu</string>
+    <string name="compression_quality_error">Sıkıştırma kalitesini seçin</string>
+    <string name="navigation_failed">Gezinme başarısız oldu</string>
+    <string name="unable_to_determine_file_name">Dosya adı belirlenemedi</string>
+    <string name="failed_to_crop_image">Görsel kırpılamadı</string>
+    <string name="failed_to_process_cropped_image">Kırpılmış görsel işlenemedi</string>
+    <string name="multi_files_selected"> dosya seçildi</string>
+    <string name="one_file_selected">1 dosya seçildi</string>
+    <string name="file_selection_cancelled">Dosya seçimi iptal edildi</string>
+    <string name="no_images_selected">Hiçbir görsel seçilmedi</string>
+    <string name="invalid_file_source_type">Geçersiz dosya kaynağı türü</string>
+    <string name="source_type_not_set">Kaynak türü ayarlanmadı</string>
+    <string name="split_file_limit_warning">Şu anda yalnızca 25 sayfadan az dosyalar desteklenmektedir.</string>
+    <string name="multi_file_selection">Birden fazla dosya seçmek için uzun basın.</string>
+    <string name="failed_to_process_selected_file">Seçilen dosya işlenemedi</string>
+    <string name="failed_to_open_file">Dosya açılamadı</string>
+    <string name="password_protected_files_not_supported">Şifre korumalı dosyalar favorilere eklenemez.</string>
+    <string name="password_entry_cancelled">Şifre girişi iptal edildi.</string>
+    <string name="failed_to_open_document">Belge açılamadı. Bozuk olabilir veya desteklenmiyor olabilir.</string>
+    <string name="opening">Açılıyor: </string>
+    <string name="failed_to_rename_file">Dosya yeniden adlandırılamadı. Lütfen tekrar deneyin.</string>
+    <string name="no_files_selected_go_back">Hiçbir dosya seçilmedi. Dosya seçmek için geri dönün.</string>
+    <string name="split_file_limit_error">PDF, 25 sayfa sınırını aşıyor.</string>
+    <string name="incorrect_password_error">"Hatalı şifre. Lütfen tekrar deneyin."</string>
+    <string name="error_processing_files">Dosyalar işlenirken hata oluştu: </string>
+    <string name="pdf_action_completed">PDF işlemi tamamlandı.</string>
+    <string name="no_compression_quality_selected">Sıkıştırma kalitesi seçilmedi.</string>
+    <string name="compression_type_set">Sıkıştırma türü ayarlandı: </string>
+    <string name="no_files_available_to_download">İndirilecek dosya yok</string>
+    <string name="downloading_files">Dosyalar indiriliyor…</string>
+    <string name="failed_to_download">İndirme başarısız oldu: </string>
+    <string name="download_completed">İndirme tamamlandı. İndirilenler klasörünüzü kontrol edin.</string>
+    <string name="watermarking_completed">Filigran ekleme tamamlandı.</string>
+    <string name="no_files_watermarked">Hiçbir dosyaya filigran eklenmedi.</string>
+    <string name="error_during_watermarking">Filigran eklenirken bir hata oluştu. Tekrar deneyin.</string>
+
     <!-- Features -->
     <string name="features_heading">Uygulama özellikleri</string>
     <string name="features_body">
@@ -144,6 +186,9 @@
     <string name="email_body">Lütfen sorununuzu veya önerilerinizi burada açıklayın.</string>
     <string name="no_email_app_found">E-posta uygulaması başlatılamadı. Kendi tarafınızdan başlatıp bildirmeniz gerekecek.</string>
     <string name="review_prompt">Uygulamayı beğendiniz mi? Yorumunuz bize yardımcı olacaktır! ❤️</string>
+    <string name="review_button">İncele</string>
+    <string name="later_button">Daha sonra</string>
+    <string name="cancel_reminder_button">Hatırlatıcıyı durdur</string>
 
     <string name="faq_1">Verilerim güvende mi?</string>
     <string name="faq_ans_1">Tüm dosyalarınız cihazınızda yerel olarak işlenir ve saklanır. Uygulama dışında bir uygulama ile paylaşmayı seçmediğiniz sürece, veri uzaktan saklanmaz veya işlenmez. Gelecekte bir özellik olarak değişiklik olursa, sizi bilgilendireceğiz.</string>

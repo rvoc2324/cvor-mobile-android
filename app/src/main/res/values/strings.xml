@@ -12,12 +12,12 @@
     <string name="settings">Settings</string>
     <string name="help_section">Help section</string>
     <string name="whatsnew">Whats New</string>
-    <string name="share_history">Smart Share history</string>
-    <string name="share_history_body">Below is the history of all the files you have shared via CVOR. You can filter the history below.</string>
+    <string name="smartt_share_history">Secure Share history</string>
+    <string name="sharee_history_body">Below is the history of all the files you have securely shared via CVOR. You can filter the history below.</string>
 
     <!-- Buttons -->
     <string name="add_watermark_button">Add Watermark</string>
-    <string name="smart_share_button">Smart share</string>
+    <string name="smartt_share_button">Secure share</string>
     <string name="share_file_button">Share file</string>
     <string name="combine_pdfs_button">Combine</string>
     <string name="convert_to_pdf_button">Convert</string>
@@ -58,14 +58,14 @@
     <string name="file_name">File Name</string>
 
     <!-- Share -->
-    <string name="sharing_with">Sharing the document with?</string>
+    <string name="sharingg_with">Sharing with?</string>
     <string name="purpose">Purpose? (optional)</string>
     <string name="share_title">Share</string>
     <string name="share_app_text">Select the app to share</string>
     <string name="share_app_icon_desc">App available to share the files</string>
     <string name="share_text">Hi! Here is the file you requested. Shared securely via CVOR!</string>
     <string name="sharehistory_hint">Search by file name, shared with or purpose</string>
-    <string name="refer_message">Check out CVOR - A smarter way to share your data: https://www.google.com</string>
+    <string name="referr_message">Check out CVOR - A secure way to share your data: https://www.google.com</string>
     <string name="refer_prompt">Help us spread the word! Refer CVOR to your friends and family ❤️</string>
     <string name="refer">Refer</string>
     <string name="share_via">Share via</string>
@@ -113,21 +113,23 @@
     <string name="preview_desc">Preview of processed file</string>
     <string name="preview_fragment_title">Preview</string>
     <string name="no_files_selected">No files selected.</string>
+    <string name="add_favourite_prompt">Add this to Favourites?</string>
+
 
     <!-- Watermark -->
     <string name="grid_watermark_check">Grid style layout</string>
     <string name="single_watermark_check">Single</string>
     <string name="opacity_text">Transparency: %d</string>
     <string name="fontsize_text">Font size: %d</string>
-    <string name="smart_text_preview">Smart text preview</string>
-    <string name="watermark_help_text">
+    <string name="smartt_text_preview">Text preview</string>
+    <string name="smartt_text_help">
         • <b> Sharing With:</b> Organisation/individual you are sharing the document with.\n
         • <b> Purpose:</b> Briefly add a purpose of the share.\n
-        • <b> Transparency:</b> Adjust lightness of the smart text.\n
-        • <b> Font Size:</b> Adjust size of smart text.\n
-        • <b> Grid style:</b> Smart text repeats across the document. Uncheck to show once.\n
-        • <b> Position: </b> Adjust the position of the smart text.\n
-        • <b> Smart text Preview:</b> Shows a preview of the text to be applied to the file.
+        • <b> Transparency:</b> Adjust lightness of the text.\n
+        • <b> Font Size:</b> Adjust size of text.\n
+        • <b> Grid style:</b> Text repeats across the document. Uncheck to show once.\n
+        • <b> Position: </b> Adjust the position of the text.\n
+        • <b> Text Preview:</b> Shows a preview of the text to be applied to the file.
     </string>
 
     <!-- Toast messages -->
@@ -171,12 +173,12 @@
     <!-- Features -->
     <string name="features_heading">App features</string>
     <string name="features_body">
-        &#8226;  Smart share - Add smart text to images and PDFs when sharing your important files to prevent misuse.\n
+        &#8226;  Secure share - Add secure text to images and PDFs when sharing your important files to prevent misuse.\n
         &#8226;  Scan documents to PDF with enhanced preview and sharing options.\n
         &#8226;  Compress, combine, split, and convert images to PDFs effortlessly.\n
         &#8226;  Mark frequently used files as favourites for quick usage.\n
-        &#8226;  Keep track of your important shared files via the Smart share history.\n
-        &#8226;  Add smart text in your preferred language; 12 languages currently supported.\n
+        &#8226;  Keep track of your important shared files via the Secure share history.\n
+        &#8226;  Add secure text in your preferred language; 12 languages currently supported.\n
     </string>
 
     <!-- FAQ and Messaging -->
@@ -193,14 +195,14 @@
     <string name="faq_1">Is my data safe?</string>
     <string name="faq_ans_1">All your files are processed and stored locally on your device. The only data that leaves the app is when you choose to share it via an external app. CVOR does not store, manage, or process any data remotely. If this changes in the future as part of a new feature, you will be informed accordingly.</string>
 
-    <string name="faq_2">What is Smart Share?</string>
-    <string name="faq_ans_2">Smart Share is designed to prevent misuse of your sensitive data. When a shared file contains the recipient’s identity, it acts as a psychological deterrent against misuse. Additionally, institutions may be reluctant to accept documents shared with someone else or used for a different purpose.</string>
+    <string name="faqq_2">What is Secure Share?</string>
+    <string name="faqq_ans_2">Secure Share is designed to prevent misuse of your sensitive data. When a shared file contains the recipient’s identity, it acts as a psychological deterrent against misuse. Additionally, institutions may be reluctant to accept documents shared with someone else or used for a different purpose.</string>
 
-    <string name="faq_3">What is Smart Share history?</string>
-    <string name="faq_ans_3">There are multiple situations where you may need to share sensitive data. Smart Share history helps you keep track of when and where you have shared your data.</string>
+    <string name="faqq_3">What is Secure Share history?</string>
+    <string name="faqq_ans_3">There are multiple situations where you may need to share sensitive data. Secure Share history helps you keep track of when and where you have shared your data.</string>
 
-    <string name="faq_4">How do I customize Smart Text?</string>
-    <string name="faq_ans_4">Smart Text is optimized for speed and maintaining document integrity. Based on user feedback, we may introduce further customization options in future updates.</string>
+    <string name="faqq_4">How do I customize Secure Text?</string>
+    <string name="faqq_ans_4">Secure Text is optimized for speed and maintaining document integrity. Based on user feedback, we may introduce further customization options in future updates.</string>
 
     <string name="faq_5">What is the maximum file size supported?</string>
     <string name="faq_ans_5">The app supports large files, but since the processing is done on the device, you may experience issues. For optimal performance, it is recommended to use files under 50MB. If dealing with multiple large files, consider processing them in smaller batches.</string>
@@ -217,11 +219,11 @@
     <string name="faq_9">Why do some apps, like WhatsApp, show file previews differently?</string>
     <string name="faq_ans_9">Apps like WhatsApp may compress or resize files when generating previews, but the original file quality remains unchanged.</string>
 
-    <string name="faq_11">How can I change my language settings?</string>
-    <string name="faq_ans_11">The app automatically uses your phone’s default language. To change the language, simply update your phone’s default language settings.</string>
-
     <string name="faq_10">Why are some language translations incorrect or unclear?</string>
     <string name="faq_ans_10">While we strive to provide accurate translations, there can be instances where translations may be incorrect or unclear. Please message us and we will aim to fix it at the earliest.</string>
+
+    <string name="faq_11">How can I change my language settings?</string>
+    <string name="faq_ans_11">The app automatically uses your phone’s default language. To change the language, simply update your phone’s default language settings.</string>
 
     <!-- Legal -->
     <string name="terms_of_use_message">By using this app, you agree to our Terms of Service and Privacy Policy.</string>

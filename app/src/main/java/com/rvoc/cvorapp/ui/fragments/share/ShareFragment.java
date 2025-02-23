@@ -107,7 +107,6 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         } else {
             binding.actionButton.setText(R.string.done_button);
         }
-
         binding.backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
 
         // Without ad flow
@@ -162,12 +161,14 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         }
 
         for (File file : processedFiles) {
+            String filePath = String.valueOf(FileUtils.copyFile(requireContext(), FileUtils.getUriFromFile(requireContext(), file), "ShareHistory"));
             ShareHistory shareHistory = new ShareHistory(
                     file.getName(),
                     new Date(),
                     shareApp,
                     sharedWith,
-                    purpose
+                    purpose,
+                    filePath
             );
             shareHistoryRepository.insertShareHistory(shareHistory);
         }
@@ -282,6 +283,8 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         dialogBinding.dialogMessage.setText(message);
         dialogBinding.positiveButton.setText(positiveButtonLabel);
         dialogBinding.negativeButton.setText(R.string.later_button);
+        dialogBinding.optionalButton.setSelected(false);
+        dialogBinding.optionalButton.setSelected(true);
         dialogBinding.optionalButton.setVisibility(View.VISIBLE);
         dialogBinding.optionalButton.setText(R.string.cancel_reminder_button);
 
@@ -316,7 +319,7 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
 
     private void handleNavigation() {
         if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
-            coreViewModel.setNavigationEvent("navigate_to_refer");
+            coreViewModel.setNavigationEvent("navigate_to_sharehistory");
         } else {
             requireActivity().finish();
         }
@@ -326,7 +329,7 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
         // Actual logic to be implemented later
 
         if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
-            coreViewModel.setNavigationEvent("navigate_to_refer");
+            coreViewModel.setNavigationEvent("navigate_to_sharehistory");
         } else {
             requireActivity().finish();
         }

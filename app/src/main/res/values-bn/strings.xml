@@ -66,6 +66,7 @@
     <string name="share_text">হাই! এখানে আপনার অনুরোধ করা ফাইল রয়েছে। এটি CVOR-এর মাধ্যমে নিরাপদে শেয়ার করা হয়েছে!</string>
     <string name="sharehistory_hint">ফাইলের নাম, শেয়ার কার সাথে হয়েছে বা উদ্দেশ্য দ্বারা অনুসন্ধান করুন</string>
     <string name="refer_message">CVOR দেখুন - আপনার ডেটা শেয়ারের স্মার্ট উপায়: https://www.google.com</string>
+    <string name="refer_prompt">আমাদের বার্তাটি ছড়িয়ে দিতে সাহায্য করুন! আপনার বন্ধু এবং পরিবারের কাছে CVOR রেফার করুন ❤️</string>
     <string name="refer">রেফার করুন</string>
     <string name="share_via">শেয়ার করুন</string>
     <string name="text_watermark">%1$s-এর সাথে %2$s-এর জন্য %3$s তারিখে শেয়ার করা হয়েছে</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">পিডিএফ সংকুচিত করুন</string>
     <string name="compress_quality">সংকোচনের পরে ফাইলের আকার (একটি বেছে নিন):</string>
     <string name="pre_compress_file_size">বর্তমান ফাইলের আকার: %1s</string>
+    <string name="compress_high">উচ্চ: %s</string>
+    <string name="compress_medium">মাঝারি: %s</string>
+    <string name="compress_low">নিম্ন: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">নতুন ফাইল নাম লিখুন</string>
@@ -126,6 +130,44 @@
         • <b> স্মার্ট টেক্সট প্রিভিউ:</b> ফাইলে প্রয়োগ করা টেক্সটের প্রিভিউ দেখায়।
     </string>
 
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">ফাইল প্রক্রিয়া করা সম্ভব নয়। আকার কমাতে এটি সংকুচিত করার চেষ্টা করুন এবং পুনরায় চেষ্টা করুন।</string>
+    <string name="compression_failed">ত্রুটি: সংকোচন ব্যর্থ হয়েছে</string>
+    <string name="compression_quality_error">সংকোচনের গুণমান নির্বাচন করুন</string>
+    <string name="navigation_failed">নেভিগেশন ব্যর্থ হয়েছে</string>
+    <string name="unable_to_determine_file_name">ফাইলের নাম নির্ধারণ করা যায়নি</string>
+    <string name="failed_to_crop_image">ছবি ক্রপ করতে ব্যর্থ</string>
+    <string name="failed_to_process_cropped_image">ক্রপ করা ছবি প্রক্রিয়াকরণ করতে ব্যর্থ</string>
+    <string name="multi_files_selected"> টি ফাইল নির্বাচিত</string>
+    <string name="one_file_selected">১টি ফাইল নির্বাচিত</string>
+    <string name="file_selection_cancelled">ফাইল নির্বাচন বাতিল হয়েছে</string>
+    <string name="no_images_selected">কোনো ছবি নির্বাচিত হয়নি</string>
+    <string name="invalid_file_source_type">অবৈধ ফাইল উত্সের ধরন</string>
+    <string name="source_type_not_set">উত্সের ধরন নির্ধারিত নয়</string>
+    <string name="split_file_limit_warning">বর্তমানে ২৫ পৃষ্ঠার কম ফাইল সমর্থিত।</string>
+    <string name="multi_file_selection">একাধিক ফাইল নির্বাচন করতে দীর্ঘক্ষণ চাপ দিন।</string>
+    <string name="failed_to_process_selected_file">নির্বাচিত ফাইল প্রক্রিয়াকরণ করতে ব্যর্থ</string>
+    <string name="failed_to_open_file">ফাইল খুলতে ব্যর্থ</string>
+    <string name="password_protected_files_not_supported">পাসওয়ার্ড সুরক্ষিত ফাইলগুলি পছন্দের তালিকায় সমর্থিত নয়।</string>
+    <string name="password_entry_cancelled">পাসওয়ার্ড প্রবেশ বাতিল করা হয়েছে।</string>
+    <string name="failed_to_open_document">ডকুমেন্ট খুলতে ব্যর্থ। এটি ক্ষতিগ্রস্ত হতে পারে বা সমর্থিত নয়।</string>
+    <string name="opening">খোলা হচ্ছে: </string>
+    <string name="failed_to_rename_file">ফাইলের নাম পরিবর্তন করতে ব্যর্থ। অনুগ্রহ করে পুনরায় চেষ্টা করুন।</string>
+    <string name="no_files_selected_go_back">কোনো ফাইল নির্বাচিত হয়নি। ফাইল নির্বাচন করতে ফিরে যান।</string>
+    <string name="split_file_limit_error">PDF ২৫ পৃষ্ঠার সীমা অতিক্রম করেছে।</string>
+    <string name="incorrect_password_error">"ভুল পাসওয়ার্ড। অনুগ্রহ করে পুনরায় চেষ্টা করুন।"</string>
+    <string name="error_processing_files">ফাইল প্রক্রিয়াকরণে ত্রুটি: </string>
+    <string name="pdf_action_completed">PDF ক্রিয়া সম্পন্ন হয়েছে।</string>
+    <string name="no_compression_quality_selected">কোনো সংকোচনের গুণমান নির্বাচিত হয়নি।</string>
+    <string name="compression_type_set">সংকোচনের ধরন নির্ধারিত: </string>
+    <string name="no_files_available_to_download">ডাউনলোডের জন্য কোনো ফাইল উপলব্ধ নেই</string>
+    <string name="downloading_files">ফাইল ডাউনলোড হচ্ছে…</string>
+    <string name="failed_to_download">ডাউনলোড ব্যর্থ হয়েছে: </string>
+    <string name="download_completed">ডাউনলোড সম্পন্ন হয়েছে। আপনার ডাউনলোড ফোল্ডার চেক করুন।</string>
+    <string name="watermarking_completed">ওয়াটারমার্কিং সম্পন্ন হয়েছে।</string>
+    <string name="no_files_watermarked">কোনো ফাইল ওয়াটারমার্ক করা হয়নি।</string>
+    <string name="error_during_watermarking">ওয়াটারমার্কিংয়ের সময় একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন।</string>
+
     <!-- Features -->
     <string name="features_heading">অ্যাপের বৈশিষ্ট্য</string>
     <string name="features_body">
@@ -144,6 +186,9 @@
     <string name="email_body">দয়া করে আপনার সমস্যা বা পরামর্শ এখানে বর্ণনা করুন।</string>
     <string name="no_email_app_found">ইমেইল অ্যাপ চালু করা যায়নি। আপনাকে এটি নিজে চালু করতে হবে এবং রিপোর্ট করতে হবে।</string>
     <string name="review_prompt">আপনি কি অ্যাপটি পছন্দ করছেন? আপনার রিভিউ আমাদের উন্নত করতে সাহায্য করবে! ❤️</string>
+    <string name="review_button">পর্যালোচনা করুন</string>
+    <string name="later_button">পরে</string>
+    <string name="cancel_reminder_button">রিমাইন্ডার বন্ধ করুন</string>
 
     <string name="faq_1">আমার ডাটা কি নিরাপদ?</string>
     <string name="faq_ans_1">আপনার সমস্ত ফাইল আপনার ডিভাইসে স্থানীয়ভাবে প্রক্রিয়াজাত এবং সংরক্ষিত হয়। শুধুমাত্র তখনই ডাটা অ্যাপ থেকে বের হয়, যখন আপনি এটি অন্য কোনো অ্যাপের মাধ্যমে শেয়ার করতে চান। CVOR কোনো ডাটা দূরবর্তীভাবে সংরক্ষণ, পরিচালনা বা প্রক্রিয়াকরণ করে না। ভবিষ্যতে যদি এই নীতিতে কোনো পরিবর্তন হয়, আপনাকে যথাযথভাবে অবহিত করা হবে।</string>
@@ -182,4 +227,5 @@
     <string name="terms_of_use_message">এই অ্যাপটি ব্যবহার করে, আপনি আমাদের ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতিতে সম্মত হচ্ছেন।</string>
     <string name="agree_button">সম্মত</string>
     <string name="disagree_button">অসম্মত</string>
+
 </resources>

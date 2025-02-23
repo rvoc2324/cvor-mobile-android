@@ -66,6 +66,7 @@
     <string name="share_text">¡Hola! Aquí está el archivo que solicitaste. ¡Compartido de manera segura a través de CVOR!</string>
     <string name="sharehistory_hint">Buscar por nombre de archivo, destinatario o propósito</string>
     <string name="refer_message">Descubre CVOR - Una forma más inteligente de compartir tus datos: https://www.google.com</string>
+    <string name="refer_prompt">¡Ayúdanos a correr la voz! Recomienda CVOR a tus amigos y familiares ❤️</string>
     <string name="refer">Recomendar</string>
     <string name="share_via">Compartir vía</string>
     <string name="text_watermark">Compartido con %1$s para %2$s el %3$s</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">Comprimir PDF</string>
     <string name="compress_quality">Tamaño de archivo tras compresión (selecciona uno):</string>
     <string name="pre_compress_file_size">Tamaño actual del archivo: %1s</string>
+    <string name="compress_high">Alto: %s</string>
+    <string name="compress_medium">Medio: %s</string>
+    <string name="compress_low">Bajo: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">Introduce un nuevo nombre de archivo</string>
@@ -124,7 +128,45 @@
     • <b> Estilo de cuadrícula:</b> El texto inteligente se repite en el documento. Desmarca para mostrarlo una sola vez.\n
     • <b> Posición:</b> Ajusta la posición del texto inteligente.\n
     • <b> Vista previa del texto inteligente:</b> Muestra una vista previa del texto que se aplicará al archivo.
-</string>
+    </string>
+
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">No se pudo procesar el archivo. Intenta comprimirlo para reducir su tamaño y vuelve a intentarlo.</string>
+    <string name="compression_failed">Error: La compresión ha fallado</string>
+    <string name="compression_quality_error">Selecciona la calidad de compresión</string>
+    <string name="navigation_failed">La navegación ha fallado</string>
+    <string name="unable_to_determine_file_name">No se pudo determinar el nombre del archivo</string>
+    <string name="failed_to_crop_image">No se pudo recortar la imagen</string>
+    <string name="failed_to_process_cropped_image">No se pudo procesar la imagen recortada</string>
+    <string name="multi_files_selected"> archivos seleccionados</string>
+    <string name="one_file_selected">1 archivo seleccionado</string>
+    <string name="file_selection_cancelled">Selección de archivo cancelada</string>
+    <string name="no_images_selected">No se seleccionaron imágenes</string>
+    <string name="invalid_file_source_type">Tipo de origen de archivo no válido</string>
+    <string name="source_type_not_set">El tipo de origen no está configurado</string>
+    <string name="split_file_limit_warning">Solo se admiten archivos con menos de 25 páginas por ahora.</string>
+    <string name="multi_file_selection">Mantén presionado para seleccionar varios archivos.</string>
+    <string name="failed_to_process_selected_file">No se pudo procesar el archivo seleccionado</string>
+    <string name="failed_to_open_file">No se pudo abrir el archivo</string>
+    <string name="password_protected_files_not_supported">Los archivos protegidos con contraseña no son compatibles con favoritos.</string>
+    <string name="password_entry_cancelled">Entrada de contraseña cancelada.</string>
+    <string name="failed_to_open_document">No se pudo abrir el documento. Puede estar dañado o no ser compatible.</string>
+    <string name="opening">Abriendo: </string>
+    <string name="failed_to_rename_file">No se pudo renombrar el archivo. Inténtalo de nuevo.</string>
+    <string name="no_files_selected_go_back">No se seleccionaron archivos. Vuelve atrás para seleccionar un archivo.</string>
+    <string name="split_file_limit_error">El PDF supera el límite de 25 páginas.</string>
+    <string name="incorrect_password_error">"Contraseña incorrecta. Inténtalo de nuevo."</string>
+    <string name="error_processing_files">Error al procesar archivos: </string>
+    <string name="pdf_action_completed">Acción de PDF completada.</string>
+    <string name="no_compression_quality_selected">No se seleccionó calidad de compresión.</string>
+    <string name="compression_type_set">Tipo de compresión establecido: </string>
+    <string name="no_files_available_to_download">No hay archivos disponibles para descargar</string>
+    <string name="downloading_files">Descargando archivos…</string>
+    <string name="failed_to_download">Error al descargar: </string>
+    <string name="download_completed">Descarga completada. Revisa tu carpeta de Descargas.</string>
+    <string name="watermarking_completed">Marcado de agua completado.</string>
+    <string name="no_files_watermarked">No se añadieron marcas de agua a ningún archivo.</string>
+    <string name="error_during_watermarking">Ocurrió un error durante el marcado de agua. Inténtalo de nuevo.</string>
 
     <!-- Features -->
     <string name="features_heading">Características de la app</string>
@@ -135,7 +177,7 @@
     &#8226;  Marcar archivos frecuentemente utilizados como favoritos para un acceso rápido.\n
     &#8226;  Hacer seguimiento de tus archivos importantes compartidos a través del historial de compartir inteligente.\n
     &#8226;  Agregar texto inteligente en tu idioma preferido; actualmente se soportan 12 idiomas.\n
-</string>
+    </string>
 
     <!-- FAQ and Messaging -->
     <string name="faq_heading">Preguntas frecuentes</string>
@@ -144,6 +186,9 @@
     <string name="email_body">Por favor describe tu problema o sugerencias aquí.</string>
     <string name="no_email_app_found">No se puede abrir la aplicación de correo. Deberás abrirla por tu cuenta y reportarlo.</string>
     <string name="review_prompt">¿Disfrutando de la app? ¡Tu reseña nos ayuda a mejorar! ❤️</string>
+    <string name="review_button">Revisar</string>
+    <string name="later_button">Más tarde</string>
+    <string name="cancel_reminder_button">Detener recordatorio</string>
 
     <string name="faq_1">¿Está segura mi información?</string>
     <string name="faq_ans_1">Todos tus archivos son procesados y almacenados localmente en tu dispositivo. Los únicos datos que salen de la app son cuando decides compartirlos mediante una app externa. CVOR no almacena, gestiona ni procesa ningún dato de forma remota. Si esto cambia en el futuro como parte de una nueva función, serás informado adecuadamente.</string>

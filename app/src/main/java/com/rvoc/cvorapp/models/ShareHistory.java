@@ -16,16 +16,17 @@ public class ShareHistory {
     private String shareMedium;
     private String sharedWith;
     private String purpose;
+    private String filePath;
 
     // private String additionalDetails;
 
-    public ShareHistory(String fileName, Date sharedDate, String shareMedium, String sharedWith, String purpose) {
+    public ShareHistory(String fileName, Date sharedDate, String shareMedium, String sharedWith, String purpose, String filePath) {
         this.fileName = fileName;
         this.sharedDate = sharedDate;
         this.shareMedium = shareMedium;
         this.sharedWith = sharedWith;
         this.purpose = purpose;
-        // this.additionalDetails = additionalDetails;
+        this.filePath = filePath;
     }
 
     // Getters and Setters
@@ -75,6 +76,14 @@ public class ShareHistory {
 
     public void setPurpose(String purpose) {
         this.purpose = purpose;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     @Override

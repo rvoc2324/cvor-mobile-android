@@ -66,7 +66,6 @@ public class HelpFragment extends Fragment {
                 }
             }
         });
-
         binding.reviewUsButton.setOnClickListener(v -> {
 
         });

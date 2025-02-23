@@ -14,7 +14,7 @@ import com.rvoc.cvorapp.utils.CrashlyticsInitialiser;
 import com.rvoc.cvorapp.utils.LoggingInitialiser;
 import com.rvoc.cvorapp.utils.PDFBoxInitialiser;
 
-import org.opencv.android.OpenCVLoader;
+// import org.opencv.android.OpenCVLoader;
 
 import javax.inject.Inject;
 

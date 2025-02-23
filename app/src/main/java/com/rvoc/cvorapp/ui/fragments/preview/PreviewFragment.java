@@ -2,14 +2,18 @@ package com.rvoc.cvorapp.ui.fragments.preview;
 
 import android.animation.ObjectAnimator;
 import android.animation.AnimatorSet;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +26,10 @@ import android.widget.Toast;
 
 import com.rvoc.cvorapp.R;
 import com.rvoc.cvorapp.adapters.PreviewPagerAdapter;
+import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
 import com.rvoc.cvorapp.databinding.FragmentPreviewBinding;
+import com.rvoc.cvorapp.services.FavouritesService;
+import com.rvoc.cvorapp.utils.ImageUtils;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.utils.FileUtils;
 
@@ -35,12 +42,18 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import dagger.multibindings.IntKey;
 
 @AndroidEntryPoint
 public class PreviewFragment extends Fragment {
 
+    @Inject
+    FavouritesService favouritesService;
     private static final String TAG = "Preview Fragment";
     private FragmentPreviewBinding binding;
     private CoreViewModel coreViewModel;
@@ -60,13 +73,14 @@ public class PreviewFragment extends Fragment {
         Log.d(TAG, "Preview fragment view created.");
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
+        String actionType = coreViewModel.getActionType().getValue();
 
         // Initialize adapter once to avoid multiple instances
         previewPagerAdapter = new PreviewPagerAdapter(requireContext());
         binding.filePreviewPager.setAdapter(previewPagerAdapter);
 
         observeProcessedFiles();
-        setupButtons();
+        setupButtons(actionType);
         setupDownloadAnimation();
     }
 
@@ -90,13 +104,13 @@ public class PreviewFragment extends Fragment {
         });
     }
 
-    private void setupButtons() {
+    private void setupButtons(String actionType) {
         binding.backButton.setOnClickListener(v -> {
             if (previewPagerAdapter != null) {
                 previewPagerAdapter.cleanupAll(); // Ensure no stale previews before going back
             }
             binding.filePreviewPager.setAdapter(null); // Clears ViewPager state
-            if (coreViewModel != null) {
+            if (coreViewModel != null && !Objects.equals(actionType, "compresspdf")) {
                 coreViewModel.resetProcessedFiles();
             }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
@@ -108,7 +122,11 @@ public class PreviewFragment extends Fragment {
         });
 
         binding.downloadIcon.setOnClickListener(v -> {
-            downloadFiles();
+            if(Objects.equals(actionType, "scanpdf")){
+                showFavouritesDialog();
+            } else {
+                downloadFiles();
+            }
             binding.downloadIcon.setVisibility(View.GONE);
             binding.cancelIcon.setVisibility(View.VISIBLE);
         });
@@ -137,6 +155,41 @@ public class PreviewFragment extends Fragment {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(scaleX, scaleY);
         animatorSet.start();
+    }
+
+    private void showFavouritesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme)
+                .setView(binding.getRoot())
+                .setCancelable(false);
+
+        // Inflate the dialog layout using ViewBinding
+        DialogLayoutBinding binding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
+
+        AlertDialog dialog = builder.create();
+
+        // Hide unnecessary elements
+        binding.inputField.setVisibility(View.GONE);
+        binding.positiveButton.setVisibility(View.VISIBLE);
+        binding.negativeButton.setVisibility(View.VISIBLE);
+
+        // Set the help text
+        binding.dialogMessage.setText(getString(R.string.add_favourite_prompt));
+
+        binding.positiveButton.setOnClickListener(v -> {
+            Uri uri = FileUtils.getUriFromFile(requireContext(), filesToShow.get(0));
+            String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), uri);
+            favouritesService.addToFavourites(String.valueOf(filesToShow), thumbnailPath);
+            downloadFiles();
+            dialog.dismiss();
+        });
+
+        binding.negativeButton.setOnClickListener(v -> {
+            downloadFiles();
+            dialog.dismiss();
+        });
+
+        // Show the dialog
+        dialog.show();
     }
 
     private void downloadFiles() {

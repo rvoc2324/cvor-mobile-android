@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
@@ -27,15 +27,20 @@
             <!-- Title Text -->
             <TextView
                 android:id="@+id/title_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/smart_share_button"
                 android:letterSpacing="0.1"
                 style="@style/TextStyle.SubTitle"
                 android:textColor="@color/white"
                 android:textAlignment="viewStart"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/help_icon"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:maxLines="2"
+                android:ellipsize="end"/>
 
             <!-- Question Mark Icon -->
             <ImageView
@@ -43,13 +48,17 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/baseline_help_24"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:filterTouchesWhenObscured="true"/>
-        </RelativeLayout>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
     <ScrollView
+        android:id="@+id/scroll_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@id/title_container"
@@ -80,9 +89,7 @@
                         android:id="@+id/input_sharing_with_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/sharing_with"
-                        app:boxStrokeColor="@color/inputBox"
-                        app:hintTextAppearance="@style/TextInputHintStyle">
+                        android:hint="@string/sharing_with">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/input_sharing_with"
@@ -214,7 +221,7 @@
         android:orientation="horizontal"
         android:padding="16dp"
         android:layout_alignParentBottom="true"
-        android:gravity="bottom">
+        android:gravity="center_vertical">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back_button"
@@ -225,7 +232,8 @@
             style="@style/SecondaryButtonStyle"
             app:cornerRadius="12dp"
             android:text="@string/back_button"
-            android:gravity="center"
+            android:gravity="center_vertical|center_horizontal"
+            android:ellipsize="end"
             android:filterTouchesWhenObscured="true"
             android:drawableLeft="@drawable/baseline_keyboard_arrow_left_24" />
 
@@ -236,9 +244,10 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:text="@string/preview_button"
+            android:ellipsize="end"
             style="@style/PrimaryButtonStyle"
             app:cornerRadius="12dp"
-            android:gravity="center"
+            android:gravity="center_vertical|center_horizontal"
             android:filterTouchesWhenObscured="true"
             android:drawableEnd="@drawable/baseline_keyboard_arrow_right_24"/>
     </LinearLayout>

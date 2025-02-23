@@ -66,6 +66,7 @@
     <string name="share_text">नमस्ते! यहां वह फ़ाइल है जो आपने अनुरोध की थी। इसे CVOR के माध्यम से सुरक्षित रूप से साझा किया गया है!</string>
     <string name="sharehistory_hint">फ़ाइल नाम, साझा किए गए व्यक्ति या उद्देश्य के अनुसार खोजें</string>
     <string name="refer_message">CVOR देखें - आपका डेटा साझा करने का एक स्मार्ट तरीका: https://www.google.com</string>
+    <string name="refer_prompt">अपने दोस्तों और परिवार को CVOR रेफर करें ❤️</string>
     <string name="refer">संदर्भित करें</string>
     <string name="share_via">के माध्यम से साझा करें</string>
     <string name="text_watermark">%1$s के साथ %2$s के लिए %3$s पर साझा किया गया</string>
@@ -79,6 +80,9 @@
     <string name="compress_pdf">पीडीएफ संपीड़ित करें</string>
     <string name="compress_quality">संपीड़न के बाद फ़ाइल का आकार (एक चुनें):</string>
     <string name="pre_compress_file_size">वर्तमान फ़ाइल का आकार: %1s</string>
+    <string name="compress_high">उच्च: %s</string>
+    <string name="compress_medium">मध्यम: %s</string>
+    <string name="compress_low">निम्न: %s</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">नया फ़ाइल नाम दर्ज करें</string>
@@ -126,6 +130,44 @@
         • <b> स्मार्ट टेक्स्ट पूर्वावलोकन:</b> फ़ाइल पर लागू टेक्स्ट का पूर्वावलोकन दिखाता है।
     </string>
 
+    <!-- Toast messages -->
+    <string name="pdf_combine_error">फ़ाइल को संसाधित नहीं किया जा सका। आकार कम करने के लिए इसे संपीड़ित करने का प्रयास करें और फिर से कोशिश करें।</string>
+    <string name="compression_failed">त्रुटि: संपीड़न विफल</string>
+    <string name="compression_quality_error">संपीड़न गुणवत्ता चुनें</string>
+    <string name="navigation_failed">नेविगेशन विफल</string>
+    <string name="unable_to_determine_file_name">फ़ाइल नाम निर्धारित करने में असमर्थ</string>
+    <string name="failed_to_crop_image">छवि को क्रॉप करने में विफल</string>
+    <string name="failed_to_process_cropped_image">क्रॉप की गई छवि को संसाधित करने में विफल</string>
+    <string name="multi_files_selected"> फ़ाइलें चयनित</string>
+    <string name="one_file_selected">1 फ़ाइल चयनित</string>
+    <string name="file_selection_cancelled">फ़ाइल चयन रद्द</string>
+    <string name="no_images_selected">कोई छवि चयनित नहीं</string>
+    <string name="invalid_file_source_type">अमान्य फ़ाइल स्रोत प्रकार</string>
+    <string name="source_type_not_set">स्रोत प्रकार सेट नहीं किया गया</string>
+    <string name="split_file_limit_warning">फिलहाल केवल 25 पृष्ठों से कम वाली फ़ाइलें समर्थित हैं।</string>
+    <string name="multi_file_selection">कई फ़ाइलों का चयन करने के लिए लंबे समय तक दबाएँ।</string>
+    <string name="failed_to_process_selected_file">चयनित फ़ाइल को संसाधित करने में विफल</string>
+    <string name="failed_to_open_file">फ़ाइल खोलने में विफल</string>
+    <string name="password_protected_files_not_supported">पासवर्ड-संरक्षित फ़ाइलें फ़ेवरेट्स के लिए समर्थित नहीं हैं।</string>
+    <string name="password_entry_cancelled">पासवर्ड प्रविष्टि रद्द।</string>
+    <string name="failed_to_open_document">दस्तावेज़ खोलने में विफल। यह दूषित या असमर्थित हो सकता है।</string>
+    <string name="opening">खोल रहा है: </string>
+    <string name="failed_to_rename_file">फ़ाइल का नाम बदलने में विफल। कृपया पुनः प्रयास करें।</string>
+    <string name="no_files_selected_go_back">कोई फ़ाइल चयनित नहीं। फ़ाइल का चयन करने के लिए वापस जाएं।</string>
+    <string name="split_file_limit_error">पीडीएफ़ 25-पृष्ठ सीमा से अधिक है।</string>
+    <string name="incorrect_password_error">गलत पासवर्ड। कृपया पुनः प्रयास करें।</string>
+    <string name="error_processing_files">फ़ाइलों को संसाधित करने में त्रुटि: </string>
+    <string name="pdf_action_completed">पीडीएफ़ क्रिया पूरी हुई।</string>
+    <string name="no_compression_quality_selected">कोई संपीड़न गुणवत्ता चयनित नहीं।</string>
+    <string name="compression_type_set">संपीड़न प्रकार सेट: </string>
+    <string name="no_files_available_to_download">डाउनलोड के लिए कोई फ़ाइल उपलब्ध नहीं</string>
+    <string name="downloading_files">फ़ाइलें डाउनलोड हो रही हैं…</string>
+    <string name="failed_to_download">डाउनलोड करने में विफल: </string>
+    <string name="download_completed">डाउनलोड पूर्ण। अपने डाउनलोड फ़ोल्डर की जाँच करें।</string>
+    <string name="watermarking_completed">वॉटरमार्किंग पूर्ण।</string>
+    <string name="no_files_watermarked">कोई फ़ाइलें वॉटरमार्क नहीं की गईं।</string>
+    <string name="error_during_watermarking">वॉटरमार्किंग के दौरान त्रुटि हुई। पुनः प्रयास करें।</string>
+
     <!-- Features -->
     <string name="features_heading">ऐप की विशेषताएँ</string>
     <string name="features_body">
@@ -143,8 +185,10 @@
     <string name="message_us_prompt">क्या आपके पास अधिक प्रश्न हैं, सुझाव देना चाहते हैं, या कोई बग रिपोर्ट करना चाहते हैं?</string>
     <string name="email_body">कृपया अपनी समस्या या सुझाव यहां विवरण के साथ दें।</string>
     <string name="no_email_app_found">ईमेल ऐप लॉन्च नहीं किया जा सका। आपको इसे स्वयं लॉन्च करना होगा और रिपोर्ट करना होगा।</string>
-
     <string name="review_prompt">क्या आप ऐप का आनंद ले रहे हैं? आपकी समीक्षा हमें सुधारने में मदद करती है! ❤️</string>
+    <string name="review_button">समीक्षा करें</string>
+    <string name="later_button">बाद में</string>
+    <string name="cancel_reminder_button">रिमाइंडर रोकें</string>
 
     <string name="faq_1">क्या मेरा डेटा सुरक्षित है?</string>
     <string name="faq_ans_1">आपकी सभी फ़ाइलें आपके डिवाइस पर स्थानीय रूप से संसाधित और संग्रहीत की जाती हैं। ऐप से बाहर केवल वही डेटा जाता है जिसे आप किसी बाहरी ऐप के माध्यम से साझा करना चुनते हैं। CVOR किसी भी डेटा को दूरस्थ रूप से संग्रहीत, प्रबंधित या संसाधित नहीं करता है। यदि भविष्य में यह किसी नए फीचर के तहत बदलता है, तो आपको इसकी जानकारी दी जाएगी।</string>
@@ -183,4 +227,5 @@
     <string name="terms_of_use_message">इस ऐप का उपयोग करके, आप हमारी उपयोग की शर्तों और गोपनीयता नीति से सहमत होते हैं।</string>
     <string name="agree_button">सहमत</string>
     <string name="disagree_button">असहमत</string>
+
 </resources>

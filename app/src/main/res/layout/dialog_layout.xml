@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center_vertical">
 
         <Button
             android:id="@+id/negativeButton"
@@ -60,6 +60,7 @@
             android:backgroundTint="@color/buttonHighlightSecondary"
             android:visibility="visible"
             android:text="@string/no"
+            android:ellipsize="end"
             android:textColor="@color/white"
             android:filterTouchesWhenObscured="true" />
 
@@ -71,6 +72,11 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:backgroundTint="@color/buttonHighlightSecondary"
             android:visibility="gone"
             android:textColor="@color/white"
@@ -83,12 +89,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
+            android:ellipsize="end"
             android:backgroundTint="@color/buttonHighlightSecondary"
             android:visibility="visible"
             android:text="@string/yes"
             android:textColor="@color/white"
             android:filterTouchesWhenObscured="true"/>
-
-
     </LinearLayout>
 </LinearLayout>
