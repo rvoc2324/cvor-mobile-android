@@ -23,12 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.adapters.PreviewPagerAdapter;
 import com.rvoc.cvorapp.databinding.FragmentShareHistoryBinding;
 import com.rvoc.cvorapp.models.ShareHistory;
 import com.rvoc.cvorapp.adapters.ShareHistoryAdapter;
 import com.rvoc.cvorapp.viewmodels.ShareHistoryViewModel;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +51,9 @@ public class ShareHistoryFragment extends Fragment {
     private Date toDate = null;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
+    private PreviewPagerAdapter previewAdapter;
+    private final List<File> previewFiles = new ArrayList<>();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentShareHistoryBinding.inflate(inflater, container, false);
@@ -63,53 +69,27 @@ public class ShareHistoryFragment extends Fragment {
         setupSearchFilter();
         setupDateFilters();
         setupObservers();
+        setupPreviewFeature();
 
-        /*// Home Button Click
-        binding.homeButton.setOnClickListener(v -> {
-            Log.d(TAG, "Home button clicked.");
-            NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_shareHistoryFragment_to_homeFragment);
-        });*/
-
-        binding.filterToggle.setOnClickListener(v -> {
-            if (binding.filterContainer.getVisibility() == View.VISIBLE) {
-                binding.filterContainer.animate()
-                        .alpha(0f)
-                        .setDuration(200)
-                        .withEndAction(() -> binding.filterContainer.setVisibility(View.GONE))
-                        .start();
-            } else {
-                binding.filterContainer.setAlpha(0f);
-                binding.filterContainer.setVisibility(View.VISIBLE);
-                binding.filterContainer.animate()
-                        .alpha(1f)
-                        .setDuration(200)
-                        .start();
-            }
-        });
+        binding.filterToggle.setOnClickListener(v -> toggleFilterContainer());
 
         // Load full share history initially
         shareHistoryViewModel.loadShareHistory();
     }
 
     private void setupRecyclerView() {
-        DividerItemDecoration divider = new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL);
-        binding.recyclerView.addItemDecoration(divider);
-
         RecyclerView recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ShareHistoryAdapter(history -> {
-            //
-        });
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+
+        adapter = new ShareHistoryAdapter(this::openPreview);
         recyclerView.setAdapter(adapter);
     }
 
     private void setupSearchFilter() {
-        EditText searchBox = binding.searchBox;
-        searchBox.addTextChangedListener(new TextWatcher() {
+        binding.searchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -118,8 +98,7 @@ public class ShareHistoryFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
     }
 
@@ -155,9 +134,79 @@ public class ShareHistoryFragment extends Fragment {
         shareHistoryViewModel.getFilteredShareHistory().observe(getViewLifecycleOwner(), shareHistories -> adapter.submitList(shareHistories));
     }
 
+    private void setupPreviewFeature() {
+        previewAdapter = new PreviewPagerAdapter(requireContext());
+        binding.viewPager.setAdapter(previewAdapter);
+        binding.viewPager.setOffscreenPageLimit(1);
+
+        binding.closePreview.setOnClickListener(v -> closePreview());
+    }
+
+    private void openPreview(ShareHistory history) {
+        if (history == null || history.getFilePath() == null) return;
+
+        File file = new File(history.getFilePath()); // Convert String path to File
+
+        // Clear and update the preview list
+        previewFiles.clear();
+        previewFiles.add(file);
+        previewAdapter.submitList(new ArrayList<>(previewFiles));
+
+        // Show and animate preview container only if it was hidden
+        if (binding.previewContainer.getVisibility() != View.VISIBLE) {
+            binding.previewContainer.setVisibility(View.VISIBLE);
+            binding.previewContainer.setAlpha(0f);
+            binding.previewContainer.animate().alpha(1f).setDuration(200).start();
+        }
+    }
+
+    private void closePreview() {
+        binding.closePreview.setEnabled(false); // Prevent multiple clicks during animation
+
+        binding.previewContainer.animate()
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction(() -> {
+                    previewFiles.clear();
+                    previewAdapter.submitList(new ArrayList<>()); // Clear adapter data
+
+                    if (previewAdapter != null) {
+                        previewAdapter.cleanupAll(); // Ensure full cleanup (if method exists)
+                    }
+
+                    binding.previewContainer.setVisibility(View.GONE);
+                    binding.previewContainer.setAlpha(1f); // Reset for future visibility changes
+                    binding.closePreview.setEnabled(true); // Re-enable after animation
+                })
+                .start();
+    }
+
+    private void toggleFilterContainer() {
+        if (binding.filterContainer.getVisibility() == View.VISIBLE) {
+            binding.filterContainer.animate()
+                    .alpha(0f)
+                    .setDuration(200)
+                    .withEndAction(() -> binding.filterContainer.setVisibility(View.GONE))
+                    .start();
+        } else {
+            binding.filterContainer.setAlpha(0f);
+            binding.filterContainer.setVisibility(View.VISIBLE);
+            binding.filterContainer.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start();
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // Clear preview adapter to avoid stale previews
+        if (previewAdapter != null) {
+            previewAdapter.cleanupAll();
+        }
+        previewFiles.clear();
         binding = null;
     }
 }
+

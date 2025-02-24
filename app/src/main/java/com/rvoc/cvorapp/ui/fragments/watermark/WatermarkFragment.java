@@ -23,9 +23,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.rvoc.cvorapp.R;
+import com.rvoc.cvorapp.adapters.FAQAdapter;
+import com.rvoc.cvorapp.adapters.WatermarkHelpAdapter;
 import com.rvoc.cvorapp.databinding.DialogLayoutBinding;
+import com.rvoc.cvorapp.models.FAQItem;
 import com.rvoc.cvorapp.services.WatermarkService;
 import com.rvoc.cvorapp.viewmodels.CoreViewModel;
 import com.rvoc.cvorapp.viewmodels.WatermarkViewModel;
@@ -57,6 +61,10 @@ public class WatermarkFragment extends Fragment {
     private CoreViewModel coreViewModel;
 
     private FragmentWatermarkBinding binding;
+
+    private DialogLayoutBinding dialogLayoutBinding;
+
+    private WatermarkHelpAdapter helpAdapter;
 
     private ExecutorService executorService;
 
@@ -331,25 +339,44 @@ public class WatermarkFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme);
 
         // Inflate the dialog layout using ViewBinding
-        DialogLayoutBinding binding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
+        dialogLayoutBinding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
 
         // Hide unnecessary elements
-        binding.inputField.setVisibility(View.GONE);
-        binding.positiveButton.setVisibility(View.GONE);
-        binding.negativeButton.setVisibility(View.GONE);
+        dialogLayoutBinding.inputField.setVisibility(View.GONE);
+        dialogLayoutBinding.positiveButton.setVisibility(View.GONE);
+        dialogLayoutBinding.negativeButton.setVisibility(View.GONE);
+        dialogLayoutBinding.dialogMessage.setVisibility(View.GONE);
+        dialogLayoutBinding.recyclerView.setVisibility(View.VISIBLE);
 
-        // Set the help text
+        setupHelp();
+
+        /* // Set the help text
         binding.dialogMessage.setText(getString(R.string.watermark_help_text));
         binding.dialogMessage.setGravity(Gravity.START);
         binding.dialogMessage.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-        binding.dialogMessage.setLetterSpacing(0.05f);
+        binding.dialogMessage.setLetterSpacing(0.05f);*/
 
         // Create the dialog
-        AlertDialog dialog = builder.setView(binding.getRoot()).create();
+        AlertDialog dialog = builder.setView(dialogLayoutBinding.getRoot()).create();
         dialog.setCanceledOnTouchOutside(true); // Dismiss on outside tap
 
         // Show the dialog
         dialog.show();
+    }
+
+    private void setupHelp() {
+        List<FAQItem> helpList = new ArrayList<>();
+        helpList.add(new FAQItem(getString(R.string.help_1), getString(R.string.help_ans_1)));
+        helpList.add(new FAQItem(getString(R.string.help_2), getString(R.string.help_ans_2)));
+        helpList.add(new FAQItem(getString(R.string.help_3), getString(R.string.help_ans_3)));
+        helpList.add(new FAQItem(getString(R.string.help_4), getString(R.string.help_ans_4)));
+        helpList.add(new FAQItem(getString(R.string.help_5), getString(R.string.help_ans_5)));
+        helpList.add(new FAQItem(getString(R.string.help_6), getString(R.string.help_ans_6)));
+        helpList.add(new FAQItem(getString(R.string.help_7), getString(R.string.help_ans_7)));
+
+        helpAdapter = new WatermarkHelpAdapter(helpList);
+        dialogLayoutBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        dialogLayoutBinding.recyclerView.setAdapter(helpAdapter);
     }
 
     @Override

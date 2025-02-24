@@ -122,7 +122,29 @@
     <string name="opacity_text">Transparency: %d</string>
     <string name="fontsize_text">Font size: %d</string>
     <string name="smartt_text_preview">Text preview</string>
-    <string name="smartt_text_help">
+
+    <string name="help_1">Sharing With</string>
+    <string name="help_ans_1">"Sharing With" refers to the organisation or individual you are sharing your data with.</string>
+
+    <string name="help_2">Purpose</string>
+    <string name="help_ans_2">The "Purpose" field allows you to briefly add a reason or description for sharing the document, eg. hotel booking ref, account opening, etc.</string>
+
+    <string name="help_3">Transparency</string>
+    <string name="help_ans_3">"Transparency" allows you to adjust the lightness of the text in the document.</string>
+
+    <string name="help_4">Font Size?</string>
+    <string name="help_ans_4">"Font Size" lets you adjust the size of the text in the document.</string>
+
+    <string name="help_5">Grid Style</string>
+    <string name="help_ans_5">"Grid Style" determines whether the text repeats across the document. If unchecked, it will show once.</string>
+
+    <string name="help_6">Position</string>
+    <string name="help_ans_6">"Position" lets you adjust the position of the text in the document.</string>
+
+    <string name="help_7">Text Preview</string>
+    <string name="help_ans_7">"Text Preview" shows a preview of the text that will be applied to the file.</string>
+
+    <!--<string name="smartt_text_help">
         • <b> Sharing With:</b> Organisation/individual you are sharing the document with.\n
         • <b> Purpose:</b> Briefly add a purpose of the share.\n
         • <b> Transparency:</b> Adjust lightness of the text.\n
@@ -130,7 +152,7 @@
         • <b> Grid style:</b> Text repeats across the document. Uncheck to show once.\n
         • <b> Position: </b> Adjust the position of the text.\n
         • <b> Text Preview:</b> Shows a preview of the text to be applied to the file.
-    </string>
+    </string>-->
 
     <!-- Toast messages -->
     <string name="pdf_combine_error">File could not be processed. Try compressing it to reduce size and try again.</string>
@@ -178,7 +200,7 @@
         &#8226;  Compress, combine, split, and convert images to PDFs effortlessly.\n
         &#8226;  Mark frequently used files as favourites for quick usage.\n
         &#8226;  Keep track of your important shared files via the Secure share history.\n
-        &#8226;  Add secure text in your preferred language; 12 languages currently supported.\n
+        &#8226;  Add secure text in your device language; checkout cvor.io for a list of the supported languages.\n
     </string>
 
     <!-- FAQ and Messaging -->
@@ -186,7 +208,7 @@
     <string name="faq_collapse">Expands and collapses the FAQ section</string>
     <string name="message_us_prompt">Have more questions or suggestions or want to report a bug?</string>
     <string name="email_body">Please describe your issue or suggestions here.</string>
-    <string name="no_email_app_found">Unable to launch email app. You will have to launch it on your end and report.</string>
+    <string name="no_email_app_found">Unable to launch email app. You can email us directly on cvorapp.io@gmail.com.</string>
     <string name="review_prompt">Enjoying the app? Your review helps us improve! ❤️</string>
     <string name="review_button">Review</string>
     <string name="later_button">Later</string>
@@ -199,7 +221,7 @@
     <string name="faqq_ans_2">Secure Share is designed to prevent misuse of your sensitive data. When a shared file contains the recipient’s identity, it acts as a psychological deterrent against misuse. Additionally, institutions may be reluctant to accept documents shared with someone else or used for a different purpose.</string>
 
     <string name="faqq_3">What is Secure Share history?</string>
-    <string name="faqq_ans_3">There are multiple situations where you may need to share sensitive data. Secure Share history helps you keep track of when and where you have shared your data.</string>
+    <string name="faqq_ans_3">There are multiple situations where you may need to share sensitive data. Secure Share history helps you keep track of when and where you have shared your data. NOTE: The share history is stored locally on your device so you may lose access to it in case of device factory resets, etc.</string>
 
     <string name="faqq_4">How do I customize Secure Text?</string>
     <string name="faqq_ans_4">Secure Text is optimized for speed and maintaining document integrity. Based on user feedback, we may introduce further customization options in future updates.</string>

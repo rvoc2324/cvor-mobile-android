@@ -16,12 +16,14 @@ import java.util.Locale;
 
 public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapter.ViewHolder> {
     private final List<ShareHistory> shareHistoryList = new ArrayList<>(); // Initialize with empty list
+    private final OnItemClickListener onItemClickListener; // Store click listener
 
     public interface OnItemClickListener {
         void onItemClick(ShareHistory history);
     }
 
     public ShareHistoryAdapter(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public void submitList(List<ShareHistory> newList) {
@@ -44,12 +46,11 @@ public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapte
         diffResult.dispatchUpdatesTo(this);
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemHistoryBinding binding = ItemHistoryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(binding);
+        return new ViewHolder(binding, onItemClickListener);
     }
 
     @Override
@@ -65,10 +66,12 @@ public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ItemHistoryBinding binding;
+        private final OnItemClickListener onItemClickListener;
 
-        public ViewHolder(ItemHistoryBinding binding) {
+        public ViewHolder(ItemHistoryBinding binding, OnItemClickListener onItemClickListener) {
             super(binding.getRoot());
             this.binding = binding;
+            this.onItemClickListener = onItemClickListener;
         }
 
         public void bind(ShareHistory history) {
@@ -86,11 +89,18 @@ public class ShareHistoryAdapter extends RecyclerView.Adapter<ShareHistoryAdapte
             binding.shareMedium.setSelected(false);
             binding.purpose.setSelected(false);
 
-            //Starting the marquee scroll when the view is bound
+            // Starting the marquee scroll when the view is bound
             binding.fileName.setSelected(true);
             binding.sharedWith.setSelected(true);
             binding.shareMedium.setSelected(true);
             binding.purpose.setSelected(true);
+
+            // Handle Click to Open Preview
+            binding.getRoot().setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(history);
+                }
+            });
         }
     }
 }

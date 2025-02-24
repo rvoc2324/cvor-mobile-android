@@ -212,22 +212,33 @@
 
     <!-- Floating ViewPager (Initially Hidden) -->
     <FrameLayout
-        android:id="@+id/viewPagerContainer"
+        android:id="@+id/previewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="100dp"
-        android:layout_marginTop="50dp"
-        android:visibility="visible"
+        android:layout_marginTop="120dp"
+        android:visibility="gone"
         android:elevation="10dp"
         android:clickable="true"
         android:focusable="true">
 
+        <!-- Cancel Icon (Top Right) -->
+        <ImageView
+            android:id="@+id/close_preview"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/baseline_clear_24"
+            android:contentDescription="@string/cancel"/>
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:clipToPadding="false"/>
     </FrameLayout>

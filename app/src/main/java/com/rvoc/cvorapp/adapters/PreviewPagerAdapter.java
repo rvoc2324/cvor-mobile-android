@@ -114,7 +114,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return fileList.size();
     }
 
-    // ✅ Clears all previous PdfPagesAdapters (prevents stale previews)
+    // Clears all previous PdfPagesAdapters (prevents stale previews)
     private void clearPreviousPdfAdapters() {
         for (PdfPagesAdapter adapter : pdfAdapters) {
             adapter.clearCache();
@@ -123,7 +123,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         pdfAdapters.clear();
     }
 
-    // ✅ Call this when Activity/Fragment is destroyed to clean up memory
+    // Call this when Activity/Fragment is destroyed to clean up memory
     public void cleanupAll() {
         clearPreviousPdfAdapters();
     }
@@ -181,7 +181,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         }
 
-        // ✅ Properly releases memory when ViewHolder is recycled
+        // Properly releases memory when ViewHolder is recycled
         public void cleanup() {
             if (pdfPagesAdapter != null) {
                 pdfPagesAdapter.clearCache();
