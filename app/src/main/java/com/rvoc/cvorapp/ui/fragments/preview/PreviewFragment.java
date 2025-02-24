@@ -17,6 +17,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -74,6 +76,22 @@ public class PreviewFragment extends Fragment {
 
         coreViewModel = new ViewModelProvider(requireActivity()).get(CoreViewModel.class);
         String actionType = coreViewModel.getActionType().getValue();
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Reset selected files when back action is triggered (including swipe or system gesture)
+                if (previewPagerAdapter != null) {
+                    previewPagerAdapter.cleanupAll(); // Ensure no stale previews before going back
+                }
+                binding.filePreviewPager.setAdapter(null); // Clears ViewPager state
+                if (coreViewModel != null && !Objects.equals(actionType, "compresspdf")) {
+                    coreViewModel.resetProcessedFiles();
+                }
+                setEnabled(false);
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
 
         // Initialize adapter once to avoid multiple instances
         previewPagerAdapter = new PreviewPagerAdapter(requireContext());
@@ -156,16 +174,14 @@ public class PreviewFragment extends Fragment {
         animatorSet.playTogether(scaleX, scaleY);
         animatorSet.start();
     }
-
     private void showFavouritesDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme)
-                .setView(binding.getRoot())
                 .setCancelable(false);
 
         // Inflate the dialog layout using ViewBinding
         DialogLayoutBinding binding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
 
-        AlertDialog dialog = builder.create();
+        AlertDialog dialog = builder.setView(binding.getRoot()).create();
 
         // Hide unnecessary elements
         binding.inputField.setVisibility(View.GONE);

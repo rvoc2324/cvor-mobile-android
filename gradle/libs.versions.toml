@@ -26,6 +26,7 @@ glide = "4.16.0"
 opencv = "4.9.0"
 ucrop = "2.2.10"
 photoView = "2.0.0"
+touchImageView = "3.6"
 adMob = "23.6.0"
 concurrent-futures = "1.2.0"
 guava = "33.4.0-android"
@@ -74,6 +75,7 @@ photoView = { group = "com.github.chrisbanes", name = "PhotoView", version.ref =
 adMob = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "adMob" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
+touchImageView = { group = "com.github.MikeOrtiz", name = "TouchImageView", version.ref = "touchImageView" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

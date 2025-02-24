@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -79,6 +80,18 @@ public class WatermarkFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "Watermark fragment 1.");
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Reset selected files when back action is triggered (including swipe or system gesture)
+                if (coreViewModel != null) {
+                    coreViewModel.resetSelectedFiles();
+                }
+                setEnabled(false);
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
 
         // Initialize executor service in the fragment
         executorService = Executors.newSingleThreadExecutor(); // Adjust pool size as needed
@@ -382,6 +395,7 @@ public class WatermarkFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        watermarkViewModel.clearState();
         binding = null; // Avoid memory leaks by clearing binding reference
     }
 }

@@ -80,8 +80,9 @@
     </style>
 
     <!-- Text hint style -->
-    <style name="TextInputHintStyle" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="TextInputHintStyle">
         <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:fontFamily">@font/poppins</item>
         <item name="android:textSize">12sp</item>
     </style>
 

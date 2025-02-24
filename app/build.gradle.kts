@@ -99,6 +99,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.ucrop)
     implementation(libs.photoView)
+    implementation(libs.touchImageView)
     ksp(libs.glide.compiler)
 
     //Animation libraries

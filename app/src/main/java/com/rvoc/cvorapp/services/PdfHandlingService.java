@@ -109,8 +109,6 @@ public class PdfHandlingService {
         }
     }
 
-
-
     //Converting images to a PDF
     public File convertImagesToPDF(@NonNull List<Uri> imageUris, @NonNull File outputFile) throws Exception {
         Log.d(TAG, "PDF Service - Converting Images to PDF");

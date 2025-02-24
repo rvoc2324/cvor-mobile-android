@@ -52,9 +52,7 @@
                 app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </com.google.android.material.card.MaterialCardView>
 
     <ScrollView
@@ -85,38 +83,32 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/input_sharing_with_layout"
+                    <EditText
+                        android:id="@+id/input_sharing_with"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/sharing_with">
+                        android:autofillHints="false"
+                        android:hint="@string/sharing_with"
+                        android:textColorHint="@color/textSecondary"
+                        style="@style/TextInputHintStyle"
+                        android:inputType="text"
+                        android:padding="12dp"
+                        android:background="@drawable/rounded_background_secondary"
+                        android:textColor="@color/text"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_sharing_with"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:textColor="@color/text"
-                            android:filterTouchesWhenObscured="true"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/input_purpose_layout"
+                    <EditText
+                        android:id="@+id/input_purpose"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:autofillHints="false"
                         android:hint="@string/purpose"
-                        app:boxStrokeColor="@color/inputBox"
-                        app:hintTextAppearance="@style/TextInputHintStyle">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_purpose"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:textColor="@color/text"
-                            android:filterTouchesWhenObscured="true"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                        android:textColorHint="@color/textSecondary"
+                        style="@style/TextInputHintStyle"
+                        android:inputType="text"
+                        android:layout_marginTop="16dp"
+                        android:padding="12dp"
+                        android:background="@drawable/rounded_background_secondary"
+                        android:textColor="@color/text"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

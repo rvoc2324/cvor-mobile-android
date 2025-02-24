@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Exclude the cache directory from extraction -->
-    <exclude domain="cache" />
 
     <!-- Include files and database directories for extraction -->
     <include domain="file" />
     <include domain="database" />
     <include domain="sharedpref" />
+    <include domain="cache" />
 
     <!-- You can also include or exclude other domains as needed -->
     <!-- <include domain="external" /> -->

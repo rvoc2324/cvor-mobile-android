@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <backup xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Exclude the cache directory (not usually needed for backup) -->
-    <exclude domain="cache" />
 
     <!-- Include shared preferences and databases if necessary -->
     <include domain="sharedpref" />
     <include domain="database" />
+    <include domain="cache" />
 
     <!-- Include files directory if needed -->
     <include domain="file" />

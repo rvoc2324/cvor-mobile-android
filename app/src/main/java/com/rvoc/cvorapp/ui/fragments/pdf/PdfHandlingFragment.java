@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -71,6 +72,18 @@ public class PdfHandlingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Log.d(TAG, "PDF Handling Initialized.");
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Reset selected files when back action is triggered (including swipe or system gesture)
+                if (coreViewModel != null) {
+                    coreViewModel.resetSelectedFiles();
+                }
+                setEnabled(false);
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
 
         executorService = Executors.newFixedThreadPool(3);
 

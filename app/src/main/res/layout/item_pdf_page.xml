@@ -4,20 +4,20 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
-        <!-- <com.github.chrisbanes.photoview.PhotoView
+        <com.ortiz.touchview.TouchImageView
             android:id="@+id/pdfPageImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
-            android:contentDescription="@string/preview_desc"/> -->
+            android:contentDescription="@string/preview_desc"/>
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/pdfPageImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/preview_desc"/>
+            android:contentDescription="@string/preview_desc"/> -->
 
     </LinearLayout>
 </layout>

@@ -155,6 +155,7 @@ public class ShareHistoryFragment extends Fragment {
         // Show and animate preview container only if it was hidden
         if (binding.previewContainer.getVisibility() != View.VISIBLE) {
             binding.previewContainer.setVisibility(View.VISIBLE);
+            binding.closePreview.setVisibility(View.VISIBLE);
             binding.previewContainer.setAlpha(0f);
             binding.previewContainer.animate().alpha(1f).setDuration(200).start();
         }
@@ -177,6 +178,7 @@ public class ShareHistoryFragment extends Fragment {
                     binding.previewContainer.setVisibility(View.GONE);
                     binding.previewContainer.setAlpha(1f); // Reset for future visibility changes
                     binding.closePreview.setEnabled(true); // Re-enable after animation
+                    binding.closePreview.setVisibility(View.GONE);
                 })
                 .start();
     }

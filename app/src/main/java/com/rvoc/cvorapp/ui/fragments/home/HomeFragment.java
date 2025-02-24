@@ -41,6 +41,7 @@ import com.rvoc.cvorapp.services.FavouritesService;
 import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
 import com.rvoc.cvorapp.utils.CleanupCache;
 import com.rvoc.cvorapp.utils.FileUtils;
+import com.rvoc.cvorapp.views.RotatingSpan;
 
 import java.io.File;
 import java.util.List;
@@ -74,24 +75,20 @@ public class HomeFragment extends Fragment {
 
         // Setting animation to logo
         String text = "CVOR";
-        int logoColor = ContextCompat.getColor(requireContext(), R.color.logoO);
-
         SpannableString spannableString = new SpannableString(text);
-        binding.titleText.setText(spannableString);
 
         // Find the index of the letter "O" in the string
         int start = text.indexOf("O");
         int end = start + 1;
+        int logoColor = ContextCompat.getColor(requireContext(), R.color.logoO);
 
         spannableString.setSpan(new ForegroundColorSpan(logoColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        // Create an animation for spinning the "O"
-        ObjectAnimator spinAnimator = ObjectAnimator.ofFloat(binding.titleText, "rotation", 0f, 360f);
-        spinAnimator.setDuration(3000); // Spin duration (3 seconds)
-        spinAnimator.setRepeatCount(ObjectAnimator.INFINITE); // Infinite repeat, or set a specific count
+        /*spannableString.setSpan(new RotatingSpan(logoColor, () -> {
+            // Optional: Callback when animation ends
+        }), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);*/
 
-        // Start the animation
-        spinAnimator.start();
+        binding.titleText.setText(spannableString);
 
         // Set background resources
         // Create a RippleDrawable programmatically

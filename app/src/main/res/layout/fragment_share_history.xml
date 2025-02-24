@@ -18,20 +18,44 @@
         app:cardBackgroundColor="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/body_container">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Title Text -->
-        <TextView
-            android:id="@+id/title_text"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/share_history"
-            android:letterSpacing="0.1"
-            style="@style/TextStyle.SubTitle"
-            android:padding="12dp"
-            android:textColor="@color/white"
-            android:textAlignment="viewStart"/>
+            android:padding="16dp">
+
+            <!-- Title Text -->
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/share_history"
+                android:letterSpacing="0.1"
+                style="@style/TextStyle.SubTitle"
+                android:textColor="@color/white"
+                android:textAlignment="viewStart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/close_preview"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+
+            <!-- Question Mark Icon -->
+            <ImageView
+                android:id="@+id/close_preview"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/cancel"
+                android:visibility="gone"
+                android:src="@drawable/baseline_clear_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <!-- Body Container containing Filter Toggle, Search Box, and Date Pickers -->
@@ -223,17 +247,6 @@
         android:elevation="10dp"
         android:clickable="true"
         android:focusable="true">
-
-        <!-- Cancel Icon (Top Right) -->
-        <ImageView
-            android:id="@+id/close_preview"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="top|end"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/baseline_clear_24"
-            android:contentDescription="@string/cancel"/>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"

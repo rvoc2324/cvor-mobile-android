@@ -8,6 +8,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -85,5 +88,11 @@ public class WatermarkViewModel extends AndroidViewModel {
 
     public LiveData<Integer> getFontSize() {
         return fontSize;
+    }
+
+    public void clearState() {
+        shareWith.setValue(null);
+        purpose.setValue(null);
+        watermarkText.setValue(null);
     }
 }
