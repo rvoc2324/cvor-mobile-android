@@ -31,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class CoreActivity extends AppCompatActivity {
 
     private static final String TAG = "Core Activity";
-    private ActivityCoreBinding binding;
     private NavController navController;
     private CoreViewModel coreViewModel;
 
@@ -42,7 +41,7 @@ public class CoreActivity extends AppCompatActivity {
 
         try {
             // Inflate the layout
-            binding = ActivityCoreBinding.inflate(getLayoutInflater());
+            com.rvoc.cvorapp.databinding.ActivityCoreBinding binding = ActivityCoreBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
 
             Log.d(TAG, "CoreActivity 1.");

@@ -41,7 +41,6 @@ import com.rvoc.cvorapp.services.FavouritesService;
 import com.rvoc.cvorapp.ui.activities.home.HomeActivity;
 import com.rvoc.cvorapp.utils.CleanupCache;
 import com.rvoc.cvorapp.utils.FileUtils;
-import com.rvoc.cvorapp.views.RotatingSpan;
 
 import java.io.File;
 import java.util.List;

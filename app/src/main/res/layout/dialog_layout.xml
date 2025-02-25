@@ -7,7 +7,7 @@
     android:layout_margin="50dp"
     android:padding="16dp"
     android:elevation="6dp"
-    android:background="@color/fragment1Background"
+    android:background="@drawable/rounded_background_secondary"
     android:gravity="center">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -48,6 +48,7 @@
         android:padding="8dp"
         android:background="@color/inputBox"
         android:textColor="@color/text"
+        android:hint="@string/input_field"
         android:filterTouchesWhenObscured="true"/>
 
     <LinearLayout

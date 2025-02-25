@@ -151,7 +151,6 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private final ItemPdfPreviewBinding binding;
         private final Context context;
         private PDDocument document;
-        private PDFRenderer renderer;
         private PdfPagesAdapter pdfPagesAdapter;
 
         public PdfViewHolder(@NonNull ItemPdfPreviewBinding binding, Context context) {
@@ -165,7 +164,7 @@ public class PreviewPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             try {
                 document = PDDocument.load(pdfFile);
-                renderer = new PDFRenderer(document);
+                PDFRenderer renderer = new PDFRenderer(document);
                 pdfPagesAdapter = new PdfPagesAdapter(document, renderer);
 
                 binding.pdfPagesRecyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));

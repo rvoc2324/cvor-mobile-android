@@ -22,7 +22,7 @@ import java.util.Locale;
 public class FileUtils {
     private static final String TAG = "FileUtils";
 
-    /**
+    /*
      * Utility method to get the file size from a URI.
 
     private long getFileSize(Context context, Uri uri) throws IOException {
@@ -111,8 +111,11 @@ public class FileUtils {
             // Define the destination file to app cache
             File cacheDir = new File(context.getCacheDir(), directoryName);
             if (!cacheDir.exists()) {
-                cacheDir.mkdirs();
+                if (!cacheDir.mkdirs()) {
+                    Log.e("CacheDir", "Failed to create directory: " + cacheDir.getAbsolutePath());
+                }
             }
+
 
             File destFile = new File(cacheDir, fileName);
 

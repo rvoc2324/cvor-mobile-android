@@ -81,7 +81,9 @@ public class ImageUtils {
     private static String saveThumbnailToCache(Context context, Bitmap bitmap, Uri fileUri) {
         File cacheDir = new File(context.getCacheDir(), "favourites_thumbnail");
         if (!cacheDir.exists()) {
-            cacheDir.mkdirs();
+            if (!cacheDir.mkdirs()) {
+                Log.e("CacheDir", "Failed to create directory: " + cacheDir.getAbsolutePath());
+            }
         }
 
         String fileName = fileUri.getLastPathSegment() + "_thumb.jpg";

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,7 +188,9 @@ public class FileManagerFragment extends Fragment {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         } else {
             Log.d(TAG, "Other action type selected, allowing multi-file selection: " + actionType);
-            Toast.makeText(requireContext(), getString(R.string.multi_file_selection), Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(requireContext(), getString(R.string.multi_file_selection), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 50, 100);
+            toast.show();
             // Enable multi-file selection
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }

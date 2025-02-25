@@ -38,9 +38,7 @@ public class FavouritesRepository {
     }
 
     public void renameFile(String oldFilePath, String newFilePath, String newFileName) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            favouritesDao.updateFile(oldFilePath, newFilePath, newFileName);
-        });
+        Executors.newSingleThreadExecutor().execute(() -> favouritesDao.updateFile(oldFilePath, newFilePath, newFileName));
     }
 
 }

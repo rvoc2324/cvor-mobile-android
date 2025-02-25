@@ -93,6 +93,8 @@ public class PreviewFragment extends Fragment {
             }
         });
 
+        Toast.makeText(requireContext(), getString(R.string.preview_prompt), Toast.LENGTH_LONG).show();
+
         // Initialize adapter once to avoid multiple instances
         previewPagerAdapter = new PreviewPagerAdapter(requireContext());
         binding.filePreviewPager.setAdapter(previewPagerAdapter);
@@ -194,7 +196,10 @@ public class PreviewFragment extends Fragment {
         binding.positiveButton.setOnClickListener(v -> {
             Uri uri = FileUtils.getUriFromFile(requireContext(), filesToShow.get(0));
             String thumbnailPath = ImageUtils.getThumbnailPath(requireContext(), uri);
-            favouritesService.addToFavourites(String.valueOf(filesToShow), thumbnailPath);
+            String filePath = filesToShow.get(0).toString();
+            Log.d(TAG, "File name being added: " + filePath);
+            Log.d(TAG, "Thumbnail being added: " + thumbnailPath);
+            favouritesService.addToFavourites(filePath, thumbnailPath);
             downloadFiles();
             dialog.dismiss();
         });

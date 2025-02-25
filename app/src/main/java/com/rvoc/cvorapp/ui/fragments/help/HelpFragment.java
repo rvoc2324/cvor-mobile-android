@@ -25,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class HelpFragment extends Fragment {
 
     private FragmentHelpBinding binding;
-    private FAQAdapter faqAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class HelpFragment extends Fragment {
         faqList.add(new FAQItem(getString(R.string.faq_10), getString(R.string.faq_ans_10)));
         faqList.add(new FAQItem(getString(R.string.faq_11), getString(R.string.faq_ans_11)));
 
-        faqAdapter = new FAQAdapter(faqList);
+        FAQAdapter faqAdapter = new FAQAdapter(faqList);
         binding.faqRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.faqRecyclerView.setAdapter(faqAdapter);
     }

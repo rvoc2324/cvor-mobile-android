@@ -20,14 +20,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 @Singleton
 public class FavouritesService {
 
-    private final Context context;
     private final FavouritesRepository favouritesRepository;
     private final Executor executor = Executors.newSingleThreadExecutor(); // Background execution
 
     @Inject
     public FavouritesService(FavouritesRepository favouritesRepository, @ApplicationContext Context context) {
         this.favouritesRepository = favouritesRepository;
-        this.context = context;
     }
 
     /**
@@ -40,7 +38,6 @@ public class FavouritesService {
     /**
      * Adds a file to favourites.
      * Ensures no duplicate entries.
-     *
      * */
     public void addToFavourites(String filePath, String thumbnailPath) {
         executor.execute(() -> {

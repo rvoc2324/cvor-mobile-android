@@ -114,6 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text"
+                    android:visibility="gone"
                     android:checked="false"
                     android:text="@string/loading"
                     android:textStyle="italic"
@@ -174,16 +175,15 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Progress Bar -->
-    <!-- Progress Bar (Always on Top) -->
-    <ProgressBar
+    <!-- Lottie Progress Bar -->
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/progress_indicator"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="gone"
-        android:elevation="10dp"/>
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/processing"
+        android:visibility="gone"/>
 </FrameLayout>
 

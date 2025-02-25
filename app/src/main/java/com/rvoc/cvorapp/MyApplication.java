@@ -42,10 +42,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // CleanupCache.initAppStateTracking();
-        // CleanupCache.scheduleDailyCleanup(this);
-        // CleanupCache.testImmediateCleanup(this);
-
         long startTime = System.currentTimeMillis();
         Log.d(TAG, "Application onCreate started.");
 

@@ -39,7 +39,6 @@ public class HomeActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "app_prefs";
     private static final String KEY_AGREED_TO_TERMS = "agreed_to_terms";
     private ActivityHomeBinding binding;
-    private DialogLayoutBinding dialogBinding;
     private NavController navController;
 
     @Override
@@ -116,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // Use ViewBinding for the dialog
-         dialogBinding = DialogLayoutBinding.inflate(getLayoutInflater());
+        com.rvoc.cvorapp.databinding.DialogLayoutBinding dialogBinding = DialogLayoutBinding.inflate(getLayoutInflater());
         dialog.setContentView(dialogBinding.getRoot());
         dialog.setCancelable(false); // Prevent dismissing without interaction
 

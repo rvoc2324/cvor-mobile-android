@@ -22,9 +22,7 @@ public class ReferFragment extends Fragment {
 
     // ActivityResultLauncher to replace startActivityForResult
     private final ActivityResultLauncher<Intent> shareLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                navigateToHome();
-            });
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> navigateToHome());
 
     @Nullable
     @Override

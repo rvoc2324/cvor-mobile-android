@@ -83,6 +83,7 @@
     <string name="compress_high">High: %s</string>
     <string name="compress_medium">Medium: %s</string>
     <string name="compress_low">Low: %s</string>
+    <string name="file_review_prompt">Hold and drag files to reorder them</string>
 
     <!-- Dialogs and Prompts -->
     <string name="filename_change_prompt">Enter new file name</string>
@@ -99,6 +100,9 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="loading">Loading, please wait!</string>
+    <string name="add_favourite_prompt">Add this to Favourites?</string> <!-- change -->
+    <string name="input_field">Input field</string> <!-- change -->
+
 
     <!-- Icons -->
     <string name="camera_icon_desc">Camera icon</string>
@@ -113,7 +117,11 @@
     <string name="preview_desc">Preview of processed file</string>
     <string name="preview_fragment_title">Preview</string>
     <string name="no_files_selected">No files selected.</string>
-    <string name="add_favourite_prompt">Add this to Favourites?</string> <!-- change -->
+    <!-- change -->
+    <string name="preview_prompt">
+       • Swipe left or up to view.\n
+       • Double tap to zoom. \n
+   </string>
 
     <!-- Watermark -->
     <string name="grid_watermark_check">Grid style layout</string>
@@ -162,7 +170,7 @@
     <string name="unable_to_determine_file_name">Unable to determine file name</string>
     <string name="failed_to_crop_image">Failed to crop image</string>
     <string name="failed_to_process_cropped_image">Failed to process cropped image</string>
-    <string name="multi_files_selected"> files selected</string>
+    <string name="multi_files_selected">%s files selected</string>
     <string name="one_file_selected">1 file selected</string>
     <string name="file_selection_cancelled">File selection cancelled</string>
     <string name="no_images_selected">No images selected</string>

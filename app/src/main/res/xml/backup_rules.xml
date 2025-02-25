@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<backup xmlns:android="http://schemas.android.com/apk/res/android">
+<backup>
 
     <!-- Include shared preferences and databases if necessary -->
     <include domain="sharedpref" />

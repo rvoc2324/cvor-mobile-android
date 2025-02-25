@@ -65,8 +65,6 @@ public class WatermarkFragment extends Fragment {
 
     private DialogLayoutBinding dialogLayoutBinding;
 
-    private WatermarkHelpAdapter helpAdapter;
-
     private ExecutorService executorService;
 
     @Override
@@ -87,6 +85,7 @@ public class WatermarkFragment extends Fragment {
                 // Reset selected files when back action is triggered (including swipe or system gesture)
                 if (coreViewModel != null) {
                     coreViewModel.resetSelectedFiles();
+                    watermarkViewModel.clearState();
                 }
                 setEnabled(false);
                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
@@ -239,6 +238,7 @@ public class WatermarkFragment extends Fragment {
         binding.backButton.setOnClickListener(v -> {
             if (coreViewModel != null) {
                 coreViewModel.resetSelectedFiles(); // Reset the files
+                watermarkViewModel.clearState();
             }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
@@ -384,10 +384,10 @@ public class WatermarkFragment extends Fragment {
         helpList.add(new FAQItem(getString(R.string.help_3), getString(R.string.help_ans_3)));
         helpList.add(new FAQItem(getString(R.string.help_4), getString(R.string.help_ans_4)));
         helpList.add(new FAQItem(getString(R.string.help_5), getString(R.string.help_ans_5)));
-        helpList.add(new FAQItem(getString(R.string.help_6), getString(R.string.help_ans_6)));
+        // helpList.add(new FAQItem(getString(R.string.help_6), getString(R.string.help_ans_6)));
         helpList.add(new FAQItem(getString(R.string.help_7), getString(R.string.help_ans_7)));
 
-        helpAdapter = new WatermarkHelpAdapter(helpList);
+        WatermarkHelpAdapter helpAdapter = new WatermarkHelpAdapter(helpList);
         dialogLayoutBinding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         dialogLayoutBinding.recyclerView.setAdapter(helpAdapter);
     }
@@ -395,7 +395,6 @@ public class WatermarkFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        watermarkViewModel.clearState();
         binding = null; // Avoid memory leaks by clearing binding reference
     }
 }

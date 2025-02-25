@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class PdfHandlingFragment extends Fragment {
     private String currentActionType;
     FileActionListener fileActionListener;
     private ExecutorService executorService;
+    private List<Map.Entry<Uri, String>> entries;
     private String customFileName;
 
     @Nullable
@@ -79,6 +81,9 @@ public class PdfHandlingFragment extends Fragment {
                 // Reset selected files when back action is triggered (including swipe or system gesture)
                 if (coreViewModel != null) {
                     coreViewModel.resetSelectedFiles();
+                    if ("compresspdf".equals(currentActionType)) {
+                        coreViewModel.resetCompressParameters();
+                    }
                 }
                 setEnabled(false);
                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
@@ -94,12 +99,34 @@ public class PdfHandlingFragment extends Fragment {
 
         setupRecyclerView();
 
+        // Observe selected files uris and update adapter
+        coreViewModel.getSelectedFiles().observe(getViewLifecycleOwner(), uris -> {
+            if (uris != null && !uris.isEmpty()) {
+                entries = new ArrayList<>(uris.entrySet());
+                fileListAdapter.submitList(entries);
+
+                // Check if the current action is "compresspdf" and trigger compression
+                if ("compresspdf".equals(currentActionType) && shouldTriggerCompression()) {
+                    triggerImmediateCompression();
+                }
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.no_files_selected_go_back), Toast.LENGTH_SHORT).show();
+                binding.actionButton.setEnabled(false);
+            }
+        });
+
         // Observe action type and update button label
         coreViewModel.getActionType().observe(getViewLifecycleOwner(), actionType -> {
             if ("combinepdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.combine_pdfs_button);
+                if (entries.size() > 1) {
+                    Toast.makeText(requireContext(), getString(R.string.file_review_prompt), Toast.LENGTH_LONG).show();
+                }
             } else if ("convertpdf".equals(actionType) || "scanpdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.convert_to_pdf_button);
+                if (entries.size() > 1) {
+                    Toast.makeText(requireContext(), getString(R.string.file_review_prompt), Toast.LENGTH_LONG).show();
+                }
             } else if ("splitpdf".equals(actionType)) {
                 binding.actionButton.setText(R.string.split_pdf_button);
             } else if ("compresspdf".equals(actionType)) {
@@ -108,25 +135,15 @@ public class PdfHandlingFragment extends Fragment {
             currentActionType = actionType;
         });
 
-        // Observe selected files uris and update adapter
-        coreViewModel.getSelectedFiles().observe(getViewLifecycleOwner(), uris -> {
-            if (uris != null && !uris.isEmpty()) {
-                List<Map.Entry<Uri, String>> entries = new ArrayList<>(uris.entrySet());
-                fileListAdapter.submitList(entries);
-
-                // Check if the current action is "compresspdf" and trigger compression
-                if ("compresspdf".equals(currentActionType) && shouldTriggerCompression()) {
-                    triggerImmediateCompression();
-                }
-            }
-        });
-
         // Handle action button click
         binding.actionButton.setOnClickListener(v -> processFiles(currentActionType));
 
         binding.backButton.setOnClickListener(v -> {
             if (coreViewModel != null) {
                 coreViewModel.resetSelectedFiles();
+                if ("compresspdf".equals(currentActionType)) {
+                    coreViewModel.resetCompressParameters();
+                }
             }
             requireActivity().getOnBackPressedDispatcher().onBackPressed();
         });
@@ -136,7 +153,7 @@ public class PdfHandlingFragment extends Fragment {
         coreViewModel.getCompressedFileSizes().observe(getViewLifecycleOwner(), sizes -> {
             binding.textCurrentFileSize.setText(getString(R.string.pre_compress_file_size,sizes.getOrDefault("Current", "")));
             binding.radioHigh.setText(getString(R.string.compress_high, sizes.getOrDefault("High", "")));
-            binding.radioMedium.setText(getString(R.string.compress_medium, sizes.getOrDefault("Medium", "")));
+            // binding.radioMedium.setText(getString(R.string.compress_medium, sizes.getOrDefault("Medium", "")));
             binding.radioLow.setText(getString(R.string.compress_low, sizes.getOrDefault("Low", "")));
         });
 
@@ -193,10 +210,10 @@ public class PdfHandlingFragment extends Fragment {
             checkAndHideProgress(completedTasks);
         });
 
-        executorService.execute(() -> {
+        /*executorService.execute(() -> {
             compressAndSave(fileUri, new File(cacheDir, "compressed_M.pdf"), "Medium");
             checkAndHideProgress(completedTasks);
-        });
+        });*/
 
         executorService.execute(() -> {
             compressAndSave(fileUri, new File(cacheDir, "compressed_L.pdf"), "Low");
@@ -218,7 +235,8 @@ public class PdfHandlingFragment extends Fragment {
     }
 
     private void checkAndHideProgress(AtomicInteger completedTasks) {
-        if (completedTasks.incrementAndGet() == 3) {
+        // Change condition based on types of compression being done
+        if (completedTasks.incrementAndGet() == 2) {
             requireActivity().runOnUiThread(() -> {
                 binding.progressIndicator.setVisibility(View.GONE);
                 coreViewModel.setCompressionComplete(true);
@@ -229,7 +247,7 @@ public class PdfHandlingFragment extends Fragment {
 
     private void setupRadioButtonListeners() {
         binding.radioHigh.setOnCheckedChangeListener((buttonView, isChecked) -> checkIfEnableActionButton());
-        binding.radioMedium.setOnCheckedChangeListener((buttonView, isChecked) -> checkIfEnableActionButton());
+        // binding.radioMedium.setOnCheckedChangeListener((buttonView, isChecked) -> checkIfEnableActionButton());
         binding.radioLow.setOnCheckedChangeListener((buttonView, isChecked) -> checkIfEnableActionButton());
     }
 
@@ -365,37 +383,6 @@ public class PdfHandlingFragment extends Fragment {
             coreViewModel.setNavigationEvent("navigate_to_preview");
         });
     }
-
-    /*private void deleteCompressFile() {
-        requireActivity().runOnUiThread(() -> {
-            // Determine the selected quality
-            String selectedQuality = binding.radioHigh.isChecked() ? "High" :
-                    binding.radioMedium.isChecked() ? "Medium" :
-                            binding.radioLow.isChecked() ? "Low" : null;
-
-            if (selectedQuality == null) {
-                Toast.makeText(requireContext(), "No compression quality selected.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Define file paths for all compression levels
-            File cacheDir = requireContext().getCacheDir();
-            Map<String, File> qualityToFileMap = new HashMap<>();
-            qualityToFileMap.put("High", new File(cacheDir, "compressed_H.pdf"));
-            qualityToFileMap.put("Medium", new File(cacheDir, "compressed_M.pdf"));
-            qualityToFileMap.put("Low", new File(cacheDir, "compressed_L.pdf"));
-
-            // Remove files not associated with the selected quality
-            for (Map.Entry<String, File> entry : qualityToFileMap.entrySet()) {
-                if (!entry.getKey().equals(selectedQuality)) {
-                    coreViewModel.removeProcessedFile(entry.getValue());
-                }
-            }
-            Toast.makeText(requireContext(), "PDF Action completed.", Toast.LENGTH_SHORT).show();
-            coreViewModel.setNavigationEvent("navigate_to_preview");
-        });
-    }*/
-
     private Uri getUriFromPosition(int position, Map<Uri, String> uris) {
         if (uris == null || position < 0 || position >= uris.size()) {
             return null;
@@ -405,28 +392,6 @@ public class PdfHandlingFragment extends Fragment {
         List<Map.Entry<Uri, String>> entryList = new ArrayList<>(uris.entrySet());
         return entryList.get(position).getKey(); // Retrieve the Uri (key) at the given position
     }
-
-    /*private void showHelpDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogTheme);
-
-        // Inflate the dialog layout using ViewBinding
-        DialogLayoutBinding binding = DialogLayoutBinding.inflate(LayoutInflater.from(requireContext()));
-
-        // Hide unnecessary elements
-        binding.inputField.setVisibility(View.VISIBLE);
-        binding.positiveButton.setVisibility(View.VISIBLE);
-        binding.negativeButton.setVisibility(View.VISIBLE);
-
-        // Set the dialog text
-        binding.dialogMessage.setText(getString(R.string.custom_file_name));
-
-        // Create the dialog
-        AlertDialog dialog = builder.setView(binding.getRoot()).create();
-        dialog.setCanceledOnTouchOutside(true); // Dismiss on outside tap
-
-        // Show the dialog
-        dialog.show();
-    }*/
 
     @Override
     public void onDestroyView() {

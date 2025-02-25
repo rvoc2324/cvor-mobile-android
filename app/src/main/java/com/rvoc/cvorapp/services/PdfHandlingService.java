@@ -222,13 +222,11 @@ public class PdfHandlingService {
                 yield 1.0f;
             }
             case "low" -> {
-                imageQuality = 0.4f;
-                yield 0.5f;
-            }
-            default -> {
                 imageQuality = 0.6f;
                 yield 0.75f;
             }
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + quality.toLowerCase());
         };  // Used to adjust the DPI relative to original
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(inputFileUri);
@@ -400,11 +398,7 @@ public class PdfHandlingService {
         }
     }
 
-    // Check if a file is large, and if so, handle it in the background (Worker)
-    public boolean isLargeFile(File file) {
-        return file.length() > MAX_FILE_SIZE;
-    }
-
+    /*
     // Worker implementation for processing large PDFs (stub, you need to integrate WorkManager)
     public void processLargePDFInBackground(File file) {
         if (isLargeFile(file)) {
@@ -413,4 +407,9 @@ public class PdfHandlingService {
             // WorkManager.enqueue(new OneTimeWorkRequest.Builder(LargeFileWorker.class).build());
         }
     }
+
+    // Check if a file is large, and if so, handle it in the background (Worker)
+    public boolean isLargeFile(File file) {
+        return file.length() > MAX_FILE_SIZE;
+    }*/
 }

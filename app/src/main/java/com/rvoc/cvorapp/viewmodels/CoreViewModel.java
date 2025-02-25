@@ -40,6 +40,7 @@ public class CoreViewModel extends AndroidViewModel {
     private final MutableLiveData<String> actionType = new MutableLiveData<>("");
     private final MutableLiveData<String> customFileName = new MutableLiveData<>("");
     private final MutableLiveData<Boolean> favouriteAdded = new MutableLiveData<>();
+
     // Navigation events (SingleLiveEvent recommended for one-time events)
     private final MutableLiveData<String> navigationEvent = new MutableLiveData<>(null);
 
@@ -216,6 +217,14 @@ public class CoreViewModel extends AndroidViewModel {
         return sourceType.getValue() != null;
     }
 
+    public void resetCompressParameters(){
+        compressedFileSizes.setValue(new HashMap<>());
+        isActionButtonEnabled.setValue(false);
+        isCompressionComplete.setValue(false);
+        compressType.setValue(null);
+        processedFiles.setValue(new ArrayList<>());
+    }
+
     // Clear State
     public void clearState() {
         actionType.setValue(null);
@@ -223,6 +232,11 @@ public class CoreViewModel extends AndroidViewModel {
         selectedFiles.setValue(new HashMap<>());
         processedFiles.setValue(new ArrayList<>());
         navigationEvent.setValue(null);
+        compressedFileSizes.setValue(new HashMap<>());
+        isActionButtonEnabled.setValue(false);
+        isCompressionComplete.setValue(false);
+        compressType.setValue(null);
+        favouriteAdded.setValue(false);
     }
 
     // Helper to get a non-null list from LiveData

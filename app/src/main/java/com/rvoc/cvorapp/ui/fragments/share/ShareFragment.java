@@ -102,11 +102,29 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
             binding = FragmentShareBinding.inflate(inflater, container, false);
         }
 
-        if ("addwatermark".equals(actionType)  || "directWatermark".equals(actionType)) {
+        // Offers the option to log all shares
+        binding.actionButton.setText(R.string.log_share_button);
+
+        binding.actionButton.setOnClickListener(v -> {
+            logShareDetails();
+            checkDialog();
+        });
+
+        /*if ("addwatermark".equals(actionType)  || "directWatermark".equals(actionType)) {
             binding.actionButton.setText(R.string.log_share_button);
         } else {
             binding.actionButton.setText(R.string.done_button);
         }
+
+        binding.actionButton.setOnClickListener(v -> {
+            if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
+                logShareDetails();
+                checkDialog();
+            } else {
+                checkDialog();
+            }
+        });*/
+
         binding.backButton.setOnClickListener(v -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
 
         // Without ad flow
@@ -117,14 +135,6 @@ public class ShareFragment extends Fragment implements ShareResultReceiver.Share
             showInterstitialAd(() -> openNativeShareModal());
         });*/
 
-        binding.actionButton.setOnClickListener(v -> {
-            if (actionType.equals("addwatermark") || actionType.equals("directWatermark")) {
-                logShareDetails();
-                checkDialog();
-            } else {
-                checkDialog();
-            }
-        });
         binding.cancelButton.setOnClickListener(v -> requireActivity().finish());
 
         watermarkViewModel.getShareApp().observe(getViewLifecycleOwner(), shareApp -> logShareDetails());
